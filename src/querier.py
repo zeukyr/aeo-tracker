@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 # import google.generativeai as genai
 from openai import OpenAI
 from perplexity import Perplexity
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
@@ -48,9 +48,11 @@ def query_perplexity(question):
     
 # ---- Gemini ----
 def query_gemini(question):
-    genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-    model = genai.GenerativeModel("gemini-2.5-flash-lite")
-    response = model.generate_content(question)
+    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=question
+    )
     return response.text
 
 def query_all_engines(question):

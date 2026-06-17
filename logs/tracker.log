@@ -311,3 +311,147 @@
 }
 2026-06-17 11:57:32,157 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
 2026-06-17 11:57:32,552 [INFO] Run complete
+2026-06-17 12:26:46,410 [INFO] Starting run...
+2026-06-17 12:26:47,317 [INFO] Loaded 3 questions
+2026-06-17 12:26:47,317 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 12:26:53,872 [ERROR] [gemini] Failed for 'how to become a certified dog groomer': 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash-lite
+Please retry in 6.13608413s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash-lite"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 6
+}
+]
+2026-06-17 12:26:53,872 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 12:26:54,366 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash-lite
+Please retry in 5.642397495s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash-lite"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 5
+}
+]
+2026-06-17 12:26:54,367 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 12:26:54,849 [ERROR] [gemini] Failed for 'how to become a dog behavior specialist': 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash-lite
+Please retry in 5.158684334s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash-lite"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 20
+}
+, retry_delay {
+  seconds: 5
+}
+]
+2026-06-17 12:26:55,308 [INFO] Run complete
+2026-06-17 13:08:32,895 [INFO] Starting run...
+2026-06-17 13:08:33,767 [INFO] Loaded 3 questions
+2026-06-17 13:08:33,767 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 13:08:33,767 [ERROR] [gemini] Failed for 'how to become a certified dog groomer': module 'google.genai' has no attribute 'configure'
+2026-06-17 13:08:33,767 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 13:08:33,768 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': module 'google.genai' has no attribute 'configure'
+2026-06-17 13:08:33,768 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 13:08:33,768 [ERROR] [gemini] Failed for 'how to become a dog behavior specialist': module 'google.genai' has no attribute 'configure'
+2026-06-17 13:08:34,155 [INFO] Run complete
+2026-06-17 13:26:00,909 [INFO] Starting run...
+2026-06-17 13:26:01,782 [INFO] Loaded 3 questions
+2026-06-17 13:26:01,783 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 13:26:02,495 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:27:34,003 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent "HTTP/1.1 503 Service Unavailable"
+2026-06-17 13:27:34,007 [ERROR] [gemini] Failed for 'how to become a certified dog groomer': 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-06-17 13:27:34,007 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 13:27:34,683 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:29:00,174 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-06-17 13:29:00,176 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash-lite\nPlease retry in 59.853134989s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash-lite'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '59s'}]}}
+2026-06-17 13:29:00,177 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 13:29:00,867 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:30:27,017 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:30:32,077 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:30:32,108 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": []
+}
+2026-06-17 13:30:32,648 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
+2026-06-17 13:30:33,057 [INFO] Run complete
+2026-06-17 13:47:31,728 [INFO] Starting run...
+2026-06-17 13:47:32,685 [INFO] Loaded 3 questions
+2026-06-17 13:47:32,685 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 13:47:33,322 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:48:59,371 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:49:02,546 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:49:02,564 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": []
+}
+2026-06-17 13:49:03,050 [INFO] [gemini] Saved general response for 'how to become a certified dog groomer'
+2026-06-17 13:49:03,051 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 13:49:03,743 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:50:28,631 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 503 Service Unavailable"
+2026-06-17 13:50:28,633 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': 503 UNAVAILABLE. {'error': {'code': 503, 'message': 'This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.', 'status': 'UNAVAILABLE'}}
+2026-06-17 13:50:28,633 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 13:50:29,284 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:51:55,450 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:51:59,160 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:51:59,173 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": []
+}
+2026-06-17 13:51:59,699 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
+2026-06-17 13:52:00,088 [INFO] Run complete
