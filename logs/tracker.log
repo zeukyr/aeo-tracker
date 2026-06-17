@@ -455,3 +455,60 @@ Please retry in 5.158684334s. [links {
 }
 2026-06-17 13:51:59,699 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
 2026-06-17 13:52:00,088 [INFO] Run complete
+2026-06-17 13:53:32,294 [INFO] Starting run...
+2026-06-17 13:53:33,210 [INFO] Loaded 3 questions
+2026-06-17 13:53:33,210 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 13:53:33,904 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:55:15,125 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:55:18,869 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:55:18,883 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Grooming School",
+        "Apprenticeship",
+        "Online Courses"
+    ],
+    "competitor_count": 3,
+    "competitor_won": null,
+    "win_reasons": []
+}
+2026-06-17 13:55:19,327 [INFO] [gemini] Saved general response for 'how to become a certified dog groomer'
+2026-06-17 13:55:19,328 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 13:55:20,042 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:56:59,653 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:57:04,286 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:57:04,293 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Karen Pryor Academy",
+        "CATCH Canine Trainers Academy",
+        "Triple Crown Academy",
+        "Academy for Dog Trainers",
+        "Jean Donaldson's Academy for Dog Trainers online program",
+        "KPA's online courses",
+        "Fenzi Dog Sports Academy"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Karen Pryor Academy",
+    "win_reasons": ["Highly regarded for its intensive program", "Respected certification awards"]
+}
+2026-06-17 13:57:05,031 [INFO] [gemini] Saved general response for 'how to become a professional dog trainer'
+2026-06-17 13:57:05,031 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 13:57:05,761 [INFO] AFC is enabled with max remote calls: 10.
+2026-06-17 13:58:49,047 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-06-17 13:58:52,605 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 13:58:52,615 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": ["Karen Pryor Academy", "The Academy for Dog Trainers", "PPG", "IAABC", "OSU's online courses"],
+    "competitor_count": 5,
+    "competitor_won": null,
+    "win_reasons": []
+}
+2026-06-17 13:58:53,064 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
+2026-06-17 13:58:53,459 [INFO] Run complete
