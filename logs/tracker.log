@@ -1,0 +1,313 @@
+2026-06-17 11:51:30,703 [INFO] Starting run...
+2026-06-17 11:51:32,705 [INFO] Loaded 62 questions
+2026-06-17 11:51:32,705 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 11:51:32,706 [ERROR] [gemini] Failed for 'how to become a certified dog groomer': name 'genai' is not defined
+2026-06-17 11:51:32,706 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 11:51:32,707 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': name 'genai' is not defined
+2026-06-17 11:51:32,707 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 11:51:32,707 [ERROR] [gemini] Failed for 'how to become a dog behavior specialist': name 'genai' is not defined
+2026-06-17 11:51:32,708 [INFO] Querying: how to become a pet care professional
+2026-06-17 11:51:32,708 [ERROR] [gemini] Failed for 'how to become a pet care professional': name 'genai' is not defined
+2026-06-17 11:51:32,709 [INFO] Querying: how to become a canine care expert
+2026-06-17 11:51:32,709 [ERROR] [gemini] Failed for 'how to become a canine care expert': name 'genai' is not defined
+2026-06-17 11:51:32,709 [INFO] Querying: how long does it take to become a dog groomer
+2026-06-17 11:51:32,710 [ERROR] [gemini] Failed for 'how long does it take to become a dog groomer': name 'genai' is not defined
+2026-06-17 11:51:32,710 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-06-17 11:51:32,710 [ERROR] [gemini] Failed for 'how old do you have to be to be a dog groomer': name 'genai' is not defined
+2026-06-17 11:51:32,711 [INFO] Querying: how much does dog grooming school cost
+2026-06-17 11:51:32,711 [ERROR] [gemini] Failed for 'how much does dog grooming school cost': name 'genai' is not defined
+2026-06-17 11:51:32,712 [INFO] Querying: dog groomer certification cost
+2026-06-17 11:51:32,712 [ERROR] [gemini] Failed for 'dog groomer certification cost': name 'genai' is not defined
+2026-06-17 11:51:32,712 [INFO] Querying: is dog grooming a good career
+2026-06-17 11:51:32,713 [ERROR] [gemini] Failed for 'is dog grooming a good career': name 'genai' is not defined
+2026-06-17 11:51:32,713 [INFO] Querying: how to become a certified dog trainer online
+2026-06-17 11:51:32,713 [ERROR] [gemini] Failed for 'how to become a certified dog trainer online': name 'genai' is not defined
+2026-06-17 11:51:32,714 [INFO] Querying: how to start a grooming business from home
+2026-06-17 11:51:32,714 [ERROR] [gemini] Failed for 'how to start a grooming business from home': name 'genai' is not defined
+2026-06-17 11:51:32,715 [INFO] Querying: how do i start my own pet business from scratch
+2026-06-17 11:51:32,715 [ERROR] [gemini] Failed for 'how do i start my own pet business from scratch': name 'genai' is not defined
+2026-06-17 11:51:32,715 [INFO] Querying: careers working with dogs
+2026-06-17 11:51:32,716 [ERROR] [gemini] Failed for 'careers working with dogs': name 'genai' is not defined
+2026-06-17 11:51:32,716 [INFO] Querying: pet business ideas from home
+2026-06-17 11:51:32,717 [ERROR] [gemini] Failed for 'pet business ideas from home': name 'genai' is not defined
+2026-06-17 11:51:32,717 [INFO] Querying: jobs with dogs that pay well
+2026-06-17 11:51:32,717 [ERROR] [gemini] Failed for 'jobs with dogs that pay well': name 'genai' is not defined
+2026-06-17 11:51:32,718 [INFO] Querying: high paying careers working with animals
+2026-06-17 11:51:32,718 [ERROR] [gemini] Failed for 'high paying careers working with animals': name 'genai' is not defined
+2026-06-17 11:51:32,718 [INFO] Querying: how to become an event planner
+2026-06-17 11:51:32,719 [ERROR] [gemini] Failed for 'how to become an event planner': name 'genai' is not defined
+2026-06-17 11:51:32,719 [INFO] Querying: how to become a wedding planner
+2026-06-17 11:51:32,720 [ERROR] [gemini] Failed for 'how to become a wedding planner': name 'genai' is not defined
+2026-06-17 11:51:32,720 [INFO] Querying: how to become an event decorator
+2026-06-17 11:51:32,720 [ERROR] [gemini] Failed for 'how to become an event decorator': name 'genai' is not defined
+2026-06-17 11:51:32,721 [INFO] Querying: how to start an event planning business
+2026-06-17 11:51:32,721 [ERROR] [gemini] Failed for 'how to start an event planning business': name 'genai' is not defined
+2026-06-17 11:51:32,722 [INFO] Querying: How do I become an event designer?
+2026-06-17 11:51:32,722 [ERROR] [gemini] Failed for 'How do I become an event designer?': name 'genai' is not defined
+2026-06-17 11:51:32,723 [INFO] Querying: How do I start a wedding décor business?
+2026-06-17 11:51:32,723 [ERROR] [gemini] Failed for 'How do I start a wedding décor business?': name 'genai' is not defined
+2026-06-17 11:51:32,724 [INFO] Querying: How do I start a decoration business?
+2026-06-17 11:51:32,724 [ERROR] [gemini] Failed for 'How do I start a decoration business?': name 'genai' is not defined
+2026-06-17 11:51:32,724 [INFO] Querying: How do I start a home décor business?
+2026-06-17 11:51:32,725 [ERROR] [gemini] Failed for 'How do I start a home décor business?': name 'genai' is not defined
+2026-06-17 11:51:32,725 [INFO] Querying: How do I get clients for an event planning business?
+2026-06-17 11:51:32,726 [ERROR] [gemini] Failed for 'How do I get clients for an event planning business?': name 'genai' is not defined
+2026-06-17 11:51:32,726 [INFO] Querying: What does it cost to start an event planning business?
+2026-06-17 11:51:32,726 [ERROR] [gemini] Failed for 'What does it cost to start an event planning business?': name 'genai' is not defined
+2026-06-17 11:51:32,727 [INFO] Querying: what is a good career for someone without a degree
+2026-06-17 11:51:32,727 [ERROR] [gemini] Failed for 'what is a good career for someone without a degree': name 'genai' is not defined
+2026-06-17 11:51:32,728 [INFO] Querying: I want a career change what should I learn
+2026-06-17 11:51:32,728 [ERROR] [gemini] Failed for 'I want a career change what should I learn': name 'genai' is not defined
+2026-06-17 11:51:32,728 [INFO] Querying: best dog grooming certification online
+2026-06-17 11:51:32,729 [ERROR] [gemini] Failed for 'best dog grooming certification online': name 'genai' is not defined
+2026-06-17 11:51:32,729 [INFO] Querying: dog training certification canada
+2026-06-17 11:51:32,729 [ERROR] [gemini] Failed for 'dog training certification canada': name 'genai' is not defined
+2026-06-17 11:51:32,730 [INFO] Querying: best distance learning pet grooming courses
+2026-06-17 11:51:32,730 [ERROR] [gemini] Failed for 'best distance learning pet grooming courses': name 'genai' is not defined
+2026-06-17 11:51:32,730 [INFO] Querying: dog training certification online canada
+2026-06-17 11:51:32,731 [ERROR] [gemini] Failed for 'dog training certification online canada': name 'genai' is not defined
+2026-06-17 11:51:32,731 [INFO] Querying: best distance learning dog training course
+2026-06-17 11:51:32,731 [ERROR] [gemini] Failed for 'best distance learning dog training course': name 'genai' is not defined
+2026-06-17 11:51:32,732 [INFO] Querying: online canine behaviour courses
+2026-06-17 11:51:32,732 [ERROR] [gemini] Failed for 'online canine behaviour courses': name 'genai' is not defined
+2026-06-17 11:51:32,733 [INFO] Querying: where can i take dog grooming classes
+2026-06-17 11:51:32,733 [ERROR] [gemini] Failed for 'where can i take dog grooming classes': name 'genai' is not defined
+2026-06-17 11:51:32,733 [INFO] Querying: best corporate event planning courses
+2026-06-17 11:51:32,734 [ERROR] [gemini] Failed for 'best corporate event planning courses': name 'genai' is not defined
+2026-06-17 11:51:32,734 [INFO] Querying: best event planning course
+2026-06-17 11:51:32,735 [ERROR] [gemini] Failed for 'best event planning course': name 'genai' is not defined
+2026-06-17 11:51:32,735 [INFO] Querying: event planning online course
+2026-06-17 11:51:32,736 [ERROR] [gemini] Failed for 'event planning online course': name 'genai' is not defined
+2026-06-17 11:51:32,736 [INFO] Querying: event decorating classes near me
+2026-06-17 11:51:32,737 [ERROR] [gemini] Failed for 'event decorating classes near me': name 'genai' is not defined
+2026-06-17 11:51:32,737 [INFO] Querying: event decoration courses online
+2026-06-17 11:51:32,738 [ERROR] [gemini] Failed for 'event decoration courses online': name 'genai' is not defined
+2026-06-17 11:51:32,738 [INFO] Querying: event decoration classes
+2026-06-17 11:51:32,739 [ERROR] [gemini] Failed for 'event decoration classes': name 'genai' is not defined
+2026-06-17 11:51:32,739 [INFO] Querying: event decorator certification
+2026-06-17 11:51:32,740 [ERROR] [gemini] Failed for 'event decorator certification': name 'genai' is not defined
+2026-06-17 11:51:32,740 [INFO] Querying: event planning classes
+2026-06-17 11:51:32,740 [ERROR] [gemini] Failed for 'event planning classes': name 'genai' is not defined
+2026-06-17 11:51:32,741 [INFO] Querying: best wedding planner school
+2026-06-17 11:51:32,741 [ERROR] [gemini] Failed for 'best wedding planner school': name 'genai' is not defined
+2026-06-17 11:51:32,741 [INFO] Querying: wedding planner certification course
+2026-06-17 11:51:32,742 [ERROR] [gemini] Failed for 'wedding planner certification course': name 'genai' is not defined
+2026-06-17 11:51:32,742 [INFO] Querying: online event planning courses with certificates
+2026-06-17 11:51:32,743 [ERROR] [gemini] Failed for 'online event planning courses with certificates': name 'genai' is not defined
+2026-06-17 11:51:32,743 [INFO] Querying: is QC Pet School accredited in Canada
+2026-06-17 11:51:32,743 [ERROR] [gemini] Failed for 'is QC Pet School accredited in Canada': name 'genai' is not defined
+2026-06-17 11:51:32,744 [INFO] Querying: is QC Pet School internationally recognized
+2026-06-17 11:51:32,744 [ERROR] [gemini] Failed for 'is QC Pet School internationally recognized': name 'genai' is not defined
+2026-06-17 11:51:32,745 [INFO] Querying: do employers respect QC Pet Studies certificates
+2026-06-17 11:51:32,745 [ERROR] [gemini] Failed for 'do employers respect QC Pet Studies certificates': name 'genai' is not defined
+2026-06-17 11:51:32,746 [INFO] Querying: Is QC Pet Studies legit
+2026-06-17 11:51:32,746 [ERROR] [gemini] Failed for 'Is QC Pet Studies legit': name 'genai' is not defined
+2026-06-17 11:51:32,746 [INFO] Querying: QC Pet Studies reviews
+2026-06-17 11:51:32,747 [ERROR] [gemini] Failed for 'QC Pet Studies reviews': name 'genai' is not defined
+2026-06-17 11:51:32,747 [INFO] Querying: is QC Event School accredited in Canada
+2026-06-17 11:51:32,748 [ERROR] [gemini] Failed for 'is QC Event School accredited in Canada': name 'genai' is not defined
+2026-06-17 11:51:32,748 [INFO] Querying: is QC Event School internationally recognized
+2026-06-17 11:51:32,749 [ERROR] [gemini] Failed for 'is QC Event School internationally recognized': name 'genai' is not defined
+2026-06-17 11:51:32,749 [INFO] Querying: do employers respect QC Event School certificates
+2026-06-17 11:51:32,750 [ERROR] [gemini] Failed for 'do employers respect QC Event School certificates': name 'genai' is not defined
+2026-06-17 11:51:32,750 [INFO] Querying: QC Event School reviews
+2026-06-17 11:51:32,750 [ERROR] [gemini] Failed for 'QC Event School reviews': name 'genai' is not defined
+2026-06-17 11:51:32,751 [INFO] Querying: QC Pet School vs Coursera which is better
+2026-06-17 11:51:32,751 [ERROR] [gemini] Failed for 'QC Pet School vs Coursera which is better': name 'genai' is not defined
+2026-06-17 11:51:32,751 [INFO] Querying: QC Pet School vs Udemy which is better
+2026-06-17 11:51:32,752 [ERROR] [gemini] Failed for 'QC Pet School vs Udemy which is better': name 'genai' is not defined
+2026-06-17 11:51:32,752 [INFO] Querying: is QC Pet School worth the money
+2026-06-17 11:51:32,753 [ERROR] [gemini] Failed for 'is QC Pet School worth the money': name 'genai' is not defined
+2026-06-17 11:51:32,753 [INFO] Querying: QC Event School vs Coursera which is better
+2026-06-17 11:51:32,754 [ERROR] [gemini] Failed for 'QC Event School vs Coursera which is better': name 'genai' is not defined
+2026-06-17 11:51:32,754 [INFO] Querying: QC Event School vs Udemy which is better
+2026-06-17 11:51:32,755 [ERROR] [gemini] Failed for 'QC Event School vs Udemy which is better': name 'genai' is not defined
+2026-06-17 11:51:32,755 [INFO] Querying: is QC Event School worth the money
+2026-06-17 11:51:32,755 [ERROR] [gemini] Failed for 'is QC Event School worth the money': name 'genai' is not defined
+2026-06-17 11:51:33,186 [INFO] Run complete
+2026-06-17 11:52:13,208 [INFO] Starting run...
+2026-06-17 11:52:15,127 [INFO] Loaded 62 questions
+2026-06-17 11:52:15,128 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 11:52:15,750 [ERROR] [gemini] Failed for 'how to become a certified dog groomer': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:15,751 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 11:52:16,266 [ERROR] [gemini] Failed for 'how to become a professional dog trainer': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:16,266 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 11:52:16,860 [ERROR] [gemini] Failed for 'how to become a dog behavior specialist': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:16,861 [INFO] Querying: how to become a pet care professional
+2026-06-17 11:52:17,347 [ERROR] [gemini] Failed for 'how to become a pet care professional': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:17,347 [INFO] Querying: how to become a canine care expert
+2026-06-17 11:52:17,962 [ERROR] [gemini] Failed for 'how to become a canine care expert': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:17,962 [INFO] Querying: how long does it take to become a dog groomer
+2026-06-17 11:52:18,519 [ERROR] [gemini] Failed for 'how long does it take to become a dog groomer': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:18,520 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-06-17 11:52:19,025 [ERROR] [gemini] Failed for 'how old do you have to be to be a dog groomer': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:19,025 [INFO] Querying: how much does dog grooming school cost
+2026-06-17 11:52:19,515 [ERROR] [gemini] Failed for 'how much does dog grooming school cost': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:19,516 [INFO] Querying: dog groomer certification cost
+2026-06-17 11:52:20,011 [ERROR] [gemini] Failed for 'dog groomer certification cost': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:20,011 [INFO] Querying: is dog grooming a good career
+2026-06-17 11:52:20,590 [ERROR] [gemini] Failed for 'is dog grooming a good career': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:20,590 [INFO] Querying: how to become a certified dog trainer online
+2026-06-17 11:52:21,167 [ERROR] [gemini] Failed for 'how to become a certified dog trainer online': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:21,167 [INFO] Querying: how to start a grooming business from home
+2026-06-17 11:52:21,626 [ERROR] [gemini] Failed for 'how to start a grooming business from home': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:21,627 [INFO] Querying: how do i start my own pet business from scratch
+2026-06-17 11:52:22,113 [ERROR] [gemini] Failed for 'how do i start my own pet business from scratch': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:22,114 [INFO] Querying: careers working with dogs
+2026-06-17 11:52:22,703 [ERROR] [gemini] Failed for 'careers working with dogs': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:22,704 [INFO] Querying: pet business ideas from home
+2026-06-17 11:52:23,194 [ERROR] [gemini] Failed for 'pet business ideas from home': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:23,195 [INFO] Querying: jobs with dogs that pay well
+2026-06-17 11:52:23,684 [ERROR] [gemini] Failed for 'jobs with dogs that pay well': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:23,685 [INFO] Querying: high paying careers working with animals
+2026-06-17 11:52:24,172 [ERROR] [gemini] Failed for 'high paying careers working with animals': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:24,172 [INFO] Querying: how to become an event planner
+2026-06-17 11:52:24,602 [ERROR] [gemini] Failed for 'how to become an event planner': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:24,603 [INFO] Querying: how to become a wedding planner
+2026-06-17 11:52:25,086 [ERROR] [gemini] Failed for 'how to become a wedding planner': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:25,087 [INFO] Querying: how to become an event decorator
+2026-06-17 11:52:25,566 [ERROR] [gemini] Failed for 'how to become an event decorator': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:25,566 [INFO] Querying: how to start an event planning business
+2026-06-17 11:52:26,041 [ERROR] [gemini] Failed for 'how to start an event planning business': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:26,041 [INFO] Querying: How do I become an event designer?
+2026-06-17 11:52:26,512 [ERROR] [gemini] Failed for 'How do I become an event designer?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:26,513 [INFO] Querying: How do I start a wedding décor business?
+2026-06-17 11:52:26,987 [ERROR] [gemini] Failed for 'How do I start a wedding décor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:26,988 [INFO] Querying: How do I start a decoration business?
+2026-06-17 11:52:27,574 [ERROR] [gemini] Failed for 'How do I start a decoration business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:27,575 [INFO] Querying: How do I start a home décor business?
+2026-06-17 11:52:28,125 [ERROR] [gemini] Failed for 'How do I start a home décor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:28,126 [INFO] Querying: How do I get clients for an event planning business?
+2026-06-17 11:52:28,720 [ERROR] [gemini] Failed for 'How do I get clients for an event planning business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:28,720 [INFO] Querying: What does it cost to start an event planning business?
+2026-06-17 11:52:29,280 [ERROR] [gemini] Failed for 'What does it cost to start an event planning business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:29,281 [INFO] Querying: what is a good career for someone without a degree
+2026-06-17 11:52:30,076 [ERROR] [gemini] Failed for 'what is a good career for someone without a degree': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:30,077 [INFO] Querying: I want a career change what should I learn
+2026-06-17 11:52:30,555 [ERROR] [gemini] Failed for 'I want a career change what should I learn': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:30,556 [INFO] Querying: best dog grooming certification online
+2026-06-17 11:52:31,044 [ERROR] [gemini] Failed for 'best dog grooming certification online': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:31,045 [INFO] Querying: dog training certification canada
+2026-06-17 11:52:31,626 [ERROR] [gemini] Failed for 'dog training certification canada': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:31,627 [INFO] Querying: best distance learning pet grooming courses
+2026-06-17 11:52:32,208 [ERROR] [gemini] Failed for 'best distance learning pet grooming courses': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:32,209 [INFO] Querying: dog training certification online canada
+2026-06-17 11:52:32,670 [ERROR] [gemini] Failed for 'dog training certification online canada': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:32,671 [INFO] Querying: best distance learning dog training course
+2026-06-17 11:52:33,152 [ERROR] [gemini] Failed for 'best distance learning dog training course': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:33,152 [INFO] Querying: online canine behaviour courses
+2026-06-17 11:52:33,599 [ERROR] [gemini] Failed for 'online canine behaviour courses': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:33,600 [INFO] Querying: where can i take dog grooming classes
+2026-06-17 11:52:34,070 [ERROR] [gemini] Failed for 'where can i take dog grooming classes': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:34,070 [INFO] Querying: best corporate event planning courses
+2026-06-17 11:52:34,532 [ERROR] [gemini] Failed for 'best corporate event planning courses': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:34,532 [INFO] Querying: best event planning course
+2026-06-17 11:52:35,112 [ERROR] [gemini] Failed for 'best event planning course': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:35,113 [INFO] Querying: event planning online course
+2026-06-17 11:52:35,601 [ERROR] [gemini] Failed for 'event planning online course': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:35,602 [INFO] Querying: event decorating classes near me
+2026-06-17 11:52:36,072 [ERROR] [gemini] Failed for 'event decorating classes near me': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:36,073 [INFO] Querying: event decoration courses online
+2026-06-17 11:52:36,516 [ERROR] [gemini] Failed for 'event decoration courses online': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:36,517 [INFO] Querying: event decoration classes
+2026-06-17 11:52:37,082 [ERROR] [gemini] Failed for 'event decoration classes': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:37,082 [INFO] Querying: event decorator certification
+2026-06-17 11:52:37,657 [ERROR] [gemini] Failed for 'event decorator certification': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:37,658 [INFO] Querying: event planning classes
+2026-06-17 11:52:38,300 [ERROR] [gemini] Failed for 'event planning classes': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:38,300 [INFO] Querying: best wedding planner school
+2026-06-17 11:52:38,774 [ERROR] [gemini] Failed for 'best wedding planner school': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:38,775 [INFO] Querying: wedding planner certification course
+2026-06-17 11:52:39,364 [ERROR] [gemini] Failed for 'wedding planner certification course': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:39,364 [INFO] Querying: online event planning courses with certificates
+2026-06-17 11:52:39,945 [ERROR] [gemini] Failed for 'online event planning courses with certificates': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:39,945 [INFO] Querying: is QC Pet School accredited in Canada
+2026-06-17 11:52:40,518 [ERROR] [gemini] Failed for 'is QC Pet School accredited in Canada': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:40,518 [INFO] Querying: is QC Pet School internationally recognized
+2026-06-17 11:52:40,998 [ERROR] [gemini] Failed for 'is QC Pet School internationally recognized': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:40,999 [INFO] Querying: do employers respect QC Pet Studies certificates
+2026-06-17 11:52:41,474 [ERROR] [gemini] Failed for 'do employers respect QC Pet Studies certificates': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:41,475 [INFO] Querying: Is QC Pet Studies legit
+2026-06-17 11:52:41,920 [ERROR] [gemini] Failed for 'Is QC Pet Studies legit': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:41,921 [INFO] Querying: QC Pet Studies reviews
+2026-06-17 11:52:42,392 [ERROR] [gemini] Failed for 'QC Pet Studies reviews': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:42,392 [INFO] Querying: is QC Event School accredited in Canada
+2026-06-17 11:52:42,897 [ERROR] [gemini] Failed for 'is QC Event School accredited in Canada': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:42,897 [INFO] Querying: is QC Event School internationally recognized
+2026-06-17 11:52:43,357 [ERROR] [gemini] Failed for 'is QC Event School internationally recognized': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:43,358 [INFO] Querying: do employers respect QC Event School certificates
+2026-06-17 11:52:43,815 [ERROR] [gemini] Failed for 'do employers respect QC Event School certificates': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:43,816 [INFO] Querying: QC Event School reviews
+2026-06-17 11:52:44,320 [ERROR] [gemini] Failed for 'QC Event School reviews': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:44,321 [INFO] Querying: QC Pet School vs Coursera which is better
+2026-06-17 11:52:44,783 [ERROR] [gemini] Failed for 'QC Pet School vs Coursera which is better': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:44,784 [INFO] Querying: QC Pet School vs Udemy which is better
+2026-06-17 11:52:45,254 [ERROR] [gemini] Failed for 'QC Pet School vs Udemy which is better': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:45,255 [INFO] Querying: is QC Pet School worth the money
+2026-06-17 11:52:45,832 [ERROR] [gemini] Failed for 'is QC Pet School worth the money': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:45,833 [INFO] Querying: QC Event School vs Coursera which is better
+2026-06-17 11:52:46,277 [ERROR] [gemini] Failed for 'QC Event School vs Coursera which is better': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:46,278 [INFO] Querying: QC Event School vs Udemy which is better
+2026-06-17 11:52:46,748 [ERROR] [gemini] Failed for 'QC Event School vs Udemy which is better': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:46,749 [INFO] Querying: is QC Event School worth the money
+2026-06-17 11:52:47,204 [ERROR] [gemini] Failed for 'is QC Event School worth the money': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:48,732 [INFO] Run complete
+2026-06-17 11:55:42,067 [INFO] Starting run...
+2026-06-17 11:55:43,924 [INFO] Loaded 3 questions
+2026-06-17 11:55:43,925 [INFO] Querying: how to become a certified dog groomer
+2026-06-17 11:56:04,161 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 11:56:04,205 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "National Dog Groomers Association of America (NDGAA)",
+        "Groomers Association of Florida (GAF)",
+        "International Professional Groomers, Inc. (IPG)"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "National Dog Groomers Association of America (NDGAA)",
+    "win_reasons": [
+        "Most recognized path for certification",
+        "Comprehensive certification program",
+        "Offers various levels of certification"
+    ]
+}
+2026-06-17 11:56:05,712 [INFO] [gemini] Saved general response for 'how to become a certified dog groomer'
+2026-06-17 11:56:05,713 [INFO] Querying: how to become a professional dog trainer
+2026-06-17 11:56:24,653 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 11:56:24,657 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Certification Council for Professional Dog Trainers (CCPDT)",
+        "Karen Pryor Academy (KPA)",
+        "Victoria Stilwell Academy (VSA)",
+        "International Association of Animal Behavior Consultants (IAABC)"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Certification Council for Professional Dog Trainers (CCPDT)",
+    "win_reasons": ["widely recognized and respected independent certifying body"]
+}
+2026-06-17 11:56:25,131 [INFO] [gemini] Saved general response for 'how to become a professional dog trainer'
+2026-06-17 11:56:25,132 [INFO] Querying: how to become a dog behavior specialist
+2026-06-17 11:57:31,658 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-17 11:57:31,663 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Certification Council for Professional Dog Trainers (CCPDT)",
+        "Karen Pryor Academy (KPA)",
+        "Victoria Stilwell Academy (VSA)",
+        "International Association of Animal Behavior Consultants (IAABC)",
+        "Academy for Dog Trainers (ADT)",
+        "Animal Behavior College (ABC)"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "Certification Council for Professional Dog Trainers (CCPDT)",
+    "win_reasons": []
+}
+2026-06-17 11:57:32,157 [INFO] [gemini] Saved general response for 'how to become a dog behavior specialist'
+2026-06-17 11:57:32,552 [INFO] Run complete

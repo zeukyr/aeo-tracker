@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 # import google.generativeai as genai
 from openai import OpenAI
 from perplexity import Perplexity
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -46,11 +47,11 @@ def query_perplexity(question):
     }
     
 # ---- Gemini ----
-# def query_gemini(question):
-#     genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-#     model = genai.GenerativeModel("gemini-1.5-flash")
-#     response = model.generate_content(question)
-#     return response.text
+def query_gemini(question):
+    genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+    model = genai.GenerativeModel("gemini-2.5-flash-lite")
+    response = model.generate_content(question)
+    return response.text
 
 def query_all_engines(question):
     results = {}
@@ -64,21 +65,21 @@ def query_all_engines(question):
     # except Exception as e:
     #     results["chatgpt"] = {"error": str(e)}
 
-    try:
-        perplexity = query_perplexity(question)
-        results["perplexity"] = {
-            "text": perplexity["text"],
-            "citations": perplexity["citations"],
-        }
-    except Exception as e:
-        results["perplexity"] = {"error": str(e)}
-
     # try:
-    #     results["gemini"] = {
-    #         "text": query_gemini(question),
-    #         "citations": [],
+    #     perplexity = query_perplexity(question)
+    #     results["perplexity"] = {
+    #         "text": perplexity["text"],
+    #         "citations": perplexity["citations"],
     #     }
     # except Exception as e:
-    #     results["gemini"] = {"error": str(e)}
+    #     results["perplexity"] = {"error": str(e)}
+
+    try:
+        results["gemini"] = {
+            "text": query_gemini(question),
+            "citations": [],
+        }
+    except Exception as e:
+        results["gemini"] = {"error": str(e)}
 
     return results
