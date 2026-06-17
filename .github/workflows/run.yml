@@ -2,9 +2,9 @@ name: Daily AI Visibility Tracker
 
 on:
   schedule:
-    - cron: "57 13 17 6 *"
-  workflow_dispatch: 
-    
+    - cron: "25 18 * * *"
+  workflow_dispatch:
+
 jobs:
   run-tracker:
     runs-on: ubuntu-latest
