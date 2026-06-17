@@ -2,7 +2,7 @@ name: Daily AI Visibility Tracker
 
 on:
   schedule:
-    - cron: "25 18 * * *"
+    - cron: "0 13 * * *"
   workflow_dispatch:
 
 jobs:

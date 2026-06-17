@@ -70,5 +70,5 @@ def save_sentiment_response(run_id, question_id, engine, raw_response, citations
 def get_questions():
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT id, question, question_type FROM questions WHERE active = true LIMIT 3")
+            cur.execute("SELECT id, question, question_type FROM questions WHERE active = true")
             return cur.fetchall()

@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-# import google.generativeai as genai
 from openai import OpenAI
 from perplexity import Perplexity
 from google import genai
@@ -58,23 +57,23 @@ def query_gemini(question):
 def query_all_engines(question):
     results = {}
 
-    # try:
-    #     chatgpt = query_chatgpt(question)
-    #     results["chatgpt"] = {
-    #         "text": chatgpt["text"],
-    #         "citations": chatgpt["citations"],
-    #     }
-    # except Exception as e:
-    #     results["chatgpt"] = {"error": str(e)}
+    try:
+        chatgpt = query_chatgpt(question)
+        results["chatgpt"] = {
+            "text": chatgpt["text"],
+            "citations": chatgpt["citations"],
+        }
+    except Exception as e:
+        results["chatgpt"] = {"error": str(e)}
 
-    # try:
-    #     perplexity = query_perplexity(question)
-    #     results["perplexity"] = {
-    #         "text": perplexity["text"],
-    #         "citations": perplexity["citations"],
-    #     }
-    # except Exception as e:
-    #     results["perplexity"] = {"error": str(e)}
+    try:
+        perplexity = query_perplexity(question)
+        results["perplexity"] = {
+            "text": perplexity["text"],
+            "citations": perplexity["citations"],
+        }
+    except Exception as e:
+        results["perplexity"] = {"error": str(e)}
 
     try:
         results["gemini"] = {
