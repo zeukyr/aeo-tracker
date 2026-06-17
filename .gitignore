@@ -19,3 +19,7 @@ results/
 # OS
 .DS_Store
 Thumbs.dblogs/
+
+node_modules/
+dashboard/dist/
+dashboard/.env
