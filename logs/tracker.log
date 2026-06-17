@@ -1,0 +1,870 @@
+2026-06-15 15:23:27,365 [INFO] Starting run...
+2026-06-15 15:24:08,591 [INFO] Starting run...
+2026-06-15 15:33:03,585 [INFO] Starting run...
+2026-06-15 15:33:57,114 [INFO] Starting run...
+2026-06-15 15:39:36,297 [INFO] Starting run...
+2026-06-15 15:39:37,253 [INFO] Loaded 51 questions
+2026-06-15 15:39:37,253 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 15:39:37,643 [ERROR] Run failed: parse_response() got an unexpected keyword argument 'citations'
+2026-06-15 15:44:46,128 [INFO] Starting run...
+2026-06-15 15:44:47,020 [INFO] Loaded 51 questions
+2026-06-15 15:44:47,020 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 15:44:47,021 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:47,446 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 15:44:47,447 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:47,814 [INFO] [perplexity] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 15:44:47,815 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:48,194 [INFO] [gemini] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 15:44:48,195 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 15:44:48,196 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:48,583 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 15:44:48,584 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:48,954 [INFO] [perplexity] Saved response for 'best course for becoming an interior designer'
+2026-06-15 15:44:48,954 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:49,334 [INFO] [gemini] Saved response for 'best course for becoming an interior designer'
+2026-06-15 15:44:49,335 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 15:44:49,335 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:49,736 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 15:44:49,737 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:50,123 [INFO] [perplexity] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 15:44:50,124 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:50,499 [INFO] [gemini] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 15:44:50,499 [INFO] Querying: best course for becoming a landscape designer
+2026-06-15 15:44:50,500 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:50,902 [INFO] [chatgpt] Saved response for 'best course for becoming a landscape designer'
+2026-06-15 15:44:50,903 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:51,282 [INFO] [perplexity] Saved response for 'best course for becoming a landscape designer'
+2026-06-15 15:44:51,282 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:51,686 [INFO] [gemini] Saved response for 'best course for becoming a landscape designer'
+2026-06-15 15:44:51,686 [INFO] Querying: best course for becoming an interior stylist
+2026-06-15 15:44:51,687 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:52,075 [INFO] [chatgpt] Saved response for 'best course for becoming an interior stylist'
+2026-06-15 15:44:52,075 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:52,425 [INFO] [perplexity] Saved response for 'best course for becoming an interior stylist'
+2026-06-15 15:44:52,425 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:52,795 [INFO] [gemini] Saved response for 'best course for becoming an interior stylist'
+2026-06-15 15:44:52,795 [INFO] Querying: best course for becoming an event planner
+2026-06-15 15:44:52,795 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:53,202 [INFO] [chatgpt] Saved response for 'best course for becoming an event planner'
+2026-06-15 15:44:53,203 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:53,603 [INFO] [perplexity] Saved response for 'best course for becoming an event planner'
+2026-06-15 15:44:53,604 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:54,002 [INFO] [gemini] Saved response for 'best course for becoming an event planner'
+2026-06-15 15:44:54,003 [INFO] Querying: best course for becoming a wedding planner
+2026-06-15 15:44:54,004 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:54,403 [INFO] [chatgpt] Saved response for 'best course for becoming a wedding planner'
+2026-06-15 15:44:54,403 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:54,807 [INFO] [perplexity] Saved response for 'best course for becoming a wedding planner'
+2026-06-15 15:44:54,808 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:55,179 [INFO] [gemini] Saved response for 'best course for becoming a wedding planner'
+2026-06-15 15:44:55,180 [INFO] Querying: best course for becoming a makeup artist
+2026-06-15 15:44:55,180 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:55,588 [INFO] [chatgpt] Saved response for 'best course for becoming a makeup artist'
+2026-06-15 15:44:55,588 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:55,997 [INFO] [perplexity] Saved response for 'best course for becoming a makeup artist'
+2026-06-15 15:44:55,997 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:56,390 [INFO] [gemini] Saved response for 'best course for becoming a makeup artist'
+2026-06-15 15:44:56,390 [INFO] Querying: best course for becoming a hairstylist
+2026-06-15 15:44:56,390 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:56,771 [INFO] [chatgpt] Saved response for 'best course for becoming a hairstylist'
+2026-06-15 15:44:56,771 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:57,142 [INFO] [perplexity] Saved response for 'best course for becoming a hairstylist'
+2026-06-15 15:44:57,142 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:57,535 [INFO] [gemini] Saved response for 'best course for becoming a hairstylist'
+2026-06-15 15:44:57,535 [INFO] Querying: best course for becoming a personal stylist
+2026-06-15 15:44:57,535 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:57,897 [INFO] [chatgpt] Saved response for 'best course for becoming a personal stylist'
+2026-06-15 15:44:57,897 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:58,254 [INFO] [perplexity] Saved response for 'best course for becoming a personal stylist'
+2026-06-15 15:44:58,254 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:58,615 [INFO] [gemini] Saved response for 'best course for becoming a personal stylist'
+2026-06-15 15:44:58,616 [INFO] Querying: best course for becoming a fashion stylist
+2026-06-15 15:44:58,616 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:59,013 [INFO] [chatgpt] Saved response for 'best course for becoming a fashion stylist'
+2026-06-15 15:44:59,013 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:59,369 [INFO] [perplexity] Saved response for 'best course for becoming a fashion stylist'
+2026-06-15 15:44:59,369 [INFO] [MOCK] Parsing course response
+2026-06-15 15:44:59,745 [INFO] [gemini] Saved response for 'best course for becoming a fashion stylist'
+2026-06-15 15:44:59,746 [INFO] Querying: best course for becoming a skincare consultant
+2026-06-15 15:44:59,746 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:00,111 [INFO] [chatgpt] Saved response for 'best course for becoming a skincare consultant'
+2026-06-15 15:45:00,112 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:00,493 [INFO] [perplexity] Saved response for 'best course for becoming a skincare consultant'
+2026-06-15 15:45:00,494 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:00,883 [INFO] [gemini] Saved response for 'best course for becoming a skincare consultant'
+2026-06-15 15:45:00,884 [INFO] Querying: best course for becoming a dog groomer
+2026-06-15 15:45:00,884 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:01,235 [INFO] [chatgpt] Saved response for 'best course for becoming a dog groomer'
+2026-06-15 15:45:01,235 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:01,624 [INFO] [perplexity] Saved response for 'best course for becoming a dog groomer'
+2026-06-15 15:45:01,625 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:01,996 [INFO] [gemini] Saved response for 'best course for becoming a dog groomer'
+2026-06-15 15:45:01,996 [INFO] Querying: best course for becoming a professional dog trainer
+2026-06-15 15:45:01,996 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:02,391 [INFO] [chatgpt] Saved response for 'best course for becoming a professional dog trainer'
+2026-06-15 15:45:02,392 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:02,798 [INFO] [perplexity] Saved response for 'best course for becoming a professional dog trainer'
+2026-06-15 15:45:02,798 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:03,180 [INFO] [gemini] Saved response for 'best course for becoming a professional dog trainer'
+2026-06-15 15:45:03,181 [INFO] Querying: best course for becoming a dog behavior specialist
+2026-06-15 15:45:03,181 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:03,537 [INFO] [chatgpt] Saved response for 'best course for becoming a dog behavior specialist'
+2026-06-15 15:45:03,538 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:03,914 [INFO] [perplexity] Saved response for 'best course for becoming a dog behavior specialist'
+2026-06-15 15:45:03,914 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:04,292 [INFO] [gemini] Saved response for 'best course for becoming a dog behavior specialist'
+2026-06-15 15:45:04,292 [INFO] Querying: best course for becoming a pet care professional
+2026-06-15 15:45:04,292 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:04,683 [INFO] [chatgpt] Saved response for 'best course for becoming a pet care professional'
+2026-06-15 15:45:04,683 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:05,059 [INFO] [perplexity] Saved response for 'best course for becoming a pet care professional'
+2026-06-15 15:45:05,060 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:05,454 [INFO] [gemini] Saved response for 'best course for becoming a pet care professional'
+2026-06-15 15:45:05,455 [INFO] Querying: best course for becoming a canine care expert
+2026-06-15 15:45:05,455 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:05,836 [INFO] [chatgpt] Saved response for 'best course for becoming a canine care expert'
+2026-06-15 15:45:05,836 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:06,225 [INFO] [perplexity] Saved response for 'best course for becoming a canine care expert'
+2026-06-15 15:45:06,226 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:06,612 [INFO] [gemini] Saved response for 'best course for becoming a canine care expert'
+2026-06-15 15:45:06,613 [INFO] Querying: best course for becoming an infant sleep consultant
+2026-06-15 15:45:06,614 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:06,997 [INFO] [chatgpt] Saved response for 'best course for becoming an infant sleep consultant'
+2026-06-15 15:45:06,997 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:07,390 [INFO] [perplexity] Saved response for 'best course for becoming an infant sleep consultant'
+2026-06-15 15:45:07,391 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:07,783 [INFO] [gemini] Saved response for 'best course for becoming an infant sleep consultant'
+2026-06-15 15:45:07,784 [INFO] Querying: best course for becoming an aging in place consultant
+2026-06-15 15:45:07,784 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:08,170 [INFO] [chatgpt] Saved response for 'best course for becoming an aging in place consultant'
+2026-06-15 15:45:08,171 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:08,626 [INFO] [perplexity] Saved response for 'best course for becoming an aging in place consultant'
+2026-06-15 15:45:08,627 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:09,052 [INFO] [gemini] Saved response for 'best course for becoming an aging in place consultant'
+2026-06-15 15:45:09,053 [INFO] Querying: best course for becoming a caregiver professional
+2026-06-15 15:45:09,054 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:09,449 [INFO] [chatgpt] Saved response for 'best course for becoming a caregiver professional'
+2026-06-15 15:45:09,450 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:09,835 [INFO] [perplexity] Saved response for 'best course for becoming a caregiver professional'
+2026-06-15 15:45:09,835 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:10,239 [INFO] [gemini] Saved response for 'best course for becoming a caregiver professional'
+2026-06-15 15:45:10,240 [INFO] Querying: best course for becoming a home care consultant
+2026-06-15 15:45:10,240 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:10,641 [INFO] [chatgpt] Saved response for 'best course for becoming a home care consultant'
+2026-06-15 15:45:10,642 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:11,075 [INFO] [perplexity] Saved response for 'best course for becoming a home care consultant'
+2026-06-15 15:45:11,076 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:11,446 [INFO] [gemini] Saved response for 'best course for becoming a home care consultant'
+2026-06-15 15:45:11,447 [INFO] Querying: best course for becoming a senior care advisor
+2026-06-15 15:45:11,448 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:11,863 [INFO] [chatgpt] Saved response for 'best course for becoming a senior care advisor'
+2026-06-15 15:45:11,863 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:12,252 [INFO] [perplexity] Saved response for 'best course for becoming a senior care advisor'
+2026-06-15 15:45:12,253 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:12,648 [INFO] [gemini] Saved response for 'best course for becoming a senior care advisor'
+2026-06-15 15:45:12,649 [INFO] Querying: best course for becoming a travel consultant
+2026-06-15 15:45:12,650 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:13,040 [INFO] [chatgpt] Saved response for 'best course for becoming a travel consultant'
+2026-06-15 15:45:13,041 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:13,702 [INFO] [perplexity] Saved response for 'best course for becoming a travel consultant'
+2026-06-15 15:45:13,703 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:14,114 [INFO] [gemini] Saved response for 'best course for becoming a travel consultant'
+2026-06-15 15:45:14,114 [INFO] Querying: best course for becoming a travel advisor
+2026-06-15 15:45:14,115 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:14,502 [INFO] [chatgpt] Saved response for 'best course for becoming a travel advisor'
+2026-06-15 15:45:14,506 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:14,902 [INFO] [perplexity] Saved response for 'best course for becoming a travel advisor'
+2026-06-15 15:45:14,903 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:15,264 [INFO] [gemini] Saved response for 'best course for becoming a travel advisor'
+2026-06-15 15:45:15,265 [INFO] Querying: best course for becoming a freelance stylist
+2026-06-15 15:45:15,265 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:15,688 [INFO] [chatgpt] Saved response for 'best course for becoming a freelance stylist'
+2026-06-15 15:45:15,689 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:16,092 [INFO] [perplexity] Saved response for 'best course for becoming a freelance stylist'
+2026-06-15 15:45:16,093 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:16,499 [INFO] [gemini] Saved response for 'best course for becoming a freelance stylist'
+2026-06-15 15:45:16,499 [INFO] Querying: best course for becoming an event business owner
+2026-06-15 15:45:16,500 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:16,888 [INFO] [chatgpt] Saved response for 'best course for becoming an event business owner'
+2026-06-15 15:45:16,889 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:17,272 [INFO] [perplexity] Saved response for 'best course for becoming an event business owner'
+2026-06-15 15:45:17,273 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:17,682 [INFO] [gemini] Saved response for 'best course for becoming an event business owner'
+2026-06-15 15:45:17,683 [INFO] Querying: best course for becoming a consulting business owner
+2026-06-15 15:45:17,684 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:18,075 [INFO] [chatgpt] Saved response for 'best course for becoming a consulting business owner'
+2026-06-15 15:45:18,076 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:18,451 [INFO] [perplexity] Saved response for 'best course for becoming a consulting business owner'
+2026-06-15 15:45:18,452 [INFO] [MOCK] Parsing course response
+2026-06-15 15:45:18,865 [INFO] [gemini] Saved response for 'best course for becoming a consulting business owner'
+2026-06-15 15:45:18,866 [INFO] Querying: best alternatives to college for creative careers
+2026-06-15 15:45:18,867 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:19,254 [INFO] [chatgpt] Saved response for 'best alternatives to college for creative careers'
+2026-06-15 15:45:19,254 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:19,673 [INFO] [perplexity] Saved response for 'best alternatives to college for creative careers'
+2026-06-15 15:45:19,674 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:20,051 [INFO] [gemini] Saved response for 'best alternatives to college for creative careers'
+2026-06-15 15:45:20,051 [INFO] Querying: what are the most popular online career schools
+2026-06-15 15:45:20,052 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:20,443 [INFO] [chatgpt] Saved response for 'what are the most popular online career schools'
+2026-06-15 15:45:20,444 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:20,875 [INFO] [perplexity] Saved response for 'what are the most popular online career schools'
+2026-06-15 15:45:20,876 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:21,297 [INFO] [gemini] Saved response for 'what are the most popular online career schools'
+2026-06-15 15:45:21,298 [INFO] Querying: what companies offer online certification programs
+2026-06-15 15:45:21,298 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:21,675 [INFO] [chatgpt] Saved response for 'what companies offer online certification programs'
+2026-06-15 15:45:21,675 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:22,076 [INFO] [perplexity] Saved response for 'what companies offer online certification programs'
+2026-06-15 15:45:22,077 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:22,492 [INFO] [gemini] Saved response for 'what companies offer online certification programs'
+2026-06-15 15:45:22,492 [INFO] Querying: what is the best platform to learn creative skills online
+2026-06-15 15:45:22,493 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:22,885 [INFO] [chatgpt] Saved response for 'what is the best platform to learn creative skills online'
+2026-06-15 15:45:22,886 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:23,227 [INFO] [perplexity] Saved response for 'what is the best platform to learn creative skills online'
+2026-06-15 15:45:23,228 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:23,606 [INFO] [gemini] Saved response for 'what is the best platform to learn creative skills online'
+2026-06-15 15:45:23,607 [INFO] Querying: what is a good career for someone without a degree
+2026-06-15 15:45:23,607 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:23,987 [INFO] [chatgpt] Saved response for 'what is a good career for someone without a degree'
+2026-06-15 15:45:23,988 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:24,386 [INFO] [perplexity] Saved response for 'what is a good career for someone without a degree'
+2026-06-15 15:45:24,386 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:24,733 [INFO] [gemini] Saved response for 'what is a good career for someone without a degree'
+2026-06-15 15:45:24,733 [INFO] Querying: I want a career change what should I learn
+2026-06-15 15:45:24,734 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:25,114 [INFO] [chatgpt] Saved response for 'I want a career change what should I learn'
+2026-06-15 15:45:25,115 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:25,499 [INFO] [perplexity] Saved response for 'I want a career change what should I learn'
+2026-06-15 15:45:25,500 [INFO] [MOCK] Parsing general response
+2026-06-15 15:45:25,928 [INFO] [gemini] Saved response for 'I want a career change what should I learn'
+2026-06-15 15:45:25,929 [INFO] Querying: is QC Career School accredited in Canada
+2026-06-15 15:45:25,929 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:26,323 [INFO] [chatgpt] Saved response for 'is QC Career School accredited in Canada'
+2026-06-15 15:45:26,324 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:26,702 [INFO] [perplexity] Saved response for 'is QC Career School accredited in Canada'
+2026-06-15 15:45:26,703 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:27,315 [INFO] [gemini] Saved response for 'is QC Career School accredited in Canada'
+2026-06-15 15:45:27,316 [INFO] Querying: is QC Career School internationally recognized
+2026-06-15 15:45:27,316 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:27,710 [INFO] [chatgpt] Saved response for 'is QC Career School internationally recognized'
+2026-06-15 15:45:27,711 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:28,060 [INFO] [perplexity] Saved response for 'is QC Career School internationally recognized'
+2026-06-15 15:45:28,060 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:28,418 [INFO] [gemini] Saved response for 'is QC Career School internationally recognized'
+2026-06-15 15:45:28,419 [INFO] Querying: do employers respect QC Career School certificates
+2026-06-15 15:45:28,419 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:28,775 [INFO] [chatgpt] Saved response for 'do employers respect QC Career School certificates'
+2026-06-15 15:45:28,775 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:29,157 [INFO] [perplexity] Saved response for 'do employers respect QC Career School certificates'
+2026-06-15 15:45:29,157 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:29,534 [INFO] [gemini] Saved response for 'do employers respect QC Career School certificates'
+2026-06-15 15:45:29,535 [INFO] Querying: is QC Career School a reputable institution
+2026-06-15 15:45:29,535 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:29,936 [INFO] [chatgpt] Saved response for 'is QC Career School a reputable institution'
+2026-06-15 15:45:29,937 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:30,319 [INFO] [perplexity] Saved response for 'is QC Career School a reputable institution'
+2026-06-15 15:45:30,319 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:30,698 [INFO] [gemini] Saved response for 'is QC Career School a reputable institution'
+2026-06-15 15:45:30,698 [INFO] Querying: QC Career School reviews
+2026-06-15 15:45:30,699 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:31,120 [INFO] [chatgpt] Saved response for 'QC Career School reviews'
+2026-06-15 15:45:31,121 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:31,508 [INFO] [perplexity] Saved response for 'QC Career School reviews'
+2026-06-15 15:45:31,509 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:31,887 [INFO] [gemini] Saved response for 'QC Career School reviews'
+2026-06-15 15:45:31,888 [INFO] Querying: should I enroll in QC Career School
+2026-06-15 15:45:31,888 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:32,277 [INFO] [chatgpt] Saved response for 'should I enroll in QC Career School'
+2026-06-15 15:45:32,278 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:32,634 [INFO] [perplexity] Saved response for 'should I enroll in QC Career School'
+2026-06-15 15:45:32,634 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:33,030 [INFO] [gemini] Saved response for 'should I enroll in QC Career School'
+2026-06-15 15:45:33,031 [INFO] Querying: is QC Career School right for me
+2026-06-15 15:45:33,032 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:33,457 [INFO] [chatgpt] Saved response for 'is QC Career School right for me'
+2026-06-15 15:45:33,458 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:33,829 [INFO] [perplexity] Saved response for 'is QC Career School right for me'
+2026-06-15 15:45:33,830 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:34,214 [INFO] [gemini] Saved response for 'is QC Career School right for me'
+2026-06-15 15:45:34,215 [INFO] Querying: should I choose QC Career School or self learning
+2026-06-15 15:45:34,215 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:34,601 [INFO] [chatgpt] Saved response for 'should I choose QC Career School or self learning'
+2026-06-15 15:45:34,602 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:34,989 [INFO] [perplexity] Saved response for 'should I choose QC Career School or self learning'
+2026-06-15 15:45:34,990 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:35,397 [INFO] [gemini] Saved response for 'should I choose QC Career School or self learning'
+2026-06-15 15:45:35,398 [INFO] Querying: how much can you earn after QC Career School
+2026-06-15 15:45:35,398 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:35,822 [INFO] [chatgpt] Saved response for 'how much can you earn after QC Career School'
+2026-06-15 15:45:35,823 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:36,186 [INFO] [perplexity] Saved response for 'how much can you earn after QC Career School'
+2026-06-15 15:45:36,187 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:36,574 [INFO] [gemini] Saved response for 'how much can you earn after QC Career School'
+2026-06-15 15:45:36,574 [INFO] Querying: do people actually succeed after QC Career School
+2026-06-15 15:45:36,575 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:36,970 [INFO] [chatgpt] Saved response for 'do people actually succeed after QC Career School'
+2026-06-15 15:45:36,971 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:37,409 [INFO] [perplexity] Saved response for 'do people actually succeed after QC Career School'
+2026-06-15 15:45:37,410 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:37,794 [INFO] [gemini] Saved response for 'do people actually succeed after QC Career School'
+2026-06-15 15:45:37,794 [INFO] Querying: is QC Career School a scam
+2026-06-15 15:45:37,794 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:38,217 [INFO] [chatgpt] Saved response for 'is QC Career School a scam'
+2026-06-15 15:45:38,217 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:38,574 [INFO] [perplexity] Saved response for 'is QC Career School a scam'
+2026-06-15 15:45:38,575 [INFO] [MOCK] Parsing credibility response
+2026-06-15 15:45:38,963 [INFO] [gemini] Saved response for 'is QC Career School a scam'
+2026-06-15 15:45:38,963 [INFO] Querying: is QC Career School better than other career schools
+2026-06-15 15:45:38,963 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:39,388 [INFO] [chatgpt] Saved response for 'is QC Career School better than other career schools'
+2026-06-15 15:45:39,389 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:39,797 [INFO] [perplexity] Saved response for 'is QC Career School better than other career schools'
+2026-06-15 15:45:39,798 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:40,169 [INFO] [gemini] Saved response for 'is QC Career School better than other career schools'
+2026-06-15 15:45:40,170 [INFO] Querying: QC Career School vs Coursera which is better
+2026-06-15 15:45:40,170 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:40,556 [INFO] [chatgpt] Saved response for 'QC Career School vs Coursera which is better'
+2026-06-15 15:45:40,556 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:40,986 [INFO] [perplexity] Saved response for 'QC Career School vs Coursera which is better'
+2026-06-15 15:45:40,987 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:41,385 [INFO] [gemini] Saved response for 'QC Career School vs Coursera which is better'
+2026-06-15 15:45:41,385 [INFO] Querying: QC Career School vs Udemy which is better
+2026-06-15 15:45:41,386 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:41,798 [INFO] [chatgpt] Saved response for 'QC Career School vs Udemy which is better'
+2026-06-15 15:45:41,798 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:42,179 [INFO] [perplexity] Saved response for 'QC Career School vs Udemy which is better'
+2026-06-15 15:45:42,180 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:42,555 [INFO] [gemini] Saved response for 'QC Career School vs Udemy which is better'
+2026-06-15 15:45:42,556 [INFO] Querying: is QC Career School better than college
+2026-06-15 15:45:42,556 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:42,952 [INFO] [chatgpt] Saved response for 'is QC Career School better than college'
+2026-06-15 15:45:42,952 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:43,328 [INFO] [perplexity] Saved response for 'is QC Career School better than college'
+2026-06-15 15:45:43,329 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:43,714 [INFO] [gemini] Saved response for 'is QC Career School better than college'
+2026-06-15 15:45:43,715 [INFO] Querying: is QC Career School better than online universities
+2026-06-15 15:45:43,716 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:44,100 [INFO] [chatgpt] Saved response for 'is QC Career School better than online universities'
+2026-06-15 15:45:44,100 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:44,484 [INFO] [perplexity] Saved response for 'is QC Career School better than online universities'
+2026-06-15 15:45:44,493 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:44,873 [INFO] [gemini] Saved response for 'is QC Career School better than online universities'
+2026-06-15 15:45:44,874 [INFO] Querying: is QC Career School worth the money
+2026-06-15 15:45:44,874 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:45,261 [INFO] [chatgpt] Saved response for 'is QC Career School worth the money'
+2026-06-15 15:45:45,262 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:45,648 [INFO] [perplexity] Saved response for 'is QC Career School worth the money'
+2026-06-15 15:45:45,649 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:46,062 [INFO] [gemini] Saved response for 'is QC Career School worth the money'
+2026-06-15 15:45:46,063 [INFO] Querying: what is better QC Career School or community college
+2026-06-15 15:45:46,064 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:46,482 [INFO] [chatgpt] Saved response for 'what is better QC Career School or community college'
+2026-06-15 15:45:46,483 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:46,925 [INFO] [perplexity] Saved response for 'what is better QC Career School or community college'
+2026-06-15 15:45:46,926 [INFO] [MOCK] Parsing competition response
+2026-06-15 15:45:47,302 [INFO] [gemini] Saved response for 'what is better QC Career School or community college'
+2026-06-15 15:45:47,671 [INFO] Run complete
+2026-06-15 16:53:43,811 [INFO] Starting run...
+2026-06-15 16:53:44,659 [INFO] Loaded 3 questions
+2026-06-15 16:53:45,044 [ERROR] Run failed: too many values to unpack (expected 3)
+2026-06-15 17:04:21,788 [INFO] Starting run...
+2026-06-15 17:04:22,691 [INFO] Loaded 3 questions
+2026-06-15 17:04:22,691 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 17:04:29,309 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:04:29,460 [INFO] [MOCK] Parsing course response
+2026-06-15 17:04:29,832 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 17:04:29,832 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 17:04:38,914 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:04:38,916 [INFO] [MOCK] Parsing course response
+2026-06-15 17:04:39,473 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 17:04:39,474 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 17:04:50,880 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:04:50,882 [INFO] [MOCK] Parsing course response
+2026-06-15 17:04:51,277 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 17:04:51,655 [INFO] Run complete
+2026-06-15 17:19:11,500 [INFO] Starting run...
+2026-06-15 17:19:12,347 [INFO] Loaded 3 questions
+2026-06-15 17:19:12,348 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 17:19:19,390 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:19:19,499 [INFO] [MOCK] Parsing course response
+2026-06-15 17:19:19,922 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 17:19:19,922 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 17:19:28,341 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:19:28,342 [INFO] [MOCK] Parsing course response
+2026-06-15 17:19:28,726 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 17:19:28,727 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 17:19:36,613 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:19:36,616 [INFO] [MOCK] Parsing course response
+2026-06-15 17:19:37,022 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 17:19:37,402 [INFO] Run complete
+2026-06-15 17:23:07,151 [INFO] Starting run...
+2026-06-15 17:23:08,010 [INFO] Loaded 3 questions
+2026-06-15 17:23:08,011 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 17:23:13,315 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:23:15,056 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:23:15,462 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 17:23:15,462 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 17:23:20,859 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:23:22,634 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:23:23,041 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 17:23:23,042 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 17:23:30,176 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:23:32,054 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:23:32,479 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 17:23:32,847 [INFO] Run complete
+2026-06-15 17:27:26,208 [INFO] Starting run...
+2026-06-15 17:27:26,978 [INFO] Loaded 3 questions
+2026-06-15 17:27:26,979 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 17:27:32,953 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:27:34,890 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:27:35,346 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 17:27:35,346 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 17:27:42,877 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:27:44,733 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:27:45,169 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 17:27:45,170 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 17:27:52,239 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:27:54,581 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:27:54,968 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 17:27:55,330 [INFO] Run complete
+2026-06-15 17:28:46,173 [INFO] Starting run...
+2026-06-15 17:28:47,025 [INFO] Loaded 3 questions
+2026-06-15 17:28:47,025 [INFO] Querying: best course for becoming an interior decorator
+2026-06-15 17:28:54,446 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:28:56,437 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:28:56,892 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-15 17:28:56,892 [INFO] Querying: best course for becoming an interior designer
+2026-06-15 17:29:06,482 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:29:10,054 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:29:10,483 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-15 17:29:10,483 [INFO] Querying: best course for becoming a colour consultant
+2026-06-15 17:29:16,584 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-15 17:29:18,584 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-15 17:29:19,027 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-15 17:29:19,447 [INFO] Run complete
+2026-06-16 09:41:35,401 [INFO] Starting run...
+2026-06-16 09:41:36,297 [INFO] Loaded 3 questions
+2026-06-16 09:41:36,298 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 09:41:44,127 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:41:47,145 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:41:47,709 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 09:41:47,709 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 09:41:57,142 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:41:59,254 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:41:59,683 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-16 09:41:59,683 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 09:42:06,267 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:42:09,249 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:42:09,648 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 09:42:10,026 [INFO] Run complete
+2026-06-16 09:58:22,917 [INFO] Starting run...
+2026-06-16 09:58:23,735 [INFO] Loaded 3 questions
+2026-06-16 09:58:23,735 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 09:58:30,193 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:58:32,543 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:58:32,569 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "National Kitchen & Bath Association",
+        "Coursera",
+        "Udemy",
+        "Skillshare",
+        "The Interior Design Institute",
+        "American Society of Interior Designers"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "The Interior Design Institute",
+    "win_reasons": [
+        "Offers a well-regarded online diploma course"
+    ]
+}
+2026-06-16 09:58:32,977 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 09:58:32,977 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 09:58:41,150 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:58:44,385 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:58:44,390 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Savannah College of Art and Design",
+        "Rhode Island School of Design",
+        "Coursera",
+        "Skillshare",
+        "Udemy"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Savannah College of Art and Design",
+    "win_reasons": [
+        "Accredited program specifically for interior design",
+        "Comprehensive curriculum covering essential topics"
+    ]
+}
+2026-06-16 09:58:44,782 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-16 09:58:44,782 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 09:58:51,029 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 09:58:53,946 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 09:58:53,950 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Camp Chroma",
+        "Staging Studio",
+        "Leatrice Eiseman",
+        "ByFERIAL Image & Color Institute",
+        "Style Academy International"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Camp Chroma",
+    "win_reasons": []
+}
+2026-06-16 09:58:54,378 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 09:58:54,766 [INFO] Run complete
+2026-06-16 10:00:47,770 [INFO] Starting run...
+2026-06-16 10:00:48,571 [INFO] Loaded 3 questions
+2026-06-16 10:00:48,571 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 10:00:56,569 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 10:00:59,362 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 10:00:59,369 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Coursera",
+        "Udemy",
+        "Skillshare",
+        "American Society of Interior Designers (ASID)"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Coursera",
+    "win_reasons": [
+        "Offers a variety of courses",
+        "Well-known platform for online education"
+    ]
+}
+2026-06-16 10:00:59,776 [INFO] [chatgpt] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 10:00:59,776 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 10:01:06,574 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 10:01:09,080 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 10:01:09,088 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Rhode Island School of Design (RISD)",
+        "Savannah College of Art and Design (SCAD)",
+        "Parsons School of Design",
+        "Pratt Institute",
+        "Coursera",
+        "Udemy",
+        "Skillshare"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Rhode Island School of Design (RISD)",
+    "win_reasons": []
+}
+2026-06-16 10:01:09,598 [INFO] [chatgpt] Saved response for 'best course for becoming an interior designer'
+2026-06-16 10:01:09,599 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 10:01:14,586 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-16 10:01:17,712 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 10:01:17,718 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "The Business of Color",
+        "Camp Chroma's Four Pillars of Color",
+        "Leatrice Eiseman's Color and Design Mastercourse",
+        "Staging Studio's Master Color Consultant® Course",
+        "Image Academia's Personal Color Analysis Certificate"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "The Business of Color",
+    "win_reasons": []
+}
+2026-06-16 10:01:18,151 [INFO] [chatgpt] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 10:01:18,521 [INFO] Run complete
+2026-06-16 12:00:55,149 [INFO] Starting run...
+2026-06-16 12:00:56,010 [INFO] Loaded 3 questions
+2026-06-16 12:00:56,010 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 12:00:56,011 [ERROR] [perplexity] Failed for 'best course for becoming an interior decorator': name 'client' is not defined
+2026-06-16 12:00:56,011 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 12:00:56,011 [ERROR] [perplexity] Failed for 'best course for becoming an interior designer': name 'client' is not defined
+2026-06-16 12:00:56,012 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 12:00:56,012 [ERROR] [perplexity] Failed for 'best course for becoming a colour consultant': name 'client' is not defined
+2026-06-16 12:00:56,418 [INFO] Run complete
+2026-06-16 12:04:47,389 [INFO] Starting run...
+2026-06-16 12:04:48,262 [INFO] Loaded 3 questions
+2026-06-16 12:04:48,262 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 12:04:52,019 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:04:55,696 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:04:55,723 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "NYIAD Interior Design School Program",
+        "University of Houston’s Certified Residential Interior Designer Program",
+        "Interior Design Institute",
+        "New York School of Interior Design Basic Interior Design Certificate Program"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "NYIAD Interior Design School Program",
+    "win_reasons": [
+        "described as a highly recommended broad foundation in the field"
+    ]
+}
+2026-06-16 12:04:56,134 [INFO] [perplexity] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 12:04:56,134 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 12:05:00,218 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:05:02,705 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:05:02,720 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "New York School of Interior Design",
+        "Parsons",
+        "The Interior Design Institute",
+        "NYIAD",
+        "FIU"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "New York School of Interior Design",
+    "win_reasons": [
+        "Best for credibility and structured training"
+    ]
+}
+2026-06-16 12:05:03,096 [INFO] [perplexity] Saved response for 'best course for becoming an interior designer'
+2026-06-16 12:05:03,096 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 12:05:07,857 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:05:11,878 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:05:11,892 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_recommendation": "not_recommended",
+    "competitors": [
+        "Leatrice Eiseman Colour Institute",
+        "Certified Colour Expert (CCE) by HSR",
+        "International Image Institute"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Leatrice Eiseman's course",
+    "win_reasons": [
+        "Industry Authority",
+        "Comprehensive Curriculum",
+        "Professional Certification",
+        "Target Audience"
+    ]
+}
+2026-06-16 12:05:12,301 [INFO] [perplexity] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 12:05:12,720 [INFO] Run complete
+2026-06-16 12:39:36,114 [INFO] Starting run...
+2026-06-16 12:39:36,889 [INFO] Loaded 3 questions
+2026-06-16 12:39:36,889 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 12:39:46,954 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:39:50,392 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:39:50,406 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "IAP Career College",
+        "NYIAD",
+        "The Interior Design Institute",
+        "New York School of Interior Design"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "IAP Career College",
+    "win_reasons": [
+        "Specifically for interior decorators",
+        "Focus on portfolio building",
+        "Short duration and recognized certificate"
+    ]
+}
+2026-06-16 12:39:50,794 [INFO] [perplexity] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 12:39:50,795 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 12:39:58,579 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:40:00,621 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:40:00,630 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Texas State University Continuing Education",
+        "New York School of Interior Design",
+        "The Interior Design Institute",
+        "Florida International University"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Texas State University Continuing Education",
+    "win_reasons": [
+        "fully online and career-oriented",
+        "career-focused and beginner-friendly"
+    ]
+}
+2026-06-16 12:40:01,044 [INFO] [perplexity] Saved response for 'best course for becoming an interior designer'
+2026-06-16 12:40:01,044 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 12:40:07,284 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:40:09,342 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:40:09,344 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_recommendation": "implicit",
+    "competitors": [
+        "Leatrice Eiseman",
+        "HSR"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "Leatrice Eiseman",
+    "win_reasons": [
+        "most comprehensive and prestigious certification",
+        "international recognition"
+    ]
+}
+2026-06-16 12:40:09,755 [INFO] [perplexity] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 12:40:10,130 [INFO] Run complete
+2026-06-16 12:47:40,573 [INFO] Starting run...
+2026-06-16 12:47:41,441 [INFO] Loaded 3 questions
+2026-06-16 12:47:41,441 [INFO] Querying: best course for becoming an interior decorator
+2026-06-16 12:47:45,510 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:47:48,423 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:47:48,453 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "IAP Career College",
+        "New York School of Interior Design (NYSID)",
+        "Interior Design Institute"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "IAP Career College",
+    "win_reasons": [
+        "Explicitly designed to help start a career as a professional interior decorator"
+    ]
+}
+2026-06-16 12:47:48,845 [INFO] [perplexity] Saved response for 'best course for becoming an interior decorator'
+2026-06-16 12:47:48,845 [INFO] Querying: best course for becoming an interior designer
+2026-06-16 12:47:53,492 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:47:56,430 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:47:56,436 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": 0,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "New York School of Interior Design",
+        "Interior Design Institute",
+        "FIU Online Certified Residential Interior Designer Training",
+        "Google/short courses"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "New York School of Interior Design",
+    "win_reasons": [
+        "Formal, school-based foundation",
+        "One-year introduction from a recognized interior design school"
+    ]
+}
+2026-06-16 12:47:56,845 [INFO] [perplexity] Saved response for 'best course for becoming an interior designer'
+2026-06-16 12:47:56,845 [INFO] Querying: best course for becoming a colour consultant
+2026-06-16 12:48:01,204 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:48:03,648 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 12:48:03,651 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "qc_recommendation": "recommended",
+    "competitors": [
+        "Leatrice Eiseman’s Color and Design Mastercourse",
+        "Home Staging Resource’s Certified Color Expert course",
+        "ByFERIAL’s 4X4 Color Training"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Leatrice Eiseman’s Color and Design Mastercourse",
+    "win_reasons": [
+        "most comprehensive / broad professional preparation"
+    ]
+}
+2026-06-16 12:48:04,069 [INFO] [perplexity] Saved response for 'best course for becoming a colour consultant'
+2026-06-16 12:48:04,471 [INFO] Run complete
+2026-06-16 17:07:45,382 [INFO] Starting run...
+2026-06-16 17:07:48,192 [INFO] Loaded 62 questions
+2026-06-16 17:07:48,192 [INFO] Querying: how to become a certified dog groomer
+2026-06-16 17:07:51,854 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:07:55,947 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:07:55,957 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "grooming school",
+        "certificate program",
+        "apprenticeship",
+        "Fear Free Groomer Certification",
+        "industry certifications",
+        "CPPG",
+        "CCG",
+        "CPS",
+        "CMG",
+        "Carroll Community College",
+        "Penn Foster"
+    ],
+    "competitor_count": 11,
+    "competitor_won": "Fear Free Groomer Certification",
+    "win_reasons": [
+        "specifically mentioned as a recognized certification",
+        "focus on low-stress handling"
+    ]
+}
+2026-06-16 17:07:56,365 [INFO] [perplexity] Saved general response for 'how to become a certified dog groomer'
+2026-06-16 17:07:56,366 [INFO] Querying: how to become a professional dog trainer
+2026-06-16 17:08:00,670 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:08:02,849 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:08:02,859 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Animal Behavior College",
+        "CATCH Canine Trainers Academy",
+        "Karen Pryor Academy"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Animal Behavior College",
+    "win_reasons": [
+        "First mention in the response",
+        "Presented as a recognized option for training"
+    ]
+}
+2026-06-16 17:08:03,277 [INFO] [perplexity] Saved general response for 'how to become a professional dog trainer'
+2026-06-16 17:08:03,278 [INFO] Querying: how to become a dog behavior specialist
+2026-06-16 17:08:13,154 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:08:16,007 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-16 17:08:16,013 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_recommendation": "not_mentioned",
+    "competitors": [
+        "Moorpark College",
+        "University of North Texas",
+        "Animaledu",
+        "Karen Pryor Academy (KPA)",
+        "Institute of Modern Dog Trainers (IMDT UK)",
+        "British College of Canine Studies",
+        "Cambridge Institute of Dog Behaviour and Training (CIDBT)",
+        "CCPDT",
+        "IACP",
+        "Animal Behavior Society (ABS)"
+    ],
+    "competitor_count": 10,
+    "competitor_won": "Karen Pryor Academy (KPA)",
+    "win_reasons": [
+        "known for its rigorous Dog Trainer Professional Program"
+    ]
+}
+2026-06-16 17:08:16,458 [INFO] [perplexity] Saved general response for 'how to become a dog behavior specialist'
+2026-06-16 17:08:16,458 [INFO] Querying: how to become a pet care professional
