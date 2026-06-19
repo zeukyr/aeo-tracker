@@ -77,9 +77,10 @@ function Citations() {
 
   const filterData = (data, school) => {
     const filtered = school === "All" ? data : data.filter(c => c.school === school);
+    const sorted = [...filtered].sort((a, b) => b.count - a.count);  // if the data is all, needs to be sorted
     return {
-      qc: filtered.filter(c => c.source_type === "QC owned"),
-      external: filtered.filter(c => c.source_type === "external").slice(0, 20)
+      qc: sorted.filter(c => c.source_type === "QC owned"),
+      external: sorted.filter(c => c.source_type === "external").slice(0, 20)
     };
   };
 

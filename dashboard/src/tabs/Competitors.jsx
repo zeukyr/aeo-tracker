@@ -4,16 +4,26 @@ import {
 } from "recharts";
 import { API_BASE_URL } from "../config";
 
+const ALL_SCHOOLS = [
+  "All",
+  "QC Pet Studies",
+  "QC Event Planning",
+  "QC Design School",
+  "QC Makeup Academy",
+  "QC Wellness Studies"
+];
+
 function Competitors() {
-  const [competitors, setCompetitors] = useState([]);
+  const [competitorsBySchool, setCompetitorsBySchool] = useState([]);
+  const [selectedSchool, setSelectedSchool] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/top-competitors`)
+    fetch(`${API_BASE_URL}/api/top-competitors-by-school`)
       .then(r => r.json())
       .then(data => {
-        setCompetitors(data);
+        setCompetitorsBySchool(data);
         setLoading(false);
       })
       .catch(err => {
@@ -25,12 +35,38 @@ function Competitors() {
   if (loading) return <p className="text-gray-500">Loading...</p>;
   if (error) return <p className="text-red-600">Error: {error}</p>;
 
+  const filteredBySchool = selectedSchool === "All"
+    ? competitorsBySchool
+    : competitorsBySchool.filter(c => c.school === selectedSchool);
+
+  const aggregated = Object.values(
+    filteredBySchool.reduce((acc, c) => {
+      if (!acc[c.competitor]) acc[c.competitor] = { competitor: c.competitor, count: 0 };
+      acc[c.competitor].count += c.count;
+      return acc;
+    }, {})
+  ).sort((a, b) => b.count - a.count).slice(0, 10);
+
   return (
     <div className="space-y-6">
       <div className="bg-white border border-gray-200 rounded-lg p-4">
-        <p className="font-medium mb-3">Top competitors mentioned</p>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={competitors} layout="vertical">
+        <div className="flex items-center justify-between mb-1">
+          <p className="font-medium mb-3">Top competitors mentioned</p>
+          <select
+              className="text-sm border border-gray-200 rounded px-2 py-1"
+              value={selectedSchool}
+              onChange={e => setSelectedSchool(e.target.value)}
+          >
+              {ALL_SCHOOLS.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+        <p className="text-sm text-gray-500 mb-3">
+          {selectedSchool === "All"
+            ? "Competitors mentioned across all schools"
+            : `Competitors mentioned in ${selectedSchool} questions`}
+        </p>
+        <ResponsiveContainer width="100%" height={350}>
+          <BarChart data={aggregated} layout="vertical">
             <XAxis type="number" />
             <YAxis type="category" dataKey="competitor" width={160} />
             <Tooltip />
