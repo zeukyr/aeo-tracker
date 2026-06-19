@@ -11,6 +11,9 @@ from api.queries import (
     get_citations,
     get_summary,
     get_competitor_win_rate,
+    get_qc_citations,
+    get_citations_by_school,
+    get_sentiment_citations,
 )
 
 app = FastAPI()
@@ -73,3 +76,16 @@ def top_competitors(days: int = None):
 @app.get("/api/competitor-win-rate")
 def competitor_win_rate(days: int = None):
     return get_competitor_win_rate(days)
+
+
+@app.get("/api/qc-citations")
+def qc_citations(days: int = None):
+    return get_qc_citations(days)
+
+@app.get("/api/citations-by-school")
+def citations_by_school(days: int = None):
+    return get_citations_by_school(days)
+
+@app.get("/api/sentiment-citations")
+def sentiment_citations(days: int = None):
+    return get_sentiment_citations(days)
