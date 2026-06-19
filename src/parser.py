@@ -27,10 +27,6 @@ Extract the following and return as JSON only, no preamble, no markdown:
         - Use 1 for the first school/platform mentioned in the response, 2 for the second, and so on. Never use 0.
         - Use null only if qc_mentioned is false (QC does not appear at all).
         - If QC is mentioned, this must be a positive integer, never 0 or negative.
-    "qc_recommendation": classify as one of:
-        - "recommended" if QC is presented as a good option with positive framing, whether as the sole pick, a co-equal pick, or a favorable alternative
-        - "not_recommended" if QC is mentioned but described negatively, discouraged, or positioned as inferior to other options
-        - "not_mentioned" if QC does not appear anywhere in the response
     "competitors": [list of other schools or platforms mentioned by name],
     "competitor_count": number of competitors mentioned,
     "competitor_won": name of school most prominently recommended, or null if QC won,
@@ -53,11 +49,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
         - Use 1 for the first school/platform mentioned in the response, 2 for the second, and so on. Never use 0.
         - Use null only if qc_mentioned is false (QC does not appear at all).
   - If QC is mentioned, this must be a positive integer, never 0 or negative.
-    "qc_recommendation": classify as one of:
-        - "recommended" if QC is presented as a good option with positive framing, whether as the sole pick, a co-equal pick, or a favorable alternative
-        - "not_recommended" if QC is mentioned but described negatively, discouraged, or positioned as inferior to other options
-        - "not_mentioned" if QC does not appear anywhere in the response
-    "competitors": ["list", "of", "other", "schools", "or", "platforms", "mentioned"],
+    "competitors": [list of other schools or platforms mentioned by name],
     "competitor_count": integer,
     "competitor_won": "name of platform recommended most prominently, or null if QC won",
     "win_reasons": ["reasons competitor was preferred, or empty list"]

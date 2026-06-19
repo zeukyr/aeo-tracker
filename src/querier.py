@@ -46,13 +46,13 @@ def query_perplexity(question):
     }
     
 # ---- Gemini ----
-def query_gemini(question):
-    client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=question
-    )
-    return response.text
+# def query_gemini(question):
+#     client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+#     response = client.models.generate_content(
+#         model="gemini-2.5-flash",
+#         contents=question
+#     )
+#     return response.text
 
 def query_all_engines(question):
     results = {}
@@ -75,12 +75,12 @@ def query_all_engines(question):
     except Exception as e:
         results["perplexity"] = {"error": str(e)}
 
-    try:
-        results["gemini"] = {
-            "text": query_gemini(question),
-            "citations": [],
-        }
-    except Exception as e:
-        results["gemini"] = {"error": str(e)}
+    # try:
+    #     results["gemini"] = {
+    #         "text": query_gemini(question),
+    #         "citations": [],
+    #     }
+    # except Exception as e:
+    #     results["gemini"] = {"error": str(e)}
 
     return results
