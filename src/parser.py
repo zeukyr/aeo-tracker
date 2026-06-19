@@ -31,6 +31,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "competitor_count": number of competitors mentioned,
     "competitor_won": name of school most prominently recommended, or null if QC won,
     "win_reasons": [reasons the competitor was preferred over QC, or empty list]
+    "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
 """,
 
@@ -53,6 +54,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "competitor_count": integer,
     "competitor_won": "name of platform recommended most prominently, or null if QC won",
     "win_reasons": ["reasons competitor was preferred, or empty list"]
+    "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
 The following URLs were cited alongside this response:
 {citations}
@@ -75,6 +77,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "qc_verdict": "one sentence summary of what the AI concluded about QC",
     "concerns_raised": ["list", "of", "concerns", "mentioned"],
     "positives_raised": ["list", "of", "positives", "mentioned"]
+    "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
 The following URLs were cited alongside this response:
 {citations}
@@ -108,6 +111,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "win_reasons": [reasons the winning side was favored, or empty list if competitor_won is "no_clear_winner" or null],
     "concerns_raised": [concerns raised about QC, or empty list],
     "positives_raised": [positives raised about QC, or empty list]
+    "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
 """
 }

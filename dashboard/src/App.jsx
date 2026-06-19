@@ -3,6 +3,7 @@ import Overview from "./tabs/Overview";
 import Visibility from "./tabs/Visibility";
 import Sentiment from "./tabs/Sentiment";
 import Competitors from "./tabs/Competitors";
+import Citations from "./tabs/Citations";
 
 const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Explorer"];
 
@@ -33,8 +34,8 @@ function App() {
       {activeTab === "Visibility" && <Visibility />}
       {activeTab === "Sentiment" && <Sentiment />}
       {activeTab === "Competitors" && <Competitors />}
-      {/* {activeTab === "Citations" && <Citations />}
-      {activeTab === "Explorer" && <Explorer />} */}
+      {activeTab === "Citations" && <Citations />}
+      {/* {activeTab === "Explorer" && <Explorer />} */}
     </div>
   );
 }
