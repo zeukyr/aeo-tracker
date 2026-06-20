@@ -4737,3 +4737,659 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-19 10:25:47,632 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
 2026-06-19 10:25:47,632 [ERROR] [perplexity] Parser returned empty for 'how to become a professional dog trainer'
 2026-06-19 10:25:48,012 [INFO] Run complete
+2026-06-19 14:07:58,817 [INFO] Starting run...
+2026-06-19 14:08:00,669 [INFO] Loaded 62 questions
+2026-06-19 14:08:00,670 [INFO] Querying: how to become a certified dog groomer
+2026-06-19 14:08:08,149 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:08,150 [INFO] Retrying request to /responses in 0.397183 seconds
+2026-06-19 14:08:13,242 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:13,243 [INFO] Retrying request to /responses in 0.892865 seconds
+2026-06-19 14:08:19,535 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:23,660 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:08:23,680 [ERROR] [chatgpt] Failed for 'how to become a certified dog groomer': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:08:24,165 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:24,165 [INFO] Retrying request to /chat/completions in 0.432839 seconds
+2026-06-19 14:08:24,693 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:24,694 [INFO] Retrying request to /chat/completions in 0.849552 seconds
+2026-06-19 14:08:25,835 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:25,838 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:08:25,839 [ERROR] [perplexity] Parser returned empty for 'how to become a certified dog groomer'
+2026-06-19 14:08:25,839 [INFO] Querying: how to become a professional dog trainer
+2026-06-19 14:08:31,109 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:31,110 [INFO] Retrying request to /responses in 0.427614 seconds
+2026-06-19 14:08:37,018 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:37,018 [INFO] Retrying request to /responses in 0.848991 seconds
+2026-06-19 14:08:43,198 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:47,442 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:08:47,444 [ERROR] [chatgpt] Failed for 'how to become a professional dog trainer': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:08:47,601 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:47,601 [INFO] Retrying request to /chat/completions in 0.382841 seconds
+2026-06-19 14:08:48,062 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:48,063 [INFO] Retrying request to /chat/completions in 0.769825 seconds
+2026-06-19 14:08:49,144 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:49,146 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:08:49,146 [ERROR] [perplexity] Parser returned empty for 'how to become a professional dog trainer'
+2026-06-19 14:08:49,147 [INFO] Querying: how to become a dog behavior specialist
+2026-06-19 14:08:54,247 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:54,248 [INFO] Retrying request to /responses in 0.497872 seconds
+2026-06-19 14:08:59,457 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:08:59,458 [INFO] Retrying request to /responses in 0.768687 seconds
+2026-06-19 14:09:04,569 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:08,748 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:09:08,751 [ERROR] [chatgpt] Failed for 'how to become a dog behavior specialist': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:08,887 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:08,888 [INFO] Retrying request to /chat/completions in 0.403969 seconds
+2026-06-19 14:09:09,366 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:09,367 [INFO] Retrying request to /chat/completions in 0.886806 seconds
+2026-06-19 14:09:10,334 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:10,335 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:10,336 [ERROR] [perplexity] Parser returned empty for 'how to become a dog behavior specialist'
+2026-06-19 14:09:10,336 [INFO] Querying: how to become a pet care professional
+2026-06-19 14:09:16,254 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:16,255 [INFO] Retrying request to /responses in 0.398015 seconds
+2026-06-19 14:09:21,819 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:21,820 [INFO] Retrying request to /responses in 0.873676 seconds
+2026-06-19 14:09:28,130 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:31,996 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:09:32,000 [ERROR] [chatgpt] Failed for 'how to become a pet care professional': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:32,292 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:32,293 [INFO] Retrying request to /chat/completions in 0.467462 seconds
+2026-06-19 14:09:32,842 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:32,842 [INFO] Retrying request to /chat/completions in 0.768033 seconds
+2026-06-19 14:09:33,683 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:33,683 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:33,684 [ERROR] [perplexity] Parser returned empty for 'how to become a pet care professional'
+2026-06-19 14:09:33,684 [INFO] Querying: how to become a canine care expert
+2026-06-19 14:09:38,492 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:38,493 [INFO] Retrying request to /responses in 0.401951 seconds
+2026-06-19 14:09:45,394 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:45,395 [INFO] Retrying request to /responses in 0.850329 seconds
+2026-06-19 14:09:52,123 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:57,413 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:09:57,417 [ERROR] [chatgpt] Failed for 'how to become a canine care expert': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:57,574 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:57,574 [INFO] Retrying request to /chat/completions in 0.425637 seconds
+2026-06-19 14:09:58,076 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:58,077 [INFO] Retrying request to /chat/completions in 0.754980 seconds
+2026-06-19 14:09:58,912 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:09:58,912 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:09:58,913 [ERROR] [perplexity] Parser returned empty for 'how to become a canine care expert'
+2026-06-19 14:09:58,913 [INFO] Querying: how long does it take to become a dog groomer
+2026-06-19 14:10:05,322 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:05,322 [INFO] Retrying request to /responses in 0.389007 seconds
+2026-06-19 14:10:11,282 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:11,282 [INFO] Retrying request to /responses in 0.941487 seconds
+2026-06-19 14:10:18,050 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:21,072 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:10:21,073 [ERROR] [chatgpt] Failed for 'how long does it take to become a dog groomer': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:10:21,223 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:21,223 [INFO] Retrying request to /chat/completions in 0.431976 seconds
+2026-06-19 14:10:21,733 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:21,734 [INFO] Retrying request to /chat/completions in 0.967957 seconds
+2026-06-19 14:10:22,777 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:22,778 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:10:22,778 [ERROR] [perplexity] Parser returned empty for 'how long does it take to become a dog groomer'
+2026-06-19 14:10:22,778 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-06-19 14:10:29,418 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:29,419 [INFO] Retrying request to /responses in 0.428271 seconds
+2026-06-19 14:10:34,197 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:34,197 [INFO] Retrying request to /responses in 0.997154 seconds
+2026-06-19 14:10:41,038 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:43,850 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:10:43,852 [ERROR] [chatgpt] Failed for 'how old do you have to be to be a dog groomer': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:10:44,088 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:44,088 [INFO] Retrying request to /chat/completions in 0.454723 seconds
+2026-06-19 14:10:44,633 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:44,634 [INFO] Retrying request to /chat/completions in 0.968469 seconds
+2026-06-19 14:10:45,680 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:45,680 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:10:45,681 [ERROR] [perplexity] Parser returned empty for 'how old do you have to be to be a dog groomer'
+2026-06-19 14:10:45,681 [INFO] Querying: how much does dog grooming school cost
+2026-06-19 14:10:54,231 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:10:54,232 [INFO] Retrying request to /responses in 0.379295 seconds
+2026-06-19 14:11:00,486 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:00,486 [INFO] Retrying request to /responses in 0.978124 seconds
+2026-06-19 14:11:06,873 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:10,157 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:11:10,162 [ERROR] [chatgpt] Failed for 'how much does dog grooming school cost': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:10,344 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:10,345 [INFO] Retrying request to /chat/completions in 0.410410 seconds
+2026-06-19 14:11:10,839 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:10,839 [INFO] Retrying request to /chat/completions in 0.887041 seconds
+2026-06-19 14:11:11,804 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:11,805 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:11,806 [ERROR] [perplexity] Parser returned empty for 'how much does dog grooming school cost'
+2026-06-19 14:11:11,806 [INFO] Querying: dog groomer certification cost
+2026-06-19 14:11:18,324 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:18,324 [INFO] Retrying request to /responses in 0.468189 seconds
+2026-06-19 14:11:23,935 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:23,935 [INFO] Retrying request to /responses in 0.768878 seconds
+2026-06-19 14:11:29,478 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:32,835 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:11:32,837 [ERROR] [chatgpt] Failed for 'dog groomer certification cost': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:33,007 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:33,008 [INFO] Retrying request to /chat/completions in 0.416843 seconds
+2026-06-19 14:11:33,516 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:33,517 [INFO] Retrying request to /chat/completions in 0.870708 seconds
+2026-06-19 14:11:34,464 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:34,465 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:34,465 [ERROR] [perplexity] Parser returned empty for 'dog groomer certification cost'
+2026-06-19 14:11:34,465 [INFO] Querying: is dog grooming a good career
+2026-06-19 14:11:41,464 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:41,465 [INFO] Retrying request to /responses in 0.380769 seconds
+2026-06-19 14:11:47,430 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:47,430 [INFO] Retrying request to /responses in 0.800382 seconds
+2026-06-19 14:11:54,220 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:57,788 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:11:57,790 [ERROR] [chatgpt] Failed for 'is dog grooming a good career': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:57,995 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:57,996 [INFO] Retrying request to /chat/completions in 0.395263 seconds
+2026-06-19 14:11:58,471 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:58,471 [INFO] Retrying request to /chat/completions in 0.908964 seconds
+2026-06-19 14:11:59,468 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:11:59,468 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:11:59,469 [ERROR] [perplexity] Parser returned empty for 'is dog grooming a good career'
+2026-06-19 14:11:59,469 [INFO] Querying: how to become a certified dog trainer online
+2026-06-19 14:12:05,550 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:05,550 [INFO] Retrying request to /responses in 0.422361 seconds
+2026-06-19 14:12:10,942 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:10,943 [INFO] Retrying request to /responses in 0.801130 seconds
+2026-06-19 14:12:16,452 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:21,918 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:12:21,925 [ERROR] [chatgpt] Failed for 'how to become a certified dog trainer online': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:12:22,074 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:22,074 [INFO] Retrying request to /chat/completions in 0.382320 seconds
+2026-06-19 14:12:22,538 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:22,540 [INFO] Retrying request to /chat/completions in 0.833624 seconds
+2026-06-19 14:12:23,449 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:23,449 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:12:23,449 [ERROR] [perplexity] Parser returned empty for 'how to become a certified dog trainer online'
+2026-06-19 14:12:23,450 [INFO] Querying: how to start a grooming business from home
+2026-06-19 14:12:28,900 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:28,901 [INFO] Retrying request to /responses in 0.384317 seconds
+2026-06-19 14:12:33,853 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:33,853 [INFO] Retrying request to /responses in 0.990557 seconds
+2026-06-19 14:12:41,087 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:45,710 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:12:45,716 [ERROR] [chatgpt] Failed for 'how to start a grooming business from home': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:12:45,889 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:45,890 [INFO] Retrying request to /chat/completions in 0.418529 seconds
+2026-06-19 14:12:46,395 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:46,397 [INFO] Retrying request to /chat/completions in 0.880259 seconds
+2026-06-19 14:12:47,353 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:47,353 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:12:47,353 [ERROR] [perplexity] Parser returned empty for 'how to start a grooming business from home'
+2026-06-19 14:12:47,354 [INFO] Querying: how do i start my own pet business from scratch
+2026-06-19 14:12:53,481 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:53,482 [INFO] Retrying request to /responses in 0.379413 seconds
+2026-06-19 14:12:59,569 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:12:59,571 [INFO] Retrying request to /responses in 0.866935 seconds
+2026-06-19 14:13:05,334 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:11,197 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:13:11,200 [ERROR] [chatgpt] Failed for 'how do i start my own pet business from scratch': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:11,412 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:11,413 [INFO] Retrying request to /chat/completions in 0.403579 seconds
+2026-06-19 14:13:11,895 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:11,896 [INFO] Retrying request to /chat/completions in 0.933723 seconds
+2026-06-19 14:13:12,900 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:12,901 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:12,901 [ERROR] [perplexity] Parser returned empty for 'how do i start my own pet business from scratch'
+2026-06-19 14:13:12,901 [INFO] Querying: careers working with dogs
+2026-06-19 14:13:18,047 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:18,047 [INFO] Retrying request to /responses in 0.486381 seconds
+2026-06-19 14:13:22,979 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:22,979 [INFO] Retrying request to /responses in 0.981357 seconds
+2026-06-19 14:13:28,840 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:32,320 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:13:32,323 [ERROR] [chatgpt] Failed for 'careers working with dogs': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:32,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:32,489 [INFO] Retrying request to /chat/completions in 0.484212 seconds
+2026-06-19 14:13:33,054 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:33,054 [INFO] Retrying request to /chat/completions in 0.807127 seconds
+2026-06-19 14:13:33,938 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:33,939 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:33,939 [ERROR] [perplexity] Parser returned empty for 'careers working with dogs'
+2026-06-19 14:13:33,939 [INFO] Querying: pet business ideas from home
+2026-06-19 14:13:40,342 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:40,342 [INFO] Retrying request to /responses in 0.486363 seconds
+2026-06-19 14:13:46,448 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:46,449 [INFO] Retrying request to /responses in 0.940995 seconds
+2026-06-19 14:13:52,416 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:56,477 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:13:56,479 [ERROR] [chatgpt] Failed for 'pet business ideas from home': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:56,636 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:56,636 [INFO] Retrying request to /chat/completions in 0.424008 seconds
+2026-06-19 14:13:57,137 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:57,138 [INFO] Retrying request to /chat/completions in 0.758068 seconds
+2026-06-19 14:13:57,967 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:13:57,968 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:13:57,968 [ERROR] [perplexity] Parser returned empty for 'pet business ideas from home'
+2026-06-19 14:13:57,968 [INFO] Querying: jobs with dogs that pay well
+2026-06-19 14:14:04,808 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:04,808 [INFO] Retrying request to /responses in 0.401363 seconds
+2026-06-19 14:14:09,548 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:09,548 [INFO] Retrying request to /responses in 0.812524 seconds
+2026-06-19 14:14:14,772 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:18,733 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:14:18,737 [ERROR] [chatgpt] Failed for 'jobs with dogs that pay well': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:14:18,969 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:18,969 [INFO] Retrying request to /chat/completions in 0.451365 seconds
+2026-06-19 14:14:19,494 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:19,494 [INFO] Retrying request to /chat/completions in 0.924899 seconds
+2026-06-19 14:14:20,530 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:20,530 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:14:20,530 [ERROR] [perplexity] Parser returned empty for 'jobs with dogs that pay well'
+2026-06-19 14:14:20,530 [INFO] Querying: high paying careers working with animals
+2026-06-19 14:14:25,526 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:25,527 [INFO] Retrying request to /responses in 0.437631 seconds
+2026-06-19 14:14:31,216 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:31,217 [INFO] Retrying request to /responses in 0.769923 seconds
+2026-06-19 14:14:37,217 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:44,396 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:14:44,397 [ERROR] [chatgpt] Failed for 'high paying careers working with animals': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:14:44,575 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:44,576 [INFO] Retrying request to /chat/completions in 0.458235 seconds
+2026-06-19 14:14:45,113 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:45,113 [INFO] Retrying request to /chat/completions in 0.992183 seconds
+2026-06-19 14:14:46,179 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:46,180 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:14:46,180 [ERROR] [perplexity] Parser returned empty for 'high paying careers working with animals'
+2026-06-19 14:14:46,180 [INFO] Querying: how to become an event planner
+2026-06-19 14:14:51,007 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:51,007 [INFO] Retrying request to /responses in 0.426223 seconds
+2026-06-19 14:14:57,276 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:14:57,277 [INFO] Retrying request to /responses in 0.947577 seconds
+2026-06-19 14:15:02,861 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:06,781 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:15:06,787 [ERROR] [chatgpt] Failed for 'how to become an event planner': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:06,965 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:06,966 [INFO] Retrying request to /chat/completions in 0.434357 seconds
+2026-06-19 14:15:07,483 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:07,484 [INFO] Retrying request to /chat/completions in 0.858454 seconds
+2026-06-19 14:15:08,424 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:08,425 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:08,425 [ERROR] [perplexity] Parser returned empty for 'how to become an event planner'
+2026-06-19 14:15:08,425 [INFO] Querying: how to become a wedding planner
+2026-06-19 14:15:14,794 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:14,796 [INFO] Retrying request to /responses in 0.471326 seconds
+2026-06-19 14:15:20,540 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:20,541 [INFO] Retrying request to /responses in 0.893249 seconds
+2026-06-19 14:15:27,682 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:31,124 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:15:31,127 [ERROR] [chatgpt] Failed for 'how to become a wedding planner': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:31,387 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:31,387 [INFO] Retrying request to /chat/completions in 0.475310 seconds
+2026-06-19 14:15:31,946 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:31,946 [INFO] Retrying request to /chat/completions in 0.754048 seconds
+2026-06-19 14:15:32,785 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:32,786 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:32,787 [ERROR] [perplexity] Parser returned empty for 'how to become a wedding planner'
+2026-06-19 14:15:32,787 [INFO] Querying: how to become an event decorator
+2026-06-19 14:15:37,593 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:37,593 [INFO] Retrying request to /responses in 0.439093 seconds
+2026-06-19 14:15:43,492 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:43,493 [INFO] Retrying request to /responses in 0.962416 seconds
+2026-06-19 14:15:50,309 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:56,177 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:15:56,180 [ERROR] [chatgpt] Failed for 'how to become an event decorator': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:56,354 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:56,354 [INFO] Retrying request to /chat/completions in 0.386569 seconds
+2026-06-19 14:15:56,822 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:56,823 [INFO] Retrying request to /chat/completions in 0.876677 seconds
+2026-06-19 14:15:57,803 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:15:57,805 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:15:57,806 [ERROR] [perplexity] Parser returned empty for 'how to become an event decorator'
+2026-06-19 14:15:57,806 [INFO] Querying: how to start an event planning business
+2026-06-19 14:16:04,387 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:04,387 [INFO] Retrying request to /responses in 0.427153 seconds
+2026-06-19 14:16:10,959 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:10,961 [INFO] Retrying request to /responses in 0.822041 seconds
+2026-06-19 14:16:15,655 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:16:15,657 [ERROR] [chatgpt] Failed for 'how to start an event planning business': Connection error.
+2026-06-19 14:16:15,818 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:15,819 [INFO] Retrying request to /chat/completions in 0.445148 seconds
+2026-06-19 14:16:16,337 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:16,338 [INFO] Retrying request to /chat/completions in 0.866690 seconds
+2026-06-19 14:16:17,286 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:17,287 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:16:17,287 [ERROR] [perplexity] Parser returned empty for 'how to start an event planning business'
+2026-06-19 14:16:17,288 [INFO] Querying: How do I become an event designer?
+2026-06-19 14:16:23,780 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:23,781 [INFO] Retrying request to /responses in 0.379660 seconds
+2026-06-19 14:16:29,481 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:29,482 [INFO] Retrying request to /responses in 0.912756 seconds
+2026-06-19 14:16:34,850 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:43,535 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:16:43,540 [ERROR] [chatgpt] Failed for 'How do I become an event designer?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:16:43,815 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:43,815 [INFO] Retrying request to /chat/completions in 0.398771 seconds
+2026-06-19 14:16:44,301 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:44,302 [INFO] Retrying request to /chat/completions in 0.992817 seconds
+2026-06-19 14:16:45,378 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:45,379 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:16:45,379 [ERROR] [perplexity] Parser returned empty for 'How do I become an event designer?'
+2026-06-19 14:16:45,379 [INFO] Querying: How do I start a wedding décor business?
+2026-06-19 14:16:51,707 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:51,707 [INFO] Retrying request to /responses in 0.432193 seconds
+2026-06-19 14:16:57,233 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:16:57,234 [INFO] Retrying request to /responses in 0.784507 seconds
+2026-06-19 14:17:03,674 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:09,096 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:17:09,097 [ERROR] [chatgpt] Failed for 'How do I start a wedding décor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:09,252 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:09,253 [INFO] Retrying request to /chat/completions in 0.488809 seconds
+2026-06-19 14:17:09,832 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:09,832 [INFO] Retrying request to /chat/completions in 0.854440 seconds
+2026-06-19 14:17:10,767 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:10,768 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:10,768 [ERROR] [perplexity] Parser returned empty for 'How do I start a wedding décor business?'
+2026-06-19 14:17:10,768 [INFO] Querying: How do I start a decoration business?
+2026-06-19 14:17:15,931 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:15,932 [INFO] Retrying request to /responses in 0.453043 seconds
+2026-06-19 14:17:21,609 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:21,610 [INFO] Retrying request to /responses in 0.832536 seconds
+2026-06-19 14:17:27,085 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:35,621 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:17:35,622 [ERROR] [chatgpt] Failed for 'How do I start a decoration business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:35,778 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:35,778 [INFO] Retrying request to /chat/completions in 0.396900 seconds
+2026-06-19 14:17:36,256 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:36,256 [INFO] Retrying request to /chat/completions in 0.830689 seconds
+2026-06-19 14:17:37,162 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:37,163 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:37,163 [ERROR] [perplexity] Parser returned empty for 'How do I start a decoration business?'
+2026-06-19 14:17:37,163 [INFO] Querying: How do I start a home décor business?
+2026-06-19 14:17:43,084 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:43,086 [INFO] Retrying request to /responses in 0.480121 seconds
+2026-06-19 14:17:47,954 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:47,955 [INFO] Retrying request to /responses in 0.963105 seconds
+2026-06-19 14:17:55,210 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:17:59,996 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:17:59,997 [ERROR] [chatgpt] Failed for 'How do I start a home décor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:00,169 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:00,171 [INFO] Retrying request to /chat/completions in 0.464967 seconds
+2026-06-19 14:18:00,722 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:00,722 [INFO] Retrying request to /chat/completions in 0.800713 seconds
+2026-06-19 14:18:01,608 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:01,609 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:01,609 [ERROR] [perplexity] Parser returned empty for 'How do I start a home décor business?'
+2026-06-19 14:18:01,609 [INFO] Querying: How do I get clients for an event planning business?
+2026-06-19 14:18:07,646 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:07,646 [INFO] Retrying request to /responses in 0.424533 seconds
+2026-06-19 14:18:12,943 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:12,944 [INFO] Retrying request to /responses in 0.773210 seconds
+2026-06-19 14:18:18,891 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:23,356 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:18:23,358 [ERROR] [chatgpt] Failed for 'How do I get clients for an event planning business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:23,518 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:23,519 [INFO] Retrying request to /chat/completions in 0.389518 seconds
+2026-06-19 14:18:23,986 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:23,987 [INFO] Retrying request to /chat/completions in 0.807435 seconds
+2026-06-19 14:18:24,882 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:24,884 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:24,885 [ERROR] [perplexity] Parser returned empty for 'How do I get clients for an event planning business?'
+2026-06-19 14:18:24,885 [INFO] Querying: What does it cost to start an event planning business?
+2026-06-19 14:18:30,406 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:30,406 [INFO] Retrying request to /responses in 0.404169 seconds
+2026-06-19 14:18:36,105 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:36,106 [INFO] Retrying request to /responses in 0.904968 seconds
+2026-06-19 14:18:41,709 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:45,909 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:18:45,911 [ERROR] [chatgpt] Failed for 'What does it cost to start an event planning business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:46,176 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:46,176 [INFO] Retrying request to /chat/completions in 0.381399 seconds
+2026-06-19 14:18:46,634 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:46,634 [INFO] Retrying request to /chat/completions in 0.794367 seconds
+2026-06-19 14:18:47,509 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:47,510 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:18:47,510 [ERROR] [perplexity] Parser returned empty for 'What does it cost to start an event planning business?'
+2026-06-19 14:18:47,510 [INFO] Querying: what is a good career for someone without a degree
+2026-06-19 14:18:52,260 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:52,260 [INFO] Retrying request to /responses in 0.451991 seconds
+2026-06-19 14:18:57,432 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:18:57,433 [INFO] Retrying request to /responses in 0.881101 seconds
+2026-06-19 14:19:04,400 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:08,748 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:19:08,750 [ERROR] [chatgpt] Failed for 'what is a good career for someone without a degree': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:08,919 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:08,921 [INFO] Retrying request to /chat/completions in 0.474926 seconds
+2026-06-19 14:19:09,476 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:09,478 [INFO] Retrying request to /chat/completions in 0.985960 seconds
+2026-06-19 14:19:10,530 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:10,530 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:10,531 [ERROR] [perplexity] Parser returned empty for 'what is a good career for someone without a degree'
+2026-06-19 14:19:10,531 [INFO] Querying: I want a career change what should I learn
+2026-06-19 14:19:16,392 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:16,394 [INFO] Retrying request to /responses in 0.390879 seconds
+2026-06-19 14:19:21,209 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:21,210 [INFO] Retrying request to /responses in 0.811858 seconds
+2026-06-19 14:19:27,743 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:32,194 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:19:32,197 [ERROR] [chatgpt] Failed for 'I want a career change what should I learn': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:32,361 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:32,362 [INFO] Retrying request to /chat/completions in 0.430885 seconds
+2026-06-19 14:19:32,871 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:32,871 [INFO] Retrying request to /chat/completions in 0.900771 seconds
+2026-06-19 14:19:33,845 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:33,845 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:33,846 [ERROR] [perplexity] Parser returned empty for 'I want a career change what should I learn'
+2026-06-19 14:19:33,846 [INFO] Querying: best dog grooming certification online
+2026-06-19 14:19:39,462 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:39,462 [INFO] Retrying request to /responses in 0.460655 seconds
+2026-06-19 14:19:45,060 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:45,060 [INFO] Retrying request to /responses in 0.838509 seconds
+2026-06-19 14:19:51,846 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:56,309 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:19:56,310 [ERROR] [chatgpt] Failed for 'best dog grooming certification online': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:56,541 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:56,542 [INFO] Retrying request to /chat/completions in 0.445021 seconds
+2026-06-19 14:19:57,062 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:57,063 [INFO] Retrying request to /chat/completions in 0.913445 seconds
+2026-06-19 14:19:58,056 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:19:58,057 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:19:58,057 [ERROR] [perplexity] Parser returned empty for 'best dog grooming certification online'
+2026-06-19 14:19:58,057 [INFO] Querying: dog training certification canada
+2026-06-19 14:20:04,364 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:04,365 [INFO] Retrying request to /responses in 0.444154 seconds
+2026-06-19 14:20:10,041 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:10,042 [INFO] Retrying request to /responses in 0.952993 seconds
+2026-06-19 14:20:16,288 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:20,608 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:20:20,613 [ERROR] [chatgpt] Failed for 'dog training certification canada': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:20:20,778 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:20,779 [INFO] Retrying request to /chat/completions in 0.456245 seconds
+2026-06-19 14:20:21,317 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:21,318 [INFO] Retrying request to /chat/completions in 0.801176 seconds
+2026-06-19 14:20:22,201 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:22,201 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:20:22,201 [ERROR] [perplexity] Parser returned empty for 'dog training certification canada'
+2026-06-19 14:20:22,201 [INFO] Querying: best distance learning pet grooming courses
+2026-06-19 14:20:27,358 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:27,359 [INFO] Retrying request to /responses in 0.385872 seconds
+2026-06-19 14:20:32,405 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:32,405 [INFO] Retrying request to /responses in 0.898794 seconds
+2026-06-19 14:20:38,192 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:43,790 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:20:43,791 [ERROR] [chatgpt] Failed for 'best distance learning pet grooming courses': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:20:43,962 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:43,964 [INFO] Retrying request to /chat/completions in 0.441132 seconds
+2026-06-19 14:20:44,482 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:44,483 [INFO] Retrying request to /chat/completions in 0.959433 seconds
+2026-06-19 14:20:45,518 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:45,519 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:20:45,519 [ERROR] [perplexity] Parser returned empty for 'best distance learning pet grooming courses'
+2026-06-19 14:20:45,519 [INFO] Querying: dog training certification online canada
+2026-06-19 14:20:50,719 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:50,721 [INFO] Retrying request to /responses in 0.394326 seconds
+2026-06-19 14:20:56,926 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:20:56,926 [INFO] Retrying request to /responses in 0.861317 seconds
+2026-06-19 14:21:03,664 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:07,732 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:21:07,734 [ERROR] [chatgpt] Failed for 'dog training certification online canada': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:07,890 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:07,890 [INFO] Retrying request to /chat/completions in 0.395661 seconds
+2026-06-19 14:21:08,373 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:08,373 [INFO] Retrying request to /chat/completions in 0.915818 seconds
+2026-06-19 14:21:09,371 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:09,373 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:09,374 [ERROR] [perplexity] Parser returned empty for 'dog training certification online canada'
+2026-06-19 14:21:09,375 [INFO] Querying: best distance learning dog training course
+2026-06-19 14:21:14,456 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:14,458 [INFO] Retrying request to /responses in 0.387971 seconds
+2026-06-19 14:21:20,734 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:20,735 [INFO] Retrying request to /responses in 0.758043 seconds
+2026-06-19 14:21:27,246 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:31,014 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:21:31,015 [ERROR] [chatgpt] Failed for 'best distance learning dog training course': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:31,229 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:31,231 [INFO] Retrying request to /chat/completions in 0.435316 seconds
+2026-06-19 14:21:31,744 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:31,744 [INFO] Retrying request to /chat/completions in 0.882939 seconds
+2026-06-19 14:21:32,710 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:32,713 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:32,713 [ERROR] [perplexity] Parser returned empty for 'best distance learning dog training course'
+2026-06-19 14:21:32,714 [INFO] Querying: online canine behaviour courses
+2026-06-19 14:21:38,264 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:38,266 [INFO] Retrying request to /responses in 0.474125 seconds
+2026-06-19 14:21:44,491 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:44,492 [INFO] Retrying request to /responses in 0.795575 seconds
+2026-06-19 14:21:49,720 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:53,522 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:21:53,525 [ERROR] [chatgpt] Failed for 'online canine behaviour courses': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:53,681 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:53,682 [INFO] Retrying request to /chat/completions in 0.485611 seconds
+2026-06-19 14:21:54,256 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:54,257 [INFO] Retrying request to /chat/completions in 0.786740 seconds
+2026-06-19 14:21:55,115 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:21:55,116 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:21:55,116 [ERROR] [perplexity] Parser returned empty for 'online canine behaviour courses'
+2026-06-19 14:21:55,117 [INFO] Querying: where can i take dog grooming classes
+2026-06-19 14:22:00,209 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:00,210 [INFO] Retrying request to /responses in 0.389919 seconds
+2026-06-19 14:22:05,727 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:05,728 [INFO] Retrying request to /responses in 0.987338 seconds
+2026-06-19 14:22:12,832 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:15,809 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:22:15,815 [ERROR] [chatgpt] Failed for 'where can i take dog grooming classes': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:22:15,981 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:15,982 [INFO] Retrying request to /chat/completions in 0.381846 seconds
+2026-06-19 14:22:16,441 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:16,441 [INFO] Retrying request to /chat/completions in 0.868561 seconds
+2026-06-19 14:22:17,454 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:17,455 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:22:17,455 [ERROR] [perplexity] Parser returned empty for 'where can i take dog grooming classes'
+2026-06-19 14:22:17,455 [INFO] Querying: best corporate event planning courses
+2026-06-19 14:22:23,055 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:23,055 [INFO] Retrying request to /responses in 0.426456 seconds
+2026-06-19 14:22:28,925 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:28,925 [INFO] Retrying request to /responses in 0.797799 seconds
+2026-06-19 14:22:34,626 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:39,015 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:22:39,016 [ERROR] [chatgpt] Failed for 'best corporate event planning courses': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:22:39,307 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:39,308 [INFO] Retrying request to /chat/completions in 0.445564 seconds
+2026-06-19 14:22:39,843 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:39,844 [INFO] Retrying request to /chat/completions in 0.753561 seconds
+2026-06-19 14:22:40,682 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:40,682 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:22:40,683 [ERROR] [perplexity] Parser returned empty for 'best corporate event planning courses'
+2026-06-19 14:22:40,683 [INFO] Querying: best event planning course
+2026-06-19 14:22:45,843 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:45,844 [INFO] Retrying request to /responses in 0.472500 seconds
+2026-06-19 14:22:52,568 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:22:52,568 [INFO] Retrying request to /responses in 0.918187 seconds
+2026-06-19 14:22:58,959 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:04,910 [INFO] Starting run...
+2026-06-19 14:44:05,705 [INFO] Loaded 62 questions
+2026-06-19 14:44:05,705 [INFO] Querying: how to become a certified dog groomer
+2026-06-19 14:44:13,158 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:13,160 [INFO] Retrying request to /responses in 0.465285 seconds
+2026-06-19 14:44:19,107 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:19,108 [INFO] Retrying request to /responses in 0.895327 seconds
+2026-06-19 14:44:25,601 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:29,605 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:44:29,616 [ERROR] [chatgpt] Failed for 'how to become a certified dog groomer': name 'RateLimitError' is not defined
+2026-06-19 14:44:29,997 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:29,998 [INFO] Retrying request to /chat/completions in 0.411347 seconds
+2026-06-19 14:44:30,659 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:30,660 [INFO] Retrying request to /chat/completions in 0.785060 seconds
+2026-06-19 14:44:31,520 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:31,520 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:44:31,520 [ERROR] [perplexity] Parser returned empty for 'how to become a certified dog groomer'
+2026-06-19 14:44:33,521 [INFO] Querying: how to become a professional dog trainer
+2026-06-19 14:44:39,856 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:39,856 [INFO] Retrying request to /responses in 0.495016 seconds
+2026-06-19 14:44:45,089 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:45,091 [INFO] Retrying request to /responses in 0.803952 seconds
+2026-06-19 14:44:51,080 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:55,168 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:44:55,172 [ERROR] [chatgpt] Failed for 'how to become a professional dog trainer': name 'RateLimitError' is not defined
+2026-06-19 14:44:55,326 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:55,326 [INFO] Retrying request to /chat/completions in 0.423813 seconds
+2026-06-19 14:44:55,827 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:55,828 [INFO] Retrying request to /chat/completions in 0.765916 seconds
+2026-06-19 14:44:56,848 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:44:56,848 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:44:56,849 [ERROR] [perplexity] Parser returned empty for 'how to become a professional dog trainer'
+2026-06-19 14:44:58,849 [INFO] Querying: how to become a dog behavior specialist
+2026-06-19 14:45:04,914 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:04,915 [INFO] Retrying request to /responses in 0.477024 seconds
+2026-06-19 14:45:11,303 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:11,303 [INFO] Retrying request to /responses in 0.935363 seconds
+2026-06-19 14:45:18,165 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:22,390 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:45:22,392 [ERROR] [chatgpt] Failed for 'how to become a dog behavior specialist': name 'RateLimitError' is not defined
+2026-06-19 14:45:22,559 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:22,560 [INFO] Retrying request to /chat/completions in 0.433112 seconds
+2026-06-19 14:45:23,073 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:23,074 [INFO] Retrying request to /chat/completions in 0.889349 seconds
+2026-06-19 14:45:24,035 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:45:24,036 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:45:24,036 [ERROR] [perplexity] Parser returned empty for 'how to become a dog behavior specialist'
+2026-06-19 14:45:26,036 [INFO] Querying: how to become a pet care professional
+2026-06-19 14:47:07,908 [INFO] Starting run...
+2026-06-19 14:47:08,761 [INFO] Loaded 62 questions
+2026-06-19 14:47:08,761 [INFO] Querying: how to become a certified dog groomer
+2026-06-19 14:47:15,044 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:15,045 [INFO] Retrying request to /responses in 0.400625 seconds
+2026-06-19 14:47:21,054 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:25,297 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:47:25,322 [ERROR] [chatgpt] Failed for 'how to become a certified dog groomer': name 'logger' is not defined
+2026-06-19 14:47:25,556 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:25,557 [INFO] Retrying request to /chat/completions in 0.425717 seconds
+2026-06-19 14:47:26,061 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:26,062 [INFO] Retrying request to /chat/completions in 0.985905 seconds
+2026-06-19 14:47:27,123 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:27,124 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:47:27,125 [ERROR] [perplexity] Parser returned empty for 'how to become a certified dog groomer'
+2026-06-19 14:47:29,126 [INFO] Querying: how to become a professional dog trainer
+2026-06-19 14:47:33,801 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:33,801 [INFO] Retrying request to /responses in 0.497402 seconds
+2026-06-19 14:47:38,958 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:42,685 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-19 14:47:42,689 [ERROR] [chatgpt] Failed for 'how to become a professional dog trainer': name 'logger' is not defined
+2026-06-19 14:47:42,845 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:42,846 [INFO] Retrying request to /chat/completions in 0.421180 seconds
+2026-06-19 14:47:43,339 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:43,340 [INFO] Retrying request to /chat/completions in 0.814084 seconds
+2026-06-19 14:47:44,224 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:44,225 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:47:44,226 [ERROR] [perplexity] Parser returned empty for 'how to become a professional dog trainer'
+2026-06-19 14:47:46,226 [INFO] Querying: how to become a dog behavior specialist
+2026-06-19 14:47:51,890 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:47:51,890 [INFO] Retrying request to /responses in 0.437807 seconds
+2026-06-19 14:47:58,468 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:59:22,051 [INFO] Starting run...
+2026-06-19 14:59:22,860 [INFO] Loaded 62 questions
+2026-06-19 14:59:22,860 [INFO] Querying: how to become a certified dog groomer
+2026-06-19 14:59:28,974 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:59:28,975 [INFO] Retrying request to /responses in 0.491124 seconds
+2026-06-19 14:59:35,400 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:59:35,401 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-19 14:59:43,650 [INFO] Starting run...
+2026-06-19 14:59:44,476 [INFO] Loaded 62 questions
+2026-06-19 14:59:44,484 [INFO] Querying: how to become a certified dog groomer
+2026-06-19 14:59:50,175 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:59:50,176 [INFO] Retrying request to /responses in 0.431888 seconds
+2026-06-19 14:59:55,031 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-19 14:59:55,032 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing

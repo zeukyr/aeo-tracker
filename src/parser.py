@@ -150,3 +150,15 @@ def parse_response(question, question_type, raw_response, citations=None):
     except Exception as e:
         logger.error(f"OpenAI parsing error: {e}")
         return {}
+    except RateLimitError as e:
+        if "insufficient_quota" in str(e):
+            logger.error("OpenAI quota exhausted")
+            raise SystemExit("OpenAI quota exhausted")
+        logger.error(f"OpenAI rate limit: {e}")
+        return {}
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse JSON from OpenAI: {e}")
+        return {}
+    except Exception as e:
+        logger.error(f"OpenAI parsing error: {e}")
+        return {}

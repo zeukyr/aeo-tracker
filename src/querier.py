@@ -1,34 +1,44 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
+from openai import OpenAI, RateLimitError
 from perplexity import Perplexity
 from google import genai
+from src.logger import logger
 
 load_dotenv()
 
 # ---- ChatGPT ----
 def query_chatgpt(question):
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    response = client.responses.create(
-        model="gpt-4o-mini",
-        tools=[{"type": "web_search_preview"}],
-        input=question
-    )
+    try: 
+        client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            max_retries=1)
+        response = client.responses.create(
+            model="gpt-4o-mini",
+            tools=[{"type": "web_search_preview"}],
+            input=question
+        )
 
-    text = response.output_text
-    citations = []
-    for item in response.output:
-        if hasattr(item, "content"):
-            for block in item.content:
-                if hasattr(block, "annotations"):
-                    for annotation in block.annotations:
-                        if annotation.type == "url_citation":
-                            citations.append(annotation.url)
+        text = response.output_text
+        citations = []
+        for item in response.output:
+            if hasattr(item, "content"):
+                for block in item.content:
+                    if hasattr(block, "annotations"):
+                        for annotation in block.annotations:
+                            if annotation.type == "url_citation":
+                                citations.append(annotation.url)
+    except RateLimitError as e:
+        if "insufficient_quota" in str(e):
+            logger.error("OpenAI quota exhausted — add credits at platform.openai.com/billing")
+            raise SystemExit("OpenAI quota exhausted")
+        raise
 
     return {
         "text": text,
         "citations": citations
     }
+    
 
 def query_perplexity(question):
     client = Perplexity()

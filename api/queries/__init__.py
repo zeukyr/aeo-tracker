@@ -9,7 +9,7 @@ from api.queries.sentiment import (
     get_top_positives,
 )
 from api.queries.competitors import (
-    get_top_competitors,
+    get_top_competitors_by_school,
     get_competitor_win_rate,
 )
 from api.queries.citations import (
@@ -19,3 +19,4 @@ from api.queries.citations import (
     get_sentiment_citations,
 )
 from api.queries.summary import get_summary
+from api.queries.explorer import get_responses

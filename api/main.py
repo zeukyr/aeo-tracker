@@ -7,13 +7,14 @@ from api.queries import (
     get_sentiment_distribution,
     get_top_positives,
     get_top_concerns,
-    get_top_competitors,
+    get_top_competitors_by_school,
     get_citations,
     get_summary,
     get_competitor_win_rate,
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
+    get_responses
 )
 
 app = FastAPI()
@@ -41,9 +42,6 @@ def sentiment_distribution(days: int = None):
 def top_concerns(days: int = None):
     return get_top_concerns(days)
 
-@app.get("/api/top-competitors")
-def top_competitors(days: int = None):
-    return get_top_competitors(days)
 
 @app.get("/api/citations")
 def citations(days: int = None):
@@ -69,9 +67,9 @@ def sentiment_distribution(days: int = None):
 def top_positives(days: int = None):
     return get_top_positives(days)
 
-@app.get("/api/top-competitors")
-def top_competitors(days: int = None):
-    return get_top_competitors(days)
+@app.get("/api/top-competitors-by-school")
+def top_competitors_by_school(days: int = None):
+    return get_top_competitors_by_school(days)
 
 @app.get("/api/competitor-win-rate")
 def competitor_win_rate(days: int = None):
@@ -89,3 +87,16 @@ def citations_by_school(days: int = None):
 @app.get("/api/sentiment-citations")
 def sentiment_citations(days: int = None):
     return get_sentiment_citations(days)
+
+@app.get("/api/responses")
+def responses(
+    days: int = None,
+    engine: str = None,
+    question_type: str = None,
+    school: str = None,
+    qc_mentioned: bool = None,
+    sentiment: str = None,
+    page: int = 1,
+    page_size: int = 20
+):
+    return get_responses(days, engine, question_type, school, qc_mentioned, sentiment, page, page_size)
