@@ -5,19 +5,25 @@ import {
 import { API_BASE_URL } from "../config";
 
 function Visibility() {
-  const [categoryData, setCategoryData] = useState([]);
-  const [schoolData, setSchoolData] = useState([]);
+  const [mentionCategoryData, setMentionCategoryData] = useState([]);
+  const [citationCategoryData, setCitationCategoryData] = useState([]);
+  const [mentionSchoolData, setMentionSchoolData] = useState([]);
+  const [citationSchoolData, setCitationSchoolData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     Promise.all([
       fetch(`${API_BASE_URL}/api/mention-rate-by-category`).then(r => r.json()),
-      fetch(`${API_BASE_URL}/api/mention-rate-by-school`).then(r => r.json())
+      fetch(`${API_BASE_URL}/api/mention-rate-by-school`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/citation-rate-by-category`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/citation-rate-by-school`).then(r => r.json())
     ])
-      .then(([categoryData, schoolData]) => {
-        setCategoryData(categoryData);
-        setSchoolData(schoolData);
+      .then(([mentionCategoryData, mentionSchoolData, citationCategoryData, citationSchoolData]) => {
+        setMentionCategoryData(mentionCategoryData);
+        setMentionSchoolData(mentionSchoolData);
+        setCitationCategoryData(citationCategoryData);
+        setCitationSchoolData(citationSchoolData);
         setLoading(false);
       })
       .catch(err => {
@@ -34,7 +40,7 @@ function Visibility() {
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <p className="font-medium mb-3">Mention rate by question category</p>
         <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={categoryData} layout="vertical">
+          <BarChart data={mentionCategoryData} layout="vertical">
             <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
             <YAxis type="category" dataKey="category" width={110} />
             <Tooltip formatter={v => `${v}%`} />
@@ -48,7 +54,35 @@ function Visibility() {
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <p className="font-medium mb-3">Mention rate by school</p>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={schoolData} layout="vertical">
+          <BarChart data={mentionSchoolData} layout="vertical">
+            <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
+            <YAxis type="category" dataKey="school" width={160} />
+            <Tooltip formatter={v => `${v}%`} />
+            <Bar dataKey="mention_rate" fill="#16a34a" radius={[0, 4, 4, 0]}>
+              <LabelList dataKey="mention_rate" position="right" formatter={v => `${v}%`} style={{ fontSize: 13 }} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <p className="font-medium mb-3">Citation rate by question category</p>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={citationCategoryData} layout="vertical">
+            <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
+            <YAxis type="category" dataKey="category" width={110} />
+            <Tooltip formatter={v => `${v}%`} />
+            <Bar dataKey="mention_rate" fill="#2563eb" radius={[0, 4, 4, 0]}>
+              <LabelList dataKey="mention_rate" position="right" formatter={v => `${v}%`} style={{ fontSize: 13 }} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        <p className="font-medium mb-3">Citation rate by school</p>
+        <ResponsiveContainer width="100%" height={200}>
+          <BarChart data={citationSchoolData} layout="vertical">
             <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
             <YAxis type="category" dataKey="school" width={160} />
             <Tooltip formatter={v => `${v}%`} />

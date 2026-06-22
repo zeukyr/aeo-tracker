@@ -11,6 +11,12 @@ def get_summary(days=None):
             mention_rate = cur.fetchone()[0]
 
             cur.execute(f"""
+                SELECT AVG(CASE WHEN qc_cited THEN 1 ELSE 0 END)
+                FROM mention_responses WHERE 1=1 {filter_clause};
+            """)
+            citation_rate = cur.fetchone()[0]
+
+            cur.execute(f"""
                 SELECT AVG(CASE WHEN qc_sentiment = 'positive' THEN 1 ELSE 0 END)
                 FROM sentiment_responses WHERE 1=1 {filter_clause};
             """)
@@ -42,6 +48,7 @@ def get_summary(days=None):
 
     return {
         "mention_rate": round(float(mention_rate) * 100, 1) if mention_rate else 0,
+        "citation_rate": round(float(citation_rate) * 100, 1) if citation_rate else 0,
         "positive_sentiment_rate": round(float(positive_rate) * 100, 1) if positive_rate else 0,
         "top_competitor": top_competitor,
         "best_engine": best_engine

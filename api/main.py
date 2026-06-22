@@ -14,7 +14,10 @@ from api.queries import (
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
-    get_responses
+    get_responses,
+    get_citation_rate_by_engine,
+    get_citation_rate_by_category,
+    get_citation_rate_by_school,
 )
 
 app = FastAPI()
@@ -34,6 +37,18 @@ def root():
 def mention_rate_by_engine(days: int = None):
     return get_mention_rate_by_engine(days)
 
+@app.get("/api/citation-rate-by-engine")
+def citation_rate_by_engine(days: int = None):
+    return get_citation_rate_by_engine(days)
+
+@app.get("/api/citation-rate-by-category")
+def citation_rate_by_category(days: int = None):
+    return get_citation_rate_by_category(days)
+
+@app.get("/api/citation-rate-by-school")
+def citation_rate_by_school(days: int = None):
+    return get_citation_rate_by_school(days)
+
 @app.get("/api/sentiment-distribution")
 def sentiment_distribution(days: int = None):
     return get_sentiment_distribution(days)
@@ -41,7 +56,6 @@ def sentiment_distribution(days: int = None):
 @app.get("/api/top-concerns")
 def top_concerns(days: int = None):
     return get_top_concerns(days)
-
 
 @app.get("/api/citations")
 def citations(days: int = None):

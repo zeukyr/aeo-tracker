@@ -29,10 +29,8 @@ def query_chatgpt(question):
                             if annotation.type == "url_citation":
                                 citations.append(annotation.url)
     except RateLimitError as e:
-        if "insufficient_quota" in str(e):
-            logger.error("OpenAI quota exhausted — add credits at platform.openai.com/billing")
-            raise SystemExit("OpenAI quota exhausted")
-        raise
+        logger.error(f"RateLimitError: {e}")
+        raise SystemExit("Rate limited")
 
     return {
         "text": text,

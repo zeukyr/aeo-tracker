@@ -2,6 +2,9 @@ from api.queries.visibility import (
     get_mention_rate_by_engine,
     get_mention_rate_by_category,
     get_mention_rate_by_school,
+    get_citation_rate_by_engine,
+    get_citation_rate_by_category,
+    get_citation_rate_by_school,
 )
 from api.queries.sentiment import (
     get_sentiment_distribution,

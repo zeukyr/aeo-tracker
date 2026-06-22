@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFilter, PERIOD_OPTIONS } from "./context/FilterContext";
 import Overview from "./tabs/Overview";
 import Visibility from "./tabs/Visibility";
 import Sentiment from "./tabs/Sentiment";
@@ -10,13 +11,25 @@ const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations",
 
 function App() {
   const [activeTab, setActiveTab] = useState("Overview");
+  const { days, setDays } = useFilter();
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
-      <h1 className="text-xl font-medium mb-6">QC AI Visibility Dashboard</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-xl font-medium">QC AI Visibility Dashboard</h1>
+        <select
+          className="text-sm border border-gray-200 rounded px-3 py-1.5"
+          value={days ?? ""}
+          onChange={e => setDays(e.target.value ? parseInt(e.target.value) : null)}
+        >
+          {PERIOD_OPTIONS.map(o => (
+            <option key={o.label} value={o.value ?? ""}>{o.label}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex gap-1 border-b border-gray-200 mb-6 overflow-x-auto">
-        {TABS.map((tab) => (
+        {TABS.map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
