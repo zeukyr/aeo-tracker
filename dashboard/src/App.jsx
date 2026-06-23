@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useFilter, PERIOD_OPTIONS } from "./context/FilterContext";
 import Overview from "./tabs/Overview";
 import Visibility from "./tabs/Visibility";
 import Sentiment from "./tabs/Sentiment";
 import Competitors from "./tabs/Competitors";
 import Citations from "./tabs/Citations";
 import Explorer from "./tabs/Explorer";
+import { useFilter } from "./context/useFilter";
+import { PERIOD_OPTIONS } from "./context/FilterContextConstants";
 
 const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Explorer"];
 

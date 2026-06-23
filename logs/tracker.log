@@ -44,12 +44,12 @@
 2026-06-17 11:51:32,721 [ERROR] [gemini] Failed for 'how to start an event planning business': name 'genai' is not defined
 2026-06-17 11:51:32,722 [INFO] Querying: How do I become an event designer?
 2026-06-17 11:51:32,722 [ERROR] [gemini] Failed for 'How do I become an event designer?': name 'genai' is not defined
-2026-06-17 11:51:32,723 [INFO] Querying: How do I start a wedding décor business?
-2026-06-17 11:51:32,723 [ERROR] [gemini] Failed for 'How do I start a wedding décor business?': name 'genai' is not defined
+2026-06-17 11:51:32,723 [INFO] Querying: How do I start a wedding dï¿½cor business?
+2026-06-17 11:51:32,723 [ERROR] [gemini] Failed for 'How do I start a wedding dï¿½cor business?': name 'genai' is not defined
 2026-06-17 11:51:32,724 [INFO] Querying: How do I start a decoration business?
 2026-06-17 11:51:32,724 [ERROR] [gemini] Failed for 'How do I start a decoration business?': name 'genai' is not defined
-2026-06-17 11:51:32,724 [INFO] Querying: How do I start a home décor business?
-2026-06-17 11:51:32,725 [ERROR] [gemini] Failed for 'How do I start a home décor business?': name 'genai' is not defined
+2026-06-17 11:51:32,724 [INFO] Querying: How do I start a home dï¿½cor business?
+2026-06-17 11:51:32,725 [ERROR] [gemini] Failed for 'How do I start a home dï¿½cor business?': name 'genai' is not defined
 2026-06-17 11:51:32,725 [INFO] Querying: How do I get clients for an event planning business?
 2026-06-17 11:51:32,726 [ERROR] [gemini] Failed for 'How do I get clients for an event planning business?': name 'genai' is not defined
 2026-06-17 11:51:32,726 [INFO] Querying: What does it cost to start an event planning business?
@@ -171,12 +171,12 @@
 2026-06-17 11:52:26,041 [ERROR] [gemini] Failed for 'how to start an event planning business': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
 2026-06-17 11:52:26,041 [INFO] Querying: How do I become an event designer?
 2026-06-17 11:52:26,512 [ERROR] [gemini] Failed for 'How do I become an event designer?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
-2026-06-17 11:52:26,513 [INFO] Querying: How do I start a wedding décor business?
-2026-06-17 11:52:26,987 [ERROR] [gemini] Failed for 'How do I start a wedding décor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:26,513 [INFO] Querying: How do I start a wedding dï¿½cor business?
+2026-06-17 11:52:26,987 [ERROR] [gemini] Failed for 'How do I start a wedding dï¿½cor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
 2026-06-17 11:52:26,988 [INFO] Querying: How do I start a decoration business?
 2026-06-17 11:52:27,574 [ERROR] [gemini] Failed for 'How do I start a decoration business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
-2026-06-17 11:52:27,575 [INFO] Querying: How do I start a home décor business?
-2026-06-17 11:52:28,125 [ERROR] [gemini] Failed for 'How do I start a home décor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
+2026-06-17 11:52:27,575 [INFO] Querying: How do I start a home dï¿½cor business?
+2026-06-17 11:52:28,125 [ERROR] [gemini] Failed for 'How do I start a home dï¿½cor business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
 2026-06-17 11:52:28,126 [INFO] Querying: How do I get clients for an event planning business?
 2026-06-17 11:52:28,720 [ERROR] [gemini] Failed for 'How do I get clients for an event planning business?': 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.
 2026-06-17 11:52:28,720 [INFO] Querying: What does it cost to start an event planning business?
@@ -816,12 +816,12 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitors": [
         "Cooperative Care Trainer Certificate",
         "Fear Free",
-        "Purdue’s Canine Care Certified program",
+        "Purdueï¿½s Canine Care Certified program",
         "PACCC",
         "Red Cross"
     ],
     "competitor_count": 5,
-    "competitor_won": "Purdue’s Canine Care Certified program",
+    "competitor_won": "Purdueï¿½s Canine Care Certified program",
     "win_reasons": [
         "emphasizes science-based standards for nutrition, veterinary care, housing, handling, socialization, enrichment, and exercise"
     ]
@@ -962,7 +962,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "qc_mentioned": false,
     "qc_mention_order": null,
     "competitors": [
-        "Penn Foster’s online pet and dog grooming certificate",
+        "Penn Fosterï¿½s online pet and dog grooming certificate",
         "American School of Dog Grooming",
         "Grooming School of Indiana",
         "West Coast Grooming Academy"
@@ -1602,7 +1602,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "win_reasons": []
 }
 2026-06-18 11:27:28,557 [INFO] [gemini] Saved general response for 'How do I become an event designer?'
-2026-06-18 11:27:28,557 [INFO] Querying: How do I start a wedding décor business?
+2026-06-18 11:27:28,557 [INFO] Querying: How do I start a wedding dï¿½cor business?
 2026-06-18 11:27:40,608 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 11:27:45,340 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 11:27:45,973 [INFO] AFC is enabled with max remote calls: 10.
@@ -1616,7 +1616,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 11:28:03,446 [INFO] [chatgpt] Saved general response for 'How do I start a wedding décor business?'
+2026-06-18 11:28:03,446 [INFO] [chatgpt] Saved general response for 'How do I start a wedding dï¿½cor business?'
 2026-06-18 11:28:04,558 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 11:28:04,561 [INFO] RAW OPENAI OUTPUT: {
     "qc_mentioned": false,
@@ -1626,7 +1626,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 11:28:04,955 [INFO] [perplexity] Saved general response for 'How do I start a wedding décor business?'
+2026-06-18 11:28:04,955 [INFO] [perplexity] Saved general response for 'How do I start a wedding dï¿½cor business?'
 2026-06-18 11:28:06,158 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 11:28:06,161 [INFO] RAW OPENAI OUTPUT: {
     "qc_mentioned": false,
@@ -1636,7 +1636,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 11:28:06,546 [INFO] [gemini] Saved general response for 'How do I start a wedding décor business?'
+2026-06-18 11:28:06,546 [INFO] [gemini] Saved general response for 'How do I start a wedding dï¿½cor business?'
 2026-06-18 11:28:06,546 [INFO] Querying: How do I start a decoration business?
 2026-06-18 11:28:15,349 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 11:28:19,699 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
@@ -1663,7 +1663,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
 }
 2026-06-18 11:28:24,757 [INFO] [perplexity] Saved general response for 'How do I start a decoration business?'
 2026-06-18 11:28:24,758 [ERROR] [gemini] Failed for 'How do I start a decoration business?': 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 39.580496177s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '39s'}]}}
-2026-06-18 11:28:24,758 [INFO] Querying: How do I start a home décor business?
+2026-06-18 11:28:24,758 [INFO] Querying: How do I start a home dï¿½cor business?
 2026-06-18 11:28:33,499 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 11:28:39,180 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 11:28:39,931 [INFO] AFC is enabled with max remote calls: 10.
@@ -1677,7 +1677,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 11:28:41,659 [INFO] [chatgpt] Saved general response for 'How do I start a home décor business?'
+2026-06-18 11:28:41,659 [INFO] [chatgpt] Saved general response for 'How do I start a home dï¿½cor business?'
 2026-06-18 11:28:42,690 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 11:28:42,691 [INFO] RAW OPENAI OUTPUT: {
     "qc_mentioned": false,
@@ -1687,8 +1687,8 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 11:28:43,053 [INFO] [perplexity] Saved general response for 'How do I start a home décor business?'
-2026-06-18 11:28:43,054 [ERROR] [gemini] Failed for 'How do I start a home décor business?': 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 20.000954312s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '20s'}]}}
+2026-06-18 11:28:43,053 [INFO] [perplexity] Saved general response for 'How do I start a home dï¿½cor business?'
+2026-06-18 11:28:43,054 [ERROR] [gemini] Failed for 'How do I start a home dï¿½cor business?': 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 20.000954312s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '20s'}]}}
 2026-06-18 11:28:43,054 [INFO] Querying: How do I get clients for an event planning business?
 2026-06-18 11:28:50,006 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 11:28:54,427 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
@@ -1891,7 +1891,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitors": [
         "CCPDT",
         "CAPDT-aligned programs",
-        "Georgian College’s Canine Training Academy",
+        "Georgian Collegeï¿½s Canine Training Academy",
         "Good Dog Academy"
     ],
     "competitor_count": 4,
@@ -1937,7 +1937,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
         "Penn Foster",
         "Professional Dog Grooming Academy (PDGA)",
         "American Grooming Academy",
-        "Jodi Murphy’s online distance-learning program"
+        "Jodi Murphyï¿½s online distance-learning program"
     ],
     "competitor_count": 5,
     "competitor_won": "Animal Behavior College",
@@ -2022,7 +2022,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "qc_mention_order": null,
     "competitors": [
         "Calm Canines Academy",
-        "Cali K9® Online Training",
+        "Cali K9ï¿½ Online Training",
         "C2H Online",
         "International Canine Training Institute (ICTI)",
         "WA Academy"
@@ -2112,8 +2112,8 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
         "West Coast Grooming Academy (WCGA)",
         "Animal Behavior College (ABC)",
         "California Paw Grooming School",
-        "Wag My Tail – Pet Grooming School",
-        "SoCal ROC – Pet Health and Grooming Course",
+        "Wag My Tail ï¿½ Pet Grooming School",
+        "SoCal ROC ï¿½ Pet Health and Grooming Course",
         "American Grooming Academy (Whittier Training)"
     ],
     "competitor_count": 6,
@@ -2360,7 +2360,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
         "Posh Events Institute",
         "Event Decorating Academy",
         "IWED Global",
-        "University of Houston’s Master Event Design program"
+        "University of Houstonï¿½s Master Event Design program"
     ],
     "competitor_count": 6,
     "competitor_won": "Event Decorating Academy",
@@ -2460,7 +2460,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "competitors": [
         "American Academy of Wedding Professionals (AAWP)",
         "V Wedding Academy",
-        "Lovegevity’s Wedding Planning Institute (CWP)",
+        "Lovegevityï¿½s Wedding Planning Institute (CWP)",
         "Certified Master Wedding and Event Planner",
         "Lehman College"
     ],
@@ -2520,7 +2520,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
     "qc_mentioned": false,
     "qc_mention_order": null,
     "competitors": [
-        "Lovegevity’s Wedding Planning Institute",
+        "Lovegevityï¿½s Wedding Planning Institute",
         "Lovegevity",
         "IAP Career College",
         "Penn Foster",
@@ -2528,7 +2528,7 @@ LINE 4: ...                  qc_mentioned, qc_mention_order, qc_recomme...
         "Association of Bridal Consultants"
     ],
     "competitor_count": 6,
-    "competitor_won": "Lovegevity’s Wedding Planning Institute",
+    "competitor_won": "Lovegevityï¿½s Wedding Planning Institute",
     "win_reasons": [
         "Offers the Certified Wedding Planner and Event Designer (CWEP) designation",
         "Includes hands-on industry experience with optional internships",
@@ -3330,7 +3330,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "win_reasons": []
 }
 2026-06-18 12:11:08,493 [INFO] [perplexity] Saved general response for 'How do I become an event designer?'
-2026-06-18 12:11:08,494 [INFO] Querying: How do I start a wedding décor business?
+2026-06-18 12:11:08,494 [INFO] Querying: How do I start a wedding dï¿½cor business?
 2026-06-18 12:11:19,102 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 12:11:24,359 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 12:11:25,626 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
@@ -3342,7 +3342,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 12:11:26,077 [INFO] [chatgpt] Saved general response for 'How do I start a wedding décor business?'
+2026-06-18 12:11:26,077 [INFO] [chatgpt] Saved general response for 'How do I start a wedding dï¿½cor business?'
 2026-06-18 12:11:27,321 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 12:11:27,329 [INFO] RAW OPENAI OUTPUT: {
     "qc_mentioned": false,
@@ -3352,7 +3352,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 12:11:27,751 [INFO] [perplexity] Saved general response for 'How do I start a wedding décor business?'
+2026-06-18 12:11:27,751 [INFO] [perplexity] Saved general response for 'How do I start a wedding dï¿½cor business?'
 2026-06-18 12:11:27,751 [INFO] Querying: How do I start a decoration business?
 2026-06-18 12:11:36,929 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 12:11:41,780 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
@@ -3376,7 +3376,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "win_reasons": []
 }
 2026-06-18 12:11:44,719 [INFO] [perplexity] Saved general response for 'How do I start a decoration business?'
-2026-06-18 12:11:44,720 [INFO] Querying: How do I start a home décor business?
+2026-06-18 12:11:44,720 [INFO] Querying: How do I start a home dï¿½cor business?
 2026-06-18 12:11:52,622 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 12:11:58,005 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 12:11:59,499 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
@@ -3388,7 +3388,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 12:11:59,920 [INFO] [chatgpt] Saved general response for 'How do I start a home décor business?'
+2026-06-18 12:11:59,920 [INFO] [chatgpt] Saved general response for 'How do I start a home dï¿½cor business?'
 2026-06-18 12:12:00,984 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-06-18 12:12:00,985 [INFO] RAW OPENAI OUTPUT: {
     "qc_mentioned": false,
@@ -3398,7 +3398,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "competitor_won": null,
     "win_reasons": []
 }
-2026-06-18 12:12:01,358 [INFO] [perplexity] Saved general response for 'How do I start a home décor business?'
+2026-06-18 12:12:01,358 [INFO] [perplexity] Saved general response for 'How do I start a home dï¿½cor business?'
 2026-06-18 12:12:01,359 [INFO] Querying: How do I get clients for an event planning business?
 2026-06-18 12:12:08,577 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
 2026-06-18 12:12:13,228 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
@@ -3628,7 +3628,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
         "Animal Behavior College",
         "Professional Dog Grooming Academy (PDGA)",
         "American Grooming Academy",
-        "Jodi Murphy’s online course"
+        "Jodi Murphyï¿½s online course"
     ],
     "competitor_count": 5,
     "competitor_won": "Animal Behavior College",
@@ -3679,7 +3679,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "qc_mention_order": null,
     "competitors": [
         "Calm Canines Academy",
-        "Cali K9® Online Training",
+        "Cali K9ï¿½ Online Training",
         "C2H Online",
         "International Canine Training Institute (ICTI)",
         "WA Academy"
@@ -4118,7 +4118,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "competitors": [
         "American Academy of Wedding Professionals (AAWP)",
         "V Wedding Academy",
-        "Lovegevity’s Wedding Planning Institute (CWP)",
+        "Lovegevityï¿½s Wedding Planning Institute (CWP)",
         "Lehman College",
         "University of New Orleans (UNO)"
     ],
@@ -4173,7 +4173,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "qc_mentioned": false,
     "qc_mention_order": null,
     "competitors": [
-        "Lovegevity’s Wedding Planning Institute",
+        "Lovegevityï¿½s Wedding Planning Institute",
         "IAP Career College",
         "Lovegevity (via HVCC Partnership)",
         "Penn Foster",
@@ -4341,7 +4341,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "qc_verdict": "QC Pet Studies appears to be a legitimate school but has mixed reviews regarding the quality of training.",
     "concerns_raised": [
         "limited hands-on learning",
-        "some users didn’t learn much",
+        "some users didnï¿½t learn much",
         "claim of globally-recognized certification not independently verified"
     ],
     "positives_raised": [
@@ -4496,7 +4496,7 @@ LINE 5:                     competitors, competitor_won, win_reasons
     "qc_sentiment": "neutral",
     "qc_verdict": "The AI response provides a mixed overview of QC Event School, highlighting positive aspects while also noting some concerns regarding the reliability of reviews.",
     "concerns_raised": [
-        "The search results are dominated by the school’s own site, affiliated testimonial content, and promotional reviews, not representing a fully independent sample of customer experience.",
+        "The search results are dominated by the schoolï¿½s own site, affiliated testimonial content, and promotional reviews, not representing a fully independent sample of customer experience.",
         "At least one reviewer noted they did not finish a course within the allowed time."
     ],
     "positives_raised": [
@@ -5068,21 +5068,21 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-19 14:16:45,378 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:16:45,379 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
 2026-06-19 14:16:45,379 [ERROR] [perplexity] Parser returned empty for 'How do I become an event designer?'
-2026-06-19 14:16:45,379 [INFO] Querying: How do I start a wedding décor business?
+2026-06-19 14:16:45,379 [INFO] Querying: How do I start a wedding dï¿½cor business?
 2026-06-19 14:16:51,707 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:16:51,707 [INFO] Retrying request to /responses in 0.432193 seconds
 2026-06-19 14:16:57,233 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:16:57,234 [INFO] Retrying request to /responses in 0.784507 seconds
 2026-06-19 14:17:03,674 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:09,096 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-19 14:17:09,097 [ERROR] [chatgpt] Failed for 'How do I start a wedding décor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:09,097 [ERROR] [chatgpt] Failed for 'How do I start a wedding dï¿½cor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
 2026-06-19 14:17:09,252 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:09,253 [INFO] Retrying request to /chat/completions in 0.488809 seconds
 2026-06-19 14:17:09,832 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:09,832 [INFO] Retrying request to /chat/completions in 0.854440 seconds
 2026-06-19 14:17:10,767 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:10,768 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
-2026-06-19 14:17:10,768 [ERROR] [perplexity] Parser returned empty for 'How do I start a wedding décor business?'
+2026-06-19 14:17:10,768 [ERROR] [perplexity] Parser returned empty for 'How do I start a wedding dï¿½cor business?'
 2026-06-19 14:17:10,768 [INFO] Querying: How do I start a decoration business?
 2026-06-19 14:17:15,931 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:15,932 [INFO] Retrying request to /responses in 0.453043 seconds
@@ -5098,21 +5098,21 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-19 14:17:37,162 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:37,163 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
 2026-06-19 14:17:37,163 [ERROR] [perplexity] Parser returned empty for 'How do I start a decoration business?'
-2026-06-19 14:17:37,163 [INFO] Querying: How do I start a home décor business?
+2026-06-19 14:17:37,163 [INFO] Querying: How do I start a home dï¿½cor business?
 2026-06-19 14:17:43,084 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:43,086 [INFO] Retrying request to /responses in 0.480121 seconds
 2026-06-19 14:17:47,954 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:47,955 [INFO] Retrying request to /responses in 0.963105 seconds
 2026-06-19 14:17:55,210 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:17:59,996 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-19 14:17:59,997 [ERROR] [chatgpt] Failed for 'How do I start a home décor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-19 14:17:59,997 [ERROR] [chatgpt] Failed for 'How do I start a home dï¿½cor business?': Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
 2026-06-19 14:18:00,169 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:18:00,171 [INFO] Retrying request to /chat/completions in 0.464967 seconds
 2026-06-19 14:18:00,722 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:18:00,722 [INFO] Retrying request to /chat/completions in 0.800713 seconds
 2026-06-19 14:18:01,608 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:18:01,609 [ERROR] OpenAI parsing error: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
-2026-06-19 14:18:01,609 [ERROR] [perplexity] Parser returned empty for 'How do I start a home décor business?'
+2026-06-19 14:18:01,609 [ERROR] [perplexity] Parser returned empty for 'How do I start a home dï¿½cor business?'
 2026-06-19 14:18:01,609 [INFO] Querying: How do I get clients for an event planning business?
 2026-06-19 14:18:07,646 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:18:07,646 [INFO] Retrying request to /responses in 0.424533 seconds
@@ -5385,49 +5385,49 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-19 14:59:28,974 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:59:28,975 [INFO] Retrying request to /responses in 0.491124 seconds
 2026-06-19 14:59:35,400 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-19 14:59:35,401 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-19 14:59:35,401 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-19 14:59:43,650 [INFO] Starting run...
 2026-06-19 14:59:44,476 [INFO] Loaded 62 questions
 2026-06-19 14:59:44,484 [INFO] Querying: how to become a certified dog groomer
 2026-06-19 14:59:50,175 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-19 14:59:50,176 [INFO] Retrying request to /responses in 0.431888 seconds
 2026-06-19 14:59:55,031 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-19 14:59:55,032 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-19 14:59:55,032 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-20 17:44:38,737 [INFO] Starting run...
 2026-06-20 17:44:39,714 [INFO] Loaded 62 questions
 2026-06-20 17:44:39,715 [INFO] Querying: how to become a certified dog groomer
 2026-06-20 17:44:46,606 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-20 17:44:46,607 [INFO] Retrying request to /responses in 0.447418 seconds
 2026-06-20 17:44:52,060 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-20 17:44:52,064 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-20 17:44:52,064 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 09:59:23,671 [INFO] Starting run...
 2026-06-22 09:59:24,536 [INFO] Loaded 62 questions
 2026-06-22 09:59:24,537 [INFO] Querying: how to become a certified dog groomer
 2026-06-22 09:59:35,517 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-22 09:59:35,527 [INFO] Retrying request to /responses in 0.497642 seconds
 2026-06-22 09:59:41,246 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-22 09:59:41,249 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 09:59:41,249 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 11:19:03,522 [INFO] Starting run...
 2026-06-22 11:19:04,400 [INFO] Loaded 62 questions
 2026-06-22 11:19:04,401 [INFO] Querying: how to become a certified dog groomer
 2026-06-22 11:19:12,291 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:19:12,291 [INFO] Retrying request to /responses in 0.488470 seconds
 2026-06-22 11:19:19,008 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-22 11:19:19,009 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 11:19:19,009 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 11:30:17,050 [INFO] Starting run...
 2026-06-22 11:30:17,872 [INFO] Loaded 62 questions
 2026-06-22 11:30:17,872 [INFO] Querying: how to become a certified dog groomer
 2026-06-22 11:30:25,320 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:30:25,320 [INFO] Retrying request to /responses in 0.399761 seconds
 2026-06-22 11:30:31,866 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
-2026-06-22 11:30:31,869 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 11:30:31,869 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 11:36:24,095 [INFO] Starting run...
 2026-06-22 11:36:24,971 [INFO] Loaded 62 questions
 2026-06-22 11:36:24,972 [INFO] Querying: how to become a certified dog groomer
 2026-06-22 11:36:26,580 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:36:26,581 [INFO] Retrying request to /chat/completions in 0.456861 seconds
 2026-06-22 11:36:27,301 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-06-22 11:36:27,302 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 11:36:27,302 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 11:37:25,563 [INFO] Starting run...
 2026-06-22 11:37:26,397 [INFO] Loaded 62 questions
 2026-06-22 11:37:26,397 [INFO] Querying: how to become a certified dog groomer
@@ -5441,169 +5441,22 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-22 11:40:24,411 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:40:24,412 [INFO] Retrying request to /chat/completions in 0.437737 seconds
 2026-06-22 11:40:24,926 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-06-22 11:40:24,926 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 11:40:24,926 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
 2026-06-22 11:41:04,623 [INFO] Starting run...
 2026-06-22 11:41:05,409 [INFO] Loaded 62 questions
 2026-06-22 11:41:05,410 [INFO] Querying: how to become a certified dog groomer
 2026-06-22 11:41:07,328 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:41:07,329 [INFO] Retrying request to /chat/completions in 0.439045 seconds
 2026-06-22 11:41:07,856 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
-2026-06-22 11:41:07,859 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
-2026-06-23 09:39:04,138 [INFO] Starting run...
-2026-06-23 09:39:05,791 [INFO] Loaded 62 questions
-2026-06-23 09:39:05,791 [INFO] Querying: how to become a certified dog groomer
-2026-06-23 09:39:14,158 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
-2026-06-23 09:39:19,359 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:39:22,066 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:39:22,069 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "National Dog Groomers Association",
-        "International Professional Groomers"
-    ],
-    "competitor_count": 2,
-    "competitor_won": "National Dog Groomers Association",
-    "win_reasons": [],
-    "qc_cited": false
-}
-2026-06-23 09:39:23,443 [ERROR] Run failed: syntax error at or near "NULL"
-LINE 40:                     NULL, ARRAY['National Dog Groomers Assoc...
-                             ^
-
-2026-06-23 09:40:08,734 [INFO] Starting run...
-2026-06-23 09:40:10,191 [INFO] Loaded 62 questions
-2026-06-23 09:40:10,191 [INFO] Querying: how to become a certified dog groomer
-2026-06-23 09:40:19,128 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
-2026-06-23 09:40:23,358 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:40:26,320 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:40:26,328 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "National Dog Groomers Association of America",
-        "International Professional Groomers"
-    ],
-    "competitor_count": 2,
-    "competitor_won": "National Dog Groomers Association of America",
-    "win_reasons": [
-        "Certifying body mentioned first",
-        "Widely recognized within the industry"
-    ],
-    "qc_cited": false
-}
-2026-06-23 09:40:27,843 [ERROR] Run failed: syntax error at or near "NULL"
-LINE 45:                     NULL, ARRAY['National Dog Groomers Assoc...
-                             ^
-
-2026-06-23 09:42:34,372 [INFO] Starting run...
-2026-06-23 09:42:35,833 [INFO] Loaded 62 questions
-2026-06-23 09:42:35,834 [INFO] Querying: how to become a certified dog groomer
-2026-06-23 09:42:42,707 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
-2026-06-23 09:42:47,717 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:42:50,305 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:42:50,308 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "National Dog Groomers Association of America (NDGAA)",
-        "International Professional Groomers (IPG)",
-        "Pet Industry Federation (PIF)"
-    ],
-    "competitor_count": 3,
-    "competitor_won": "National Dog Groomers Association of America (NDGAA)",
-    "win_reasons": [],
-    "qc_cited": false
-}
-2026-06-23 09:42:51,039 [INFO] [chatgpt] Saved general response for 'how to become a certified dog groomer'
-2026-06-23 09:42:54,034 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:42:54,042 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "Professional grooming school",
-        "Paragon online certificate courses",
-        "Fear Free Groomer Certification",
-        "AKCÂ® S.A.F.E. Dog Grooming Program",
-        "Certified Canine Groomer (CCG)",
-        "Certified Professional Pet Groomer (CPPG)",
-        "Certified Master Groomer (CMG)"
-    ],
-    "competitor_count": 7,
-    "competitor_won": "Professional grooming school",
-    "win_reasons": ["Encompasses all required skills and cuts with formal training"]
-    ,
-    "qc_cited": false
-}
-2026-06-23 09:42:54,756 [INFO] [perplexity] Saved general response for 'how to become a certified dog groomer'
-2026-06-23 09:43:14,761 [INFO] Querying: how to become a professional dog trainer
-2026-06-23 09:43:26,553 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
-2026-06-23 09:43:30,033 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:43:32,197 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:43:32,198 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "Association of Professional Dog Trainers (APDT)",
-        "International Association of Canine Professionals (IACP)",
-        "Certification Council for Professional Dog Trainers (CCPDT)"
-    ],
-    "competitor_count": 3,
-    "competitor_won": "Association of Professional Dog Trainers (APDT)",
-    "win_reasons": [],
-    "qc_cited": false
-}
-2026-06-23 09:43:32,895 [INFO] [chatgpt] Saved general response for 'how to become a professional dog trainer'
-2026-06-23 09:43:35,871 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:43:35,871 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "Karen Pryor Academy",
-        "CATCH Canine Trainers Academy"
-    ],
-    "competitor_count": 2,
-    "competitor_won": "Karen Pryor Academy",
-    "win_reasons": []
-    ,
-    "qc_cited": false
-}
-2026-06-23 09:43:36,553 [INFO] [perplexity] Saved general response for 'how to become a professional dog trainer'
-2026-06-23 09:43:56,558 [INFO] Querying: how to become a dog behavior specialist
-2026-06-23 09:44:02,905 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
-2026-06-23 09:44:08,786 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:44:11,711 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:44:11,712 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "International Association of Animal Behavior Consultants",
-        "Certification Council for Professional Dog Trainers"
-    ],
-    "competitor_count": 2,
-    "competitor_won": "International Association of Animal Behavior Consultants",
-    "win_reasons": [
-        "First organization mentioned in the certification section"
-    ],
-    "qc_cited": false
-}
-2026-06-23 09:44:12,398 [INFO] [chatgpt] Saved general response for 'how to become a dog behavior specialist'
-2026-06-23 09:44:14,445 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
-2026-06-23 09:44:14,450 [INFO] RAW OPENAI OUTPUT: {
-    "qc_mentioned": false,
-    "qc_mention_order": null,
-    "competitors": [
-        "Karen Pryor Academy",
-        "British College of Canine Studies",
-        "Institute of Modern Dog Trainers"
-    ],
-    "competitor_count": 3,
-    "competitor_won": "Karen Pryor Academy",
-    "win_reasons": [
-        "Provides hands-on experience and curriculum covering dog behavior and class design"
-    ],
-    "qc_cited": false
-}
-2026-06-23 09:44:15,144 [INFO] [perplexity] Saved general response for 'how to become a dog behavior specialist'
-2026-06-23 09:44:35,149 [INFO] Querying: how to become a pet care professional
-2026-06-23 09:44:45,094 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-22 11:41:07,859 [ERROR] OpenAI quota exhausted ï¿½ add credits at platform.openai.com/billing
+2026-06-22 15:17:50,231 [INFO] Starting run...
+2026-06-22 15:17:51,041 [INFO] Loaded 62 questions
+2026-06-22 15:17:51,041 [INFO] Querying: how to become a certified dog groomer
+2026-06-22 15:17:59,979 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-22 15:17:59,980 [INFO] Retrying request to /responses in 0.398265 seconds
+2026-06-22 15:18:05,860 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-22 15:18:05,861 [ERROR] RateLimitError: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-23 09:19:37,334 [INFO] Starting run...
+2026-06-23 09:19:38,248 [INFO] Loaded 62 questions
+2026-06-23 09:19:38,248 [INFO] Querying: how to become a certified dog groomer
+2026-06-23 09:19:48,953 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
