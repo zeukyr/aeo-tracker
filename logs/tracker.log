@@ -5449,3 +5449,14 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-22 11:41:07,329 [INFO] Retrying request to /chat/completions in 0.439045 seconds
 2026-06-22 11:41:07,856 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:41:07,859 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-22 15:17:50,231 [INFO] Starting run...
+2026-06-22 15:17:51,041 [INFO] Loaded 62 questions
+2026-06-22 15:17:51,041 [INFO] Querying: how to become a certified dog groomer
+2026-06-22 15:17:59,979 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-22 15:17:59,980 [INFO] Retrying request to /responses in 0.398265 seconds
+2026-06-22 15:18:05,860 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 429 Too Many Requests"
+2026-06-22 15:18:05,861 [ERROR] RateLimitError: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}}
+2026-06-23 09:19:37,334 [INFO] Starting run...
+2026-06-23 09:19:38,248 [INFO] Loaded 62 questions
+2026-06-23 09:19:38,248 [INFO] Querying: how to become a certified dog groomer
+2026-06-23 09:19:48,953 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"

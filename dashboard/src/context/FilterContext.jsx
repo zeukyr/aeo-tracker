@@ -1,12 +1,3 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
-const FilterContext = createContext();
-
-export function FilterProvider({ children }) {
-  const [days, setDays] = useState(30);
-  return (
-    <FilterContext.Provider value={{ days, setDays }}>
-      {children}
-    </FilterContext.Provider>
-  );
-}
+export const FilterContext = createContext();

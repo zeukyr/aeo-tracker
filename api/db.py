@@ -11,3 +11,9 @@ def _date_filter(days):
     if days:
         return f"AND created_at >= now() - interval '{int(days)} days'"
     return ""
+    
+def _prev_date_filter(days, alias=None):
+    prefix = f"{alias}." if alias else ""
+    if days:
+        return f"AND {prefix}created_at >= now() - interval '{int(days) * 2} days' AND {prefix}created_at < now() - interval '{int(days)} days'"
+    return ""
