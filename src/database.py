@@ -35,7 +35,7 @@ def save_mention_response(run_id, question_id, engine, raw_response, citations, 
                     run_id, question_id, engine, raw_response, citations,
                     qc_mentioned, qc_mention_order, competitors, competitor_count, competitor_won, win_reasons, qc_cited
                 ) VALUES (
-                    %s, %s, %s, %s, %s, %s
+                    %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s
                 )
             """, (

@@ -5449,3 +5449,161 @@ LINE 5:                     competitors, competitor_won, win_reasons
 2026-06-22 11:41:07,329 [INFO] Retrying request to /chat/completions in 0.439045 seconds
 2026-06-22 11:41:07,856 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
 2026-06-22 11:41:07,859 [ERROR] OpenAI quota exhausted — add credits at platform.openai.com/billing
+2026-06-23 09:39:04,138 [INFO] Starting run...
+2026-06-23 09:39:05,791 [INFO] Loaded 62 questions
+2026-06-23 09:39:05,791 [INFO] Querying: how to become a certified dog groomer
+2026-06-23 09:39:14,158 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-23 09:39:19,359 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:39:22,066 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:39:22,069 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "National Dog Groomers Association",
+        "International Professional Groomers"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "National Dog Groomers Association",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-23 09:39:23,443 [ERROR] Run failed: syntax error at or near "NULL"
+LINE 40:                     NULL, ARRAY['National Dog Groomers Assoc...
+                             ^
+
+2026-06-23 09:40:08,734 [INFO] Starting run...
+2026-06-23 09:40:10,191 [INFO] Loaded 62 questions
+2026-06-23 09:40:10,191 [INFO] Querying: how to become a certified dog groomer
+2026-06-23 09:40:19,128 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-23 09:40:23,358 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:40:26,320 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:40:26,328 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "National Dog Groomers Association of America",
+        "International Professional Groomers"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "National Dog Groomers Association of America",
+    "win_reasons": [
+        "Certifying body mentioned first",
+        "Widely recognized within the industry"
+    ],
+    "qc_cited": false
+}
+2026-06-23 09:40:27,843 [ERROR] Run failed: syntax error at or near "NULL"
+LINE 45:                     NULL, ARRAY['National Dog Groomers Assoc...
+                             ^
+
+2026-06-23 09:42:34,372 [INFO] Starting run...
+2026-06-23 09:42:35,833 [INFO] Loaded 62 questions
+2026-06-23 09:42:35,834 [INFO] Querying: how to become a certified dog groomer
+2026-06-23 09:42:42,707 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-23 09:42:47,717 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:42:50,305 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:42:50,308 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "National Dog Groomers Association of America (NDGAA)",
+        "International Professional Groomers (IPG)",
+        "Pet Industry Federation (PIF)"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "National Dog Groomers Association of America (NDGAA)",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-23 09:42:51,039 [INFO] [chatgpt] Saved general response for 'how to become a certified dog groomer'
+2026-06-23 09:42:54,034 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:42:54,042 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Professional grooming school",
+        "Paragon online certificate courses",
+        "Fear Free Groomer Certification",
+        "AKCÂ® S.A.F.E. Dog Grooming Program",
+        "Certified Canine Groomer (CCG)",
+        "Certified Professional Pet Groomer (CPPG)",
+        "Certified Master Groomer (CMG)"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Professional grooming school",
+    "win_reasons": ["Encompasses all required skills and cuts with formal training"]
+    ,
+    "qc_cited": false
+}
+2026-06-23 09:42:54,756 [INFO] [perplexity] Saved general response for 'how to become a certified dog groomer'
+2026-06-23 09:43:14,761 [INFO] Querying: how to become a professional dog trainer
+2026-06-23 09:43:26,553 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-23 09:43:30,033 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:43:32,197 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:43:32,198 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Association of Professional Dog Trainers (APDT)",
+        "International Association of Canine Professionals (IACP)",
+        "Certification Council for Professional Dog Trainers (CCPDT)"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Association of Professional Dog Trainers (APDT)",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-23 09:43:32,895 [INFO] [chatgpt] Saved general response for 'how to become a professional dog trainer'
+2026-06-23 09:43:35,871 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:43:35,871 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Karen Pryor Academy",
+        "CATCH Canine Trainers Academy"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "Karen Pryor Academy",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-23 09:43:36,553 [INFO] [perplexity] Saved general response for 'how to become a professional dog trainer'
+2026-06-23 09:43:56,558 [INFO] Querying: how to become a dog behavior specialist
+2026-06-23 09:44:02,905 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-23 09:44:08,786 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:44:11,711 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:44:11,712 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "International Association of Animal Behavior Consultants",
+        "Certification Council for Professional Dog Trainers"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "International Association of Animal Behavior Consultants",
+    "win_reasons": [
+        "First organization mentioned in the certification section"
+    ],
+    "qc_cited": false
+}
+2026-06-23 09:44:12,398 [INFO] [chatgpt] Saved general response for 'how to become a dog behavior specialist'
+2026-06-23 09:44:14,445 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-23 09:44:14,450 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Karen Pryor Academy",
+        "British College of Canine Studies",
+        "Institute of Modern Dog Trainers"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Karen Pryor Academy",
+    "win_reasons": [
+        "Provides hands-on experience and curriculum covering dog behavior and class design"
+    ],
+    "qc_cited": false
+}
+2026-06-23 09:44:15,144 [INFO] [perplexity] Saved general response for 'how to become a dog behavior specialist'
+2026-06-23 09:44:35,149 [INFO] Querying: how to become a pet care professional
+2026-06-23 09:44:45,094 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
