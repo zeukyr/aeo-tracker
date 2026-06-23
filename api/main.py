@@ -18,6 +18,7 @@ from api.queries import (
     get_citation_rate_by_engine,
     get_citation_rate_by_category,
     get_citation_rate_by_school,
+    get_topics,
 )
 
 app = FastAPI()
@@ -114,3 +115,7 @@ def responses(
     page_size: int = 20
 ):
     return get_responses(days, engine, question_type, school, qc_mentioned, sentiment, page, page_size)
+
+@app.get("/api/topics")
+def topics(days: int = None):
+    return get_topics(days)
