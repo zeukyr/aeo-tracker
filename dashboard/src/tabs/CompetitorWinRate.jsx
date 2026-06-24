@@ -1,36 +1,65 @@
 import { useEffect, useState } from "react";
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList
-} from "recharts";
 import { API_BASE_URL } from "../config";
+import { useFilter } from "../context/useFilter";
+
+const RED = "#a32d2d";
+const RED_BG = "#fcebeb";
+
+function WinRateRow({ rank, competitor, winRate }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
+        {rank}
+      </span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+          <span style={{ fontSize: 13, color: "#111" }}>{competitor}</span>
+          <span style={{
+            fontSize: 11, fontWeight: 500,
+            background: winRate > 50 ? RED_BG : "#eaf3de",
+            color: winRate > 50 ? RED : "#3b6d11",
+            padding: "2px 7px", borderRadius: 99,
+          }}>
+            {winRate}%
+          </span>
+        </div>
+        <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
+          <div style={{
+            height: "100%",
+            width: `${winRate}%`,
+            background: winRate > 50 ? RED : "#1d9e75",
+            borderRadius: 99,
+            transition: "width 0.4s ease",
+          }} />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function CompetitorWinRate() {
+  const { days } = useFilter();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/competitor-win-rate`)
-      .then(r => r.json())
-      .then(data => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
 
-  if (loading) return <p className="text-gray-400 text-sm">Loading...</p>;
-  if (!data.length) return <p className="text-gray-400 text-sm">No competition data yet.</p>;
+    fetch(`${API_BASE_URL}/api/competitor-win-rate?${params}`)
+      .then(r => r.json())
+      .then(data => { setData(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [days]);
+
+  if (loading) return <p className="state-msg">Loading...</p>;
+  if (!data.length) return <p className="state-empty">No competition data yet.</p>;
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data} layout="vertical">
-        <XAxis type="number" domain={[0, 100]} tickFormatter={v => `${v}%`} />
-        <YAxis type="category" dataKey="competitor" width={160} />
-        <Tooltip formatter={v => `${v}%`} />
-        <Bar dataKey="win_rate" fill="#dc2626" radius={[0, 4, 4, 0]}>
-          <LabelList dataKey="win_rate" position="right" formatter={v => `${v}%`} style={{ fontSize: 13 }} />
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }}>
+      {data.map((d, i) => (
+        <WinRateRow key={d.competitor} rank={i + 1} competitor={d.competitor} winRate={d.win_rate} />
+      ))}
+    </div>
   );
 }

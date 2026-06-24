@@ -101,7 +101,8 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "qc_sentiment": classify as one of:
         - "positive" if the response is predominantly favorable toward QC with no significant caveats
         - "negative" if the response raises serious doubts, explicitly discourages QC, or concludes unfavorably
-        - "neutral" if the response is purely factual with no clear lean, OR if it's mixed — presenting both positive and cautionary information without a clear overall lean
+        - "neutral" if the response is purely factual with no clear lean, OR if it presents both positive and cautionary information without a clear overall lean
+    ONLY use these 3 sentiment labels. Do not invent your own labels or use any other words to describe the sentiment.
     "qc_verdict": "one sentence summary of what the AI concluded about QC",
     "competitor_won": classify as exactly one of:
         - the competitor's name, ONLY if the response clearly states or strongly implies the competitor is the better choice overall

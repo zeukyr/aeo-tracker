@@ -1,3 +1,330 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS
+   All colors, radii, and type values live here.
+   Update once, applies everywhere.
+   ============================================================ */
+
+:root {
+  /* Brand colors */
+  --color-blue:         #378add;
+  --color-blue-light:   #e6f1fb;
+  --color-blue-dark:    #185fa5;
+
+  --color-green:        #1d9e75;
+  --color-amber:        #ba7517;
+  --color-gray-line:    #888780;
+
+  /* Semantic surface colors */
+  --surface-primary:    #ffffff;
+  --surface-secondary:  #f7f7f5;
+
+  /* Semantic text colors */
+  --text-primary:       #111111;
+  --text-secondary:     #6b6b6b;
+  --text-muted:         #9b9b9b;
+
+  /* Semantic border */
+  --border-default:     rgba(0, 0, 0, 0.10);
+  --border-emphasis:    rgba(0, 0, 0, 0.20);
+
+  /* Status — badges, alerts */
+  --color-up-bg:        #eaf3de;
+  --color-up-text:      #3b6d11;
+  --color-down-bg:      #fcebeb;
+  --color-down-text:    #a32d2d;
+  --color-neutral-bg:   #f0efec;
+  --color-neutral-text: #5f5e5a;
+
+  /* Radius */
+  --radius-sm:          6px;
+  --radius-md:          8px;
+  --radius-lg:          12px;
+  --radius-pill:        99px;
+
+  /* Type scale */
+  --text-xs:            11px;
+  --text-sm:            12px;
+  --text-base:          14px;
+  --text-lg:            16px;
+  --text-xl:            22px;
+
+  /* Shadows */
+  --shadow-card:        0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ============================================================
+   BASE
+   Only things Tailwind's preflight misses for dashboards.
+   ============================================================ */
+
+body {
+  color: var(--text-primary);
+  background: var(--surface-secondary);
+  -webkit-font-smoothing: antialiased;
+}
+
+p, h1, h2, h3, h4 {
+  margin: 0;
+}
+
+
+/* ============================================================
+   CARDS & PANELS
+   .card            — white bordered surface (charts, sections)
+   .metric-card     — summary number card
+   .metric-grid     — responsive card row
+   ============================================================ */
+
+.card {
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card--emphasis {
+  border-color: var(--color-blue);
+}
+
+.metric-card {
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-card);
+}
+
+.metric-card--highlight {
+  border-color: var(--color-blue);
+}
+
+.metric-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.metric-value {
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+
+/* ============================================================
+   BADGES
+   .badge            — base styles, always pair with a modifier
+   .badge--up        — positive delta (green)
+   .badge--down      — negative delta (red)
+   .badge--neutral   — no change / no data
+   .badge--you       — "YOU" brand label
+   .badge--info      — general info (blue)
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.badge--up {
+  background: var(--color-up-bg);
+  color: var(--color-up-text);
+}
+
+.badge--down {
+  background: var(--color-down-bg);
+  color: var(--color-down-text);
+}
+
+.badge--neutral {
+  background: var(--color-neutral-bg);
+  color: var(--color-neutral-text);
+}
+
+.badge--you {
+  background: var(--color-blue-light);
+  color: var(--color-blue-dark);
+  font-size: 10px;
+  padding: 1px 6px;
+}
+
+.badge--info {
+  background: var(--color-blue-light);
+  color: var(--color-blue-dark);
+}
+
+
+/* ============================================================
+   PANEL TYPOGRAPHY
+   Consistent titles and subtitles inside .card panels.
+   ============================================================ */
+
+.panel-title {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.panel-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+
+/* ============================================================
+   BRAND BARS
+   Competitor share-of-voice rows with progress bars.
+   ============================================================ */
+
+.brand-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand-row__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.brand-row__name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.brand-name {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.brand-name--you {
+  font-weight: 500;
+}
+
+.brand-row__stats {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.brand-pct {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.brand-delta {
+  font-size: var(--text-xs);
+}
+
+.brand-delta--up   { color: var(--color-up-text); }
+.brand-delta--down { color: var(--color-down-text); }
+
+.bar-track {
+  height: 5px;
+  background: var(--surface-secondary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease;
+}
+
+
+/* ============================================================
+   CHART LEGEND
+   Sits above Chart.js canvases.
+   ============================================================ */
+
+.chart-legend {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   LAYOUT HELPERS
+   ============================================================ */
+
+.chart-section {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .chart-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ============================================================
+   STATE MESSAGES
+   Loading, error, empty states.
+   ============================================================ */
+
+.state-msg {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  padding: 2rem 0;
+}
+
+.state-msg--error {
+  color: var(--color-down-text);
+}
+
+.state-empty {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
