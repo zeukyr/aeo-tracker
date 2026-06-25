@@ -25,7 +25,7 @@ function ProgressBar({ score }) {
 }
 
 const LLM_ENGINES = ["chatgpt", "gemini", "perplexity"];
-const LLM_LABELS = { chatgpt: "GPT", gemini: "Gemini", perplexity: "Perplexity" };
+const LLM_LABELS = { chatgpt: "ChatGPT", gemini: "Gemini", perplexity: "Perplexity" };
 
 function RivalPills({ rivals }) {
   if (!rivals || rivals.length === 0) return <span className="text-gray-400 text-xs">—</span>;
