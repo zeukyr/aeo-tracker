@@ -23,4 +23,4 @@ from api.queries.citations import (
 )
 from api.queries.summary import get_summary
 from api.queries.explorer import get_responses
-from api.queries.topics import get_topics, get_prompt_detail
+from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail

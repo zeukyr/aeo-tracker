@@ -9,10 +9,21 @@ import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 
 // ─── constants ────────────────────────────────────────────────────────────────
-const LLM_ENGINES   = ["chatgpt", "gemini", "perplexity"];
-const LLM_LABELS    = { chatgpt: "ChatGPT", gemini: "Gemini", perplexity: "Perplexity" };
-const LLM_COLORS    = { chatgpt: "#378add", gemini: "#ba7517", perplexity: "#1d9e75" };
-const QC_BLUE       = "#378add";
+const LLM_ENGINES = ["chatgpt", "gemini", "perplexity"];
+const LLM_LABELS  = { chatgpt: "ChatGPT", gemini: "Gemini", perplexity: "Perplexity" };
+const LLM_COLORS  = { chatgpt: "#378add", gemini: "#ba7517", perplexity: "#1d9e75" };
+const QC_BLUE     = "#378add";
+
+// One colour per topic — 6 distinct, none clash with each other or LLM colours
+const TOPIC_COLORS = {
+  "Career Exploration":    "#378add",
+  "How to Become":         "#1d9e75",
+  "Starting a Business":   "#7c3aed",
+  "Course Discovery":      "#ba7517",
+  "Brand Credibility":     "#d6336c",
+  "Competitor Comparison": "#0ca678",
+};
+const FALLBACK_COLORS = ["#378add","#1d9e75","#7c3aed","#ba7517","#d6336c","#0ca678"];
 
 // ─── small helpers ─────────────────────────────────────────────────────────────
 function visColor(score) {
@@ -22,30 +33,42 @@ function visColor(score) {
   return "bg-red-100 text-red-700";
 }
 
-function MetricBadge({ value, suffix = "%" }) {
+// Unified metric badge — shows visibility % for mention topics, positive-sentiment % for sentiment topics
+function MetricBadge({ topic }) {
+  if (topic.visibility != null) {
+    const val = topic.visibility;
+    return (
+      <span className={`text-xs font-medium px-2 py-0.5 rounded ${visColor(val)}`}>
+        {val}% vis
+      </span>
+    );
+  }
+  if (topic.sentiment != null) {
+    const val = topic.sentiment;
+    const cls = val >= 60
+      ? "bg-green-100 text-green-700"
+      : val >= 40
+      ? "bg-yellow-100 text-yellow-700"
+      : "bg-red-100 text-red-700";
+    return (
+      <span className={`text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
+        {val}% pos
+      </span>
+    );
+  }
+  return <span className="text-gray-300 text-xs">—</span>;
+}
+
+function SovBadge({ value }) {
   if (value == null) return <span className="text-gray-300 text-xs">—</span>;
   return (
     <span className={`text-xs font-medium px-2 py-0.5 rounded ${visColor(value)}`}>
-      {value}{suffix}
+      {value}%
     </span>
   );
 }
 
-function SentimentBadge({ value }) {
-  if (value == null) return <span className="text-gray-300 text-xs">—</span>;
-  const cls = value >= 60
-    ? "bg-green-100 text-green-700"
-    : value >= 40
-    ? "bg-yellow-100 text-yellow-700"
-    : "bg-red-100 text-red-700";
-  return (
-    <span className={`text-xs font-medium px-2 py-0.5 rounded ${cls}`}>
-      {value}% pos
-    </span>
-  );
-}
-
-// ─── chart tooltip (matches Sentiment.jsx style) ──────────────────────────────
+// ─── shared chart tooltip ─────────────────────────────────────────────────────
 function ChartTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
@@ -67,37 +90,72 @@ function ChartTooltip({ active, payload, label }) {
   );
 }
 
-// ─── visibility trend line chart (mention-type prompts) ───────────────────────
-function VisibilityChart({ data }) {
-  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+// ─── top-level topics-over-time chart ─────────────────────────────────────────
+function TopicsOverTimeChart({ chartData }) {
+  if (!chartData) return null;
+  const { topics, series } = chartData;
+
   return (
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis
-          tickFormatter={v => `${v}%`}
-          tick={{ fontSize: 11, fill: "#888780" }}
-          axisLine={false} tickLine={false}
-          width={36} domain={[0, 100]}
-        />
-        <Tooltip content={<ChartTooltip />} />
-        {/* Mention rate and citation rate as paler supporting lines */}
-        <Line
-          type="monotone" dataKey="mentionRate" name="Mention rate"
-          stroke={QC_BLUE} strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        <Line
-          type="monotone" dataKey="citationRate" name="Citation rate"
-          stroke="#1d9e75" strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        {/* Visibility = main, bold */}
-        <Line
-          type="monotone" dataKey="visibility" name="Visibility"
-          stroke={QC_BLUE} strokeWidth={2.5} dot={false} />
-      </LineChart>
-    </ResponsiveContainer>
+    <div className="card" style={{ marginBottom: 12 }}>
+      <p className="panel-title">Topics over time</p>
+      <p className="panel-subtitle">Visibility (mention topics) or positive-sentiment rate (credibility/comparison topics)</p>
+
+      {/* legend */}
+      <div style={{ display: "flex", gap: 14, marginBottom: 12, flexWrap: "wrap" }}>
+        {topics.map((t, i) => {
+          const color = TOPIC_COLORS[t.name] || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+          return (
+            <span key={t.name} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+              {t.name}
+            </span>
+          );
+        })}
+      </div>
+
+      {series?.length ? (
+        <ResponsiveContainer width="100%" height={220}>
+          <LineChart data={series} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+            <XAxis
+              dataKey="day"
+              tick={{ fontSize: 11, fill: "#888780" }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              tickFormatter={v => `${v}%`}
+              tick={{ fontSize: 11, fill: "#888780" }}
+              axisLine={false}
+              tickLine={false}
+              width={36}
+              domain={[0, 100]}
+            />
+            <Tooltip content={<ChartTooltip />} />
+            {topics.map((t, i) => {
+              const color = TOPIC_COLORS[t.name] || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+              return (
+                <Line
+                  key={t.name}
+                  type="monotone"
+                  dataKey={t.name}
+                  name={t.name}
+                  stroke={color}
+                  strokeWidth={2}
+                  dot={false}
+                  connectNulls
+                />
+              );
+            })}
+          </LineChart>
+        </ResponsiveContainer>
+      ) : (
+        <p className="state-empty">No time-series data yet.</p>
+      )}
+    </div>
   );
 }
 
-// chart legend helper
+// ─── chart legend helper ───────────────────────────────────────────────────────
 function ChartLegend({ items }) {
   return (
     <div style={{ display: "flex", gap: 14, marginBottom: 10, flexWrap: "wrap" }}>
@@ -116,6 +174,28 @@ function ChartLegend({ items }) {
         </span>
       ))}
     </div>
+  );
+}
+
+// ─── visibility trend line chart (mention-type prompts) ───────────────────────
+function VisibilityChart({ data }) {
+  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
+        <YAxis
+          tickFormatter={v => `${v}%`}
+          tick={{ fontSize: 11, fill: "#888780" }}
+          axisLine={false} tickLine={false}
+          width={36} domain={[0, 100]}
+        />
+        <Tooltip content={<ChartTooltip />} />
+        <Line type="monotone" dataKey="mentionRate"  name="Mention rate"  stroke={QC_BLUE}   strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="citationRate" name="Citation rate" stroke="#1d9e75"  strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="visibility"   name="Visibility"    stroke={QC_BLUE}   strokeWidth={2.5} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
   );
 }
 
@@ -140,11 +220,7 @@ function SentimentChart({ data }) {
           </linearGradient>
         </defs>
         <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis
-          tickFormatter={v => `${v}%`}
-          tick={{ fontSize: 11, fill: "#888780" }}
-          axisLine={false} tickLine={false} width={36}
-        />
+        <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} width={36} />
         <Tooltip content={<ChartTooltip />} />
         <Area type="monotone" dataKey="positive" name="Positive" stroke="#3b6d11" strokeWidth={2} fill="url(#tGradPos)" dot={false} />
         <Area type="monotone" dataKey="neutral"  name="Neutral"  stroke="#854f0b" strokeWidth={2} fill="url(#tGradNeu)" dot={false} />
@@ -154,19 +230,43 @@ function SentimentChart({ data }) {
   );
 }
 
-// ─── competitor SOV ranking (right ⅓ panel) ───────────────────────────────────
-function CompetitorRanking({ competitors, kind }) {
+// ─── competitor ranking panel (right ⅓) ──────────────────────────────────────
+// Branching behaviour:
+//   • visibility != null  → ranked bar rows by mention-rate %
+//   • visibility == null  → plain name pills (sentiment prompts, no mention data)
+function CompetitorRanking({ competitors }) {
   if (!competitors?.length) {
     return <p className="text-xs text-gray-400 italic">No competitor data.</p>;
   }
-  const maxCount = Math.max(...competitors.map(c => c.count), 1);
 
+  const hasVisibility = competitors.some(c => c.visibility != null);
+
+  if (!hasVisibility) {
+    // Plain pill list for sentiment prompts
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {competitors.map(c => (
+          <span key={c.name} style={{
+            fontSize: 11, padding: "3px 10px", borderRadius: 99,
+            background: c.isQC ? "#dbeafe" : "#f0efec",
+            color:      c.isQC ? QC_BLUE   : "#4b5563",
+            fontWeight: c.isQC ? 600 : 400,
+          }}>
+            {c.name}{c.isQC ? " (YOU)" : ""}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  // Ranked bars by visibility (mention rate %)
+  const maxVis = Math.max(...competitors.map(c => c.visibility || 0), 1);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {competitors.slice(0, 8).map((comp, i) => {
-        const barPct = Math.round((comp.count / maxCount) * 100);
+        const barPct   = Math.round(((comp.visibility || 0) / maxVis) * 100);
         const barColor = comp.isQC ? QC_BLUE : "#7c3aed";
-        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * (comp.count / maxCount));
+        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * ((comp.visibility || 0) / maxVis));
         return (
           <div key={comp.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ width: 18, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
@@ -181,7 +281,7 @@ function CompetitorRanking({ competitors, kind }) {
                   )}
                 </span>
                 <span style={{ fontSize: 11, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>
-                  {kind === "mention" && comp.sov != null ? `${comp.sov}%` : comp.count}
+                  {comp.visibility}%
                 </span>
               </div>
               <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
@@ -199,11 +299,29 @@ function CompetitorRanking({ competitors, kind }) {
   );
 }
 
+// ─── LLM stat node badge ──────────────────────────────────────────────────────
+function StatNode({ label, value, color }) {
+  if (value == null) return null;
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      background: "#f4f4f2", borderRadius: 8,
+      padding: "4px 10px", minWidth: 52,
+    }}>
+      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>
+        {label}
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: color || "#374151", lineHeight: 1.3 }}>
+        {value}%
+      </span>
+    </div>
+  );
+}
+
 // ─── LLM response drawer (slide-in from right) ───────────────────────────────
 function ResponseDrawer({ drawer, onClose }) {
   const { open, engine, response, date, promptText } = drawer;
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return;
     const handler = e => { if (e.key === "Escape") onClose(); };
@@ -212,19 +330,11 @@ function ResponseDrawer({ drawer, onClose }) {
   }, [open, onClose]);
 
   if (!open) return null;
-
   const color = LLM_COLORS[engine] || "#888";
 
   return (
     <>
-      {/* backdrop */}
-      <div
-        onClick={onClose}
-        style={{
-          position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40,
-        }}
-      />
-      {/* panel */}
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
       <div style={{
         position: "fixed", top: 0, right: 0, bottom: 0,
         width: "min(520px, 90vw)",
@@ -252,10 +362,7 @@ function ResponseDrawer({ drawer, onClose }) {
           </div>
           <button
             onClick={onClose}
-            style={{
-              background: "none", border: "none", cursor: "pointer",
-              fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px",
-            }}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
             aria-label="Close"
           >
             ✕
@@ -265,18 +372,14 @@ function ResponseDrawer({ drawer, onClose }) {
         {/* prompt context */}
         {promptText && (
           <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
-            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>
-              "{promptText}"
-            </p>
+            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{promptText}"</p>
           </div>
         )}
 
         {/* response body */}
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
           {response
-            ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>
-                {response}
-              </p>
+            ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{response}</p>
             : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
           }
         </div>
@@ -286,13 +389,24 @@ function ResponseDrawer({ drawer, onClose }) {
 }
 
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
-function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
+function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   if (loading) {
     return (
       <tr>
-        <td colSpan={4} className="px-4 pb-4 pt-1">
+        <td colSpan={3} className="px-4 pb-4 pt-1">
           <div className="ml-8 bg-gray-50 rounded-lg p-4">
             <p className="text-xs text-gray-400 italic">Loading…</p>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (error) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-4 pb-4 pt-1">
+          <div className="ml-8 bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-red-500">Failed to load detail ({error}). Restart the backend server and reload.</p>
           </div>
         </td>
       </tr>
@@ -304,16 +418,16 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
 
   return (
     <tr>
-      <td colSpan={4} className="px-4 pb-4 pt-1">
+      <td colSpan={3} className="px-4 pb-4 pt-1">
         <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
 
           {/* prompt text */}
           <p className="italic text-gray-600 text-sm">"{prompt.text}"</p>
 
-          {/* chart + competitor SOV side by side */}
+          {/* chart (⅔) + competitors (⅓) */}
           <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
 
-            {/* ⅔ chart */}
+            {/* chart */}
             <div style={{ flex: 2, minWidth: 0 }}>
               <p className="text-xs font-medium text-gray-500 uppercase mb-2">
                 {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
@@ -322,7 +436,7 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
                 <>
                   <ChartLegend items={[
                     { label: "Visibility",    color: QC_BLUE },
-                    { label: "Mention rate",  color: QC_BLUE, dashed: true },
+                    { label: "Mention rate",  color: QC_BLUE,  dashed: true },
                     { label: "Citation rate", color: "#1d9e75", dashed: true },
                   ]} />
                   <VisibilityChart data={timeseries} />
@@ -339,21 +453,19 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
               )}
             </div>
 
-            {/* ⅓ competitor ranking */}
+            {/* competitor panel */}
             <div style={{ flex: 1, minWidth: 140 }}>
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">
-                {kind === "mention" ? "Share of voice" : "Winner frequency"}
-              </p>
-              <CompetitorRanking competitors={competitors} kind={kind} />
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
+              <CompetitorRanking competitors={competitors} />
             </div>
           </div>
 
-          {/* per-LLM summaries */}
+          {/* per-LLM breakdown */}
           <div>
             <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
             <div className="space-y-2">
               {LLM_ENGINES.map(engine => {
-                const llm = llms?.find(l => l.engine === engine);
+                const llm   = llms?.find(l => l.engine === engine);
                 const color = LLM_COLORS[engine];
                 return (
                   <div key={engine} style={{
@@ -362,44 +474,25 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
                     border: "1px solid #f0efec",
                   }}>
                     {/* engine label */}
-                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 80, flexShrink: 0 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
                       {LLM_LABELS[engine]}
                     </span>
 
-                    {/* metrics */}
+                    {/* stat node badges */}
                     {llm ? (
-                      <div style={{ flex: 1, display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+                      <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
                         {llm.kind === "mention" ? (
                           <>
-                            <span className="text-xs text-gray-500">
-                              Visibility <span className="font-medium text-gray-800">{llm.visibility}%</span>
-                            </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-xs text-gray-500">
-                              Mention <span className="font-medium text-gray-800">{llm.mentionRate}%</span>
-                            </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-xs text-gray-500">
-                              Citation <span className="font-medium text-gray-800">{llm.citationRate}%</span>
-                            </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-xs text-gray-500">
-                              SOV <span className="font-medium text-gray-800">{llm.sov}%</span>
-                            </span>
+                            <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
+                            <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
+                            <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
+                            <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
                           </>
                         ) : (
                           <>
-                            <span className="text-xs text-gray-500">
-                              Positive <span style={{ color: "#3b6d11" }} className="font-medium">{llm.positive}%</span>
-                            </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-xs text-gray-500">
-                              Neutral <span style={{ color: "#854f0b" }} className="font-medium">{llm.neutral}%</span>
-                            </span>
-                            <span className="text-xs text-gray-400">·</span>
-                            <span className="text-xs text-gray-500">
-                              Negative <span style={{ color: "#a32d2d" }} className="font-medium">{llm.negative}%</span>
-                            </span>
+                            <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
+                            <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
+                            <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
                           </>
                         )}
                       </div>
@@ -407,14 +500,13 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
                       <span className="text-xs text-gray-400 flex-1">No data</span>
                     )}
 
-                    {/* arrow to open drawer */}
+                    {/* arrow → response drawer */}
                     <button
                       onClick={() => onOpenDrawer(engine, llm, prompt.text)}
                       style={{
                         background: "none", border: "none", cursor: "pointer",
                         color: llm ? color : "#d1d5db",
-                        fontSize: 13, padding: "2px 4px",
-                        flexShrink: 0,
+                        fontSize: 13, padding: "2px 4px", flexShrink: 0,
                       }}
                       title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
                       aria-label={`Open ${LLM_LABELS[engine]} response`}
@@ -433,14 +525,13 @@ function PromptDetail({ prompt, detail, loading, onOpenDrawer }) {
 }
 
 // ─── prompt row ───────────────────────────────────────────────────────────────
-function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, onOpenDrawer }) {
+function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailError, onOpenDrawer }) {
   return (
     <>
       <tr
         className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
         onClick={onToggle}
       >
-        {/* prompt text */}
         <td className="px-4 py-2.5 pl-10">
           <div className="flex items-center gap-2">
             <span className="text-gray-400 text-xs">{expanded ? "▼" : "▶"}</span>
@@ -449,21 +540,8 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, onOpenDr
             </span>
           </div>
         </td>
-
-        {/* visibility */}
-        <td className="px-3 py-2.5">
-          <MetricBadge value={prompt.visibility} />
-        </td>
-
-        {/* sentiment */}
-        <td className="px-3 py-2.5">
-          <SentimentBadge value={prompt.sentiment} />
-        </td>
-
-        {/* SOV */}
-        <td className="px-3 py-2.5">
-          <MetricBadge value={prompt.sov} />
-        </td>
+        <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
+        <td className="px-3 py-2.5"><SovBadge value={prompt.sov} /></td>
       </tr>
 
       {expanded && (
@@ -471,6 +549,7 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, onOpenDr
           prompt={prompt}
           detail={detail}
           loading={detailLoading}
+          error={detailError}
           onOpenDrawer={onOpenDrawer}
         />
       )}
@@ -479,14 +558,13 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, onOpenDr
 }
 
 // ─── topic header row ─────────────────────────────────────────────────────────
-function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, onOpenDrawer }) {
+function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, detailErrors, onOpenDrawer }) {
   return (
     <>
       <tr
         className="bg-gray-50 cursor-pointer hover:bg-gray-100 border-t border-gray-200"
         onClick={onToggle}
       >
-        {/* topic name */}
         <td className="px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="text-gray-500 text-xs">{expanded ? "▼" : "▶"}</span>
@@ -496,21 +574,8 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
             </div>
           </div>
         </td>
-
-        {/* visibility */}
-        <td className="px-3 py-3">
-          <MetricBadge value={topic.visibility} />
-        </td>
-
-        {/* sentiment */}
-        <td className="px-3 py-3">
-          <SentimentBadge value={topic.sentiment} />
-        </td>
-
-        {/* SOV */}
-        <td className="px-3 py-3">
-          <MetricBadge value={topic.sov} />
-        </td>
+        <td className="px-3 py-3"><MetricBadge topic={topic} /></td>
+        <td className="px-3 py-3"><SovBadge value={topic.sov} /></td>
       </tr>
 
       {expanded && topic.prompts.map(prompt => (
@@ -521,6 +586,7 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
           onToggle={e => { e.stopPropagation(); onTogglePrompt(prompt.id, prompt.kind); }}
           detail={promptDetails[prompt.id]}
           detailLoading={loadingDetails.has(prompt.id)}
+          detailError={detailErrors[prompt.id]}
           onOpenDrawer={onOpenDrawer}
         />
       ))}
@@ -531,30 +597,43 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
 // ─── main Topics component ────────────────────────────────────────────────────
 export default function Topics() {
   const { days } = useFilter();
-  const [data,          setData]          = useState([]);
-  const [loading,       setLoading]       = useState(true);
-  const [error,         setError]         = useState(null);
+  const [data,           setData]           = useState([]);
+  const [loading,        setLoading]        = useState(true);
+  const [error,          setError]          = useState(null);
+  const [chartData,      setChartData]      = useState(null);
   const [expandedTopics,  setExpandedTopics]  = useState(new Set());
   const [expandedPrompts, setExpandedPrompts] = useState(new Set());
-  const [promptDetails,   setPromptDetails]   = useState({});  // id → detail object
+  const [promptDetails,   setPromptDetails]   = useState({});
   const [loadingDetails,  setLoadingDetails]  = useState(new Set());
+  const [detailErrors,    setDetailErrors]    = useState({});
   const [drawer, setDrawer] = useState({ open: false, engine: null, response: null, date: null, promptText: null });
 
-  // fetch topic list whenever the day filter changes
+  // Fetch the accordion list + the top chart in parallel
   useEffect(() => {
     setLoading(true);
     setError(null);
     setExpandedTopics(new Set());
     setExpandedPrompts(new Set());
     setPromptDetails({});
+    setDetailErrors({});
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    const qs = params.toString();
 
-    fetch(`${API_BASE_URL}/api/topics?${params}`)
-      .then(r => r.json())
-      .then(d => { setData(d); setLoading(false); })
-      .catch(err => { setError(err.message); setLoading(false); });
+    Promise.all([
+      fetch(`${API_BASE_URL}/api/topics?${qs}`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/topics-over-time?${qs}`).then(r => r.json()),
+    ])
+      .then(([topics, chart]) => {
+        setData(topics);
+        setChartData(chart);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, [days]);
 
   function toggleTopic(name) {
@@ -565,14 +644,13 @@ export default function Topics() {
     });
   }
 
-  function togglePrompt(id, kind) {
+  function togglePrompt(id) {
     setExpandedPrompts(prev => {
       const next = new Set(prev);
       if (next.has(id)) {
         next.delete(id);
       } else {
         next.add(id);
-        // lazy-load detail if not yet fetched
         if (!promptDetails[id] && !loadingDetails.has(id)) {
           fetchPromptDetail(id);
         }
@@ -587,30 +665,26 @@ export default function Topics() {
     if (days) params.append("days", days);
 
     fetch(`${API_BASE_URL}/api/topic-prompt/${id}?${params}`)
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`Server error ${r.status}`);
+        return r.json();
+      })
       .then(detail => {
         setPromptDetails(prev => ({ ...prev, [id]: detail }));
-        setLoadingDetails(prev => {
-          const next = new Set(prev);
-          next.delete(id);
-          return next;
-        });
+        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
       })
-      .catch(() => {
-        setLoadingDetails(prev => {
-          const next = new Set(prev);
-          next.delete(id);
-          return next;
-        });
+      .catch(err => {
+        setDetailErrors(prev => ({ ...prev, [id]: err.message }));
+        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
       });
   }
 
   function openDrawer(engine, llm, promptText) {
     setDrawer({
-      open:         true,
+      open:      true,
       engine,
-      response:     llm?.latestResponse ?? null,
-      date:         llm?.latestResponseDate ?? null,
+      response:  llm?.latestResponse ?? null,
+      date:      llm?.latestResponseDate ?? null,
       promptText,
     });
   }
@@ -625,19 +699,21 @@ export default function Topics() {
 
   return (
     <>
+      {/* Top line graph */}
+      <TopicsOverTimeChart chartData={chartData} />
+
+      {/* Accordion table */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
         <table className="w-full text-left table-fixed">
           <colgroup>
-            <col style={{ width: "45%" }} />
-            <col style={{ width: "18.33%" }} />
-            <col style={{ width: "18.33%" }} />
-            <col style={{ width: "18.33%" }} />
+            <col style={{ width: "55%" }} />
+            <col style={{ width: "22.5%" }} />
+            <col style={{ width: "22.5%" }} />
           </colgroup>
           <thead>
             <tr className="border-b border-gray-200 bg-gray-50">
               <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
-              <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility</th>
-              <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Sentiment</th>
+              <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility / Sentiment</th>
               <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</th>
             </tr>
           </thead>
@@ -652,6 +728,7 @@ export default function Topics() {
                 onTogglePrompt={togglePrompt}
                 promptDetails={promptDetails}
                 loadingDetails={loadingDetails}
+                detailErrors={detailErrors}
                 onOpenDrawer={openDrawer}
               />
             ))}

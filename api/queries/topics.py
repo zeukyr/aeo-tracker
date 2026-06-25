@@ -236,20 +236,103 @@ def get_topics(days=None):
     return result
 
 
-def get_prompt_detail(prompt_id: int, days=None):
+def get_topics_over_time(days=None):
+    """
+    Returns time-series data for the top-level topics chart.
+    One data point per (topic, day); score = visibility % for mention topics,
+    positive-sentiment % for sentiment topics.
+
+    Returns: { topics: [{name, kind}], series: [{day, "<topic>": value, ...}] }
+    """
+    date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
+    date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
+
+    mention_q = f"""
+        SELECT
+            COALESCE(q.topic, 'Uncategorized') AS topic,
+            date(m.created_at)                 AS day,
+            AVG(
+                (CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END +
+                 CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) / 2.0
+            ) * 100 AS score
+        FROM mention_responses m
+        JOIN questions q ON q.id = m.question_id
+        WHERE q.topic IS NOT NULL
+          AND q.question_type IN ('course', 'general')
+          {date_m}
+        GROUP BY q.topic, date(m.created_at)
+        ORDER BY day, q.topic;
+    """
+
+    sentiment_q = f"""
+        SELECT
+            COALESCE(q.topic, 'Uncategorized') AS topic,
+            date(s.created_at)                 AS day,
+            COUNT(*) FILTER (WHERE s.qc_sentiment = 'positive') * 100.0
+                / NULLIF(COUNT(*), 0)           AS score
+        FROM sentiment_responses s
+        JOIN questions q ON q.id = s.question_id
+        WHERE q.topic IS NOT NULL
+          AND q.question_type IN ('credibility', 'competition')
+          {date_s}
+        GROUP BY q.topic, date(s.created_at)
+        ORDER BY day, q.topic;
+    """
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(mention_q)
+            mention_rows = cur.fetchall()
+            cur.execute(sentiment_q)
+            sentiment_rows = cur.fetchall()
+
+    topics_seen = {}   # name → kind
+    days_data   = {}   # day_str → {topic: score}
+
+    for topic, day, score in mention_rows:
+        day_str = str(day)
+        score   = round(float(score or 0), 1)
+        days_data.setdefault(day_str, {})[topic] = score
+        topics_seen.setdefault(topic, "mention")
+
+    for topic, day, score in sentiment_rows:
+        day_str = str(day)
+        score   = round(float(score or 0), 1)
+        days_data.setdefault(day_str, {})[topic] = score
+        topics_seen.setdefault(topic, "sentiment")
+
+    series = [
+        {"day": day, **scores}
+        for day, scores in sorted(days_data.items())
+    ]
+
+    # Return topics in canonical display order
+    topics_list = [
+        {"name": name, "kind": topics_seen[name]}
+        for name in TOPIC_ORDER
+        if name in topics_seen
+    ]
+    for name, kind in topics_seen.items():
+        if name not in TOPIC_ORDER:
+            topics_list.append({"name": name, "kind": kind})
+
+    return {"topics": topics_list, "series": series}
+
+
+def get_prompt_detail(prompt_id: str, days=None):
     """
     Lazy-loaded detail for a single prompt (fetched when the row is expanded).
     Returns: { kind, timeseries, competitors, llms }
 
     kind="mention"  → timeseries has {day, visibility, mentionRate, citationRate}
-                       competitors has [{name, count, sov, isQC}]
+                       competitors has [{name, visibility (mention rate %), isQC}]
     kind="sentiment"→ timeseries has {day, positive, neutral, negative}
-                       competitors has [{name, count, pct, isQC}] (from competitor_won)
+                       competitors has [{name, visibility: null, isQC}] (plain name list)
     """
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
 
-    # First determine question_type so we know which table to query
+    # Determine question_type to pick the right table
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT question_type FROM questions WHERE id = %s", (prompt_id,))
@@ -281,13 +364,26 @@ def get_prompt_detail(prompt_id: int, days=None):
                     mr = round(float(mr or 0), 1)
                     cr = round(float(cr or 0), 1)
                     timeseries.append({
-                        "day":         str(day),
-                        "mentionRate": mr,
+                        "day":          str(day),
+                        "mentionRate":  mr,
                         "citationRate": cr,
-                        "visibility":  round((mr + cr) / 2, 1),
+                        "visibility":   round((mr + cr) / 2, 1),
                     })
 
-                # ── competitors ────────────────────────────────────────────
+                # ── QC stats + total responses ─────────────────────────────
+                cur.execute(f"""
+                    SELECT
+                        COUNT(*) FILTER (WHERE m.qc_mentioned) AS qc_cnt,
+                        COUNT(*)                                AS total
+                    FROM mention_responses m
+                    WHERE m.question_id = %s {date_m};
+                """, (prompt_id,))
+                qc_row = cur.fetchone()
+                qc_cnt          = int(qc_row[0] or 0)
+                total_responses = max(int(qc_row[1] or 0), 1)  # guard div-by-zero
+
+                # ── competitors ranked by mention rate % ───────────────────
+                # cnt = number of responses (rows) that mention this competitor
                 cur.execute(f"""
                     SELECT comp, COUNT(*) AS cnt
                     FROM mention_responses m
@@ -305,28 +401,23 @@ def get_prompt_detail(prompt_id: int, days=None):
                 """, (prompt_id,))
                 comp_rows = cur.fetchall()
 
-                # Add QC row by counting qc_mentioned
-                cur.execute(f"""
-                    SELECT COUNT(*) FILTER (WHERE m.qc_mentioned) AS qc_cnt,
-                           COUNT(*) AS total
-                    FROM mention_responses m
-                    WHERE m.question_id = %s {date_m};
-                """, (prompt_id,))
-                qc_row = cur.fetchone()
-                qc_cnt   = int(qc_row[0] or 0)
-                total_responses = int(qc_row[1] or 0)
-
-                all_comps = [{"name": r[0], "count": int(r[1]), "isQC": False} for r in comp_rows]
+                all_comps = [
+                    {
+                        "name":       r[0],
+                        "visibility": round(int(r[1]) / total_responses * 100, 1),
+                        "isQC":       False,
+                    }
+                    for r in comp_rows
+                ]
                 if qc_cnt > 0:
-                    all_comps.insert(0, {"name": "QC", "count": qc_cnt, "isQC": True})
+                    all_comps.append({
+                        "name":       "QC",
+                        "visibility": round(qc_cnt / total_responses * 100, 1),
+                        "isQC":       True,
+                    })
 
-                max_count = max((c["count"] for c in all_comps), default=1)
-                total_brand_slots = sum(c["count"] for c in all_comps)
-                competitors = [{
-                    **c,
-                    "sov": round(c["count"] / total_brand_slots * 100, 1) if total_brand_slots else 0.0,
-                    "pct": round(c["count"] / max_count * 100, 1),
-                } for c in all_comps]
+                all_comps.sort(key=lambda c: -c["visibility"])
+                competitors = all_comps
 
                 # ── per-LLM metrics ────────────────────────────────────────
                 cur.execute(f"""
@@ -348,13 +439,13 @@ def get_prompt_detail(prompt_id: int, days=None):
                 """, (prompt_id,))
                 engine_rows = cur.fetchall()
 
-                # Latest raw response per engine
+                # Bug fix: alias table so {date_m} resolves m.created_at correctly
                 cur.execute(f"""
-                    SELECT DISTINCT ON (engine)
-                        engine, raw_response, created_at
-                    FROM mention_responses
-                    WHERE question_id = %s {date_m}
-                    ORDER BY engine, created_at DESC;
+                    SELECT DISTINCT ON (m.engine)
+                        m.engine, m.raw_response, m.created_at
+                    FROM mention_responses m
+                    WHERE m.question_id = %s {date_m}
+                    ORDER BY m.engine, m.created_at DESC;
                 """, (prompt_id,))
                 latest_rows = {r[0]: {"response": r[1], "date": str(r[2])} for r in cur.fetchall()}
 
@@ -373,7 +464,7 @@ def get_prompt_detail(prompt_id: int, days=None):
                         "visibility":   round((mr + cr) / 2, 1),
                         "sentiment":    None,
                         "sov":          round(qc_m / total_b * 100, 1) if total_b else 0.0,
-                        "latestResponse": latest_rows.get(engine, {}).get("response"),
+                        "latestResponse":     latest_rows.get(engine, {}).get("response"),
                         "latestResponseDate": latest_rows.get(engine, {}).get("date"),
                     })
 
@@ -403,27 +494,23 @@ def get_prompt_detail(prompt_id: int, days=None):
                     "negative": round(float(r[3] or 0), 1),
                 } for r in ts_rows]
 
-                # ── competitors (from competitor_won) ──────────────────────
+                # ── competitors: plain name list from competitor_won ────────
+                # No mention data exists for sentiment prompts, so we just list
+                # distinct competitor names that appeared as "winner", no bar data.
                 cur.execute(f"""
-                    SELECT
-                        COALESCE(competitor_won, 'No clear winner') AS winner,
-                        COUNT(*) AS cnt
+                    SELECT DISTINCT s.competitor_won AS name
                     FROM sentiment_responses s
                     WHERE s.question_id = %s
-                      AND competitor_won IS NOT NULL
+                      AND s.competitor_won IS NOT NULL
+                      AND s.competitor_won != 'no_clear_winner'
                       {date_s}
-                    GROUP BY competitor_won
-                    ORDER BY cnt DESC;
+                    ORDER BY name;
                 """, (prompt_id,))
                 comp_rows = cur.fetchall()
-                total_comp = sum(int(r[1]) for r in comp_rows)
-                competitors = [{
-                    "name":  r[0],
-                    "count": int(r[1]),
-                    "pct":   round(int(r[1]) / total_comp * 100, 1) if total_comp else 0.0,
-                    "sov":   None,
-                    "isQC":  r[0] == "QC",
-                } for r in comp_rows]
+                competitors = [
+                    {"name": r[0], "visibility": None, "isQC": r[0] == "QC"}
+                    for r in comp_rows
+                ]
 
                 # ── per-LLM metrics ────────────────────────────────────────
                 cur.execute(f"""
@@ -441,12 +528,13 @@ def get_prompt_detail(prompt_id: int, days=None):
                 """, (prompt_id,))
                 engine_rows = cur.fetchall()
 
+                # Bug fix: alias table so {date_s} resolves s.created_at correctly
                 cur.execute(f"""
-                    SELECT DISTINCT ON (engine)
-                        engine, raw_response, created_at
-                    FROM sentiment_responses
-                    WHERE question_id = %s {date_s}
-                    ORDER BY engine, created_at DESC;
+                    SELECT DISTINCT ON (s.engine)
+                        s.engine, s.raw_response, s.created_at
+                    FROM sentiment_responses s
+                    WHERE s.question_id = %s {date_s}
+                    ORDER BY s.engine, s.created_at DESC;
                 """, (prompt_id,))
                 latest_rows = {r[0]: {"response": r[1], "date": str(r[2])} for r in cur.fetchall()}
 
@@ -463,7 +551,7 @@ def get_prompt_detail(prompt_id: int, days=None):
                         "neutral":      round(float(neu or 0), 1),
                         "negative":     round(float(neg or 0), 1),
                         "sov":          None,
-                        "latestResponse": latest_rows.get(engine, {}).get("response"),
+                        "latestResponse":     latest_rows.get(engine, {}).get("response"),
                         "latestResponseDate": latest_rows.get(engine, {}).get("date"),
                     })
 

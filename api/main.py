@@ -19,6 +19,7 @@ from api.queries import (
     get_citation_rate_by_category,
     get_citation_rate_by_school,
     get_topics,
+    get_topics_over_time,
     get_prompt_detail,
 )
 
@@ -121,8 +122,12 @@ def responses(
 def topics(days: int = None):
     return get_topics(days)
 
+@app.get("/api/topics-over-time")
+def topics_over_time(days: int = None):
+    return get_topics_over_time(days)
+
 @app.get("/api/topic-prompt/{prompt_id}")
-def topic_prompt(prompt_id: int, days: int = None):
+def topic_prompt(prompt_id: str, days: int = None):
     result = get_prompt_detail(prompt_id, days)
     if result is None:
         from fastapi import HTTPException
