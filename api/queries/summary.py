@@ -66,6 +66,41 @@ def fetch_visibility_score(cur, filter_clause):
     row = cur.fetchone()[0]
     return round(float(row), 1) if row is not None else None
 
+def fetch_competitor_mention_counts(cur, filter_clause):
+    cur.execute(f"""
+        SELECT b.brand_name, COUNT(DISTINCT b.mention_response_id) as mentions
+        FROM mention_response_brands b
+        JOIN mention_responses m ON m.id = b.mention_response_id
+        WHERE b.brand_type = 'competitor' {filter_clause.replace("created_at", "m.created_at")}
+        GROUP BY b.brand_name;
+    """)
+    return {row[0]: row[1] for row in cur.fetchall()}
+
+def fetch_total_responses(cur, filter_clause):
+    cur.execute(f"""
+        SELECT COUNT(*) FROM mention_responses WHERE 1=1 {filter_clause};
+    """)
+    return cur.fetchone()[0] or 0
+
+def fetch_top_competitors(cur, filter_curr, filter_prev, limit=5):
+    curr_counts = fetch_competitor_mention_counts(cur, filter_curr)
+    prev_counts = fetch_competitor_mention_counts(cur, filter_prev)
+    total_curr = fetch_total_responses(cur, filter_curr)
+    total_prev = fetch_total_responses(cur, filter_prev)
+
+    top_names = sorted(curr_counts, key=curr_counts.get, reverse=True)[:limit]
+
+    competitors = []
+    for name in top_names:
+        rate_curr = round(curr_counts[name] / total_curr * 100, 1) if total_curr else 0
+        rate_prev = round(prev_counts.get(name, 0) / total_prev * 100, 1) if total_prev else None
+        competitors.append({
+            "name": name,
+            "mention_rate": rate_curr,
+            "diff": round(rate_curr - rate_prev, 1) if rate_prev is not None else None
+        })
+    return competitors
+
 def rank_diff(curr, prev):
     if curr is None or prev is None:
         return None
@@ -140,6 +175,8 @@ def get_summary(days=None):
             best_engine_row = cur.fetchone()
             best_engine = best_engine_row[0] if best_engine_row else None
 
+            top_competitors = fetch_top_competitors(cur, filter_curr, filter_prev)
+
     return {
         "mention_rate": round(mention_curr * 100, 1) if mention_curr else 0,
         "mention_rate_diff": diff(mention_curr, mention_prev),
@@ -154,5 +191,6 @@ def get_summary(days=None):
         "visibility_score": visibility_curr,
         "visibility_score_diff": visibility_score_diff(visibility_curr, visibility_prev),
         "top_competitor": top_competitor,
+        "top_competitors": top_competitors,
         "best_engine": best_engine
     }
