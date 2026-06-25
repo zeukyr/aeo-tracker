@@ -10,6 +10,65 @@ def fetch_avg_rank(cur, filter_clause):
     row = cur.fetchone()[0]
     return float(row) if row else None
 
+<<<<<<< Updated upstream
+=======
+def fetch_sov(cur, filter_clause):
+    cur.execute(f"""
+        SELECT
+            SUM(CASE WHEN b.brand_type = 'qc' THEN 1 ELSE 0 END) AS qc_mentions,
+            SUM(CASE WHEN b.brand_type = 'competitor' THEN 1 ELSE 0 END) AS competitor_mentions
+        FROM mention_response_brands b
+        JOIN mention_responses m
+            ON b.mention_response_id = m.id
+        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")};
+    """)
+    row = cur.fetchone()
+    qc_mentions = row[0] or 0
+    competitor_mentions = row[1] or 0
+
+    total = qc_mentions + competitor_mentions
+    if total == 0:
+        return None
+
+    return round((qc_mentions / total) * 100, 1)
+
+def fetch_visibility_score(cur, filter_clause):
+    cur.execute(f"""
+        WITH link_scores AS (
+            SELECT
+                mention_response_id,
+                MAX(
+                    CASE
+                        WHEN is_qc_internal AND is_inline THEN 100
+                        WHEN is_qc AND NOT is_qc_internal AND is_inline THEN 70
+                        WHEN is_qc_internal AND NOT is_inline THEN 30
+                        WHEN is_qc AND NOT is_qc_internal AND NOT is_inline THEN 15
+                        ELSE 0
+                    END
+                ) AS link_score
+            FROM mention_response_links
+            GROUP BY mention_response_id
+        )
+        SELECT AVG(
+            (CASE WHEN m.qc_mentioned THEN 100 ELSE 0 END) * 0.40
+            + (CASE
+                WHEN m.qc_mention_order = 1 THEN 100
+                WHEN m.qc_mention_order = 2 THEN 75
+                WHEN m.qc_mention_order = 3 THEN 50
+                WHEN m.qc_mention_order >= 4 THEN 25
+                WHEN m.qc_mentioned THEN 25
+                ELSE 0
+              END) * 0.45
+            + COALESCE(ls.link_score, 0) * 0.15
+        )
+        FROM mention_responses m
+        LEFT JOIN link_scores ls ON ls.mention_response_id = m.id
+        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")};
+    """)
+    row = cur.fetchone()[0]
+    return round(float(row), 1) if row is not None else None
+
+>>>>>>> Stashed changes
 def rank_diff(curr, prev):
     if curr is None or prev is None:
         return None

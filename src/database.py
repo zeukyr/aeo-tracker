@@ -43,6 +43,57 @@ def save_mention_response(run_id, question_id, engine, raw_response, citations, 
                 parsed.get("qc_mentioned"), parsed.get("qc_mention_order"),
                 parsed.get("competitors"), parsed.get("competitor_count"), parsed.get("competitor_won"), parsed.get("win_reasons"), parsed.get("qc_cited")
             ))
+
+            mention_response_id = cur.fetchone()[0]
+
+            if parsed.get("qc_mentioned") and parsed.get("qc_mention_order") is None:
+                logger.error(f"qc_mentioned=true but qc_mention_order is null for mention_response {mention_response_id}")
+
+            # 2. Insert brand rows into mention_response_brands
+            brands = parsed.get("brands", [])
+            for b in brands:
+                name = b.get("name")
+                brand_type = b.get("brand_type")
+                rank_position = b.get("rank_position")
+                if not name or not brand_type or rank_position is None:
+                    logger.error(f"Skipping malformed brand entry for mention_response {mention_response_id}: {b}")
+                    continue
+
+                cur.execute("""
+                    INSERT INTO mention_response_brands (
+                        mention_response_id, brand_name, brand_type, rank_position
+                    ) VALUES (%s, %s, %s, %s)
+                """, (
+                    mention_response_id,
+                    name,
+                    brand_type,
+                    rank_position
+                ))
+
+            # 3. Insert link rows into mention_response_links
+            links = parsed.get("links", [])
+            for l in links:
+                url = l.get("url")
+                is_qc = l.get("is_qc")
+                is_inline = l.get("is_inline")
+                if not url or is_qc is None or is_inline is None:
+                    logger.error(f"Skipping malformed link entry for mention_response {mention_response_id}: {l}")
+                    continue
+
+                is_qc_internal = is_qc_domain(url)
+
+                cur.execute("""
+                    INSERT INTO mention_response_links (
+                        mention_response_id, url, is_qc, is_qc_internal, is_inline
+                    ) VALUES (%s, %s, %s, %s, %s)
+                """, (
+                    mention_response_id,
+                    url,
+                    bool(is_qc) or is_qc_internal,
+                    is_qc_internal,
+                    bool(is_inline)
+                ))
+
         conn.commit()
 
 def save_sentiment_response(run_id, question_id, engine, raw_response, citations, parsed):
