@@ -185,10 +185,11 @@ function Overview() {
     <div>
       <div className="metric-grid">
         <MetricCard label="Mention rate"       value={`${summary.mention_rate}%`}                          diff={summary.mention_rate_diff} />
-        <MetricCard label="Visibility score"   value={summary.visibility_score ?? "--"}                    diff={summary.visibility_score_diff} highlight />
+        <MetricCard label="Visibility score"   value={summary.visibility_score ?? "--"}                    diff={summary.visibility_score_diff} />
         <MetricCard label="Positive sentiment" value={`${summary.positive_sentiment_rate}%`}               diff={summary.positive_sentiment_diff} />
         <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
         <MetricCard label="Share of voice"     value={summary.share_of_voice ? `${summary.share_of_voice}%` : "--"} diff={summary.share_of_voice_diff} />
+        <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} />
       </div>
 
       <div className="chart-section">

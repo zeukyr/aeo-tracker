@@ -1,0 +1,2228 @@
+2026-06-24 17:07:03,979 [INFO] Starting run...
+2026-06-24 17:07:05,888 [INFO] Loaded 62 questions
+2026-06-24 17:07:05,889 [INFO] Querying: how to become a certified dog groomer
+2026-06-24 17:07:15,756 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:07:31,950 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:07:35,741 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:07:35,757 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "National Dog Groomers Association of America"
+    ],
+    "competitor_count": 1,
+    "competitor_won": "National Dog Groomers Association of America",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:07:36,204 [INFO] [chatgpt] Saved general response for 'how to become a certified dog groomer'
+2026-06-24 17:07:38,196 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:07:38,197 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Madison College",
+        "Animal Behavior College (ABC)",
+        "Fear Free"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Madison College",
+    "win_reasons": [
+        "Provides hands-on training and a recognized credential (AKC-PGC)."
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:07:38,556 [INFO] [perplexity] Saved general response for 'how to become a certified dog groomer'
+2026-06-24 17:07:58,557 [INFO] Querying: how to become a professional dog trainer
+2026-06-24 17:08:05,801 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:08:22,304 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:08:25,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:08:25,489 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Association of Professional Dog Trainers (APDT)",
+        "International Association of Canine Professionals (IACP)",
+        "Certification Council for Professional Dog Trainers (CCPDT)"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Association of Professional Dog Trainers (APDT)",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:08:25,983 [INFO] [chatgpt] Saved general response for 'how to become a professional dog trainer'
+2026-06-24 17:08:28,185 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:08:28,191 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Animal Behavior College",
+        "CATCH Canine Trainers Academy",
+        "Penn Foster",
+        "Karen Pryor Academy"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Animal Behavior College",
+    "win_reasons": [
+        "First school mentioned",
+        "Offers a reputable training program",
+        "Focuses on a hybrid of online learning and real-world practice"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:08:28,560 [INFO] [perplexity] Saved general response for 'how to become a professional dog trainer'
+2026-06-24 17:08:48,561 [INFO] Querying: how to become a dog behavior specialist
+2026-06-24 17:08:58,782 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:09:15,297 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:09:17,935 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:09:17,946 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Certification Council for Professional Dog Trainers (CCPDT)",
+        "International Association of Animal Behavior Consultants (IAABC)"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "Certification Council for Professional Dog Trainers (CCPDT)",
+    "win_reasons": ["Recognized certification program", "Industry standard for professional trainers"],
+    "qc_cited": false
+}
+2026-06-24 17:09:18,384 [INFO] [chatgpt] Saved general response for 'how to become a dog behavior specialist'
+2026-06-24 17:09:20,298 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:09:20,310 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "CCPDT",
+        "e-Training for Dogs",
+        "Animal Education",
+        "Karen Pryor Academy"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "CCPDT",
+    "win_reasons": [
+        "The certification from CCPDT is a recognized and standard path for becoming a dog behavior specialist."
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:09:20,692 [INFO] [perplexity] Saved general response for 'how to become a dog behavior specialist'
+2026-06-24 17:09:40,692 [INFO] Querying: how to become a pet care professional
+2026-06-24 17:09:50,474 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:10:04,259 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:10:08,808 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:10:08,809 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "National Association of Professional Pet Sitters",
+        "Pet Sitters International"
+    ],
+    "competitor_count": 2,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:10:10,251 [INFO] [chatgpt] Saved general response for 'how to become a pet care professional'
+2026-06-24 17:10:12,904 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:10:12,998 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Stautzenberger College",
+        "NAPPS Certification Course",
+        "CPPS-Certified Professional Pet Sitter®",
+        "Rover"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Stautzenberger College",
+    "win_reasons": [
+        "Mentioned first as a notable program",
+        "Offers specialized training relevant to the profession"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:10:13,390 [INFO] [perplexity] Saved general response for 'how to become a pet care professional'
+2026-06-24 17:10:33,390 [INFO] Querying: how to become a canine care expert
+2026-06-24 17:10:42,149 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:10:58,942 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:02,595 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:02,596 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "animal science",
+        "veterinary technology",
+        "Certified Professional Dog Trainer (CPDT)",
+        "Association of Professional Dog Trainers (APDT)",
+        "National Association of Dog Obedience Instructors (NADOI)"
+    ],
+    "competitor_count": 5,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:11:03,057 [INFO] [chatgpt] Saved general response for 'how to become a canine care expert'
+2026-06-24 17:11:05,038 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:05,046 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Deb Jones Dog Training",
+        "Senior Dog Certified",
+        "PACCC",
+        "American Red Cross",
+        "Academy for Dog Trainers",
+        "Association for Animal Welfare Advancement"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "Deb Jones Dog Training",
+    "win_reasons": ["Offers specialized Cooperative Care Trainer Certificate that covers essential skills for canine care."]
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:11:05,413 [INFO] [perplexity] Saved general response for 'how to become a canine care expert'
+2026-06-24 17:11:25,414 [INFO] Querying: how long does it take to become a dog groomer
+2026-06-24 17:11:30,837 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:11:45,599 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:48,234 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:48,235 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:11:49,315 [INFO] [chatgpt] Saved general response for 'how long does it take to become a dog groomer'
+2026-06-24 17:11:53,104 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:11:53,109 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Groom Curriculum",
+        "Pet Care Ins",
+        "Animal Behavior College",
+        "Penn Foster",
+        "National Dog Groomers Association",
+        "Reddit",
+        "Hound Therapy",
+        "Northern California Grooming Academy"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "Animal Behavior College",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:11:53,518 [INFO] [perplexity] Saved general response for 'how long does it take to become a dog groomer'
+2026-06-24 17:12:13,518 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-06-24 17:12:15,786 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:12:28,734 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:12:30,317 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:12:30,328 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:12:30,778 [INFO] [chatgpt] Saved general response for 'how old do you have to be to be a dog groomer'
+2026-06-24 17:12:32,736 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:12:32,741 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "OKC Unleashed",
+        "National Dog Groomers",
+        "The Academy of Pet Careers",
+        "Hound Therapy",
+        "Penn Foster",
+        "Animal Behavior College"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "Penn Foster",
+    "win_reasons": [
+        "Offers comprehensive online courses for pet grooming.",
+        "Well-known and established career training program."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:12:33,126 [INFO] [perplexity] Saved general response for 'how old do you have to be to be a dog groomer'
+2026-06-24 17:12:53,126 [INFO] Querying: how much does dog grooming school cost
+2026-06-24 17:12:59,593 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:13:15,044 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:13:17,948 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:13:17,954 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "MidMo Dog Training",
+        "Paragon School of Pet Grooming",
+        "Just Four Paws Academy",
+        "Penn Foster"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "MidMo Dog Training",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:13:18,447 [INFO] [chatgpt] Saved general response for 'how much does dog grooming school cost'
+2026-06-24 17:13:20,729 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:13:20,733 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "American School of Dog Grooming",
+        "Virginia School of Pet Grooming",
+        "West Coast Grooming Academy",
+        "Pennsylvania Dog Grooming School",
+        "Penn Foster Pet Grooming Certificate"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Virginia School of Pet Grooming",
+    "win_reasons": [
+        "Clearly outlines total cost and includes supplies and maintenance."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:13:21,121 [INFO] [perplexity] Saved general response for 'how much does dog grooming school cost'
+2026-06-24 17:13:41,122 [INFO] Querying: dog groomer certification cost
+2026-06-24 17:13:50,357 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:14:06,325 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:10,183 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:10,184 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "AKC S.A.F.E. Groomer Certification",
+        "National Dog Groomers Association of America (NDGAA)",
+        "International Professional Groomers (IPG)",
+        "Paragon School of Pet Grooming",
+        "Clip Shoppe School of Dog Grooming",
+        "Penn Foster Pet and Dog Grooming Certificate"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "AKC S.A.F.E. Groomer Certification",
+    "win_reasons": [
+        "Affordable cost",
+        "Flexible online format",
+        "Self-paced duration",
+        "Focus on safety protocols"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:14:10,656 [INFO] [chatgpt] Saved general response for 'dog groomer certification cost'
+2026-06-24 17:14:13,380 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:13,389 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "competitors": [
+        "New Skills Academy",
+        "Penn Foster",
+        "West Coast Grooming Academy",
+        "MidMo Dog Training",
+        "AKC Canine College"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "MidMo Dog Training",
+    "win_reasons": ["Wages while training to offset costs"]
+    ,"qc_cited": true
+}
+2026-06-24 17:14:13,791 [INFO] [perplexity] Saved general response for 'dog groomer certification cost'
+2026-06-24 17:14:33,791 [INFO] Querying: is dog grooming a good career
+2026-06-24 17:14:37,911 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:14:52,747 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:55,278 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:55,281 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:14:55,740 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-06-24 17:14:57,387 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:14:57,641 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Animal Behavior College",
+        "Indeed",
+        "The Academy of Pet Careers",
+        "Petco",
+        "American Grooming Academy"
+    ],
+    "competitor_count": 5,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:14:58,000 [INFO] [perplexity] Saved general response for 'is dog grooming a good career'
+2026-06-24 17:15:18,001 [INFO] Querying: how to become a certified dog trainer online
+2026-06-24 17:15:25,400 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:15:40,657 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:15:43,877 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:15:43,880 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Certification Council for Professional Dog Trainers (CCPDT)",
+        "International Association of Canine Professionals (IACP)",
+        "Karen Pryor Academy"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Certification Council for Professional Dog Trainers (CCPDT)",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:15:44,321 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-06-24 17:15:47,405 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:15:47,407 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "CATCH Canine Trainers Academy",
+        "Animal Behavior College",
+        "Karen Pryor Academy",
+        "Penn Foster",
+        "Good Dog Academy"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "CATCH Canine Trainers Academy",
+    "win_reasons": [
+        "Offers a comprehensive program aligned with CCPDT standards",
+        "Provides hands-on workshops or mentor-coached practice"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:15:47,804 [INFO] [perplexity] Saved general response for 'how to become a certified dog trainer online'
+2026-06-24 17:16:07,805 [INFO] Querying: how to start a grooming business from home
+2026-06-24 17:16:21,043 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:16:36,094 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:16:38,411 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:16:38,417 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:16:38,926 [INFO] [chatgpt] Saved general response for 'how to start a grooming business from home'
+2026-06-24 17:16:41,922 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:16:41,923 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 6,
+    "competitors": [
+        "Penn Foster",
+        "TimetoPet",
+        "Easy Busy Pets",
+        "Groomer to Groomer",
+        "Groom Arts"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Penn Foster",
+    "win_reasons": [
+        "First mentioned competitor with a dedicated blog entry",
+        "Well-known educational platform for various vocational studies"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:16:42,319 [INFO] [perplexity] Saved general response for 'how to start a grooming business from home'
+2026-06-24 17:17:02,320 [INFO] Querying: how do i start my own pet business from scratch
+2026-06-24 17:17:09,987 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:17:26,819 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:17:29,129 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:17:29,134 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:17:29,594 [INFO] [chatgpt] Saved general response for 'how do i start my own pet business from scratch'
+2026-06-24 17:17:30,804 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:17:30,809 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:17:31,190 [INFO] [perplexity] Saved general response for 'how do i start my own pet business from scratch'
+2026-06-24 17:17:51,191 [INFO] Querying: careers working with dogs
+2026-06-24 17:17:58,500 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:18:15,052 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:18:16,788 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:18:16,794 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:18:17,251 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-06-24 17:18:19,211 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:18:19,213 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": null,
+    "competitors": [
+        "animalcoursesdirect.co.uk",
+        "wearwagrepeat.com",
+        "indeed.com",
+        "internationaldogtrainerschool.com",
+        "julius-k9.com",
+        "akc.org",
+        "reddit.com",
+        "facebook.com"
+    ],
+    "competitor_count": 8,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:18:19,643 [INFO] [perplexity] Saved general response for 'careers working with dogs'
+2026-06-24 17:18:39,644 [INFO] Querying: pet business ideas from home
+2026-06-24 17:18:49,405 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:19:05,994 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:09,003 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:09,007 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:19:09,750 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-06-24 17:19:11,124 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:11,126 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:19:11,501 [INFO] [perplexity] Saved general response for 'pet business ideas from home'
+2026-06-24 17:19:31,501 [INFO] Querying: jobs with dogs that pay well
+2026-06-24 17:19:37,090 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:19:52,152 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:53,664 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:53,666 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:19:54,131 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-06-24 17:19:56,645 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:19:56,658 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Wear Wag Repeat",
+        "Indeed",
+        "ZipRecruiter",
+        "International Dog Trainer School",
+        "Reddit",
+        "Unity",
+        "AKC",
+        "Julius K9"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "Wear Wag Repeat",
+    "win_reasons": []
+    ,
+    "qc_cited": true
+}
+2026-06-24 17:19:57,030 [INFO] [perplexity] Saved general response for 'jobs with dogs that pay well'
+2026-06-24 17:20:17,031 [INFO] Querying: high paying careers working with animals
+2026-06-24 17:20:23,176 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:20:39,639 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:20:42,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:20:42,493 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:20:42,864 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-06-24 17:20:45,085 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:20:45,090 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Top Universities",
+        "Unity.edu",
+        "Indeed",
+        "Berry College",
+        "Career Village",
+        "Husson University",
+        "Reddit",
+        "UC Davis"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "Indeed",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:20:45,549 [INFO] [perplexity] Saved general response for 'high paying careers working with animals'
+2026-06-24 17:21:05,549 [INFO] Querying: how to become an event planner
+2026-06-24 17:21:13,596 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:21:27,832 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:21:30,123 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:21:30,124 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "International Live Events Association",
+        "Meeting Professionals International"
+    ],
+    "competitor_count": 2,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:21:30,551 [INFO] [chatgpt] Saved general response for 'how to become an event planner'
+2026-06-24 17:21:32,605 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:21:32,616 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "indeed.com",
+        "imexevents.com",
+        "webber.edu",
+        "socialtables.com",
+        "pennfoster.edu",
+        "cvent.com",
+        "nyiad.edu",
+        "ccny.cuny.edu"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "indeed.com",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:21:32,979 [INFO] [perplexity] Saved general response for 'how to become an event planner'
+2026-06-24 17:21:52,981 [INFO] Querying: how to become a wedding planner
+2026-06-24 17:22:02,223 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:22:18,379 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:22:20,583 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:22:20,584 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:22:21,028 [INFO] [chatgpt] Saved general response for 'how to become a wedding planner'
+2026-06-24 17:22:23,240 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:22:23,247 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Lovegevity",
+        "AACWP",
+        "PCC"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Lovegevity",
+    "win_reasons": [
+        "Specific certifications focused on industry specifics"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:22:23,641 [INFO] [perplexity] Saved general response for 'how to become a wedding planner'
+2026-06-24 17:22:43,642 [INFO] Querying: how to become an event decorator
+2026-06-24 17:22:56,256 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:23:12,900 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:23:15,694 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:23:15,703 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:23:16,188 [INFO] [chatgpt] Saved general response for 'how to become an event decorator'
+2026-06-24 17:23:19,375 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:23:19,382 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "Event Decorating Academy",
+        "Penn Foster"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "Event Decorating Academy",
+    "win_reasons": [
+        "Offers a specific accredited course for event decorating"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:23:19,783 [INFO] [perplexity] Saved general response for 'how to become an event decorator'
+2026-06-24 17:23:39,784 [INFO] Querying: how to start an event planning business
+2026-06-24 17:23:49,876 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:24:06,035 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:24:09,515 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:24:09,517 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:24:10,034 [INFO] [chatgpt] Saved general response for 'how to start an event planning business'
+2026-06-24 17:24:12,911 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:24:12,914 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "SHMS",
+        "Cvent",
+        "Les Roches",
+        "Social Tables",
+        "EventPlanning.com",
+        "YouTube"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "SHMS",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:24:13,317 [INFO] [perplexity] Saved general response for 'how to start an event planning business'
+2026-06-24 17:24:33,317 [INFO] Querying: How do I become an event designer?
+2026-06-24 17:24:40,450 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:24:56,716 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:24:59,966 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:24:59,973 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "International Live Events Association",
+        "Meeting Professionals International"
+    ],
+    "competitor_count": 2,
+    "competitor_won": "International Live Events Association",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:25:00,730 [INFO] [chatgpt] Saved general response for 'How do I become an event designer?'
+2026-06-24 17:25:05,711 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:25:05,712 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Indeed",
+        "Webber International University",
+        "Social Tables",
+        "Cvent",
+        "Reddit",
+        "NYIAD",
+        "Wagner College"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Indeed",
+    "win_reasons": []
+    ,
+    "qc_cited": false
+}
+2026-06-24 17:25:06,159 [INFO] [perplexity] Saved general response for 'How do I become an event designer?'
+2026-06-24 17:25:26,159 [INFO] Querying: How do I start a wedding décor business?
+2026-06-24 17:25:37,158 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:25:51,368 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:25:52,757 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:25:52,759 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:25:53,220 [INFO] [chatgpt] Saved general response for 'How do I start a wedding décor business?'
+2026-06-24 17:25:54,285 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:25:54,291 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:25:54,676 [INFO] [perplexity] Saved general response for 'How do I start a wedding décor business?'
+2026-06-24 17:26:14,677 [INFO] Querying: How do I start a decoration business?
+2026-06-24 17:26:26,890 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:26:42,527 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:26:45,009 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:26:45,010 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:26:45,494 [INFO] [chatgpt] Saved general response for 'How do I start a decoration business?'
+2026-06-24 17:26:46,673 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:26:46,679 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:26:47,060 [INFO] [perplexity] Saved general response for 'How do I start a decoration business?'
+2026-06-24 17:27:07,061 [INFO] Querying: How do I start a home décor business?
+2026-06-24 17:27:18,364 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:27:32,987 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:27:35,700 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:27:35,708 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:27:36,137 [INFO] [chatgpt] Saved general response for 'How do I start a home décor business?'
+2026-06-24 17:27:38,006 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:27:38,014 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Printify",
+        "DesignFiles",
+        "MUNBYN",
+        "Hivelife",
+        "Ankorstore",
+        "Little Design Corner"
+    ],
+    "competitor_count": 6,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:27:38,439 [INFO] [perplexity] Saved general response for 'How do I start a home décor business?'
+2026-06-24 17:27:58,441 [INFO] Querying: How do I get clients for an event planning business?
+2026-06-24 17:28:06,235 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:28:22,517 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:28:23,950 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:28:23,961 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:28:24,357 [INFO] [chatgpt] Saved general response for 'How do I get clients for an event planning business?'
+2026-06-24 17:28:25,711 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:28:25,718 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:28:26,128 [INFO] [perplexity] Saved general response for 'How do I get clients for an event planning business?'
+2026-06-24 17:28:46,129 [INFO] Querying: What does it cost to start an event planning business?
+2026-06-24 17:28:54,128 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:29:10,689 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:29:13,441 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:29:13,445 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:29:13,932 [INFO] [chatgpt] Saved general response for 'What does it cost to start an event planning business?'
+2026-06-24 17:29:15,327 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:29:15,335 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:29:15,718 [INFO] [perplexity] Saved general response for 'What does it cost to start an event planning business?'
+2026-06-24 17:29:35,719 [INFO] Querying: what is a good career for someone without a degree
+2026-06-24 17:29:44,478 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:29:58,888 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:01,612 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:01,620 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:30:02,066 [INFO] [chatgpt] Saved general response for 'what is a good career for someone without a degree'
+2026-06-24 17:30:03,557 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:03,564 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "OCSO Careers",
+        "Indeed",
+        "College Raptor",
+        "US Career Institute",
+        "CalCareers",
+        "Davron",
+        "US News"
+    ],
+    "competitor_count": 7,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:30:03,955 [INFO] [perplexity] Saved general response for 'what is a good career for someone without a degree'
+2026-06-24 17:30:23,956 [INFO] Querying: I want a career change what should I learn
+2026-06-24 17:30:31,928 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:30:48,469 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:51,015 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:51,028 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "online courses",
+        "certifications",
+        "degree programs"
+    ],
+    "competitor_count": 3,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:30:51,491 [INFO] [chatgpt] Saved general response for 'I want a career change what should I learn'
+2026-06-24 17:30:53,457 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:30:53,470 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Google",
+        "AWS",
+        "PMP",
+        "Indeed Certifications"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Google",
+    "win_reasons": [
+        "Prominent for tech roles",
+        "Reputable certifications"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:30:53,854 [INFO] [perplexity] Saved general response for 'I want a career change what should I learn'
+2026-06-24 17:31:13,855 [INFO] Querying: best dog grooming certification online
+2026-06-24 17:31:21,978 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:31:37,028 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:31:40,759 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:31:40,763 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Whole Pet Grooming Academy",
+        "JKL Grooming Academy",
+        "Paragon School of Pet Grooming",
+        "Peticademy",
+        "Groomadog Course Online"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Whole Pet Grooming Academy",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:31:41,260 [INFO] [chatgpt] Saved course response for 'best dog grooming certification online'
+2026-06-24 17:31:45,553 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:31:45,558 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Professional Dog Grooming Academy (PDGA)",
+        "Fear Free Groomer Certification Program",
+        "Penn Foster",
+        "AKC® S.A.F.E. Dog Grooming Program",
+        "Animal Behavior College",
+        "Paragon Pet School",
+        "learn2groomdogs.com"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Professional Dog Grooming Academy (PDGA)",
+    "win_reasons": [
+        "Widely recognized as a top online dog grooming certification",
+        "Created by industry professionals with comprehensive training"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:31:46,009 [INFO] [perplexity] Saved course response for 'best dog grooming certification online'
+2026-06-24 17:32:06,010 [INFO] Querying: dog training certification canada
+2026-06-24 17:32:13,152 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:32:29,472 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:32:31,927 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:32:31,935 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Dogma Academy",
+        "Georgian College",
+        "Dogue Academy"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Dogma Academy",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:32:32,431 [INFO] [chatgpt] Saved course response for 'dog training certification canada'
+2026-06-24 17:32:35,104 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:32:35,112 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Good Dog Academy",
+        "CCS (Canine Correspondence Studies)",
+        "CAPDT (Developing)",
+        "DIGMODA Academy",
+        "Animal Behaviour College",
+        "CCPDT®",
+        "Karen Pryor Academy"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Good Dog Academy",
+    "win_reasons": [
+        "Canada’s first CAPDT-accredited school",
+        "Science-based, force-free training",
+        "Recognized in BC and internationally"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:32:35,485 [INFO] [perplexity] Saved course response for 'dog training certification canada'
+2026-06-24 17:32:55,487 [INFO] Querying: best distance learning pet grooming courses
+2026-06-24 17:33:02,998 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:33:17,305 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:33:20,627 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:33:20,628 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Pretty Paws Grooming Academy",
+        "WPGA (World Pet Grooming Association)",
+        "Penn Foster's Pet Grooming Certificate Program",
+        "Paragon School of Pet Grooming",
+        "Elevify's Pet Bather & Groomer Course"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Pretty Paws Grooming Academy",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:33:21,068 [INFO] [chatgpt] Saved course response for 'best distance learning pet grooming courses'
+2026-06-24 17:33:23,689 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:33:23,692 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Penn Foster",
+        "Animal Behavior College",
+        "New York Institute of Pet Grooming (NYIPG)",
+        "PDGA (Professional Dog Grooming Academy)",
+        "Paragon Petschool",
+        "American Grooming Academy",
+        "Jodi Murphy’s Distance Learning Program"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "Penn Foster",
+    "win_reasons": [
+        "affordable",
+        "fully online",
+        "suitable for beginners"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:33:24,069 [INFO] [perplexity] Saved course response for 'best distance learning pet grooming courses'
+2026-06-24 17:33:44,070 [INFO] Querying: dog training certification online canada
+2026-06-24 17:33:52,246 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:34:07,997 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:10,715 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:10,724 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Good Dog Academy",
+        "DogStars Training Academy",
+        "Canine Club Academy",
+        "Dogue Academy",
+        "SHIELD K9 Online"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Good Dog Academy",
+    "win_reasons": [
+        "CAPDT-accredited",
+        "Emphasizes positive reinforcement and evidence-based training methods",
+        "Comprehensive course layout with 24/7 access"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:34:11,197 [INFO] [chatgpt] Saved course response for 'dog training certification online canada'
+2026-06-24 17:34:13,240 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:13,245 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 3,
+    "competitors": [
+        "Good Dog Academy",
+        "Canine Correspondence Studies (CCS)",
+        "Animal Behaviour College (ABC)",
+        "Karen Pryor Academy (KPA)"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Good Dog Academy",
+    "win_reasons": [
+        "CAPDT accreditation",
+        "science-based curriculum",
+        "year-round enrollment"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:34:13,634 [INFO] [perplexity] Saved course response for 'dog training certification online canada'
+2026-06-24 17:34:33,635 [INFO] Querying: best distance learning dog training course
+2026-06-24 17:34:41,338 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:34:54,601 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:56,869 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:56,872 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "SHIELD K9 Online Dog Training",
+        "Calm Canines Academy",
+        "C2H Online",
+        "Cali K9 Online Training",
+        "The Canine University"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "SHIELD K9 Online Dog Training",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:34:57,311 [INFO] [chatgpt] Saved course response for 'best distance learning dog training course'
+2026-06-24 17:34:59,518 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:34:59,522 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "CATCH Canine Trainers Academy",
+        "Fenzi Dog Sports Academy",
+        "Victoria Stilwell Academy",
+        "Karen Pryor Academy",
+        "SpiritDog Online Dog Training",
+        "e-Training for Dogs"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "CATCH Canine Trainers Academy",
+    "win_reasons": [
+        "Only program explicitly labeled as a hands-on distance learning course for certification"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:34:59,919 [INFO] [perplexity] Saved course response for 'best distance learning dog training course'
+2026-06-24 17:35:19,920 [INFO] Querying: online canine behaviour courses
+2026-06-24 17:35:25,832 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:35:41,331 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:35:43,121 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:35:43,122 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Animal Behavior Institute",
+        "Ethology Institute",
+        "Calm Canines Academy",
+        "Mindfulness4dogs Online Dog School",
+        "Building Bonds Online Courses"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Animal Behavior Institute",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:35:43,638 [INFO] [chatgpt] Saved course response for 'online canine behaviour courses'
+2026-06-24 17:35:45,717 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:35:45,724 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "The International School for Canine Psychology (ISCP)",
+        "Instinct Dog Training",
+        "Canine Behavior Academy (by Trish)",
+        "Good Dog Academy",
+        "ABI (Animal Behavior Institute)",
+        "Coursera",
+        "Karen Pryor Academy",
+        "Canine Foundations"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "The International School for Canine Psychology (ISCP)",
+    "win_reasons": [
+        "Offers a variety of diplomas from beginner to degree level",
+        "Academically rigorous and widely trusted"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:35:46,150 [INFO] [perplexity] Saved course response for 'online canine behaviour courses'
+2026-06-24 17:36:06,151 [INFO] Querying: where can i take dog grooming classes
+2026-06-24 17:36:13,950 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:36:28,316 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:36:30,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:36:30,492 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "South Texas College",
+        "West Coast Grooming Academy",
+        "Flawless Pet Grooming School & Salon",
+        "Shear Excellence Dog Grooming Academy",
+        "Diamond Cut Dog Grooming School"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "South Texas College",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:36:30,922 [INFO] [chatgpt] Saved course response for 'where can i take dog grooming classes'
+2026-06-24 17:36:33,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:36:33,491 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Stacey’s Canine Design",
+        "All Breed Pet Salon",
+        "The Pooch Parlor Groomer Academy",
+        "PetSmart Groomer Class",
+        "Penn Foster",
+        "Super Styling Sessions",
+        "2handsart",
+        "GroomHaus"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "Stacey’s Canine Design",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:36:33,884 [INFO] [perplexity] Saved course response for 'where can i take dog grooming classes'
+2026-06-24 17:36:53,885 [INFO] Querying: best corporate event planning courses
+2026-06-24 17:37:02,105 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:37:18,868 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:37:22,211 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:37:22,212 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "University of Texas at Arlington's Corporate Event Planner Course",
+        "ed2go's Corporate Event Planner Course",
+        "Dallas College's Corporate Event Planner Course",
+        "Coursera's Introduction to Events Management"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "University of Texas at Arlington's Corporate Event Planner Course",
+    "win_reasons": [
+        "Comprehensive 240-hour program",
+        "Focus on conferences and corporate training days",
+        "Certification from Lovegevity"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:37:22,718 [INFO] [chatgpt] Saved course response for 'best corporate event planning courses'
+2026-06-24 17:37:24,715 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:37:24,722 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 5,
+    "competitors": [
+        "University of Texas at Arlington",
+        "North Carolina Central University",
+        "University of Houston",
+        "GWSB International",
+        "Coursera",
+        "NYIAD",
+        "LinkedIn Learning",
+        "UNC Charlotte"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "University of Texas at Arlington",
+    "win_reasons": [
+        "Most targeted and rigorous option for corporate events"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:37:25,128 [INFO] [perplexity] Saved course response for 'best corporate event planning courses'
+2026-06-24 17:37:45,128 [INFO] Querying: best event planning course
+2026-06-24 17:37:55,294 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:38:10,701 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:38:14,104 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:38:14,107 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "LinkedIn Learning",
+        "Bryant University",
+        "Management and Strategy Institute",
+        "Wedding Planning Institute",
+        "New York Institute of Art and Design"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "LinkedIn Learning",
+    "win_reasons": [
+        "Comprehensive introduction to fundamentals",
+        "Ideal for beginners"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:38:14,548 [INFO] [chatgpt] Saved course response for 'best event planning course'
+2026-06-24 17:38:17,597 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:38:17,598 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "NYIAD Online Event Planning Course",
+        "North Seattle College Corporate Event Planner (CEP)",
+        "Temple University Event Leadership",
+        "MSI Certified Event Planning Certification",
+        "Bunker Hill Community College Event Management",
+        "Alison Free Online Event Planning",
+        "New York (Wagner) Wedding and Event Planning"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "NYIAD Online Event Planning Course",
+    "win_reasons": [
+        "Specifically teaches the art of planning various events with a focus on practical mastery"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:38:17,962 [INFO] [perplexity] Saved course response for 'best event planning course'
+2026-06-24 17:38:37,963 [INFO] Querying: event planning online course
+2026-06-24 17:38:42,018 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:39:00,479 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:02,320 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:02,325 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Coursera",
+        "Udemy",
+        "edX",
+        "Skillshare",
+        "Eventbrite",
+        "MasterClass"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "Coursera",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:39:02,819 [INFO] [chatgpt] Saved course response for 'event planning online course'
+2026-06-24 17:39:04,581 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:04,585 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "NYIAD",
+        "IAP Career College",
+        "Penn Foster",
+        "MSI Certified",
+        "University of Texas at Arlington",
+        "PCMA Institute",
+        "Alison"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "NYIAD",
+    "win_reasons": [
+        "Deep, mentor-supported training with extended completion windows"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:39:05,014 [INFO] [perplexity] Saved course response for 'event planning online course'
+2026-06-24 17:39:25,015 [INFO] Querying: event decorating classes near me
+2026-06-24 17:39:26,783 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:39:44,267 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:46,832 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:46,834 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:39:47,324 [INFO] [chatgpt] Saved course response for 'event decorating classes near me'
+2026-06-24 17:39:48,853 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:39:48,856 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "Event Decorating Academy",
+        "Yes! Event Decor",
+        "IWED Global"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Event Decorating Academy",
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:39:49,267 [INFO] [perplexity] Saved course response for 'event decorating classes near me'
+2026-06-24 17:40:09,267 [INFO] Querying: event decoration courses online
+2026-06-24 17:40:17,364 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:40:34,169 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:40:37,344 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:40:37,348 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "competitors": [
+        "Event Decorating Academy",
+        "Lab productora",
+        "Tuma Event Ambience Creators (TEAC)",
+        "Posh Events Institute",
+        "Yes! Event Academy"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Event Decorating Academy",
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:40:37,810 [INFO] [chatgpt] Saved course response for 'event decoration courses online'
+2026-06-24 17:40:39,856 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:40:39,859 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "competitors": [
+        "Elevify",
+        "Event Decorating Academy",
+        "Posh Events Course",
+        "Yes! Event Decor & More",
+        "University of Houston"
+    ],
+    "competitor_count": 5,
+    "competitor_won": "Elevify",
+    "win_reasons": [
+        "Offers free version of the course",
+        "Flexible workload"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:40:40,252 [INFO] [perplexity] Saved course response for 'event decoration courses online'
+2026-06-24 17:41:00,253 [INFO] Querying: event decoration classes
+2026-06-24 17:41:06,475 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:41:21,124 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:41:22,989 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:41:22,993 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Udemy",
+        "Coursera",
+        "Skillshare"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Udemy",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:41:24,429 [INFO] [chatgpt] Saved course response for 'event decoration classes'
+2026-06-24 17:41:26,104 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:41:26,110 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "competitors": [
+        "Yes! Event Academy",
+        "Event Decorating Academy",
+        "IWED Global",
+        "Wake Tech"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Yes! Event Academy",
+    "win_reasons": [
+        "Focus on beginners and foundational skills"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:41:26,486 [INFO] [perplexity] Saved course response for 'event decoration classes'
+2026-06-24 17:41:46,487 [INFO] Querying: event decorator certification
+2026-06-24 17:41:50,903 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:42:07,972 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:42:10,665 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:42:10,666 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [],
+    "competitor_count": 0,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:42:11,173 [INFO] [chatgpt] Saved course response for 'event decorator certification'
+2026-06-24 17:42:12,702 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:42:12,706 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "competitors": [
+        "Event Decorating Academy",
+        "MPI (Meeting Professionals International)",
+        "IWED Global"
+    ],
+    "competitor_count": 3,
+    "competitor_won": null,
+    "win_reasons": [],
+    "qc_cited": true
+}
+2026-06-24 17:42:13,105 [INFO] [perplexity] Saved course response for 'event decorator certification'
+2026-06-24 17:42:33,106 [INFO] Querying: event planning classes
+2026-06-24 17:42:37,405 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:42:53,473 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:42:58,184 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:42:58,188 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Coursera",
+        "Udemy",
+        "LinkedIn Learning"
+    ],
+    "competitor_count": 3,
+    "competitor_won": "Coursera",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:42:58,621 [INFO] [chatgpt] Saved course response for 'event planning classes'
+2026-06-24 17:43:01,148 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:43:01,156 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "MSU Denver",
+        "NYIAD",
+        "LinkedIn Learning",
+        "Event School London",
+        "NYU SPS",
+        "University of Texas at Arlington",
+        "Post-MSU Denver",
+        "York College CPE",
+        "Wagner College",
+        "Lehman College",
+        "CCNY",
+        "QC Event School",
+        "Fashion & Design"
+    ],
+    "competitor_count": 13,
+    "competitor_won": "MSU Denver",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:43:01,538 [INFO] [perplexity] Saved course response for 'event planning classes'
+2026-06-24 17:43:21,538 [INFO] Querying: best wedding planner school
+2026-06-24 17:43:31,372 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:43:46,226 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:43:49,098 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:43:49,100 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "WedTech Academy - Lovegevity",
+        "V Wedding Academy",
+        "New York Institute of Art and Design (NYIAD)",
+        "Wedding Academy Global",
+        "Weddings Beautiful Worldwide",
+        "The Sheffield School"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "WedTech Academy - Lovegevity",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:43:49,547 [INFO] [chatgpt] Saved course response for 'best wedding planner school'
+2026-06-24 17:43:51,624 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:43:51,631 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "University of Texas at Arlington",
+        "The New York Institute of Art & Design (NYIAD)",
+        "Wedding Academy Global",
+        "New York Institute of Art and Design",
+        "Certified Wedding Planner Society",
+        "Collin College",
+        "American Association of Certified Wedding Planners (AACWP)",
+        "Certified Wedding & Event Planning (CWEP) program"
+    ],
+    "competitor_count": 8,
+    "competitor_won": "University of Texas at Arlington",
+    "win_reasons": [
+        "widely considered the best wedding planner school",
+        "offers a comprehensive online program mastering the fundamentals of planning and delivering stunning weddings"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:43:51,995 [INFO] [perplexity] Saved course response for 'best wedding planner school'
+2026-06-24 17:44:11,996 [INFO] Querying: wedding planner certification course
+2026-06-24 17:44:17,531 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:44:32,919 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:44:35,769 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:44:35,776 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "The Wedding Planning Institute",
+        "The Bridal Society",
+        "Lovegevity",
+        "Academy of Wedding and Event Planning",
+        "Udemy",
+        "Coursera"
+    ],
+    "competitor_count": 6,
+    "competitor_won": "The Wedding Planning Institute",
+    "win_reasons": [],
+    "qc_cited": false
+}
+2026-06-24 17:44:36,211 [INFO] [chatgpt] Saved course response for 'wedding planner certification course'
+2026-06-24 17:44:37,924 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:44:37,927 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "Wedding Planning Institute",
+        "IAP Career College",
+        "Lovegevity",
+        "NYIAD"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Wedding Planning Institute",
+    "win_reasons": [
+        "Comprehensive certification options",
+        "Internship opportunities",
+        "Large library of resource templates"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:44:38,353 [INFO] [perplexity] Saved course response for 'wedding planner certification course'
+2026-06-24 17:44:58,354 [INFO] Querying: online event planning courses with certificates
+2026-06-24 17:45:06,926 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:45:21,529 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:45:23,257 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:45:23,258 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "competitors": [
+        "Elevify",
+        "University of North Carolina at Charlotte",
+        "New York University School of Professional Studies",
+        "California State University, Long Beach"
+    ],
+    "competitor_count": 4,
+    "competitor_won": "Elevify",
+    "win_reasons": [
+        "Comprehensive course covering essential aspects of event planning.",
+        "Flexible study hours ranging from 4 to 360 hours."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:45:23,690 [INFO] [chatgpt] Saved course response for 'online event planning courses with certificates'
+2026-06-24 17:45:25,722 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:45:25,728 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "competitors": [
+        "UNC Charlotte",
+        "MSI Certified",
+        "IAP Career College",
+        "PCMA Institute",
+        "NYIAD",
+        "Portland Community College",
+        "LinkedIn Learning"
+    ],
+    "competitor_count": 7,
+    "competitor_won": "UNC Charlotte",
+    "win_reasons": [
+        "Most rigorous and industry-aligned certification",
+        "Provides comprehensive training and portfolio project"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:45:26,138 [INFO] [perplexity] Saved course response for 'online event planning courses with certificates'
+2026-06-24 17:45:46,140 [INFO] Querying: is QC Pet School accredited in Canada
+2026-06-24 17:45:51,478 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:46:06,348 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:09,526 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:09,527 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies does not hold accreditation from the national accrediting body in Canada but is recognized by industry-specific organizations.",
+    "concerns_raised": ["Not accredited by Accreditation Canada"],
+    "positives_raised": ["Accredited by the Better Business Bureau with an A+ rating", "Recognized by Canadian Pet Care Professionals for its Dog Grooming Certificate"],
+    "qc_cited": true
+}
+2026-06-24 17:46:09,992 [INFO] [chatgpt] Saved credibility response for 'is QC Pet School accredited in Canada'
+2026-06-24 17:46:12,360 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:12,363 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies is BBB Accredited but is not recognized by Canadian government education authorities.",
+    "concerns_raised": [
+        "not accredited by a Canadian government or educational authority",
+        "no specific mention of accreditation by a Canadian provincial branch",
+        "operates as an online/international distance education program"
+    ],
+    "positives_raised": [
+        "BBB Accredited with an A+ rating",
+        "graduates receive a professional certification that is industry recognized"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:46:12,753 [INFO] [perplexity] Saved credibility response for 'is QC Pet School accredited in Canada'
+2026-06-24 17:46:32,753 [INFO] Querying: is QC Pet School internationally recognized
+2026-06-24 17:46:36,662 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:46:50,315 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:52,833 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:52,834 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies is not formally accredited but is recognized for its quality education and international accessibility.",
+    "concerns_raised": ["Not accredited by traditional educational accrediting bodies"],
+    "positives_raised": ["Comprehensive pet care education", "A+ rating from BBB", "Courses meet international standards", "Accessible to students worldwide"],
+    "qc_cited": true
+}
+2026-06-24 17:46:53,254 [INFO] [chatgpt] Saved credibility response for 'is QC Pet School internationally recognized'
+2026-06-24 17:46:55,913 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:46:55,922 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "QC Pet Studies presents its certification as internationally recognized, but lacks evidence of independent global endorsement.",
+    "concerns_raised": [
+        "The recognition is based on the school’s own claims rather than independent endorsements.",
+        "The BBB accreditation reflects consumer satisfaction, not academic or industry validation.",
+        "No independent international associations are cited for QC Pet Studies."
+    ],
+    "positives_raised": [
+        "QC Pet Studies offers an internationally recognized certification based on its own claims.",
+        "The school has been offering distance education since 1984.",
+        "Graduates can earn the title International Dog Training Professional™ (IDTP™)."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:46:56,321 [INFO] [perplexity] Saved credibility response for 'is QC Pet School internationally recognized'
+2026-06-24 17:47:16,322 [INFO] Querying: do employers respect QC Pet Studies certificates
+2026-06-24 17:47:21,610 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:47:36,152 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:47:39,493 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:47:39,494 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The response indicates that while QC Pet Studies certificates can enhance credibility, their value can vary based on multiple factors.",
+    "concerns_raised": [
+        "Some employers may prefer degrees from more traditional academic institutions.",
+        "Employers look for candidates with evidence of specialized knowledge and skills."
+    ],
+    "positives_raised": [
+        "Certifications from reputable organizations can enhance a candidate's credibility in fields related to pet care.",
+        "Employers may appreciate candidates who commit to ongoing learning and professional development."
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:47:39,962 [INFO] [chatgpt] Saved credibility response for 'do employers respect QC Pet Studies certificates'
+2026-06-24 17:47:43,222 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:47:43,224 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The response discusses the mixed reception of QC Pet Studies certificates among employers, indicating both skepticism and some positive recognition.",
+    "concerns_raised": [
+        "limited and mixed evidence of employer respect for QC Pet Studies certificates",
+        "practical employer awareness is low",
+        "most employers in the dog sitting and walking industry do not understand these certifications",
+        "some employers prioritize experience over formal certifications",
+        "critics note lack of depth in dog behavior recognition"
+    ],
+    "positives_raised": [
+        "some graduates report career benefits",
+        "QC Pet Studies courses are highlighted as comprehensive by SPCA International",
+        "growing awareness among some clients and employers about training"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:47:43,610 [INFO] [perplexity] Saved credibility response for 'do employers respect QC Pet Studies certificates'
+2026-06-24 17:48:03,611 [INFO] Querying: Is QC Pet Studies legit
+2026-06-24 17:48:10,213 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:48:24,277 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:48:27,031 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:48:27,081 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies is portrayed as a legitimate and reputable institution with positive student experiences.",
+    "concerns_raised": [],
+    "positives_raised": [
+        "well-structured and organized curriculum",
+        "clear assignment expectations",
+        "prompt grading",
+        "14-day money-back guarantee"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:48:27,579 [INFO] [chatgpt] Saved credibility response for 'Is QC Pet Studies legit'
+2026-06-24 17:48:30,206 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:48:30,207 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies is considered legitimate with comprehensive offerings but has mixed student feedback regarding hands-on learning.",
+    "concerns_raised": [
+        "Limited hands-on learning",
+        "Some students felt they didn't learn much",
+        "Questions about the validity of criticisms"
+    ],
+    "positives_raised": [
+        "Legitimate online school",
+        "Over 40 years of experience",
+        "A+ rating from the Better Business Bureau",
+        "One-on-one training from industry experts",
+        "Comprehensive online courses",
+        "Graduates earn a professional certification that is valid forever"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:48:30,627 [INFO] [perplexity] Saved credibility response for 'Is QC Pet Studies legit'
+2026-06-24 17:48:50,628 [INFO] Querying: QC Pet Studies reviews
+2026-06-24 17:48:57,894 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:49:11,647 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:49:15,097 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:49:15,102 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies is a reputable option for those seeking to pursue a career in the pet care industry.",
+    "concerns_raised": [],
+    "positives_raised": [
+        "well-structured materials",
+        "flexibility of the online format",
+        "supportive tutors",
+        "enriching Virtual Classroom community",
+        "practical assignments",
+        "enhanced confidence",
+        "knowledgeable and encouraging tutors",
+        "friendly and helpful student community"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:49:15,559 [INFO] [chatgpt] Saved credibility response for 'QC Pet Studies reviews'
+2026-06-24 17:49:17,298 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:49:17,301 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "The AI concluded that QC Pet Studies generally receives excellent and positive reviews from graduates who appreciate the course structure and career impact.",
+    "concerns_raised": ["lack of hands-on learning in the past"],
+    "positives_raised": ["well-structured courses", "prompt grading", "interactive elements", "success in acquiring new clients", "self-paced online format", "21-day money-back guarantee"],
+    "qc_cited": true
+}
+2026-06-24 17:49:17,693 [INFO] [perplexity] Saved credibility response for 'QC Pet Studies reviews'
+2026-06-24 17:49:37,694 [INFO] Querying: is QC Event School accredited in Canada
+2026-06-24 17:49:41,508 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:49:55,836 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:49:59,025 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:49:59,026 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "QC Event School is not accredited by Canadian educational authorities despite being recognized in the United States.",
+    "concerns_raised": [
+        "Does not hold accreditation from Canadian educational authorities",
+        "No indication of receiving accreditation from CEQAC"
+    ],
+    "positives_raised": [
+        "Accredited by the Better Business Bureau (BBB) with an A+ rating",
+        "Specializing in distance education since 1984"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:49:59,459 [INFO] [chatgpt] Saved credibility response for 'is QC Event School accredited in Canada'
+2026-06-24 17:50:01,597 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:50:01,606 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is recognized by industry bodies but is not government-accredited as a formal educational institution in Canada.",
+    "concerns_raised": [
+        "Not accredited by the Canadian Ministry of Education",
+        "Considered a 'for-profit info share'",
+        "Courses do not appear on official academic transcripts",
+        "Tax-deductible only at the federal level, not provincial"
+    ],
+    "positives_raised": [
+        "BBB Accredited with an A+ rating",
+        "Certifications approved by ILEA",
+        "Internationally recognized certificates"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:50:01,970 [INFO] [perplexity] Saved credibility response for 'is QC Event School accredited in Canada'
+2026-06-24 17:50:21,971 [INFO] Querying: is QC Event School internationally recognized
+2026-06-24 17:50:28,027 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:50:41,200 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:50:43,631 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:50:43,638 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is recognized internationally but lacks formal accreditation by a recognized body.",
+    "concerns_raised": [
+        "Not accredited by a regional or national accrediting body recognized by the U.S. Department of Education"
+    ],
+    "positives_raised": [
+        "Internationally recognized institution",
+        "Established in 1984",
+        "Trained thousands of students worldwide",
+        "Offers flexible, high-quality online courses",
+        "Programs approved by ILEA",
+        "A+ rating with the BBB"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:50:45,114 [INFO] [chatgpt] Saved credibility response for 'is QC Event School internationally recognized'
+2026-06-24 17:50:47,599 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:50:47,606 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The response provides a balanced view, highlighting both the international recognition of QC Event School's certifications and the limitations of proprietary designations.",
+    "concerns_raised": [
+        "Proprietary designations may not be recognized by some employers as industry-standard certifications.",
+        "Comparative lack of recognition for QC's certifications versus those issued by professional associations."
+    ],
+    "positives_raised": [
+        "QC Event School's courses and certifications are internationally recognized.",
+        "Accredited by the Better Business Bureau with an A+ ranking.",
+        "Approved by the International Live Events Association."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:50:48,009 [INFO] [perplexity] Saved credibility response for 'is QC Event School internationally recognized'
+2026-06-24 17:51:08,009 [INFO] Querying: do employers respect QC Event School certificates
+2026-06-24 17:51:12,422 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:51:26,094 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:51:29,177 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:51:29,185 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The response outlines various factors affecting the respectability of QC Event School certificates, indicating that the perception varies by industry and employer.",
+    "concerns_raised": [
+        "Employers may prioritize experience over certificates.",
+        "Recognition varies by industry and employer's criteria.",
+        "Some employers may not consider the certificate essential."
+    ],
+    "positives_raised": [
+        "The certificate can enhance qualifications.",
+        "Relevant experience can boost attractiveness as a candidate.",
+        "Programs may offer networking opportunities."
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:51:29,648 [INFO] [chatgpt] Saved credibility response for 'do employers respect QC Event School certificates'
+2026-06-24 17:51:31,530 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:51:31,535 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "The AI concludes that QC Event School certificates may not be respected by employers and raises doubts about their value compared to industry-recognized certifications.",
+    "concerns_raised": [
+        "questionable value of QC certificates",
+        "proprietary designations not officially recognized",
+        "potential suspicion from employers",
+        "preference for accredited designations"
+    ],
+    "positives_raised": [
+        "can help refresh skills",
+        "can specialize in niches",
+        "can improve job chances through accredited training"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:51:31,900 [INFO] [perplexity] Saved credibility response for 'do employers respect QC Event School certificates'
+2026-06-24 17:51:51,901 [INFO] Querying: QC Event School reviews
+2026-06-24 17:52:01,269 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:52:14,901 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:52:17,784 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:52:17,787 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "The AI concluded that QC Event School is a reputable choice for event planning education, highlighting its positive feedback and strong curriculum.",
+    "concerns_raised": [],
+    "positives_raised": ["comprehensive course content", "supportive tutors", "flexibility of online learning", "well-received specialized courses"],
+    "qc_cited": true
+}
+2026-06-24 17:52:19,264 [INFO] [chatgpt] Saved credibility response for 'QC Event School reviews'
+2026-06-24 17:52:21,813 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:52:21,822 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School is a highly recommended, accredited institution for event planning.",
+    "concerns_raised": [
+        "A few students noted they did not finish certain courses within the allowed timeframe",
+        "A 2012 review of a different QC school (QC Design School) described it as a 'scam', but this does not reflect on the current QC Event School"
+    ],
+    "positives_raised": [
+        "Courses are self-paced and online, offering flexibility",
+        "Tuition is low-cost with monthly promotions and payment plans",
+        "The school holds an A+ BBB rating and is approved by the International Live Events Association",
+        "Graduates praise helpful tutors, interactive webinars, and a welcoming community",
+        "Over 30,000+ students have started successful businesses, citing the training as a 10/10 experience"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:52:22,209 [INFO] [perplexity] Saved credibility response for 'QC Event School reviews'
+2026-06-24 17:52:42,209 [INFO] Querying: QC Pet School vs Coursera which is better
+2026-06-24 17:52:47,267 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:53:04,192 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:53:07,120 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:53:07,121 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet School is ideal for those wanting to specialize in pet-related subjects.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Specializes in pet care, training, and behavior",
+        "Offers hands-on training geared towards pet grooming, dog training, etc.",
+        "Provides industry-recognized certifications",
+        "Ideal for pet enthusiasts or professionals looking to specialize in pet care and training"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:53:07,712 [INFO] [chatgpt] Saved competition response for 'QC Pet School vs Coursera which is better'
+2026-06-24 17:53:09,895 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:53:09,904 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies is the recommended choice for those wanting to become certified dog groomers with hands-on training.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "QC Pet Studies provides a specialized program for dog grooming.",
+        "Includes business training on starting a grooming business.",
+        "Offers a clear path to immediate employment in the pet industry.",
+        "One-time payment with no recurring fees."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:53:10,284 [INFO] [perplexity] Saved competition response for 'QC Pet School vs Coursera which is better'
+2026-06-24 17:53:30,285 [INFO] Querying: QC Pet School vs Udemy which is better
+2026-06-24 17:53:38,580 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:53:55,573 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:53:58,297 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:53:58,304 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet School is favored for its specialization and recognized certifications in pet training.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Focuses specifically on pet training and related topics",
+        "Offers recognized certifications, which may be beneficial if you’re pursuing a career in pet training",
+        "Typically includes comprehensive programs with support from instructors and a clear curriculum"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:53:58,772 [INFO] [chatgpt] Saved competition response for 'QC Pet School vs Udemy which is better'
+2026-06-24 17:54:01,000 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:54:01,001 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet School is the superior choice for pursuing dog grooming and pet care education.",
+    "competitor_won": "QC",
+    "win_reasons": [
+        "Specialization in dog grooming and pet care",
+        "Accredited certificate recognized by employers",
+        "Structured program with business training"
+    ],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Industry recognition",
+        "Practical, skill-focused curriculum",
+        "Flexibility to complete at one's own pace",
+        "Hands-on practice opportunities"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:54:01,384 [INFO] [perplexity] Saved competition response for 'QC Pet School vs Udemy which is better'
+2026-06-24 17:54:21,384 [INFO] Querying: is QC Pet School worth the money
+2026-06-24 17:54:29,002 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:54:44,970 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:54:48,891 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:54:48,892 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The value of QC Pet Studies depends on individual goals and preferences.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Online format requires self-discipline and independence",
+        "Students must find their own dogs for grooming practice"
+    ],
+    "positives_raised": [
+        "Comprehensive online courses with flexible learning",
+        "Competitively priced compared to traditional programs",
+        "Lifetime access to course materials and additional student support"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:54:49,347 [INFO] [chatgpt] Saved competition response for 'is QC Pet School worth the money'
+2026-06-24 17:54:51,293 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:54:51,305 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet School offers a flexible and comprehensive certification option but has significant considerations regarding hands-on training and cost.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Limited Hands-On Learning",
+        "High Total Cost",
+        "Extra Cost for Hands-On"
+    ],
+    "positives_raised": [
+        "Flexible, Self-Paced Learning",
+        "Comprehensive Materials",
+        "Business Training Included",
+        "Included Tools",
+        "Risk-Free Trial",
+        "Reputable Accreditation"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:54:51,690 [INFO] [perplexity] Saved competition response for 'is QC Pet School worth the money'
+2026-06-24 17:55:11,692 [INFO] Querying: QC Event School vs Coursera which is better
+2026-06-24 17:55:16,266 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:55:31,362 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:55:34,202 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:55:34,212 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School may be better for those specifically interested in event management, but it depends on individual goals.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Specializes in event planning and management",
+        "Offers a structured curriculum with a specific focus on hands-on skills for the events industry",
+        "Provides certifications that may be industry-recognized",
+        "Access to instructors and personalized feedback"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:55:34,679 [INFO] [chatgpt] Saved competition response for 'QC Event School vs Coursera which is better'
+2026-06-24 17:55:37,000 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:55:37,008 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is a good choice for those specifically wanting to become event planners, but it is not positioned as the overall better option compared to Coursera.",
+    "competitor_won": "Coursera",
+    "win_reasons": [
+        "Offers a wide variety of courses",
+        "Provides flexibility and career-focused professional certificates",
+        "Has a larger catalog of nearly 7,000 courses"
+    ],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Specialized training in event planning with mentor-led programs",
+        "Globally recognized professional certification for event planners",
+        "7 personalized 1-on-1 mentor reviews"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:55:37,416 [INFO] [perplexity] Saved competition response for 'QC Event School vs Coursera which is better'
+2026-06-24 17:55:57,417 [INFO] Querying: QC Event School vs Udemy which is better
+2026-06-24 17:56:05,278 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:56:20,252 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:56:23,438 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:56:23,443 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School offers a structured approach for those specifically interested in event planning, but the decision depends on individual needs.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Specializes in event planning and related courses",
+        "Offers comprehensive, structured courses with a clear progression",
+        "Provides accredited certifications upon completion",
+        "One-on-one feedback from instructors and professional support",
+        "Opportunities to connect with industry professionals and peers"
+    ],
+    "qc_cited": false
+}
+2026-06-24 17:56:23,882 [INFO] [chatgpt] Saved competition response for 'QC Event School vs Udemy which is better'
+2026-06-24 17:56:25,992 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:56:26,013 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School is significantly better for those seeking comprehensive, accredited certification for a professional career.",
+    "competitor_won": "QC",
+    "win_reasons": [
+        "Provides a full career training and professional certification",
+        "Grants valuable industry credentials",
+        "Offers structured programs with 1-on-1 guidance"
+    ],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Dedicated distance education provider",
+        "Self-paced lessons and templates for contracts",
+        "Certificate of completion to demonstrate credibility"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:56:26,381 [INFO] [perplexity] Saved competition response for 'QC Event School vs Udemy which is better'
+2026-06-24 17:56:46,381 [INFO] Querying: is QC Event School worth the money
+2026-06-24 17:56:55,107 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-24 17:57:09,775 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:57:16,499 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:57:16,501 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School offers flexible and structured courses that are well-received by students, making it a worthwhile investment for those interested in event planning.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Courses are well-structured and easy to follow",
+        "Flexibility to study at one's own pace",
+        "Positive feedback from students",
+        "Accredited by the Better Business Bureau with an A+ rating"
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:57:16,949 [INFO] [chatgpt] Saved competition response for 'is QC Event School worth the money'
+2026-06-24 17:57:19,882 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-24 17:57:19,888 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is recommended for those seeking foundational knowledge in event planning, though its proprietary certifications may have limited industry recognition.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Proprietary designations are not industry-recognized.",
+        "Some course content is dated.",
+        "Conflicting legacy reviews mention negative experiences with a related entity."
+    ],
+    "positives_raised": [
+        "High student satisfaction and career impact.",
+        "Accreditation and affordable courses.",
+        "Flexibility with self-paced online courses.",
+        "Support community access."
+    ],
+    "qc_cited": true
+}
+2026-06-24 17:57:20,316 [INFO] [perplexity] Saved competition response for 'is QC Event School worth the money'
+2026-06-24 17:57:41,811 [INFO] Run complete

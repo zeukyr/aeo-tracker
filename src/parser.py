@@ -7,19 +7,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+QC_BRANDS = "QC Career School, QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, QC Wellness Studies"
+
+QC_CONTEXT = """
+You are analyzing an AI engine response to the question: "{question}"
+Response: "{response}"
+Citations: {citations}
+QC Career School (also known as """ + QC_BRANDS + """) is the brand being tracked.
+"""
 
 PROMPTS = {
-"course": """
-You are analyzing an AI engine response to the question: "{question}"
-
-The response was:
-"{response}"
-
-The following URLs were cited alongside this response:
-{citations}
-
-You are checking whether "QC Career School" (also known as QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, or QC Wellness Studies) is mentioned in the response above.
-
+"course": QC_CONTEXT + """
 Extract the following and return as JSON only, no preamble, no markdown:
 {{
     "qc_mentioned": true if any QC brand is mentioned in the response, false otherwise,
@@ -27,7 +25,13 @@ Extract the following and return as JSON only, no preamble, no markdown:
         - Use 1 for the first school/platform mentioned in the response, 2 for the second, and so on. Never use 0.
         - Use null only if qc_mentioned is false (QC does not appear at all).
         - If QC is mentioned, this must be a positive integer, never 0 or negative.
-    "competitors": [list of other COURSES, SCHOOLS, or EDUCATION PLATFORMS mentioned by name that someone could enroll in. Do NOT include QC Career School, QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, or QC Wellness Studies — these are all the same company and should never be listed as competitors.]
+    "competitors": [
+        list of named schools or platforms someone could enroll in.
+        Examples of what TO include: "Penn Foster", "Animal Behavior College", "Karen Pryor Academy"
+        Examples of what NOT to include: "apprenticeship", "online courses", "vocational school", 
+        "veterinarian", job titles, or generic training methods.
+        Do NOT include QC brands.
+    ]    
     "competitor_count": number of competitors mentioned,
     "competitor_won": name of school most prominently recommended, or null if QC won,
     "win_reasons": [reasons the competitor was preferred over QC, or empty list]
@@ -35,13 +39,7 @@ Extract the following and return as JSON only, no preamble, no markdown:
 }}
 """,
 
-"general": """
-You are analyzing an AI engine response to the question: "{question}"
-
-The response was:
-"{response}"
-
-You are checking whether "QC Career School" (also known as QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, or QC Wellness Studies) is mentioned in the response above.
+"general": QC_CONTEXT + """
 
 Extract the following and return as JSON only, no preamble, no markdown:
 {{
@@ -56,17 +54,9 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "win_reasons": ["reasons competitor was preferred, or empty list"]
     "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
-The following URLs were cited alongside this response:
-{citations}
 """,
 
-"credibility": """
-You are analyzing an AI engine response to the question: "{question}"
-
-The response was:
-"{response}"
-
-You are checking whether "QC Career School" (also known as QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, or QC Wellness Studies) is mentioned in the response above.
+"credibility": QC_CONTEXT + """
 
 Extract the following and return as JSON only, no preamble, no markdown:
 {{
@@ -79,23 +69,9 @@ Extract the following and return as JSON only, no preamble, no markdown:
     "positives_raised": ["list", "of", "positives", "mentioned"]
     "qc_cited": true if any URL in the citations list belongs to QC Career School, QC Pet Studies, QC Event Planning, QC Design School, QC Makeup Academy, or QC Wellness Studies — even if QC is not mentioned in the response text itself. false otherwise.
 }}
-The following URLs were cited alongside this response:
-{citations}
 """,
 
-"competition": """
-You are analyzing an AI engine response to the question: "{question}"
-
-The response was:
-"{response}"
-
-The following URLs were cited alongside this response:
-{citations}
-
-You are checking how "QC Career School" (also known as QC Makeup Academy, QC Design School, QC Event Planning, QC Pet Studies, or QC Wellness Studies) is portrayed in the response above relative to any competitor mentioned.
-
-Read the full response carefully before deciding. Pay attention to which option is actually favored in the text, not just which one is mentioned first or more often.
-
+"competition": QC_CONTEXT + """
 Extract the following and return as JSON only, no preamble, no markdown:
 {{
     "qc_sentiment": classify as one of:
@@ -145,20 +121,13 @@ def parse_response(question, question_type, raw_response, citations=None):
         logger.info(f"RAW OPENAI OUTPUT: {raw}")
         return json.loads(raw)
 
-    except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse JSON from OpenAI: {e}")
-        return {}
-    except Exception as e:
-        logger.error(f"OpenAI parsing error: {e}")
-        return {}
     except RateLimitError as e:
         if "insufficient_quota" in str(e):
-            logger.error("OpenAI quota exhausted")
             raise SystemExit("OpenAI quota exhausted")
         logger.error(f"OpenAI rate limit: {e}")
         return {}
     except json.JSONDecodeError as e:
-        logger.error(f"Failed to parse JSON from OpenAI: {e}")
+        logger.error(f"Failed to parse JSON: {e}")
         return {}
     except Exception as e:
         logger.error(f"OpenAI parsing error: {e}")
