@@ -19,6 +19,7 @@ from api.queries import (
     get_citation_rate_by_category,
     get_citation_rate_by_school,
     get_topics,
+    get_prompt_detail,
 )
 
 app = FastAPI()
@@ -119,3 +120,11 @@ def responses(
 @app.get("/api/topics")
 def topics(days: int = None):
     return get_topics(days)
+
+@app.get("/api/topic-prompt/{prompt_id}")
+def topic_prompt(prompt_id: int, days: int = None):
+    result = get_prompt_detail(prompt_id, days)
+    if result is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Prompt not found")
+    return result
