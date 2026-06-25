@@ -10,8 +10,6 @@ def fetch_avg_rank(cur, filter_clause):
     row = cur.fetchone()[0]
     return float(row) if row else None
 
-<<<<<<< Updated upstream
-=======
 def fetch_sov(cur, filter_clause):
     cur.execute(f"""
         SELECT
@@ -68,11 +66,20 @@ def fetch_visibility_score(cur, filter_clause):
     row = cur.fetchone()[0]
     return round(float(row), 1) if row is not None else None
 
->>>>>>> Stashed changes
 def rank_diff(curr, prev):
     if curr is None or prev is None:
         return None
     return round((prev - curr) * 100, 1)
+
+def sov_diff(curr, prev):
+    if curr is None or prev is None:
+        return None
+    return round(curr - prev, 1)
+
+def visibility_score_diff(curr, prev):
+    if curr is None or prev is None:
+        return None
+    return round(curr - prev, 1)
 
 def get_summary(days=None):
     filter_curr = _date_filter(days)
@@ -105,14 +112,18 @@ def get_summary(days=None):
             rank_curr = fetch_avg_rank(cur, filter_curr)
             rank_prev = fetch_avg_rank(cur, filter_prev)
 
+            sov_curr = fetch_sov(cur, filter_curr)
+            sov_prev = fetch_sov(cur, filter_prev)
+
+            visibility_curr = fetch_visibility_score(cur, filter_curr)
+            visibility_prev = fetch_visibility_score(cur, filter_prev)
+
             cur.execute(f"""
-                WITH combined AS (
-                    SELECT unnest(competitors) as competitor
-                    FROM mention_responses WHERE 1=1 {filter_curr}
-                )
-                SELECT competitor, COUNT(*) as count
-                FROM combined
-                GROUP BY competitor
+                SELECT b.brand_name, COUNT(*) as count
+                FROM mention_response_brands b
+                JOIN mention_responses m ON m.id = b.mention_response_id
+                WHERE b.brand_type = 'competitor' {filter_curr.replace("created_at", "m.created_at")}
+                GROUP BY b.brand_name
                 ORDER BY count DESC
                 LIMIT 1;
             """)
@@ -138,6 +149,10 @@ def get_summary(days=None):
         "positive_sentiment_diff": diff(sentiment_curr, sentiment_prev),
         "avg_rank": round(rank_curr, 2) if rank_curr else None,
         "avg_rank_diff": rank_diff(rank_curr, rank_prev),
+        "sov": sov_curr,
+        "sov_diff": sov_diff(sov_curr, sov_prev),
+        "visibility_score": visibility_curr,
+        "visibility_score_diff": visibility_score_diff(visibility_curr, visibility_prev),
         "top_competitor": top_competitor,
         "best_engine": best_engine
     }

@@ -5,6 +5,19 @@ from src.logger import logger
 
 load_dotenv()
 
+QC_DOMAINS = [
+    "qccareerschool",
+    "qcpetstudies",
+    "qceventplanning",
+    "qcdesignschool",
+    "qcmakeupacademy",
+    "qcwellnessstudies",
+]
+
+def is_qc_domain(url):
+    url_lower = (url or "").lower()
+    return any(domain in url_lower for domain in QC_DOMAINS)
+
 def get_connection():
     return psycopg2.connect(os.getenv("SUPABASE_DB_URL"))
 
@@ -30,18 +43,18 @@ def finish_run(run_id, status="success", error=None):
 def save_mention_response(run_id, question_id, engine, raw_response, citations, parsed):
     with get_connection() as conn:
         with conn.cursor() as cur:
+            # 1. Insert into mention_responses
             cur.execute("""
                 INSERT INTO mention_responses (
                     run_id, question_id, engine, raw_response, citations,
-                    qc_mentioned, qc_mention_order, competitors, competitor_count, competitor_won, win_reasons, qc_cited
-                ) VALUES (
-                    %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s, %s
-                )
+                    qc_mentioned, qc_mention_order, qc_cited
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                RETURNING id
             """, (
                 run_id, question_id, engine, raw_response, citations,
-                parsed.get("qc_mentioned"), parsed.get("qc_mention_order"),
-                parsed.get("competitors"), parsed.get("competitor_count"), parsed.get("competitor_won"), parsed.get("win_reasons"), parsed.get("qc_cited")
+                parsed.get("qc_mentioned"),
+                parsed.get("qc_mention_order"),
+                parsed.get("qc_cited")
             ))
 
             mention_response_id = cur.fetchone()[0]
@@ -114,14 +127,15 @@ def save_sentiment_response(run_id, question_id, engine, raw_response, citations
                 parsed.get("qc_sentiment"), parsed.get("qc_verdict"), parsed.get("concerns_raised"), parsed.get("positives_raised"),
                 parsed.get("competitor_won"), parsed.get("win_reasons"), parsed.get("qc_cited")
             ))
+        
         conn.commit()
 
 def get_questions():
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT id, question, question_type 
-                FROM questions 
-                WHERE active = true 
+                SELECT id, question, question_type
+                FROM questions
+                WHERE active = true
             """)
             return cur.fetchall()

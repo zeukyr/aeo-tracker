@@ -5,25 +5,40 @@ def get_topics(days=None):
     filter_clause = _date_filter(days)
 
     query = f"""
+        WITH rates AS (
+            SELECT
+                q.school,
+                q.id AS question_id,
+                q.question,
+                m.engine,
+                AVG(CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END) * 100 AS response_rate,
+                AVG(CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) * 100 AS citation_rate
+            FROM mention_responses m
+            JOIN questions q ON q.id = m.question_id
+            WHERE q.school IS NOT NULL {filter_clause.replace('AND created_at', 'AND m.created_at')}
+            GROUP BY q.school, q.id, q.question, m.engine
+        ),
+        brands AS (
+            SELECT
+                q.school,
+                q.id AS question_id,
+                m.engine,
+                array_remove(array_agg(DISTINCT b.brand_name), NULL) AS competitors
+            FROM mention_responses m
+            JOIN questions q ON q.id = m.question_id
+            LEFT JOIN mention_response_brands b
+                ON b.mention_response_id = m.id AND b.brand_type = 'competitor'
+            WHERE q.school IS NOT NULL {filter_clause.replace('AND created_at', 'AND m.created_at')}
+            GROUP BY q.school, q.id, m.engine
+        )
         SELECT
-            q.school,
-            q.id AS question_id,
-            q.question,
-            m.engine,
-            AVG(CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END) * 100 AS response_rate,
-            AVG(CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) * 100 AS citation_rate,
-            array_remove(array_agg(DISTINCT comp), NULL) AS competitors
-        FROM mention_responses m
-        JOIN questions q ON q.id = m.question_id
-        CROSS JOIN LATERAL unnest(
-            CASE WHEN m.competitors IS NULL OR array_length(m.competitors, 1) = 0
-                 THEN ARRAY[NULL::text]
-                 ELSE m.competitors
-            END
-        ) AS comp
-        WHERE q.school IS NOT NULL {filter_clause.replace('AND created_at', 'AND m.created_at')}
-        GROUP BY q.school, q.id, q.question, m.engine
-        ORDER BY q.school, q.id, m.engine;
+            r.school, r.question_id, r.question, r.engine,
+            r.response_rate, r.citation_rate,
+            COALESCE(br.competitors, ARRAY[]::text[]) AS competitors
+        FROM rates r
+        LEFT JOIN brands br
+            ON br.school = r.school AND br.question_id = r.question_id AND br.engine = r.engine
+        ORDER BY r.school, r.question_id, r.engine;
     """
 
     with get_connection() as conn:
