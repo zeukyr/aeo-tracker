@@ -1,4 +1,19 @@
 from api.db import get_connection, _date_filter, _prev_date_filter
+def fetch_avg_rank(cur, filter_clause):
+    cur.execute(f"""
+        SELECT AVG(qc_mention_order)
+        FROM mention_responses
+        WHERE qc_mentioned = TRUE
+        AND qc_mention_order IS NOT NULL
+        {filter_clause};
+    """)
+    row = cur.fetchone()[0]
+    return float(row) if row else None
+
+def rank_diff(curr, prev):
+    if curr is None or prev is None:
+        return None
+    return round((prev - curr) * 100, 1)
 
 def get_summary(days=None):
     filter_curr = _date_filter(days)
@@ -27,6 +42,9 @@ def get_summary(days=None):
 
             sentiment_curr = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_curr)
             sentiment_prev = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_prev)
+
+            rank_curr = fetch_avg_rank(cur, filter_curr)
+            rank_prev = fetch_avg_rank(cur, filter_prev)
 
             cur.execute(f"""
                 WITH combined AS (
@@ -59,6 +77,8 @@ def get_summary(days=None):
         "citation_rate_diff": diff(citation_curr, citation_prev),
         "positive_sentiment_rate": round(sentiment_curr * 100, 1) if sentiment_curr else 0,
         "positive_sentiment_diff": diff(sentiment_curr, sentiment_prev),
+        "avg_rank": round(rank_curr, 2) if rank_curr else None,
+        "avg_rank_diff": rank_diff(rank_curr, rank_prev),
         "top_competitor": top_competitor,
         "best_engine": best_engine
     }

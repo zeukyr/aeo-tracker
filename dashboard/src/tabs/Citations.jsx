@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList, Cell
-} from "recharts";
 import { API_BASE_URL } from "../config";
+import { useFilter } from "../context/useFilter";
 
 const ALL_SCHOOLS = [
   "All",
@@ -10,32 +8,22 @@ const ALL_SCHOOLS = [
   "QC Event Planning",
   "QC Design School",
   "QC Makeup Academy",
-  "QC Wellness Studies"
+  "QC Wellness Studies",
 ];
-
-function CitationChart({ data, color = "#7c3aed" }) {
-  if (!data.length) return <p className="text-gray-400 text-sm">No data for this selection.</p>;
-  return (
-    <ResponsiveContainer width="100%" height={Math.max(200, data.length * 40)}>
-      <BarChart data={data} layout="vertical">
-        <XAxis type="number" />
-        <YAxis type="category" dataKey="url" width={300} tick={{ fontSize: 11 }} />
-        <Tooltip />
-        <Bar dataKey="count" radius={[0, 4, 4, 0]}>
-          {data.map((_, i) => (
-            <Cell key={i} fill={i % 2 === 0 ? color : `${color}99`} />
-          ))}
-          <LabelList dataKey="count" position="right" style={{ fontSize: 13 }} />
-        </Bar>
-      </BarChart>
-    </ResponsiveContainer>
-  );
-}
 
 function SchoolFilter({ value, onChange }) {
   return (
     <select
-      className="text-sm border border-gray-200 rounded px-2 py-1"
+      style={{
+        fontSize: 12,
+        color: "#6b6b6b",
+        border: "0.5px solid rgba(0,0,0,0.15)",
+        borderRadius: 6,
+        padding: "4px 8px",
+        background: "#fff",
+        cursor: "pointer",
+        flexShrink: 0,
+      }}
       value={value}
       onChange={e => onChange(e.target.value)}
     >
@@ -44,21 +32,131 @@ function SchoolFilter({ value, onChange }) {
   );
 }
 
+function CitationRow({ rank, url, count, maxCount, color }) {
+  const pct = Math.round((count / maxCount) * 100);
+  const domain = (() => { try { return new URL(url).hostname.replace("www.", ""); } catch { return url; } })();
+  const path   = (() => { try { return new URL(url).pathname; } catch { return ""; } })();
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
+        {rank}
+      </span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+          <div style={{ minWidth: 0, marginRight: 12 }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: "#111" }}>{domain}</span>
+            {path && path !== "/" && (
+              <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {path}
+              </span>
+            )}
+          </div>
+          <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
+        </div>
+        <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
+          <div style={{
+            height: "100%",
+            width: `${pct}%`,
+            background: color,
+            opacity: 0.4 + 0.6 * (count / maxCount),
+            borderRadius: 99,
+            transition: "width 0.4s ease",
+          }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const PAGE_SIZE = 5;
+
+function CitationList({ data, color, emptyMsg }) {
+  const [visible, setVisible] = useState(PAGE_SIZE);
+
+  useEffect(() => { setVisible(PAGE_SIZE); }, [data]);
+
+  if (!data.length) return <p className="state-empty">{emptyMsg ?? "No data for this selection."}</p>;
+
+  const maxCount = data[0]?.count ?? 1;
+  const shown    = data.slice(0, visible);
+  const hasMore  = visible < data.length;
+
+  return (
+    <div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {shown.map((c, i) => (
+          <CitationRow key={c.url} rank={i + 1} url={c.url} count={c.count} maxCount={maxCount} color={color} />
+        ))}
+      </div>
+      {hasMore && (
+        <button
+          onClick={() => setVisible(v => v + PAGE_SIZE)}
+          style={{
+            marginTop: 12,
+            fontSize: 12,
+            color: "#6b6b6b",
+            background: "#f7f7f5",
+            border: "0.5px solid rgba(0,0,0,0.12)",
+            borderRadius: 6,
+            padding: "5px 14px",
+            cursor: "pointer",
+            width: "100%",
+          }}
+        >
+          Show {Math.min(PAGE_SIZE, data.length - visible)} more
+          <span style={{ color: "#9b9b9b", marginLeft: 4 }}>({data.length - visible} remaining)</span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+function TabBar({ tabs, active, onChange }) {
+  return (
+    <div style={{ display: "flex", gap: 0, borderBottom: "0.5px solid rgba(0,0,0,0.10)", marginBottom: 20 }}>
+      {tabs.map(tab => (
+        <button
+          key={tab.id}
+          onClick={() => onChange(tab.id)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 13,
+            fontWeight: 500,
+            color: active === tab.id ? "#378add" : "#6b6b6b",
+            background: "none",
+            border: "none",
+            borderBottom: active === tab.id ? "2px solid #378add" : "2px solid transparent",
+            cursor: "pointer",
+            marginBottom: -1,
+          }}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Citations() {
+  const { days } = useFilter();
   const [mentionCitations, setMentionCitations] = useState([]);
   const [sentimentCitations, setSentimentCitations] = useState([]);
   const [qcCitations, setQcCitations] = useState([]);
   const [mentionSchool, setMentionSchool] = useState("All");
   const [sentimentSchool, setSentimentSchool] = useState("All");
-  const [activeSection, setActiveSection] = useState("about");
+  const [activeTab, setActiveTab] = useState("about");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+
     Promise.all([
-      fetch(`${API_BASE_URL}/api/citations-by-school`).then(r => r.json()),
-      fetch(`${API_BASE_URL}/api/sentiment-citations`).then(r => r.json()),
-      fetch(`${API_BASE_URL}/api/qc-citations`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/citations-by-school?${params}`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/sentiment-citations?${params}`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/qc-citations?${params}`).then(r => r.json()),
     ])
       .then(([mentionData, sentimentData, qcData]) => {
         setMentionCitations(mentionData);
@@ -66,113 +164,109 @@ function Citations() {
         setQcCitations(qcData);
         setLoading(false);
       })
-      .catch(err => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+      .catch(err => { setError(err.message); setLoading(false); });
+  }, [days]);
 
-  if (loading) return <p className="text-gray-500">Loading...</p>;
-  if (error) return <p className="text-red-600">Error: {error}</p>;
+  if (loading) return <p className="state-msg">Loading...</p>;
+  if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;
 
   const filterData = (data, school) => {
     const filtered = school === "All" ? data : data.filter(c => c.school === school);
-    const sorted = [...filtered].sort((a, b) => b.count - a.count);  // if the data is all, needs to be sorted
+    const sorted = [...filtered].sort((a, b) => b.count - a.count);
     return {
-      qc: sorted.filter(c => c.source_type === "QC owned"),
-      external: sorted.filter(c => c.source_type === "external").slice(0, 20)
+      qc:       sorted.filter(c => c.source_type === "QC owned"),
+      external: sorted.filter(c => c.source_type === "external").slice(0, 20),
     };
   };
 
-  const mentionFiltered = filterData(mentionCitations, mentionSchool);
+  const mentionFiltered   = filterData(mentionCitations, mentionSchool);
   const sentimentFiltered = filterData(sentimentCitations, sentimentSchool);
-  const qcTotal = qcCitations.reduce((sum, c) => sum + c.count, 0);
+  const qcTotal           = qcCitations.reduce((sum, c) => sum + c.count, 0);
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 rounded-md p-4">
-          <p className="text-sm text-gray-500 mb-1">QC pages cited (total)</p>
-          <p className="text-2xl font-medium">{qcTotal}</p>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+      {/* Summary cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div className="metric-card">
+          <p className="metric-label">QC pages cited (total)</p>
+          <p className="metric-value">{qcTotal.toLocaleString()}</p>
         </div>
-        <div className="bg-gray-50 rounded-md p-4">
-          <p className="text-sm text-gray-500 mb-1">Unique QC pages cited</p>
-          <p className="text-2xl font-medium">{qcCitations.length}</p>
+        <div className="metric-card">
+          <p className="metric-label">Unique QC pages cited</p>
+          <p className="metric-value">{qcCitations.length}</p>
         </div>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-4">
-        <p className="font-medium mb-1">All QC pages cited</p>
-        <p className="text-sm text-gray-500 mb-3">Every QC-owned URL appearing as a source across all AI responses</p>
-        <CitationChart data={qcCitations} color="#2563eb" />
+      {/* All QC pages */}
+      <div className="card">
+        <p className="panel-title">All QC pages cited</p>
+        <p className="panel-subtitle">Every QC-owned URL appearing as a source across all AI responses</p>
+        <CitationList data={qcCitations} color="#378add" emptyMsg="No QC citations recorded yet." />
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-4">
-        <div className="flex gap-4 border-b border-gray-200 mb-4">
-          <button
-            className={`pb-2 text-sm font-medium ${activeSection === "about" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-500"}`}
-            onClick={() => setActiveSection("about")}
-          >
-            About QC
-          </button>
-          <button
-            className={`pb-2 text-sm font-medium ${activeSection === "discovery" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-500"}`}
-            onClick={() => setActiveSection("discovery")}
-          >
-            Course Discovery
-          </button>
-        </div>
+      {/* Sources breakdown by tab */}
+      <div className="card">
+        <TabBar
+          tabs={[
+            { id: "about",     label: "About QC" },
+            { id: "discovery", label: "Course discovery" },
+          ]}
+          active={activeTab}
+          onChange={setActiveTab}
+        />
 
-        {activeSection === "about" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+        {activeTab === "about" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
-                <p className="font-medium">Sources used when AI answers questions about QC</p>
-                <p className="text-sm text-gray-500">From credibility and competition questions — these directly shape QC's reputation</p>
+                <p className="panel-title">Sources used when AI answers questions about QC</p>
+                <p className="panel-subtitle">From credibility and competition questions — these directly shape QC's reputation</p>
               </div>
               <SchoolFilter value={sentimentSchool} onChange={setSentimentSchool} />
             </div>
 
             {sentimentFiltered.qc.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-2">QC owned sources</p>
-                <CitationChart data={sentimentFiltered.qc} color="#2563eb" />
+                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 10 }}>QC owned</p>
+                <CitationList data={sentimentFiltered.qc} color="#378add" />
               </div>
             )}
 
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-2">External sources</p>
-              <p className="text-xs text-gray-400 mb-2">Review sites, Reddit threads, competitor pages shaping AI's opinion of QC</p>
-              <CitationChart data={sentimentFiltered.external} color="#dc2626" />
+              <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 4 }}>External</p>
+              <p style={{ fontSize: 11, color: "#9b9b9b", marginBottom: 10 }}>Review sites, Reddit threads, competitor pages shaping AI's view of QC</p>
+              <CitationList data={sentimentFiltered.external} color="#a32d2d" emptyMsg="No external sources found." />
             </div>
           </div>
         )}
 
-        {activeSection === "discovery" && (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
+        {activeTab === "discovery" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
-                <p className="font-medium">Sources used when AI recommends courses generally</p>
-                <p className="text-sm text-gray-500">From course and general questions — what QC is competing against for visibility</p>
+                <p className="panel-title">Sources used when AI recommends courses generally</p>
+                <p className="panel-subtitle">From course and general questions — what QC is competing against for visibility</p>
               </div>
               <SchoolFilter value={mentionSchool} onChange={setMentionSchool} />
             </div>
 
             {mentionFiltered.qc.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-2">QC owned sources</p>
-                <CitationChart data={mentionFiltered.qc} color="#2563eb" />
+                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 10 }}>QC owned</p>
+                <CitationList data={mentionFiltered.qc} color="#378add" />
               </div>
             )}
 
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-2">External sources</p>
-              <p className="text-xs text-gray-400 mb-2">Course aggregators, competitor pages, job boards cited instead of QC</p>
-              <CitationChart data={mentionFiltered.external} color="#7c3aed" />
+              <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 4 }}>External</p>
+              <p style={{ fontSize: 11, color: "#9b9b9b", marginBottom: 10 }}>Course aggregators, competitor pages, job boards cited instead of QC</p>
+              <CitationList data={mentionFiltered.external} color="#7c3aed" emptyMsg="No external sources found." />
             </div>
           </div>
         )}
       </div>
+
     </div>
   );
 }
