@@ -54,7 +54,7 @@ def main():
                     )
 
                 logger.info(f"[{engine}] Saved {question_type} response for '{question}'")
-            time.sleep(20)
+            time.sleep(2)
         finish_run(run_id, status="success")
         logger.info("Run complete")
 

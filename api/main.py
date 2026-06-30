@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Body
+
 from api.queries import (
     get_mention_rate_by_engine,
     get_mention_rate_by_category,
@@ -19,6 +21,13 @@ from api.queries import (
     get_citation_rate_by_category,
     get_citation_rate_by_school,
     get_topics,
+)
+
+from api.queries.recommendations_synthesis import (
+    generate_recommendations,
+    save_recommendations,
+    get_saved_recommendations,
+    update_recommendation_status,
 )
 
 app = FastAPI()
@@ -119,3 +128,34 @@ def responses(
 @app.get("/api/topics")
 def topics(days: int = None):
     return get_topics(days)
+
+@app.get("/api/competitor-wins")
+def competitor_wins(days: int = None):
+    return get_competitor_wins(days)
+
+@app.get("/api/qc-buried-positions")
+def qc_buried_positions(days: int = None):
+    return get_qc_buried_positions(days)
+
+@app.get("/api/citation-gaps")
+def citation_gaps(days: int = None):
+    return get_citation_gaps(days)
+
+@app.get("/api/recurring-concerns")
+def recurring_concerns(days: int = None):
+    return get_recurring_concerns(days)
+
+@app.get("/api/generate-recommendations")
+def trigger_recommendations(days: int = None):
+    recs = generate_recommendations(days)
+    save_recommendations(recs)
+    return {"generated": len(recs), "recommendations": recs}
+
+@app.get("/api/recommendations")
+def list_recommendations():
+    return get_saved_recommendations()
+
+@app.patch("/api/recommendations/{rec_id}")
+def patch_recommendation_status(rec_id: str, status: str = Body(..., embed=True)):
+    update_recommendation_status(rec_id, status)
+    return {"updated": True}

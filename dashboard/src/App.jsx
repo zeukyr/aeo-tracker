@@ -8,8 +8,9 @@ import Explorer from "./tabs/Explorer";
 import { useFilter } from "./context/useFilter";
 import { PERIOD_OPTIONS } from "./context/FilterContextConstants";
 import Topics from "./tabs/Topics";
+import Recommendations from "./tabs/Recommendations";
 
-const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Explorer", "Topics"];
+const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Explorer", "Topics", "Recommendations"];
 
 function App() {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -53,6 +54,7 @@ function App() {
       {activeTab === "Citations" && <Citations />}
       {activeTab === "Explorer" && <Explorer />}
       {activeTab === "Topics" && <Topics />}
+      {activeTab === "Recommendations" && <Recommendations />}
     </div>
   );
 }

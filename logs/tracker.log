@@ -2226,3 +2226,5157 @@
 }
 2026-06-24 17:57:20,316 [INFO] [perplexity] Saved competition response for 'is QC Event School worth the money'
 2026-06-24 17:57:41,811 [INFO] Run complete
+2026-06-30 12:12:14,742 [INFO] Starting run...
+2026-06-30 12:12:15,633 [INFO] Loaded 62 questions
+2026-06-30 12:12:15,633 [INFO] Querying: how to become a certified dog trainer online
+2026-06-30 12:12:34,827 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:12:41,500 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:12:44,387 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:12:44,395 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "Association of Professional Dog Trainers",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Certification Council for Professional Dog Trainers",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "International Association of Animal Behavior Consultants",
+            "brand_type": "competitor",
+            "rank_position": 4
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:12:45,020 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-06-30 12:13:11,569 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:11,581 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "CATCH Canine Trainers Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Good Dog Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Karen Pryor Academy (KPA)",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 4
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.gooddog-academy.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://catchdogtrainers.com/our-program/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/dog-obedience-trainer-career-diploma",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/Dogtraining/comments/ufk1j6/best_online_dog_training_cert_i_really_want_to/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.dogtrainercollege.us/michigan-dog-trainer-certification-school/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ccpdt.org",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.animaledu.com/program-overview/online-canine-and-service-dog-training/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://iscdt.com",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:13:12,467 [INFO] [perplexity] Saved general response for 'how to become a certified dog trainer online'
+2026-06-30 12:13:14,468 [INFO] Querying: is dog grooming a good career
+2026-06-30 12:13:18,652 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:13:24,366 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:26,170 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:26,174 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:13:26,605 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-06-30 12:13:31,803 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:31,816 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.pennfoster.edu/blog/how-to-become-a-pet-groomer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/should-i-be-pet-groomer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/12pgyqq/is_dog_grooming_worth_it_as_a_profession/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1374413579983848/posts/1974531299972070/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careers.petco.com/grooming-careers",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://americangroomingacademy.com/top-5-reasons-to-become-a-professional-dog-groomer/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=86eSPiTckRA",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1374413579983848/posts/2038159546942578/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:13:32,489 [INFO] [perplexity] Saved general response for 'is dog grooming a good career'
+2026-06-30 12:13:34,489 [INFO] Querying: careers working with dogs
+2026-06-30 12:13:41,920 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:13:50,002 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:51,951 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:13:51,957 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:13:52,395 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-06-30 12:14:01,193 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:14:01,205 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://wearwagrepeat.com/best-jobs-dog-lovers/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://internationaldogtrainerschool.com/careers-that-involve-animals/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://julius-k9.com/working-dogs-most-common-jobs-for-dogs-and-what-they-do/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.akc.org/sports/conformation/careers-in-dogs/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/dogs/comments/2ir9jb/what_jobs_do_you_have_that_you_work_with_dogs/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ziprecruiter.com/Jobs/Working-Dog/-in-Milwaukee,WI",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/q-dog-l-milwaukee,-wi-jobs.html",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/WeRateDogs/posts/here-are-my-top-10-most-unique-dog-jobs/1328596579312206/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.care.com/dog-walking-jobs/milwaukee-wi",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:14:02,003 [INFO] [perplexity] Saved general response for 'careers working with dogs'
+2026-06-30 12:14:04,004 [INFO] Querying: pet business ideas from home
+2026-06-30 12:14:13,323 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:14:18,710 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:14:20,351 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:14:20,354 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:14:20,803 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-06-30 12:14:26,673 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:14:26,674 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://merchize.com/15-profitable-pet-businesses-ideas/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://printify.com/blog/pet-business-ideas/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.wagbar.com/50-profitable-pet-business-ideas-from-low-cost-startups-to-high-growth-opportunities",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.qcpetstudies.com/blog/2021/09/22-lucrative-pet-business-ideas-anyone-can-start",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.revelationpets.com/blog/15-trendy-pet-business-ideas-to-inspire-your-next-big-move",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=U0rcXLMJvxg",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.petprofessional.com.au/info-centre/7-unique-and-useful-pet-business-ideas/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/smallbusinessuk/comments/18bbs3o/business_ideas_for_an_animal_professional/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.uschamber.com/co/start/business-ideas/small-business-pet-trends",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:14:27,818 [INFO] [perplexity] Saved general response for 'pet business ideas from home'
+2026-06-30 12:14:29,819 [INFO] Querying: jobs with dogs that pay well
+2026-06-30 12:15:03,819 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:15:09,906 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:11,471 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:11,480 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:15:11,940 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-06-30 12:15:18,816 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:18,822 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qcpetstudies.com/blog/2025/07/33-high-paying-jobs-working-with-dogs",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://wearwagrepeat.com/best-jobs-dog-lovers/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ziprecruiter.com/g/Highest-Paying-Animal-Jobs",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://internationaldogtrainerschool.com/careers-that-involve-animals/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/q-dog-l-north-port,-fl-jobs.html",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.berry.edu/articles/blog/2020/exploring-careers-with-animals",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.akc.org/sports/conformation/careers-in-dogs/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/careerguidance/comments/18re61x/any_animal_jobs_that_actually_pay_well/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:15:19,599 [INFO] [perplexity] Saved general response for 'jobs with dogs that pay well'
+2026-06-30 12:15:21,600 [INFO] Querying: high paying careers working with animals
+2026-06-30 12:15:36,713 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:15:43,380 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:44,351 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:44,354 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": []
+}
+2026-06-30 12:15:44,793 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-06-30 12:15:51,135 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:15:51,150 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.topuniversities.com/student-info/careers-advice/top-six-jobs-animals-how-land-them",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://unity.edu/career-corner/20-cool-careers-with-animals-that-pay-well/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://internationaldogtrainerschool.com/careers-that-involve-animals/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.berry.edu/articles/blog/2020/exploring-careers-with-animals",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/jobs-for-animal-lovers",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.careervillage.org/questions/1025805/what-should-i-pursue-in-the-animal-field-without-financial-stress",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://nationalcareers.service.gov.uk/explore-careers/job-sector/agriculture-environment-and-animal-care",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/careerguidance/comments/18re61x/any_animal_jobs_that_actually_pay_well/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:15:51,827 [INFO] [perplexity] Saved general response for 'high paying careers working with animals'
+2026-06-30 12:15:53,827 [INFO] Querying: what is a good career for someone without a degree
+2026-06-30 12:15:59,369 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:16:04,211 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:05,587 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:05,593 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:16:06,087 [INFO] [chatgpt] Saved general response for 'what is a good career for someone without a degree'
+2026-06-30 12:16:12,261 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:12,265 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/jobs-without-a-degree",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.systemone.com/blog/high-paying-jobs-without-a-degree/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://calcareers.ca.gov/CalHRPublic/Jobs/NoDegreeRequired.aspx",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.uscareerinstitute.edu/blog/80-Jobs-that-pay-over-50k-without-a-degree",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.davron.net/100-best-high-paying-jobs-without-a-college-degree-in-2025-no-experience-needed-for-many/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careers.usnews.com/best-jobs/rankings/best-jobs-without-a-college-degree",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/careerguidance/comments/1s38jdf/whats-the_best_job_without_a_degree_right_now/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/7255891764494844/posts/26208742968783105/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:16:12,937 [INFO] [perplexity] Saved general response for 'what is a good career for someone without a degree'
+2026-06-30 12:16:14,937 [INFO] Querying: I want a career change what should I learn
+2026-06-30 12:16:23,034 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:16:28,181 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:31,836 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:31,841 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:16:32,470 [INFO] [chatgpt] Saved general response for 'I want a career change what should I learn'
+2026-06-30 12:16:43,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:16:43,495 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.coursera.org/articles/career-change",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/starting-new-job/ideas-for-a-career-change",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/careerchange/comments/16ocwsw/i_want_to_change_careers_but_dont_know_what/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://extension.harvard.edu/blog/5-tips-for-changing-careers/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.careershifters.org/expert-advice/how-to-change-career-when-youve-no-idea-what-to-do-next",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.forbes.com/sites/josephliu/2019/04/02/successfully-change-careers/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.usa.gov/features/how-to-change-careers",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/careersandjobs/posts/3731553550460925/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=AYGnkvtf9EU",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careers.usnews.com/advice/best-jobs/slideshows/jobs-to-consider-for-a-career-change",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:16:44,239 [INFO] [perplexity] Saved general response for 'I want a career change what should I learn'
+2026-06-30 12:16:46,239 [INFO] Querying: how to become a certified dog groomer
+2026-06-30 12:16:52,383 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:16:59,426 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:00,875 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:00,884 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:17:01,314 [INFO] [chatgpt] Saved general response for 'how to become a certified dog groomer'
+2026-06-30 12:17:12,016 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:12,017 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.fearfree.com/certifications/fear-free-certified-trainers-groomers-other-pet-professionals/fear-free-groomer-certification-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/career-development/how-to-become-a-dog-groomer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/blog/how-to-become-a-pet-groomer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.akc.org/products-services/akc-safe-grooming-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.houndtherapy.com/blog/become-a-dog-groomer-texas/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.appga.org/certifications",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/103o9vq/certifications_grooming_schools_qualifications/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:17:12,684 [INFO] [perplexity] Saved general response for 'how to become a certified dog groomer'
+2026-06-30 12:17:14,684 [INFO] Querying: how to become a professional dog trainer
+2026-06-30 12:17:23,675 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:17:30,242 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:32,220 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:32,221 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:17:32,664 [INFO] [chatgpt] Saved general response for 'how to become a professional dog trainer'
+2026-06-30 12:17:39,300 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:39,308 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.akc.org/expert-advice/training/how-to-become-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://catchdogtrainers.com/our-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=Ap4-aEweZB4",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://ahimsadogtraining.com/how-to-become-a-dog-trainer-in-seattle/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/Dogtraining/comments/2va4nz/how_does_one_become_a_professional_dog_trainer/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://apdt.com/resource-center-so-you-want-to-be-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/blog/how-to-become-a-dog-trainer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.animalhumanesociety.org/behavior/becoming-dog-trainer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.dogtrainercollege.us/become-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:17:40,061 [INFO] [perplexity] Saved general response for 'how to become a professional dog trainer'
+2026-06-30 12:17:42,062 [INFO] Querying: how to become a dog behavior specialist
+2026-06-30 12:17:48,222 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:17:55,670 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:57,982 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:17:57,996 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "Karen Pryor Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "International Association of Animal Behavior Consultants (IAABC)",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Animal Behavior College",
+            "brand_type": "competitor",
+            "rank_position": 4
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:17:58,503 [INFO] [chatgpt] Saved general response for 'how to become a dog behavior specialist'
+2026-06-30 12:18:03,087 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:03,092 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.ccpdt.org/certification/dog-behavior-consultant/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.patriciamcconnell.com/wp-content/uploads/2021/10/Becoming-A-Behist-Hecht-6-21-17_6.pdf",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/finding-a-job/how-to-become-animal-behaviorist",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://apdt.com/resource-center-so-you-want-to-be-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=5ROl5vOzCss",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.animaledu.com/program-overview/canine-training-behavior/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1172900230020378/posts/1972253103418416/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/Dogtraining/comments/6zqk1e/dog_trainers_im_wanting_to_get_my_dog_trainerdog/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:18:03,791 [INFO] [perplexity] Saved general response for 'how to become a dog behavior specialist'
+2026-06-30 12:18:05,791 [INFO] Querying: how to become a pet care professional
+2026-06-30 12:18:14,163 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:18:20,906 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:22,368 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:22,379 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:18:22,830 [INFO] [chatgpt] Saved general response for 'how to become a pet care professional'
+2026-06-30 12:18:28,727 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:28,742 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.petcareins.com/blog/become-a-certified-pet-care-professional",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://petsitters.org/page/NAPPSCertificationCourse",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://petsittertraining.com/blog/how-to-become-a-pet-sitter/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.petsit.com/certification",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.timetopet.com/blog/understanding-pet-sitting-certifications",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=rQOFLVvJjoA",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.redcross.org/take-a-class/resources/articles/pet-certifications-for-dog-walkers-pet-sitters",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/petsitting/comments/18vo94b/want_to_be_a_pet_sitter_where_do_i_start/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/4481852125264856/posts/24251866591170116/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.rover.com/become-a-sitter/",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:18:29,489 [INFO] [perplexity] Saved general response for 'how to become a pet care professional'
+2026-06-30 12:18:31,490 [INFO] Querying: how to become a canine care expert
+2026-06-30 12:18:38,421 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:18:46,250 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:47,705 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:47,707 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:18:48,153 [INFO] [chatgpt] Saved general response for 'how to become a canine care expert'
+2026-06-30 12:18:52,647 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:18:52,654 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://dogtrainingcareers.com/how-to-become-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.petcareins.com/blog/become-a-certified-pet-care-professional",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://capdt.ca/becoming-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.scitraining.ca/canine-specialist",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://seniordogvets.learnworlds.com/program/standard-veterinary-membership",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.georgiancollege.ca/academics/programs/canine-training-academy/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.sheridancollege.ca/programs/animal-care",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://vet.purdue.edu/ccc/about.php",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.scitraining.com/canine-specialist",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:18:53,322 [INFO] [perplexity] Saved general response for 'how to become a canine care expert'
+2026-06-30 12:18:55,323 [INFO] Querying: how long does it take to become a dog groomer
+2026-06-30 12:18:58,782 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:19:03,572 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:05,436 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:05,441 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:19:05,872 [INFO] [chatgpt] Saved general response for 'how long does it take to become a dog groomer'
+2026-06-30 12:19:12,500 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:12,516 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Penn Foster Online Certificate",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "West Coast Hybrid Course",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Groom Curriculum",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "The Academy of Pet Careers",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Northern California Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.groomcurriculum.com/become-a-pro-groomer-guide/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.theacademyofpetcareers.com/blog/how-long-does-it-take-to-become-a-dog-groomer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.westcoastgroomingacademy.com/dog-grooming-classes/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/1cggd5t/how_long_did_it_take_for_you_guys_to_become_fully/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.northerncaliforniagroomingacademy.com/blog/blog-post-title-two-t5my5-k4xmd-67jzh-eksjt",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:19:33,886 [ERROR] qc_mentioned=true but qc_mention_order is null for mention_response 3fb0cdd5-e311-46aa-87f7-97f303e80a63
+2026-06-30 12:19:34,308 [INFO] [perplexity] Saved general response for 'how long does it take to become a dog groomer'
+2026-06-30 12:19:36,309 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-06-30 12:19:38,210 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:19:41,748 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:43,222 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:43,229 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:19:43,646 [INFO] [chatgpt] Saved general response for 'how old do you have to be to be a dog groomer'
+2026-06-30 12:19:49,441 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:19:49,447 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qcpetstudies.com/blog/2016/07/become-a-dog-groomer-am-i-too-old-or-young",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.theacademyofpetcareers.com/blog/how-to-become-a-dog-groomer/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://nationaldoggroomers.com/pgc",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://mycareer.nj.gov/training/44445",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/blog/how-to-become-a-pet-groomer",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.petmd.com/dog/general-health/grooming-tips-new-puppy",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://services.petsmart.com/content/grooming-faq",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/grooming/comments/1jski4e/pet_groomers_how_did_you_get_started_in_the/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.cga.ct.gov/2006/rpt/2006-R-0670.htm",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:19:50,228 [INFO] [perplexity] Saved general response for 'how old do you have to be to be a dog groomer'
+2026-06-30 12:19:52,229 [INFO] Querying: how to become an event planner
+2026-06-30 12:20:01,702 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:20:08,905 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:10,749 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:10,759 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:20:11,178 [INFO] [chatgpt] Saved general response for 'how to become an event planner'
+2026-06-30 12:20:17,523 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:17,524 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.indeed.com/career-advice/career-development/how-to-become-event-planner",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.webber.edu/how-to-become-an-event-planner/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/getting-started/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/creative/event-planning-career-diploma",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/jobs/comments/3i4ijh/im_interested_in_being_an_event_planner_but_where/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://wagner.edu/lifelong-learning/event-planning/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=FCeoracgwPg",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:20:18,253 [INFO] [perplexity] Saved general response for 'how to become an event planner'
+2026-06-30 12:20:20,254 [INFO] Querying: how to become a wedding planner
+2026-06-30 12:20:28,066 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:20:33,368 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:34,633 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:34,644 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:20:35,071 [INFO] [chatgpt] Saved general response for 'how to become a wedding planner'
+2026-06-30 12:20:40,121 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:40,122 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://blog.candicecoppola.com/how-to-become-a-wedding-planner-with-no-experience/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://inthedetailsweddings.com/how-to-become-a-wedding-planner/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.careervillage.org/questions/1187838/what-is-the-specific-process-to-become-a-wedding-planner",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.andreaeppolito.com/blog/what-education-do-you-need-to-become-a-wedding-planner",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.pcc.edu/training-programs/wedding-planner-course/",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=uW3ULindEzg",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/227744626590951/posts/564469322918478/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/design-articles/career-guides/wedding-and-event-planners",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://aacwp.org",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/WedditNYC/comments/1ev8j89/wanting_to_become_a_wedding_planner/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:20:40,872 [INFO] [perplexity] Saved general response for 'how to become a wedding planner'
+2026-06-30 12:20:42,873 [INFO] Querying: how to become an event decorator
+2026-06-30 12:20:48,810 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:20:53,617 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:55,228 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:20:55,231 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:20:55,660 [INFO] [chatgpt] Saved general response for 'how to become an event decorator'
+2026-06-30 12:21:10,317 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:21:10,324 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qcdesignschool.com/blog/2023/01/everything-you-need-to-know-about-event-decorators",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-decor",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventdecoratingacademy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=wL3z_YXIsqw",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.cvlinens.com/blogs/styling-tips/how-to-start-small-event-decorating-business",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/smallbusiness/comments/169fw5u/starting_my_own_event_planningdecorating_business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=eyEP8HDB39o",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1728639700484510/posts/8077624735585943/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/blog/guide-to-becoming-an-event-planner",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:21:11,038 [INFO] [perplexity] Saved general response for 'how to become an event decorator'
+2026-06-30 12:21:13,038 [INFO] Querying: How do I become an event designer?
+2026-06-30 12:21:21,550 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:21:27,446 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:21:30,686 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:21:30,706 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:21:31,374 [INFO] [chatgpt] Saved general response for 'How do I become an event designer?'
+2026-06-30 12:21:38,064 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:21:38,074 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.indeed.com/career-advice/career-development/how-to-become-event-planner",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.webber.edu/how-to-become-an-event-planner/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://community.cvent.com/discussion/how-to-become-an-event-planner-a-step-by-step-guide",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/getting-started/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/jobs/comments/3i4ijh/im_interested_in_being_an_event_planner_but_where/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=CdFVWEKKfkU",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/gettoknowgriffin/posts/9531861566924283/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://online-distance.ncsu.edu/career/event-planner/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:21:38,861 [INFO] [perplexity] Saved general response for 'How do I become an event designer?'
+2026-06-30 12:21:40,861 [INFO] Querying: how to start a grooming business from home
+2026-06-30 12:21:49,590 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:21:58,001 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:00,192 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:00,193 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:22:00,641 [INFO] [chatgpt] Saved general response for 'how to start a grooming business from home'
+2026-06-30 12:22:07,809 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:07,818 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.pennfoster.edu/blog/how-to-start-a-mobile-grooming-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.timetopet.com/blog/how-to-start-a-mobile-dog-grooming-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://easybusypets.com/blog/starting-a-dog-grooming-business-the-complete-guide",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.moego.pet/blog/can-you-run-a-dog-grooming-business-from-home-in-2026",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/10izty5/how_can_i_start_up_my_grooming_career_at_home/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qcpetstudies.com/blog/2022/08/how-to-prepare-a-home-dog-grooming-set-up",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.groomertogroomer.com/is-home-based-grooming-right-for-you/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1374413579983848/posts/1911340856291115/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.groomarts.com/student-advice/setting-up-home-salon",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=TbKP9cIgvms",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:22:08,577 [INFO] [perplexity] Saved general response for 'how to start a grooming business from home'
+2026-06-30 12:22:10,577 [INFO] Querying: how do i start my own pet business from scratch
+2026-06-30 12:22:17,604 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:22:24,588 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:28,949 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:28,959 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:22:29,557 [INFO] [chatgpt] Saved general response for 'how do i start my own pet business from scratch'
+2026-06-30 12:22:34,363 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:34,380 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.shopify.com/blog/pet-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://printify.com/blog/pet-business-ideas/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://merchize.com/15-profitable-pet-businesses-ideas/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://wearwagrepeat.com/working-with-pets-dog-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qcpetstudies.com/blog/2021/09/22-lucrative-pet-business-ideas-anyone-can-start",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://uk.indeed.com/career-advice/finding-a-job/pet-business-ideas",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=pAFFZOnfnS4",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/startups/comments/1gas547/pet_care_business_start_up/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:22:35,054 [INFO] [perplexity] Saved general response for 'how do i start my own pet business from scratch'
+2026-06-30 12:22:37,054 [INFO] Querying: how to start an event planning business
+2026-06-30 12:22:46,351 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:22:53,085 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:55,570 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:22:55,575 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:22:56,235 [INFO] [chatgpt] Saved general response for 'how to start an event planning business'
+2026-06-30 12:23:01,010 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:01,015 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.shms.com/en/news/how-to-start-event-management-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://lesroches.edu/blog/event-planning-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://community.cvent.com/discussion/how-do-i-get-started-in-event-planning-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/starting-event-planning-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://eventplanning.com/start-event-planning-with-no-money/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=jYxPMuddUvo",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/945398623599681/posts/1292284905577716/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/1n0yeus/how_to_start_an_event_managment_business_from_0/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:23:01,779 [INFO] [perplexity] Saved general response for 'how to start an event planning business'
+2026-06-30 12:23:03,780 [INFO] Querying: How do I start a wedding décor business?
+2026-06-30 12:23:10,631 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:23:18,273 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:20,404 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:20,414 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:23:20,840 [INFO] [chatgpt] Saved general response for 'How do I start a wedding décor business?'
+2026-06-30 12:23:25,289 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:25,296 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.cvlinens.com/blogs/styling-tips/how-to-start-small-event-decorating-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/blog/2022/12/how-to-start-an-event-decorating-business",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.wix.com/blog/wedding-business-ideas",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/smallbusiness/comments/169fw5u/starting_my_own_event_planningdecorating_business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=BJcev5Z8ZWA&vl=fr",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=eyEP8HDB39o",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/110823182278706/posts/25429826056618403/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:23:25,979 [INFO] [perplexity] Saved general response for 'How do I start a wedding décor business?'
+2026-06-30 12:23:27,979 [INFO] Querying: How do I start a decoration business?
+2026-06-30 12:23:43,086 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:23:50,297 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:55,178 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:23:55,179 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:23:55,789 [INFO] [chatgpt] Saved general response for 'How do I start a decoration business?'
+2026-06-30 12:24:03,013 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:03,020 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://members.asicentral.com/news/web-exclusive/april-2019/8-steps-to-start-a-successful-decorating-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://decoratingden.com/how-to-start-an-interior-decorating-or-design-business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=Gmwji4b3H4M",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/smallbusiness/comments/169fw5u/starting_my_own_event_planningdecorating_business/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=eyEP8HDB39o",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=J7SU3Y2YbVc",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/945398623599681/posts/1032923194847223/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.tiktok.com/@rennieconcepts/video/7333298525880700165",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:24:03,368 [ERROR] qc_mentioned=true but qc_mention_order is null for mention_response 8a8f8d98-04b6-43b5-9972-6ca9c380f610
+2026-06-30 12:24:03,684 [INFO] [perplexity] Saved general response for 'How do I start a decoration business?'
+2026-06-30 12:24:05,684 [INFO] Querying: How do I start a home décor business?
+2026-06-30 12:24:14,181 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:24:19,946 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:21,580 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:21,615 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:24:22,072 [INFO] [chatgpt] Saved general response for 'How do I start a home décor business?'
+2026-06-30 12:24:28,797 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:28,797 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://printify.com/blog/how-to-start-a-home-decor-business/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://munbyn.com/blogs/build-your-business/start-a-home-decor-business",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=Gmwji4b3H4M",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://hivelife.com/home-decor-business/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://blog.ankorstore.com/how-to-open-decoration-shop/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=lyPVvuo6PR0",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://thelittledesigncorner.com/blogs/news/start-an-interior-design-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=QXP21FtlKB8",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:24:29,965 [INFO] [perplexity] Saved general response for 'How do I start a home décor business?'
+2026-06-30 12:24:31,966 [INFO] Querying: How do I get clients for an event planning business?
+2026-06-30 12:24:41,641 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:24:48,396 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:51,216 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:51,230 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:24:51,865 [INFO] [chatgpt] Saved general response for 'How do I get clients for an event planning business?'
+2026-06-30 12:24:56,810 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:24:56,825 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/get-corporate-clients/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.entrepreneur.com/growing-a-business/8-savvy-ways-to-promote-your-event-planning-business/233687",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/Entrepreneur/comments/agb5is/how_to_find_clients_as_an_event_planning_agency/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.bestversionmedia.com/how-event-planners-can-reach-couples-and-clients-locally/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=BY5oV1-0OM8",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://community.cvent.com/discussion/how-do-i-get-started-in-event-planning-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/945398623599681/posts/1332785031527703/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://lesroches.edu/blog/event-planning-business/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:24:57,555 [INFO] [perplexity] Saved general response for 'How do I get clients for an event planning business?'
+2026-06-30 12:24:59,555 [INFO] Querying: What does it cost to start an event planning business?
+2026-06-30 12:25:06,522 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:25:12,788 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:14,254 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:14,266 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:25:14,728 [INFO] [chatgpt] Saved general response for 'What does it cost to start an event planning business?'
+2026-06-30 12:25:26,052 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:26,062 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.entrepreneur.com/starting-a-business/how-to-start-an-event-planning-service/37892",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/blog/2022/05/how-much-does-it-cost-to-start-an-event-planning-business",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.greatevent.com/how-much-do-event-planners-charge/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.designrush.com/agency/digital-marketing/trends/event-planner-cost",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.thumbtack.com/p/party-planners-cost",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://casual.pm/how-to/start-event-planning-business",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=CdFVWEKKfkU",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/1htqwlk/can_you_become_rich_owning_an_event_company/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/945398623599681/posts/1096286331844242/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:25:26,833 [INFO] [perplexity] Saved general response for 'What does it cost to start an event planning business?'
+2026-06-30 12:25:28,834 [INFO] Querying: how much does dog grooming school cost
+2026-06-30 12:25:36,046 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:25:40,736 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:43,468 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:43,478 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.midmodogs.com/grooming-school?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.justfourpawsacademy.com/prospective-students/pet-grooming-school-tuition-fees?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate/tuition?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://paragonpetschool.com/tuition/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:25:44,068 [INFO] [chatgpt] Saved general response for 'how much does dog grooming school cost'
+2026-06-30 12:25:50,676 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:25:50,686 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.thedailygroomer.com/grooming-school-locations/florida",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.americanschoolofdoggrooming.com/grooming-school",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.westcoastgroomingacademy.com/dog-grooming-classes/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://pawsperity.org/customers/services/school/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/15jrbe2/learning_to_dog_groom_how_much_should_i_pay_to/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://newskillsacademy.com/course/dog-grooming-certification",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/207737160909911/posts/829543312062623/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://petsplayground.edu",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:25:51,381 [INFO] [perplexity] Saved general response for 'how much does dog grooming school cost'
+2026-06-30 12:25:53,382 [INFO] Querying: dog groomer certification cost
+2026-06-30 12:26:01,205 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:26:07,134 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:13,671 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:13,686 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "American Kennel Club",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "International Professional Groomers",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Paragon School of Pet Grooming",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Clip Shoppe School of Dog Grooming",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "GateWay Community College",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "National Cat Groomers Institute",
+            "brand_type": "competitor",
+            "rank_position": 6
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.akc.org/groomer-hub/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ipgicmg.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://paragonpetschool.com/tuition/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.clipshoppeschoolofdoggrooming.com/tuition?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.gatewaycc.edu/dog-grooming?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://nationalcatgroomers.com/pages/certification-process?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:26:14,509 [INFO] [chatgpt] Saved general response for 'dog groomer certification cost'
+2026-06-30 12:26:20,640 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:20,660 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.westcoastgroomingacademy.com/class-scheduling-pricing/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qcpetstudies.com/blog/2021/05/how-much-does-dog-grooming-school-cost",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennsylvaniadoggroomingschool.com/tuition",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://newskillsacademy.com/course/dog-grooming-certification",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/15jrbe2/learning_to_dog_groom_how_much_should_i_pay_to/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://adulted.nassauboces.org/programs/cte/pet-grooming",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.caninecollege.akc.org/visitor_class_catalog/category/91290",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:26:21,441 [INFO] [perplexity] Saved general response for 'dog groomer certification cost'
+2026-06-30 12:26:23,441 [INFO] Querying: best dog grooming certification online
+2026-06-30 12:26:30,389 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:26:34,851 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:40,876 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:40,877 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 5,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Whole Pet Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Let's Groom Virtual Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Prestige Dog Grooming School",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://wpga.squarespace.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.jessronagrooming.com/the-body-blueprint?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://letsgroomvirtualacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.doggroomingschool.com/copy-of-4-week-fast-track-program-6?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.qcpetstudies.com/?utm_source=openai",
+            "is_qc": true,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:26:41,657 [INFO] [chatgpt] Saved course response for 'best dog grooming certification online'
+2026-06-30 12:26:51,264 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:26:51,267 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Professional Dog Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Best (Paragon Pet School)",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "AKC® S.A.F.E. Program",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Carroll Community College",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "American Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 6
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.pdga.online",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.carrollcc.edu/programs/professional-skills-job-training/professional-pet-grooming-certificate/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.akc.org/products-services/akc-safe-grooming-program/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.facebook.com/groups/1374413579983848/posts/2102185767206622/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/egxxe2/online_grooming_courses/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://americangroomingacademy.com/learning-online/",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:26:52,148 [INFO] [perplexity] Saved course response for 'best dog grooming certification online'
+2026-06-30 12:26:54,149 [INFO] Querying: dog training certification canada
+2026-06-30 12:27:00,792 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:27:07,601 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:16,996 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:17,003 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Dogue Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Cochrane and Area Humane Society",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Unleashed Potential K9 Academy",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Certification Council for Professional Dog Trainers",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Canadian Association of Professional Dog Trainers",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Tellington TTouch Canada",
+            "brand_type": "competitor",
+            "rank_position": 6
+        }
+    ],
+    "links": [
+        {
+            "url": "https://dogueacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.cochranehumane.ca/programs/pace-instructor-certificate?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://unleashedpotential.ca/dog-trainer-school/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ccpdt.org/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://capdt.ca/becoming-a-dog-trainer/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ttouch.ca/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:27:17,839 [INFO] [chatgpt] Saved course response for 'dog training certification canada'
+2026-06-30 12:27:24,907 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:24,912 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Good Dog Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Dogma Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Certification Council for Professional Dog Trainers (CCPDT)",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Karen Pryor Academy (KPA)",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Canine Correspondence Studies (CCS)",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.gooddog-academy.com/blog/how-do-i-become-certified-dog-trainer-canada",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://capdt.ca/becoming-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.dogmaacademy.com/dcbc-program",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://dogtrainingcareers.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ccpdt.org",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.facebook.com/groups/thelibary/posts/8926520837379515/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.gooddog-academy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:27:25,798 [INFO] [perplexity] Saved course response for 'dog training certification canada'
+2026-06-30 12:27:27,799 [INFO] Querying: best distance learning pet grooming courses
+2026-06-30 12:27:37,042 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:27:40,115 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:46,715 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:46,724 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Dreamy Dogs Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Pretty Paws Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Penn Foster Pet Grooming Program",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "WPGA Grooming Certification",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Let's Groom Virtual Academy",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.theneondragon.ca/academy?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.dreamydogsgroomingacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pawpaddogs.co.uk/dog-grooming-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://prettypawsacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.scribd.com/document/757038565/pet-Course-Syllabus?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://wpga.squarespace.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://letsgolearn.quickbase.com/db/bkqf8797p?a=dr&r=4m&rl=sek&utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://letsgroomvirtualacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:27:47,669 [INFO] [chatgpt] Saved course response for 'best distance learning pet grooming courses'
+2026-06-30 12:27:53,662 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:27:53,667 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "American Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Jodi Murphy",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Jess Rona",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Paragon",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "IPG",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "PDGA",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.reddit.com/r/doggrooming/comments/egxxe2/online_grooming_courses/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/1374413579983848/posts/2102185767206622/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pdga.online",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://americangroomingacademy.com/learning-online/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.jodimurphy.net/distance-learning-program",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.jessronacourses.com",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:27:54,611 [INFO] [perplexity] Saved course response for 'best distance learning pet grooming courses'
+2026-06-30 12:27:56,611 [INFO] Querying: dog training certification online canada
+2026-06-30 12:28:02,917 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:28:08,975 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:16,475 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:16,480 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Good Dog Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "DogStars Training Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "CynoDo",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Shield K9 Online",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Canine Club Academy",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.gooddog-academy.com/student-handbook?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.gooddog-academy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.y-petnavi.jp/pet/dogstars/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://dogstars.ca/become-a-trainer/online-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://flamingtext.ru/Name-Logos/Cynda/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.cynodo.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://shield-k9.mykajabi.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.shieldk9online.ca/shield-pro-trainer-and-certification-course/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.thecollarclubacademy.com/fort-worth-dog-training?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://canineclubacademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:28:17,448 [INFO] [chatgpt] Saved course response for 'dog training certification online canada'
+2026-06-30 12:28:23,327 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:23,334 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "Good Dog Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Canine Correspondence Studies",
+            "brand_type": "competitor",
+            "rank_position": 3
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qcpetstudies.com/certification-courses/dog-training",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.gooddog-academy.com/blog/how-do-i-become-certified-dog-trainer-canada",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://dogtrainingcareers.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://capdt.ca/becoming-a-dog-trainer/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.gooddog-academy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/thelibary/posts/8926520837379515/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.hustleupdogtraineracademy.com/post/top-7-dog-trainer-schools-in-canada-and-the-one-that-s-actually-treat-free",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://mydogcan.mccanndogs.com",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:28:24,203 [INFO] [perplexity] Saved course response for 'dog training certification online canada'
+2026-06-30 12:28:26,203 [INFO] Querying: best distance learning dog training course
+2026-06-30 12:28:35,376 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:28:39,151 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:44,657 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:44,660 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://themindfulretriever.com/blog-training?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://pawholt.com/blog/best-online-dog-training-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://customcanineunlimited.com/product/police-k9-trainer-course/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://worldanimalfoundation.org/dogs/spirit-dog-training-reviews/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://thedigitalmerchant.com/thinkific-membership-site-examples/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.dunbaracademy.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://sitstaylearn.com/products/puppy-university-by-nick-white?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.thecanineuniversity.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:28:45,588 [INFO] [chatgpt] Saved course response for 'best distance learning dog training course'
+2026-06-30 12:28:55,485 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:28:55,520 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "CATCH Canine Trainers Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Team Dog",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "SpiritDog Training",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Karen Pryor Academy",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Victoria Stilwell Academy",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Fenzi Dog Sports Academy",
+            "brand_type": "competitor",
+            "rank_position": 6
+        }
+    ],
+    "links": [
+        {
+            "url": "https://teamdog.pet",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://karenpryoracademy.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/OpenDogTraining/comments/1nn02cq/dog_trainers_whats_your_favorite_online/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/groups/664027960470508/posts/2554892098050742/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://e-trainingfordogs.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://catchdogtrainers.com/our-program/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.laylopets.com/blogs/barkives/5-places-to-visit-online-to-get-the-best-virtual-dog-training",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/dog-obedience-trainer-career-diploma",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=ImeD9PLtf9c",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:28:56,445 [INFO] [perplexity] Saved course response for 'best distance learning dog training course'
+2026-06-30 12:28:58,445 [INFO] Querying: online canine behaviour courses
+2026-06-30 12:29:04,250 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:29:09,395 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:16,213 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:16,222 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.bbb.org/us/nc/durham/profile/continuing-education/animal-behavior-institute-inc-0593-90164629?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.animaledu.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.icti.org/dog-breed?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.icti.org/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://ethology.eu/certification-programs/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://ethology.eu/courses/canine-behavior/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://amazinganimalminds.com/for-dog-owners/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.calmcanines.academy/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.lovemadesimple.com/Foundations-of-Love-Online-Relationship-Course?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://buildingbondsonlinecourses.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:29:17,094 [INFO] [chatgpt] Saved course response for 'online canine behaviour courses'
+2026-06-30 12:29:23,857 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:23,888 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "The International School for Canine Psychology and Behaviour (ISCP)",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Karen Pryor Academy (KPA)",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Canine Behavior Academy",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Instinct Dog Training",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Canine Foundations",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "Coursera",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.theiscp.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.instinctdogtraining.com/learn/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.canine-behavior-associates.com/canine-behavior-academy-online/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/dog-obedience-trainer-career-diploma",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://karenpryoracademy.com/courses/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/dogs/comments/17hk6cz/suggestions_for_reputable_online_courses_for_dog/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.animaledu.com/program-overview/canine-training-behavior/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.coursera.org/courses?query=dog",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.caninefoundations.com/virtual-programs/basic-behaviour-101/",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:29:24,875 [INFO] [perplexity] Saved course response for 'online canine behaviour courses'
+2026-06-30 12:29:26,876 [INFO] Querying: where can i take dog grooming classes
+2026-06-30 12:29:32,522 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:29:37,168 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:46,740 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:46,744 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Paragon Pet School",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "South Texas College",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "West Coast Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Boujee Pet Grooming School and Academy",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Flawless Pet Grooming",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "Doggone Rite Dog Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://paragonpetschool.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.southtexascollege.edu/cpit/courses/career/dog-grooming/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.westcoastgroomingacademy.com/dog-grooming-classes/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://boujeepetgroomingschool.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.flawlessmobilepetgrooming.com/School_of_Dog_Grooming?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://doggonerite.com/academy-2/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:29:47,670 [INFO] [chatgpt] Saved course response for 'where can i take dog grooming classes'
+2026-06-30 12:29:52,784 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:29:52,788 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Professional Dog Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "American Grooming Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Dog Grooming School of Pennsylvania",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Virginia Schools",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "American Kennel Club Canine College",
+            "brand_type": "competitor",
+            "rank_position": 6
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.pdga.online",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennsylvaniadoggroomingschool.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://americangroomingacademy.com/learning-online/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.thedailygroomer.com/grooming-school-locations/virginia",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.yelp.com/search?find_desc=Dog+Grooming+School&find_loc=Virginia+Beach%2C+VA",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.caninecollege.akc.org/visitor_class_catalog/category/91290",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:29:53,663 [INFO] [perplexity] Saved course response for 'where can i take dog grooming classes'
+2026-06-30 12:29:55,664 [INFO] Querying: best corporate event planning courses
+2026-06-30 12:30:02,807 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:30:06,123 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:13,113 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:13,115 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/corporate-event-planning?utm_source=openai",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ebsi.ie/en-pk/products/event-planning?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ed2go.com/courses/hospitality/hospitality-service/ctp/corporate-event-planner?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://web-ded.uta.edu/wconnect/ace/50th.aspx?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.perfectvenue.com/post/event-planning-courses?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pensacolayp.com/event/pd-events202501?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.mcneese.edu/training-programs/corporate-event-planner/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://blog.planpadi.com/best-event-management-courses-in-nigeria/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://time.ly/blog/corporate-event-planning-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:30:13,907 [INFO] [chatgpt] Saved course response for 'best corporate event planning courses'
+2026-06-30 12:30:20,428 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:20,429 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": null,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "University of Texas at Arlington",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "GW School of Business",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "University of Houston",
+            "brand_type": "competitor",
+            "rank_position": 4
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.perfectvenue.com/post/event-planning-courses",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://iits.business.gwu.edu/professional-certificate-event-management",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.uh.edu/training-programs/corporate-event-planner/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/1gaeq1x/corporate_event_planning_international_events_are/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.coursera.org/courses?query=event+management",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/corporate-event-planning",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.linkedin.com/learning/topics/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.fiu.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://courses.msicertified.com/course/event-planner-certification",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:30:20,807 [ERROR] qc_mentioned=true but qc_mention_order is null for mention_response 6db30c39-9b28-4883-be0f-667aad3234a9
+2026-06-30 12:30:21,333 [INFO] [perplexity] Saved course response for 'best corporate event planning courses'
+2026-06-30 12:30:23,333 [INFO] Querying: best event planning course
+2026-06-30 12:30:30,430 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:30:35,248 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:41,932 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:41,940 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 3,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "IAP Career College",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Management & Strategy Institute",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "New York Institute of Art and Design",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "New York University School of Professional Studies",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.lindaikejisblog.com/2018/3/become-a-professional-event-planner-at-the-ipc-events-academy-training-this-march-april-2018-2.html?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.miamiherald.com/careers-education/best-event-planner-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventuallyz.com/event-planning-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses?utm_source=openai",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/floral-design?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://blog.eventsmart.com/2023/06/16/event-planning-certifications/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.sps.nyu.edu/certificates/events-and-convention-management.html?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:30:42,778 [INFO] [chatgpt] Saved course response for 'best event planning course'
+2026-06-30 12:30:55,731 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:30:55,744 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.msudenver.edu/innovative-lifelong-learning/career-launchpad/event-planning/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.coursera.org/courses?query=event+management",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://courses.msicertified.com/course/event-planner-certification",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/1pbq3cc/best_education_to_pursue_to_enter_the_field_of/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://onlinetraining.harpercollege.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.csu.edu/training-programs/corporate-event-planner/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://alison.com/tag/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.iapcollege.com/program/event-planner-course/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://ece.emory.edu/areas-of-study/event-planning/",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:30:56,508 [INFO] [perplexity] Saved course response for 'best event planning course'
+2026-06-30 12:30:58,509 [INFO] Querying: event planning online course
+2026-06-30 12:31:02,099 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:31:09,544 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:13,119 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:13,128 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Coursera",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Udemy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "edX",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Skillshare",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "FutureLearn",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Allied Health Career Training",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "Meeting Professionals International (MPI)",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:31:13,783 [INFO] [chatgpt] Saved course response for 'event planning online course'
+2026-06-30 12:31:21,807 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:21,808 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "NYIAD",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "IAP Career College",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "UNC Charlotte",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "University of Florida",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Oxford Home Study College",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "MSICertified",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.iapcollege.com/program/event-planner-course/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://academics.charlotte.edu/program/meeting-and-event-planning-professional-certificate-online/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.oxfordhomestudy.com/courses/event-management-courses-online/event-management-free-online-course",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://courses.msicertified.com/course/event-planner-certification",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.linkedin.com/learning/topics/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/creative/event-planning-career-diploma",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.aa.ufl.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://alison.com/tag/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/dvigup/doing_online_courses_for_an_event_planning/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:31:22,835 [INFO] [perplexity] Saved course response for 'event planning online course'
+2026-06-30 12:31:24,835 [INFO] Querying: event decorating classes near me
+2026-06-30 12:31:27,145 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:31:33,228 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:35,157 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:35,158 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:31:35,613 [INFO] [chatgpt] Saved course response for 'event decorating classes near me'
+2026-06-30 12:31:42,029 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:31:42,030 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-decor",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.yeseventdecor.com/classes",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventbrite.com/e/event-planning-1-day-workshop-gainesville-fl-tickets-1991962378095",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.eventective.com/gainesville-fl/event-planners/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.aa.ufl.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://corporatetraining.cf.edu/training-programs/master-event-design/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.yelp.com/search?find_desc=Cake+Decorating+Classes&find_loc=Gainesville%2C+FL",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://fun4gatorkids.com/Parties-Events/Party-Planners/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.instagram.com/event_decorating_academy/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.facebook.com/RoyalExpress.Events/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:31:42,896 [INFO] [perplexity] Saved course response for 'event decorating classes near me'
+2026-06-30 12:31:44,897 [INFO] Querying: event decoration courses online
+2026-06-30 12:31:51,433 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:31:57,011 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:06,163 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:06,164 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.finelib.com/listing/Wow-Events-Nigeria/88232/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qcdesignschool.com/online-courses/event-decor?utm_source=openai",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://posheventscourse.thinkific.com/courses/eventdecoratingonlinecourse?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.posheventsinstitute.com/product-page/event-decorating-online-course?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.yesacademy.co.in/?srsltid=AfmBOoqjZeoTCOxxBuDQbCxrAgvDGe_NR3jTDklZy9o6sEQAwI05UMbg&utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.yeseventdecor.com/classes?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://gratoria.pl/jak-naelektryzowac-balon-proste-metody-na-efektowne-eksperymenty?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.domestika.org/en/courses/5576-creating-stunning-balloon-garlands-for-event-decor?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.elevify.com/es/cursos/alimentos-gastronomia-y-hospitalidad/fiestas-y-eventos/curso-de-decoracion-de-fiestas-0fd05?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.elevify.com/en-us/courses/food-gastronomy-and-hospitality/parties-and-events/party-and-event-decoration-course-4b87d?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:32:06,967 [INFO] [chatgpt] Saved course response for 'event decoration courses online'
+2026-06-30 12:32:19,687 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:19,688 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "Event Decorating Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "Poshevents Course",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Elevify",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Yes! Event Decor & More",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "University of Houston",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "NYIAD",
+            "brand_type": "competitor",
+            "rank_position": 7
+        },
+        {
+            "name": "Decor Arabia",
+            "brand_type": "competitor",
+            "rank_position": 8
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.eventdecoratingacademy.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://posheventscourse.thinkific.com/courses/eventdecoratingonlinecourse",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-decor",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.yeseventdecor.com/classes",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.elevify.com/en-us/courses/food-gastronomy-and-hospitality/parties-and-events/event-decoration-course-f4b1f",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://decorarabia.com/training/decoration-event-planning-package/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.uh.edu/training-programs/master-event-design/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.youtube.com/playlist?list=PLJOiHYousWbqIXEOrsVqT8PQGNcDsuahG",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:32:20,655 [INFO] [perplexity] Saved course response for 'event decoration courses online'
+2026-06-30 12:32:22,656 [INFO] Querying: event decoration classes
+2026-06-30 12:32:27,578 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:32:33,207 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:35,980 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:35,986 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Makeup Academy",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "QC Event Planning",
+            "brand_type": "qc",
+            "rank_position": 4
+        },
+        {
+            "name": "QC Pet Studies",
+            "brand_type": "qc",
+            "rank_position": 5
+        },
+        {
+            "name": "QC Wellness Studies",
+            "brand_type": "qc",
+            "rank_position": 6
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:32:36,615 [INFO] [chatgpt] Saved course response for 'event decoration classes'
+2026-06-30 12:32:48,015 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:32:48,025 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 2,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Yes! Event Academy",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 2
+        },
+        {
+            "name": "Posh Events Institute",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Event Decorating Academy",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "IWED Global",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Posheventscourse",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "Wake Technical Community College",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.yeseventdecor.com/classes",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://posheventscourse.thinkific.com/courses/eventdecoratingonlinecourse",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-decor",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.eventdecoratingacademy.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://iwedglobal.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=7YIjiNMG_JU",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://onlinecareertraining.waketech.edu/training-programs/master-event-design/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.posheventsinstitute.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/playlist?list=PLJOiHYousWbqIXEOrsVqT8PQGNcDsuahG",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.instagram.com/event_decorating_academy/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:32:49,349 [INFO] [perplexity] Saved course response for 'event decoration classes'
+2026-06-30 12:32:51,350 [INFO] Querying: event decorator certification
+2026-06-30 12:32:57,310 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:33:02,420 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:03,743 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:03,749 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:33:04,442 [INFO] [chatgpt] Saved course response for 'event decorator certification'
+2026-06-30 12:33:10,621 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:10,627 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Design School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "Event Decorating Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "IWED Global",
+            "brand_type": "competitor",
+            "rank_position": 3
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.qcdesignschool.com/online-courses/event-decor",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventdecoratingacademy.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-decor",
+            "is_qc": true,
+            "is_inline": false
+        },
+        {
+            "url": "https://iwedglobal.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.uh.edu/training-programs/master-event-design/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.westmoreland.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.youtube.com/watch?v=wL3z_YXIsqw",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:33:11,394 [INFO] [perplexity] Saved course response for 'event decorator certification'
+2026-06-30 12:33:13,395 [INFO] Querying: event planning classes
+2026-06-30 12:33:17,136 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:33:23,739 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:25,376 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:25,384 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Career School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:33:25,902 [INFO] [chatgpt] Saved course response for 'event planning classes'
+2026-06-30 12:33:34,535 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:33:34,537 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 1
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.iapcollege.com/program/event-planner-course/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://courses.msicertified.com/course/event-planner-certification",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://careertraining.smc.edu/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.perfectvenue.com/post/event-planning-courses",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.cpace.csulb.edu/courses/meeting-and-event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.uclaextension.edu/business-management/hospitality-management/specialization/event-planning-and-management",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventbrite.com/d/ca--los-angeles/event-planning-classes/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:33:35,316 [INFO] [perplexity] Saved course response for 'event planning classes'
+2026-06-30 12:33:37,317 [INFO] Querying: best wedding planner school
+2026-06-30 12:33:49,227 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:33:55,669 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:06,212 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:06,229 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "The CWP Society - Sheree Amour Weddings & Event Planning",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "American Academy of Wedding Professionals (AAWP)",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Certified Master Wedding and Event Planner by Lovegevity",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Wedding Academy Global",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Lehman College's Wedding and Event Planner Classes",
+            "brand_type": "competitor",
+            "rank_position": 5
+        },
+        {
+            "name": "Certified Wedding Planners Society",
+            "brand_type": "competitor",
+            "rank_position": 6
+        },
+        {
+            "name": "University of Texas at San Antonio's Certified Master Wedding and Event Planner",
+            "brand_type": "competitor",
+            "rank_position": 7
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.shereeamourweddings.com/the-cwp-society?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://beaweddingplanner.com/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://wedxuniversity.selar.com/3td3?currency=XAF&utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://pace.uno.edu/program/certified-master-wedding-and-event-planner/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.weddingacademy.fr/products/stage-jour-j?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/best-online-wedding-planner-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.lehman.edu/academics/continuing-education/learn-more/wedding-event-planning-certificate/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.atouchofgrayevents.com/cwps?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.pace.utsa.edu/training-programs/certified-master-wedding-event-planner-overview/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        }
+    ]
+}
+2026-06-30 12:34:07,235 [INFO] [chatgpt] Saved course response for 'best wedding planner school'
+2026-06-30 12:34:14,497 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:14,506 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "Wedding Planner Institute",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "New York Institute of Art and Design",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Penn Foster",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "Certified Master Wedding and Event Planner",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "American Association of Certified Wedding Planners",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://careertraining.fiu.edu/training-programs/wedding-planner-course/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://weddingplannerinstitute.com",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://aacwp.org",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.online.colostate.edu/training-programs/certified-master-wedding-event-planner/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.reddit.com/r/wedding/comments/rqx1w5/wedding_planning_programscertificate/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/wedding-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/best-online-wedding-planner-courses/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/creative/wedding-planner-career-diploma",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.weddingplanninginstitute.com/courses/certified-wedding-and-event-planning",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:34:15,443 [INFO] [perplexity] Saved course response for 'best wedding planner school'
+2026-06-30 12:34:17,444 [INFO] Querying: wedding planner certification course
+2026-06-30 12:34:22,843 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:34:29,064 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:31,804 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:31,813 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 1,
+    "qc_cited": false,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 1
+        },
+        {
+            "name": "The Wedding Academy",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "Institute of Wedding and Event Planning",
+            "brand_type": "competitor",
+            "rank_position": 3
+        },
+        {
+            "name": "New York Institute of Art and Design (NYIAD)",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "College of International Education",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": []
+}
+2026-06-30 12:34:32,402 [INFO] [chatgpt] Saved course response for 'wedding planner certification course'
+2026-06-30 12:34:38,206 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:34:38,212 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://www.weddingplanninginstitute.com/courses/certified-wedding-and-event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.online.colostate.edu/training-programs/certified-master-wedding-event-planner/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://careertraining.stcc.edu/training-programs/wedding-planner-course/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://weddingplannerinstitute.com",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/creative/wedding-planner-career-diploma",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.socialtables.com/blog/event-planning/best-online-wedding-planner-courses/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/wedding-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.georgiacenter.uga.edu/professional-programs/certified-wedding-planner/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://aacwp.org",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.cwpsociety.com/courses/plannercertification",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:34:38,942 [INFO] [perplexity] Saved course response for 'wedding planner certification course'
+2026-06-30 12:34:40,942 [INFO] Querying: online event planning courses with certificates
+2026-06-30 12:34:47,170 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:34:54,144 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:01,899 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:01,907 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": true,
+    "qc_mention_order": 3,
+    "qc_cited": true,
+    "brands": [
+        {
+            "name": "QC Event School",
+            "brand_type": "qc",
+            "rank_position": 3
+        },
+        {
+            "name": "Edmonds College",
+            "brand_type": "competitor",
+            "rank_position": 1
+        },
+        {
+            "name": "University of North Carolina at Charlotte",
+            "brand_type": "competitor",
+            "rank_position": 2
+        },
+        {
+            "name": "New York University School of Professional Studies",
+            "brand_type": "competitor",
+            "rank_position": 4
+        },
+        {
+            "name": "Emory University",
+            "brand_type": "competitor",
+            "rank_position": 5
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.edmonds.edu/programs-and-degrees/online-degrees-and-certificates/degrees-and-certificates/evpl-cert-melepc20.html?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.linkedin.com/company/event-logistics-inc.?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://online.charlotte.edu/programs/meeting-and-event-planning-professional-certificate/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.eventuallyz.com/event-planning-courses/?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qceventplanning.com/online-event-courses/event-planning?utm_source=openai",
+            "is_qc": true,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.sps.nyu.edu/certificates/events-and-convention-management.html?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.credly.com/org/emory-university/badge/event-planning-management-certificate?utm_source=openai",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://ece.emory.edu/areas-of-study/event-planning/index.php?utm_source=openai",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:35:02,821 [INFO] [chatgpt] Saved course response for 'online event planning courses with certificates'
+2026-06-30 12:35:08,216 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:08,227 [INFO] RAW OPENAI OUTPUT: {
+    "qc_mentioned": false,
+    "qc_mention_order": null,
+    "qc_cited": false,
+    "brands": [],
+    "links": [
+        {
+            "url": "https://academics.charlotte.edu/program/meeting-and-event-planning-professional-certificate-online/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://courses.msicertified.com/course/event-planner-certification",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.iapcollege.com/program/event-planner-course/",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://iits.business.gwu.edu/professional-certificate-event-management",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.nyiad.edu/courses/event-planning",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://alison.com/tag/event-planning",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://lifelonglearning.purdueforlife.org/training-programs/event-management-certificate-program/",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/creative/event-planning-career-diploma",
+            "is_qc": false,
+            "is_inline": true
+        },
+        {
+            "url": "https://www.oxfordhomestudy.com/event-planning-courses-online-free",
+            "is_qc": false,
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/EventProduction/comments/dvigup/doing_online_courses_for_an_event_planning/",
+            "is_qc": false,
+            "is_inline": false
+        }
+    ]
+}
+2026-06-30 12:35:08,960 [INFO] [perplexity] Saved course response for 'online event planning courses with certificates'
+2026-06-30 12:35:10,961 [INFO] Querying: is QC Pet School accredited in Canada
+2026-06-30 12:35:16,231 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:35:19,723 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:19,733 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:19,733 [ERROR] [chatgpt] Parser returned empty for 'is QC Pet School accredited in Canada'
+2026-06-30 12:35:19,733 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:19,733 [ERROR] [perplexity] Parser returned empty for 'is QC Pet School accredited in Canada'
+2026-06-30 12:35:21,734 [INFO] Querying: is QC Pet School internationally recognized
+2026-06-30 12:35:25,644 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:35:28,596 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:28,597 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:28,598 [ERROR] [chatgpt] Parser returned empty for 'is QC Pet School internationally recognized'
+2026-06-30 12:35:28,598 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:28,598 [ERROR] [perplexity] Parser returned empty for 'is QC Pet School internationally recognized'
+2026-06-30 12:35:30,598 [INFO] Querying: do employers respect QC Pet Studies certificates
+2026-06-30 12:35:34,209 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:35:39,374 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:39,375 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:39,375 [ERROR] [chatgpt] Parser returned empty for 'do employers respect QC Pet Studies certificates'
+2026-06-30 12:35:39,375 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:39,375 [ERROR] [perplexity] Parser returned empty for 'do employers respect QC Pet Studies certificates'
+2026-06-30 12:35:41,376 [INFO] Querying: Is QC Pet Studies legit
+2026-06-30 12:35:46,119 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:35:50,891 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:35:50,893 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:50,893 [ERROR] [chatgpt] Parser returned empty for 'Is QC Pet Studies legit'
+2026-06-30 12:35:50,893 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:35:50,894 [ERROR] [perplexity] Parser returned empty for 'Is QC Pet Studies legit'
+2026-06-30 12:35:52,894 [INFO] Querying: QC Pet Studies reviews
+2026-06-30 12:36:05,896 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:36:10,048 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:36:10,050 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:10,050 [ERROR] [chatgpt] Parser returned empty for 'QC Pet Studies reviews'
+2026-06-30 12:36:10,051 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:10,051 [ERROR] [perplexity] Parser returned empty for 'QC Pet Studies reviews'
+2026-06-30 12:36:12,051 [INFO] Querying: is QC Event School accredited in Canada
+2026-06-30 12:36:15,556 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:36:19,796 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:36:19,798 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:19,798 [ERROR] [chatgpt] Parser returned empty for 'is QC Event School accredited in Canada'
+2026-06-30 12:36:19,798 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:19,798 [ERROR] [perplexity] Parser returned empty for 'is QC Event School accredited in Canada'
+2026-06-30 12:36:21,799 [INFO] Querying: is QC Event School internationally recognized
+2026-06-30 12:36:28,781 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:36:32,364 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:36:32,366 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:32,366 [ERROR] [chatgpt] Parser returned empty for 'is QC Event School internationally recognized'
+2026-06-30 12:36:32,366 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:36:32,366 [ERROR] [perplexity] Parser returned empty for 'is QC Event School internationally recognized'
+2026-06-30 12:36:34,367 [INFO] Querying: do employers respect QC Event School certificates
+2026-06-30 12:40:35,660 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:40:40,731 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:40:40,739 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:40:40,739 [ERROR] [chatgpt] Parser returned empty for 'do employers respect QC Event School certificates'
+2026-06-30 12:40:40,739 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:40:40,739 [ERROR] [perplexity] Parser returned empty for 'do employers respect QC Event School certificates'
+2026-06-30 12:40:42,740 [INFO] Querying: QC Event School reviews
+2026-06-30 12:40:48,407 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:40:53,697 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:40:53,699 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:40:53,699 [ERROR] [chatgpt] Parser returned empty for 'QC Event School reviews'
+2026-06-30 12:40:53,699 [ERROR] OpenAI parsing error: 'credibility'
+2026-06-30 12:40:53,699 [ERROR] [perplexity] Parser returned empty for 'QC Event School reviews'
+2026-06-30 12:40:55,700 [INFO] Querying: QC Pet School vs Coursera which is better
+2026-06-30 12:40:59,910 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:41:06,016 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:08,160 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:08,172 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet School is suitable for those specifically interested in pet education, while Coursera offers a broader range of topics.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Focuses specifically on pet-related education",
+        "Offers certificates recognized within the pet care industry",
+        "Includes practical components relevant to pet care"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:41:08,613 [INFO] [chatgpt] Saved competition response for 'QC Pet School vs Coursera which is better'
+2026-06-30 12:41:10,394 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:10,401 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "The response suggests that the choice between QC Pet Studies and Coursera depends on individual career goals.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "QC Pet Studies offers hands-on training, lower one-time cost, and direct industry certification."
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:41:10,810 [INFO] [perplexity] Saved competition response for 'QC Pet School vs Coursera which is better'
+2026-06-30 12:41:12,810 [INFO] Querying: QC Pet School vs Udemy which is better
+2026-06-30 12:41:22,987 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:41:28,413 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:30,539 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:30,545 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet School is better for specialized training in the pet industry.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Typically more expensive than average Udemy courses.",
+        "Limited to pet-related topics."
+    ],
+    "positives_raised": [
+        "Focuses on pet-related courses, making it ideal for those interested in careers like pet grooming, dog training, and pet psychology.",
+        "Many courses offer a recognized certification upon completion.",
+        "Personalized feedback from instructors and a community of fellow students."
+    ],
+    "qc_cited": false
+}
+2026-06-30 12:41:30,975 [INFO] [chatgpt] Saved competition response for 'QC Pet School vs Udemy which is better'
+2026-06-30 12:41:32,639 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:32,643 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet School is superior for those pursuing professional careers in pet care due to its structured curriculum and professional feedback.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Offers industry-relevant certification",
+        "Includes personalized feedback from experienced professionals",
+        "Thoughtfully designed curriculum with practical assignments"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:41:33,003 [INFO] [perplexity] Saved competition response for 'QC Pet School vs Udemy which is better'
+2026-06-30 12:41:35,004 [INFO] Querying: is QC Pet School worth the money
+2026-06-30 12:41:41,272 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:41:47,275 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:50,388 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:50,398 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies provides a valuable educational experience for those seeking to enter the pet care industry, especially for online learners.",
+    "competitor_won": "QC",
+    "win_reasons": [],
+    "concerns_raised": ["The courses are online-based, which may not suit everyone."],
+    "positives_raised": ["Comprehensive online courses", "Flexibility in learning at one's own pace", "Personalized feedback from industry professionals", "A+ rating with the Better Business Bureau", "14-day money-back guarantee", "Quality of instruction"],
+    "qc_cited": true
+}
+2026-06-30 12:41:50,798 [INFO] [chatgpt] Saved competition response for 'is QC Pet School worth the money'
+2026-06-30 12:41:53,379 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:41:53,388 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies is considered a solid choice for aspiring pet professionals due to its flexibility and included business training.",
+    "competitor_won": "QC",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Limited Hands-On Learning",
+        "Extra Cost for Hands-On Options",
+        "Difficulty Finding Dogs"
+    ],
+    "positives_raised": [
+        "Business Training Included",
+        "Flexibility and Support",
+        "Cost Transparency",
+        "Success Stories"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:41:53,742 [INFO] [perplexity] Saved competition response for 'is QC Pet School worth the money'
+2026-06-30 12:41:55,743 [INFO] Querying: QC Event School vs Coursera which is better
+2026-06-30 12:42:00,895 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:42:08,562 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:10,874 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:10,884 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School offers specialized training in event planning, while Coursera provides a broader range of courses.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Specializes in event planning and management",
+        "Offers targeted programs that are often practical and industry-specific",
+        "Provides certifications recognized in the event planning industry",
+        "Primarily online with a strong emphasis on practical skills"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:42:11,307 [INFO] [chatgpt] Saved competition response for 'QC Event School vs Coursera which is better'
+2026-06-30 12:42:13,900 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:13,907 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School is the clear winner for anyone looking to become a professional event planner due to its industry mentorship and specialized resources.",
+    "competitor_won": "QC",
+    "win_reasons": [
+        "Industry-specific mentorship is provided.",
+        "Includes exclusive access to planning software.",
+        "Offers bonus business start-up training."
+    ],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Deep focus on event/wedding planning.",
+        "Globally recognized professional certification specific to event planning.",
+        "High value investment with flexible payment plans."
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:42:14,268 [INFO] [perplexity] Saved competition response for 'QC Event School vs Coursera which is better'
+2026-06-30 12:42:16,269 [INFO] Querying: QC Event School vs Udemy which is better
+2026-06-30 12:42:20,640 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:42:26,365 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:27,952 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:27,959 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is highly specialized and offers structured support, making it a good choice for event planning professionals.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [],
+    "positives_raised": [
+        "Focuses specifically on event planning and design",
+        "Offers structured courses with comprehensive materials",
+        "Provides recognized certifications upon completion",
+        "Includes mentorship and direct instructor support"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:42:28,399 [INFO] [chatgpt] Saved competition response for 'QC Event School vs Udemy which is better'
+2026-06-30 12:42:30,330 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:30,330 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School is better for earning a recognized certification and comprehensive training to launch an event planning career.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": ["Some users describe the content as 'dated'."],
+    "positives_raised": ["QC Event School offers necessary depth and certification.", "Graduates receive a recognized certificate.", "Part of QC family with an A+ rating from the Better Business Bureau.", "Structured, unit-based curriculum covers all aspects of planning."],
+    "qc_cited": true
+}
+2026-06-30 12:42:30,709 [INFO] [perplexity] Saved competition response for 'QC Event School vs Udemy which is better'
+2026-06-30 12:42:32,710 [INFO] Querying: is QC Event School worth the money
+2026-06-30 12:42:38,673 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-06-30 12:42:43,939 [INFO] HTTP Request: POST https://api.perplexity.ai/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:46,157 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:46,165 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School offers accredited online courses with positive feedback, but whether it is worth the investment depends on individual circumstances.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "Cost may not align with budget and expected value",
+        "Effectiveness in securing employment or advancing a career can vary"
+    ],
+    "positives_raised": [
+        "Accredited online courses",
+        "Flexible learning environment",
+        "Positive student feedback",
+        "Support from industry experts"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:42:46,571 [INFO] [chatgpt] Saved competition response for 'is QC Event School worth the money'
+2026-06-30 12:42:48,776 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-06-30 12:42:48,781 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School provides a high-quality, accessible, and cost-effective learning path, though its certifications may not be universally recognized.",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "limited recognition of proprietary certifications among some employers",
+        "some material can be dated",
+        "isolated negative reviews criticizing the school as a 'for-profit scam'"
+    ],
+    "positives_raised": [
+        "affordability and flexibility of self-paced, online courses",
+        "A+ ranking from the Better Business Bureau",
+        "strong student outcomes and positive reviews",
+        "21-day money-back guarantee"
+    ],
+    "qc_cited": true
+}
+2026-06-30 12:42:49,174 [INFO] [perplexity] Saved competition response for 'is QC Event School worth the money'
+2026-06-30 12:42:51,603 [INFO] Run complete

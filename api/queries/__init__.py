@@ -24,3 +24,12 @@ from api.queries.citations import (
 from api.queries.summary import get_summary
 from api.queries.explorer import get_responses
 from api.queries.topics import get_topics
+from api.queries.recommendations import (
+    get_competitor_wins,
+    get_qc_buried_positions,
+    get_citation_gaps,
+    get_recurring_concerns,
+)
+from api.queries.recommendations_synthesis import (
+    generate_recommendations
+)
