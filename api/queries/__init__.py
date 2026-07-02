@@ -23,7 +23,7 @@ from api.queries.citations import (
 )
 from api.queries.summary import get_summary
 from api.queries.explorer import get_responses
-from api.queries.topics import get_topics
+from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail
 from api.queries.recommendations import (
     get_competitor_wins,
     get_qc_buried_positions,
@@ -31,5 +31,5 @@ from api.queries.recommendations import (
     get_recurring_concerns,
 )
 from api.queries.recommendations_synthesis import (
-    generate_recommendations
-), get_topics_over_time, get_prompt_detail
+    generate_recommendations,
+)
