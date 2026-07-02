@@ -1,16 +1,23 @@
 from api.db import get_connection, _date_filter, _prev_date_filter
-def fetch_avg_rank(cur, filter_clause):
+
+def _school_clause_params(school):
+    return ("AND q.school = %s" if school else ""), ([school] if school else [])
+
+def fetch_avg_rank(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
     cur.execute(f"""
-        SELECT AVG(qc_mention_order)
-        FROM mention_responses
-        WHERE qc_mentioned = TRUE
-        AND qc_mention_order IS NOT NULL
-        {filter_clause};
-    """)
+        SELECT AVG(m.qc_mention_order)
+        FROM mention_responses m
+        LEFT JOIN questions q ON q.id = m.question_id
+        WHERE m.qc_mentioned = TRUE
+        AND m.qc_mention_order IS NOT NULL
+        {filter_clause.replace("created_at", "m.created_at")} {school_clause};
+    """, params)
     row = cur.fetchone()[0]
     return float(row) if row else None
 
-def fetch_sov(cur, filter_clause):
+def fetch_sov(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
     cur.execute(f"""
         SELECT
             SUM(CASE WHEN b.brand_type = 'qc' THEN 1 ELSE 0 END) AS qc_mentions,
@@ -18,8 +25,9 @@ def fetch_sov(cur, filter_clause):
         FROM mention_response_brands b
         JOIN mention_responses m
             ON b.mention_response_id = m.id
-        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")};
-    """)
+        LEFT JOIN questions q ON q.id = m.question_id
+        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")} {school_clause};
+    """, params)
     row = cur.fetchone()
     qc_mentions = row[0] or 0
     competitor_mentions = row[1] or 0
@@ -30,7 +38,8 @@ def fetch_sov(cur, filter_clause):
 
     return round((qc_mentions / total) * 100, 1)
 
-def fetch_visibility_score(cur, filter_clause):
+def fetch_visibility_score(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
     cur.execute(f"""
         WITH link_scores AS (
             SELECT
@@ -60,33 +69,40 @@ def fetch_visibility_score(cur, filter_clause):
             + COALESCE(ls.link_score, 0) * 0.15
         )
         FROM mention_responses m
+        LEFT JOIN questions q ON q.id = m.question_id
         LEFT JOIN link_scores ls ON ls.mention_response_id = m.id
-        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")};
-    """)
+        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")} {school_clause};
+    """, params)
     row = cur.fetchone()[0]
     return round(float(row), 1) if row is not None else None
 
-def fetch_competitor_mention_counts(cur, filter_clause):
+def fetch_competitor_mention_counts(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
     cur.execute(f"""
         SELECT b.brand_name, COUNT(DISTINCT b.mention_response_id) as mentions
         FROM mention_response_brands b
         JOIN mention_responses m ON m.id = b.mention_response_id
-        WHERE b.brand_type = 'competitor' {filter_clause.replace("created_at", "m.created_at")}
+        LEFT JOIN questions q ON q.id = m.question_id
+        WHERE b.brand_type = 'competitor' {filter_clause.replace("created_at", "m.created_at")} {school_clause}
         GROUP BY b.brand_name;
-    """)
+    """, params)
     return {row[0]: row[1] for row in cur.fetchall()}
 
-def fetch_total_responses(cur, filter_clause):
+def fetch_total_responses(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
     cur.execute(f"""
-        SELECT COUNT(*) FROM mention_responses WHERE 1=1 {filter_clause};
-    """)
+        SELECT COUNT(*)
+        FROM mention_responses m
+        LEFT JOIN questions q ON q.id = m.question_id
+        WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")} {school_clause};
+    """, params)
     return cur.fetchone()[0] or 0
 
-def fetch_top_competitors(cur, filter_curr, filter_prev, limit=5):
-    curr_counts = fetch_competitor_mention_counts(cur, filter_curr)
-    prev_counts = fetch_competitor_mention_counts(cur, filter_prev)
-    total_curr = fetch_total_responses(cur, filter_curr)
-    total_prev = fetch_total_responses(cur, filter_prev)
+def fetch_top_competitors(cur, filter_curr, filter_prev, limit=5, school=None):
+    curr_counts = fetch_competitor_mention_counts(cur, filter_curr, school)
+    prev_counts = fetch_competitor_mention_counts(cur, filter_prev, school)
+    total_curr = fetch_total_responses(cur, filter_curr, school)
+    total_prev = fetch_total_responses(cur, filter_prev, school)
 
     top_names = sorted(curr_counts, key=curr_counts.get, reverse=True)[:limit]
 
@@ -116,15 +132,18 @@ def visibility_score_diff(curr, prev):
         return None
     return round(curr - prev, 1)
 
-def get_summary(days=None):
+def get_summary(days=None, school=None):
     filter_curr = _date_filter(days)
     filter_prev = _prev_date_filter(days)
+    school_clause, school_params = _school_clause_params(school)
 
     def fetch_rate(cur, column, table, filter_clause):
         cur.execute(f"""
             SELECT AVG(CASE WHEN {column} THEN 1 ELSE 0 END)
-            FROM {table} WHERE 1=1 {filter_clause};
-        """)
+            FROM {table} t
+            LEFT JOIN questions q ON q.id = t.question_id
+            WHERE 1=1 {filter_clause.replace("created_at", "t.created_at")} {school_clause};
+        """, school_params)
         row = cur.fetchone()[0]
         return float(row) if row else None
 
@@ -144,38 +163,41 @@ def get_summary(days=None):
             sentiment_curr = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_curr)
             sentiment_prev = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_prev)
 
-            rank_curr = fetch_avg_rank(cur, filter_curr)
-            rank_prev = fetch_avg_rank(cur, filter_prev)
+            rank_curr = fetch_avg_rank(cur, filter_curr, school)
+            rank_prev = fetch_avg_rank(cur, filter_prev, school)
 
-            sov_curr = fetch_sov(cur, filter_curr)
-            sov_prev = fetch_sov(cur, filter_prev)
+            sov_curr = fetch_sov(cur, filter_curr, school)
+            sov_prev = fetch_sov(cur, filter_prev, school)
 
-            visibility_curr = fetch_visibility_score(cur, filter_curr)
-            visibility_prev = fetch_visibility_score(cur, filter_prev)
+            visibility_curr = fetch_visibility_score(cur, filter_curr, school)
+            visibility_prev = fetch_visibility_score(cur, filter_prev, school)
 
             cur.execute(f"""
                 SELECT b.brand_name, COUNT(*) as count
                 FROM mention_response_brands b
                 JOIN mention_responses m ON m.id = b.mention_response_id
-                WHERE b.brand_type = 'competitor' {filter_curr.replace("created_at", "m.created_at")}
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE b.brand_type = 'competitor' {filter_curr.replace("created_at", "m.created_at")} {school_clause}
                 GROUP BY b.brand_name
                 ORDER BY count DESC
                 LIMIT 1;
-            """)
+            """, school_params)
             top_competitor_row = cur.fetchone()
             top_competitor = top_competitor_row[0] if top_competitor_row else None
 
             cur.execute(f"""
-                SELECT engine, AVG(CASE WHEN qc_mentioned THEN 1 ELSE 0 END) as rate
-                FROM mention_responses WHERE 1=1 {filter_curr}
-                GROUP BY engine
+                SELECT m.engine, AVG(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END) as rate
+                FROM mention_responses m
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE 1=1 {filter_curr.replace("created_at", "m.created_at")} {school_clause}
+                GROUP BY m.engine
                 ORDER BY rate DESC
                 LIMIT 1;
-            """)
+            """, school_params)
             best_engine_row = cur.fetchone()
             best_engine = best_engine_row[0] if best_engine_row else None
 
-            top_competitors = fetch_top_competitors(cur, filter_curr, filter_prev)
+            top_competitors = fetch_top_competitors(cur, filter_curr, filter_prev, school=school)
 
     return {
         "mention_rate": round(mention_curr * 100, 1) if mention_curr else 0,

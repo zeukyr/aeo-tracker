@@ -139,7 +139,7 @@ function TabBar({ tabs, active, onChange }) {
 }
 
 function Citations() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [mentionCitations, setMentionCitations] = useState([]);
   const [sentimentCitations, setSentimentCitations] = useState([]);
   const [qcCitations, setQcCitations] = useState([]);
@@ -152,6 +152,7 @@ function Citations() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     Promise.all([
       fetch(`${API_BASE_URL}/api/citations-by-school?${params}`).then(r => r.json()),
@@ -165,7 +166,7 @@ function Citations() {
         setLoading(false);
       })
       .catch(err => { setError(err.message); setLoading(false); });
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;

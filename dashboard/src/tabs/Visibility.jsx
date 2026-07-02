@@ -73,7 +73,7 @@ function ChartPanel({ title, subtitle, children }) {
 }
 
 function Visibility() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [mentionCategoryData, setMentionCategoryData] = useState([]);
   const [citationCategoryData, setCitationCategoryData] = useState([]);
   const [mentionSchoolData, setMentionSchoolData] = useState([]);
@@ -84,6 +84,7 @@ function Visibility() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     Promise.all([
       fetch(`${API_BASE_URL}/api/mention-rate-by-category?${params}`).then(r => r.json()),
@@ -102,7 +103,7 @@ function Visibility() {
         setError(err.message);
         setLoading(false);
       });
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;

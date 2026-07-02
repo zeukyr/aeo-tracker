@@ -154,7 +154,7 @@ function MentionChart({ data }) {
 }
 
 function Overview() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [mentionData, setMentionData] = useState([]);
   const [summary, setSummary] = useState(null);
   const [error, setError] = useState(null);
@@ -164,6 +164,7 @@ function Overview() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     Promise.all([
       fetch(`${API_BASE_URL}/api/mention-rate-by-engine?${params}`).then((r) => r.json()),
@@ -174,7 +175,7 @@ function Overview() {
         setSummary(summaryData);
       })
       .catch((err) => setError(err.message));
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;

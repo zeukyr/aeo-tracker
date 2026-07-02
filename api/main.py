@@ -46,73 +46,69 @@ def root():
     return {"status": "running"}
 
 @app.get("/api/mention-rate-by-engine")
-def mention_rate_by_engine(days: int = None):
-    return get_mention_rate_by_engine(days)
+def mention_rate_by_engine(days: int = None, school: str = None):
+    return get_mention_rate_by_engine(days, school)
 
 @app.get("/api/citation-rate-by-engine")
-def citation_rate_by_engine(days: int = None):
-    return get_citation_rate_by_engine(days)
+def citation_rate_by_engine(days: int = None, school: str = None):
+    return get_citation_rate_by_engine(days, school)
 
 @app.get("/api/citation-rate-by-category")
-def citation_rate_by_category(days: int = None):
-    return get_citation_rate_by_category(days)
+def citation_rate_by_category(days: int = None, school: str = None):
+    return get_citation_rate_by_category(days, school)
 
 @app.get("/api/citation-rate-by-school")
-def citation_rate_by_school(days: int = None):
-    return get_citation_rate_by_school(days)
+def citation_rate_by_school(days: int = None, school: str = None):
+    return get_citation_rate_by_school(days, school)
 
 @app.get("/api/sentiment-distribution")
-def sentiment_distribution(days: int = None):
-    return get_sentiment_distribution(days)
+def sentiment_distribution(days: int = None, school: str = None):
+    return get_sentiment_distribution(days, school)
 
 @app.get("/api/top-concerns")
-def top_concerns(days: int = None):
-    return get_top_concerns(days)
+def top_concerns(days: int = None, school: str = None):
+    return get_top_concerns(days, school)
 
 @app.get("/api/citations")
-def citations(days: int = None):
-    return get_citations(days)
+def citations(days: int = None, school: str = None):
+    return get_citations(days, school)
 
 @app.get("/api/summary")
-def summary(days: int = None):
-    return get_summary(days)
+def summary(days: int = None, school: str = None):
+    return get_summary(days, school)
 
 @app.get("/api/mention-rate-by-category")
-def mention_rate_by_category(days: int = None):
-    return get_mention_rate_by_category(days)
+def mention_rate_by_category(days: int = None, school: str = None):
+    return get_mention_rate_by_category(days, school)
 
 @app.get("/api/mention-rate-by-school")
-def mention_rate_by_school(days: int = None):
-    return get_mention_rate_by_school(days)
-
-@app.get("/api/sentiment-distribution")
-def sentiment_distribution(days: int = None):
-    return get_sentiment_distribution(days)
+def mention_rate_by_school(days: int = None, school: str = None):
+    return get_mention_rate_by_school(days, school)
 
 @app.get("/api/top-positives")
-def top_positives(days: int = None):
-    return get_top_positives(days)
+def top_positives(days: int = None, school: str = None):
+    return get_top_positives(days, school)
 
 @app.get("/api/top-competitors-by-school")
-def top_competitors_by_school(days: int = None):
-    return get_top_competitors_by_school(days)
+def top_competitors_by_school(days: int = None, school: str = None):
+    return get_top_competitors_by_school(days, school)
 
 @app.get("/api/competitor-win-rate")
-def competitor_win_rate(days: int = None):
-    return get_competitor_win_rate(days)
+def competitor_win_rate(days: int = None, school: str = None):
+    return get_competitor_win_rate(days, school)
 
 
 @app.get("/api/qc-citations")
-def qc_citations(days: int = None):
-    return get_qc_citations(days)
+def qc_citations(days: int = None, school: str = None):
+    return get_qc_citations(days, school)
 
 @app.get("/api/citations-by-school")
-def citations_by_school(days: int = None):
-    return get_citations_by_school(days)
+def citations_by_school(days: int = None, school: str = None):
+    return get_citations_by_school(days, school)
 
 @app.get("/api/sentiment-citations")
-def sentiment_citations(days: int = None):
-    return get_sentiment_citations(days)
+def sentiment_citations(days: int = None, school: str = None):
+    return get_sentiment_citations(days, school)
 
 @app.get("/api/topics")
 def topics(

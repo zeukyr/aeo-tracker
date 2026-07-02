@@ -25,10 +25,9 @@ const TOPIC_COLORS = {
 };
 const FALLBACK_COLORS = ["#378add","#1d9e75","#7c3aed","#ba7517","#d6336c","#0ca678"];
 
-// ─── prompt filter bar (engine / type / school / mentioned / sentiment) ───────
+// ─── prompt filter bar (engine / type / mentioned / sentiment; school is global, see App.jsx) ─
 const ENGINES = ["All", "chatgpt", "perplexity", "gemini"];
 const TYPES = ["All", "course", "general", "credibility", "competition"];
-const SCHOOLS = ["All", "QC Pet Studies", "QC Event Planning", "QC Design School", "QC Makeup Academy", "QC Wellness Studies"];
 const SENTIMENTS = ["All", "positive", "neutral", "negative"];
 
 function FilterSelect({ label, value, onChange, options }) {
@@ -695,7 +694,7 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
 
 // ─── main Prompts component ───────────────────────────────────────────────────
 export default function Prompts() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [data,           setData]           = useState([]);
   const [loading,        setLoading]        = useState(true);
   const [error,          setError]          = useState(null);
@@ -709,7 +708,6 @@ export default function Prompts() {
   const [filters, setFilters] = useState({
     engine: "All",
     question_type: "All",
-    school: "All",
     qc_mentioned: "All",
     sentiment: "All",
   });
@@ -727,9 +725,9 @@ export default function Prompts() {
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
     if (filters.engine !== "All") params.append("engine", filters.engine);
     if (filters.question_type !== "All") params.append("question_type", filters.question_type);
-    if (filters.school !== "All") params.append("school", filters.school);
     if (filters.qc_mentioned !== "All") params.append("qc_mentioned", filters.qc_mentioned === "Yes");
     if (filters.sentiment !== "All") params.append("sentiment", filters.sentiment);
     const qs = params.toString();
@@ -747,7 +745,7 @@ export default function Prompts() {
         setError(err.message);
         setLoading(false);
       });
-  }, [days, filters]);
+  }, [days, school, filters]);
 
   function toggleTopic(name) {
     setExpandedTopics(prev => {
@@ -808,10 +806,9 @@ export default function Prompts() {
       {/* Filters */}
       <div className="bg-white border border-gray-200 rounded-lg p-4" style={{ marginBottom: 12 }}>
         <p className="font-medium mb-3">Filters</p>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <FilterSelect label="Engine" value={filters.engine} onChange={v => setFilter("engine", v)} options={ENGINES} />
           <FilterSelect label="Question type" value={filters.question_type} onChange={v => setFilter("question_type", v)} options={TYPES} />
-          <FilterSelect label="School" value={filters.school} onChange={v => setFilter("school", v)} options={SCHOOLS} />
           <FilterSelect label="QC mentioned" value={filters.qc_mentioned} onChange={v => setFilter("qc_mentioned", v)} options={["All", "Yes", "No"]} />
           <FilterSelect label="Sentiment" value={filters.sentiment} onChange={v => setFilter("sentiment", v)} options={SENTIMENTS} />
         </div>
@@ -824,7 +821,7 @@ export default function Prompts() {
         <p className="state-msg state-msg--error">Error: {error}</p>
       ) : !data.length ? (
         <p className="state-empty">
-          {Object.values(filters).every(v => v === "All")
+          {(school === "All" || !school) && Object.values(filters).every(v => v === "All")
             ? "No topic data yet. Run the pipeline to collect responses."
             : "No prompts match your filters."}
         </p>

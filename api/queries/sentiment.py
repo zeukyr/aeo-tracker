@@ -1,17 +1,20 @@
 from api.db import get_connection, _date_filter
 
-def get_sentiment_distribution(days=None):
-    filter_clause = _date_filter(days)
+def get_sentiment_distribution(days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
+    school_clause = "AND q.school = %s" if school else ""
+    params = [school] if school else []
     query = f"""
-        SELECT DATE(created_at) as day, qc_sentiment, COUNT(*) as count
-        FROM sentiment_responses
-        WHERE 1=1 {filter_clause}
-        GROUP BY day, qc_sentiment
+        SELECT DATE(s.created_at) as day, s.qc_sentiment, COUNT(*) as count
+        FROM sentiment_responses s
+        LEFT JOIN questions q ON q.id = s.question_id
+        WHERE 1=1 {filter_clause} {school_clause}
+        GROUP BY day, s.qc_sentiment
         ORDER BY day;
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query)
+            cur.execute(query, params)
             rows = cur.fetchall()
     pivoted = {}
     for day, sentiment, count in rows:
@@ -22,13 +25,16 @@ def get_sentiment_distribution(days=None):
             pivoted[day_str][sentiment] = count
     return sorted(pivoted.values(), key=lambda x: x["day"])
 
-def get_top_concerns(days=None):
-    filter_clause = _date_filter(days)
+def get_top_concerns(days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
+    school_clause = "AND q.school = %s" if school else ""
+    params = [school] if school else []
     query = f"""
         WITH expanded AS (
-            SELECT unnest(concerns_raised) as concern
-            FROM sentiment_responses
-            WHERE 1=1 {filter_clause}
+            SELECT unnest(s.concerns_raised) as concern
+            FROM sentiment_responses s
+            LEFT JOIN questions q ON q.id = s.question_id
+            WHERE 1=1 {filter_clause} {school_clause}
         )
         SELECT concern, COUNT(*) as count
         FROM expanded
@@ -38,17 +44,20 @@ def get_top_concerns(days=None):
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query)
+            cur.execute(query, params)
             rows = cur.fetchall()
     return [{"concern": r[0], "count": r[1]} for r in rows]
 
-def get_top_positives(days=None):
-    filter_clause = _date_filter(days)
+def get_top_positives(days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
+    school_clause = "AND q.school = %s" if school else ""
+    params = [school] if school else []
     query = f"""
         WITH expanded AS (
-            SELECT unnest(positives_raised) as positive
-            FROM sentiment_responses
-            WHERE 1=1 {filter_clause}
+            SELECT unnest(s.positives_raised) as positive
+            FROM sentiment_responses s
+            LEFT JOIN questions q ON q.id = s.question_id
+            WHERE 1=1 {filter_clause} {school_clause}
         )
         SELECT positive, COUNT(*) as count
         FROM expanded
@@ -58,6 +67,6 @@ def get_top_positives(days=None):
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query)
+            cur.execute(query, params)
             rows = cur.fetchall()
     return [{"positive": r[0], "count": r[1]} for r in rows]

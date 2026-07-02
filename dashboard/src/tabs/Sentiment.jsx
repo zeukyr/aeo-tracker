@@ -74,7 +74,7 @@ function TagList({ items, labelKey, countKey, color, bg }) {
 }
 
 function Sentiment() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [sentimentData, setSentimentData] = useState([]);
   const [concerns, setConcerns] = useState([]);
   const [positives, setPositives] = useState([]);
@@ -84,6 +84,7 @@ function Sentiment() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     Promise.all([
       fetch(`${API_BASE_URL}/api/sentiment-distribution?${params}`).then(r => r.json()),
@@ -100,7 +101,7 @@ function Sentiment() {
         setError(err.message);
         setLoading(false);
       });
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;

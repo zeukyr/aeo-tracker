@@ -38,19 +38,20 @@ function WinRateRow({ rank, competitor, winRate }) {
 }
 
 export function CompetitorWinRate() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     fetch(`${API_BASE_URL}/api/competitor-win-rate?${params}`)
       .then(r => r.json())
       .then(data => { setData(data); setLoading(false); })
       .catch(() => setLoading(false));
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (!data.length) return <p className="state-empty">No competition data yet.</p>;

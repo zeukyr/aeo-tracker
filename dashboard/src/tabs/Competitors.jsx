@@ -45,7 +45,7 @@ function CompetitorRow({ rank, name, count, maxCount }) {
 }
 
 function Competitors() {
-  const { days } = useFilter();
+  const { days, school } = useFilter();
   const [competitorsBySchool, setCompetitorsBySchool] = useState([]);
   const [selectedSchool, setSelectedSchool] = useState("All");
   const [loading, setLoading] = useState(true);
@@ -54,6 +54,7 @@ function Competitors() {
   useEffect(() => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
 
     fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`)
       .then(r => r.json())
@@ -65,7 +66,7 @@ function Competitors() {
         setError(err.message);
         setLoading(false);
       });
-  }, [days]);
+  }, [days, school]);
 
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;
