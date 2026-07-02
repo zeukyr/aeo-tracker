@@ -74,14 +74,14 @@ def query_all_engines(question):
     except Exception as e:
         results["chatgpt"] = {"error": str(e)}
 
-    try:
-        perplexity = query_perplexity(question)
-        results["perplexity"] = {
-            "text": perplexity["text"],
-            "citations": perplexity["citations"],
-        }
-    except Exception as e:
-        results["perplexity"] = {"error": str(e)}
+    # try:
+    #     perplexity = query_perplexity(question)
+    #     results["perplexity"] = {
+    #         "text": perplexity["text"],
+    #         "citations": perplexity["citations"],
+    #     }
+    # except Exception as e:
+    #     results["perplexity"] = {"error": str(e)}
 
     # try:
     #     results["gemini"] = {

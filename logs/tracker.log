@@ -7380,3 +7380,106 @@
 }
 2026-06-30 12:42:49,174 [INFO] [perplexity] Saved competition response for 'is QC Event School worth the money'
 2026-06-30 12:42:51,603 [INFO] Run complete
+2026-07-02 10:54:19,031 [INFO] Starting run...
+2026-07-02 10:54:19,937 [INFO] Loaded 6 questions
+2026-07-02 10:54:19,937 [INFO] Querying: how to become a certified dog trainer online
+2026-07-02 10:54:29,544 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:54:32,622 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:54:32,653 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Certification Council for Professional Dog Trainers",
+            "text_as_written": "Certification Council for Professional Dog Trainers (CCPDT)"
+        },
+        {
+            "name": "International Association of Canine Professionals",
+            "text_as_written": "International Association of Canine Professionals (IACP)"
+        },
+        {
+            "name": "Karen Pryor Academy",
+            "text_as_written": "Karen Pryor Academy"
+        },
+        {
+            "name": "Animal Behavior College",
+            "text_as_written": "Animal Behavior College"
+        }
+    ],
+    "links": []
+}
+2026-07-02 10:54:33,186 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-07-02 10:54:35,187 [INFO] Querying: is dog grooming a good career
+2026-07-02 10:54:49,232 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:54:54,721 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:54:54,723 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-02 10:54:55,134 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-07-02 10:54:57,134 [INFO] Querying: careers working with dogs
+2026-07-02 10:55:05,241 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:55:07,643 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:55:07,651 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-02 10:55:08,065 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-07-02 10:55:10,066 [INFO] Querying: pet business ideas from home
+2026-07-02 10:55:18,224 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:55:19,406 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:55:19,407 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-02 10:55:19,801 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-07-02 10:55:21,801 [INFO] Querying: jobs with dogs that pay well
+2026-07-02 10:55:29,130 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:55:30,128 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:55:30,142 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-02 10:55:30,532 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-07-02 10:55:32,533 [INFO] Querying: high paying careers working with animals
+2026-07-02 10:55:40,354 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 10:55:41,741 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 10:55:41,760 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-02 10:55:42,182 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-07-02 10:55:44,566 [INFO] Run complete
+2026-07-02 16:08:05,929 [INFO] Starting run...
+2026-07-02 16:08:06,730 [INFO] Loaded 6 questions
+2026-07-02 16:08:06,730 [INFO] Querying: how to become a certified dog trainer online
+2026-07-02 16:08:28,756 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-02 16:08:32,495 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-02 16:08:32,519 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Certification Council for Professional Dog Trainers",
+            "text_as_written": "Certification Council for Professional Dog Trainers (CCPDT)"
+        },
+        {
+            "name": "IAABC",
+            "text_as_written": "IAABC (International Association of Animal Behavior Consultants)"
+        },
+        {
+            "name": "APDT",
+            "text_as_written": "APDT (Association of Professional Dog Trainers)"
+        },
+        {
+            "name": "Karen Pryor Academy",
+            "text_as_written": "Karen Pryor Academy"
+        },
+        {
+            "name": "Dog Trainer Academy",
+            "text_as_written": "Dog Trainer Academy"
+        },
+        {
+            "name": "The Pet Professional Guild",
+            "text_as_written": "The Pet Professional Guild"
+        }
+    ],
+    "links": []
+}
+2026-07-02 16:08:33,155 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'

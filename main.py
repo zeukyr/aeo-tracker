@@ -2,7 +2,7 @@ import sys
 from src.logger import logger
 from src.database import get_questions, start_run, finish_run, save_mention_response, save_sentiment_response
 from src.querier import query_all_engines
-from src.parser import parse_response
+from src.parsing.parser import parse_response
 import time
 
 def main():
