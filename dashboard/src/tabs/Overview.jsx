@@ -219,7 +219,7 @@ function Overview() {
           <p className="panel-subtitle">Share across all responses</p>
           <div className="brand-list">
             <BrandBar
-              name="QC Pet Studies"
+              name={school && school !== "All" ? school : "QC (all schools)"}
               pct={summary.qc_mention_rate ?? summary.mention_rate ?? 0}
               delta={summary.mention_rate_diff ?? null}
               isYou
