@@ -32,4 +32,4 @@ from api.queries.recommendations import (
 )
 from api.queries.recommendations_synthesis import (
     generate_recommendations
-)
+), get_topics_over_time, get_prompt_detail

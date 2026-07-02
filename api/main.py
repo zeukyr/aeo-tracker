@@ -21,6 +21,8 @@ from api.queries import (
     get_citation_rate_by_category,
     get_citation_rate_by_school,
     get_topics,
+    get_topics_over_time,
+    get_prompt_detail,
 )
 
 from api.queries.recommendations_synthesis import (
@@ -159,3 +161,16 @@ def list_recommendations():
 def patch_recommendation_status(rec_id: str, status: str = Body(..., embed=True)):
     update_recommendation_status(rec_id, status)
     return {"updated": True}
+
+
+@app.get("/api/topics-over-time")
+def topics_over_time(days: int = None):
+    return get_topics_over_time(days)
+
+@app.get("/api/topic-prompt/{prompt_id}")
+def topic_prompt(prompt_id: str, days: int = None):
+    result = get_prompt_detail(prompt_id, days)
+    if result is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Prompt not found")
+    return result
