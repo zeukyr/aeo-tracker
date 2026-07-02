@@ -22,8 +22,7 @@ from api.queries.citations import (
     get_sentiment_citations,
 )
 from api.queries.summary import get_summary
-from api.queries.explorer import get_responses
-from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail
+from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses
 from api.queries.recommendations import (
     get_competitor_wins,
     get_qc_buried_positions,

@@ -25,6 +25,31 @@ const TOPIC_COLORS = {
 };
 const FALLBACK_COLORS = ["#378add","#1d9e75","#7c3aed","#ba7517","#d6336c","#0ca678"];
 
+// ─── prompt filter bar (engine / type / school / mentioned / sentiment) ───────
+const ENGINES = ["All", "chatgpt", "perplexity", "gemini"];
+const TYPES = ["All", "course", "general", "credibility", "competition"];
+const SCHOOLS = ["All", "QC Pet Studies", "QC Event Planning", "QC Design School", "QC Makeup Academy", "QC Wellness Studies"];
+const SENTIMENTS = ["All", "positive", "neutral", "negative"];
+
+function FilterSelect({ label, value, onChange, options }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs text-gray-500">{label}</label>
+      <select
+        className="text-sm border border-gray-200 rounded px-2 py-1"
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      >
+        {options.map(o => (
+          <option key={typeof o === "string" ? o : o.value} value={typeof o === "string" ? o : o.value}>
+            {typeof o === "string" ? o : o.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 // ─── small helpers ─────────────────────────────────────────────────────────────
 function visColor(score) {
   if (score == null) return "bg-gray-100 text-gray-400";
@@ -318,19 +343,52 @@ function StatNode({ label, value, color }) {
   );
 }
 
-// ─── LLM response drawer (slide-in from right) ───────────────────────────────
+// ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
 function ResponseDrawer({ drawer, onClose }) {
-  const { open, engine, response, date, promptText } = drawer;
+  const { open, engine, promptText, promptId } = drawer;
+  const { days } = useFilter();
+  const [history, setHistory] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch the full response history for this (prompt, engine) pair whenever the drawer opens
+  useEffect(() => {
+    if (!open || !promptId || !engine) return;
+    setLoading(true);
+    setIndex(0);
+    const params = new URLSearchParams({ engine });
+    if (days) params.append("days", days);
+
+    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/responses?${params}`)
+      .then(r => r.json())
+      .then(rows => {
+        setHistory(Array.isArray(rows) ? rows : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setHistory([]);
+        setLoading(false);
+      });
+  }, [open, promptId, engine, days]);
+
+  const total = history.length;
+  const goOlder = () => setIndex(i => Math.min(i + 1, total - 1));
+  const goNewer = () => setIndex(i => Math.max(i - 1, 0));
 
   useEffect(() => {
     if (!open) return;
-    const handler = e => { if (e.key === "Escape") onClose(); };
+    const handler = e => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") setIndex(i => Math.min(i + 1, total - 1));
+      if (e.key === "ArrowRight") setIndex(i => Math.max(i - 1, 0));
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose]);
+  }, [open, onClose, total]);
 
   if (!open) return null;
   const color = LLM_COLORS[engine] || "#888";
+  const current = history[index];
 
   return (
     <>
@@ -357,7 +415,11 @@ function ResponseDrawer({ drawer, onClose }) {
               {LLM_LABELS[engine] || engine}
             </p>
             <p style={{ fontSize: 11, color: "#9b9b9b" }}>
-              {date ? `Latest response · ${date}` : "Latest response"}
+              {loading
+                ? "Loading…"
+                : total > 0
+                  ? `Response ${index + 1} of ${total} · ${current?.date ?? ""}`
+                  : "No responses"}
             </p>
           </div>
           <button
@@ -376,11 +438,48 @@ function ResponseDrawer({ drawer, onClose }) {
           </div>
         )}
 
+        {/* prev / next navigation */}
+        {total > 1 && (
+          <div style={{
+            padding: "8px 20px",
+            borderBottom: "1px solid #f0efec",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexShrink: 0,
+          }}>
+            <button
+              onClick={goOlder}
+              disabled={index >= total - 1}
+              style={{
+                background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
+                fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Older response"
+            >
+              ← Older
+            </button>
+            <button
+              onClick={goNewer}
+              disabled={index <= 0}
+              style={{
+                background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
+                fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Newer response"
+            >
+              Newer →
+            </button>
+          </div>
+        )}
+
         {/* response body */}
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
-          {response
-            ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{response}</p>
-            : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
+          {loading
+            ? <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
+            : current?.response
+              ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{current.response}</p>
+              : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
           }
         </div>
       </div>
@@ -502,7 +601,7 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
 
                     {/* arrow → response drawer */}
                     <button
-                      onClick={() => onOpenDrawer(engine, llm, prompt.text)}
+                      onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
                       style={{
                         background: "none", border: "none", cursor: "pointer",
                         color: llm ? color : "#d1d5db",
@@ -594,8 +693,8 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
   );
 }
 
-// ─── main Topics component ────────────────────────────────────────────────────
-export default function Topics() {
+// ─── main Prompts component ───────────────────────────────────────────────────
+export default function Prompts() {
   const { days } = useFilter();
   const [data,           setData]           = useState([]);
   const [loading,        setLoading]        = useState(true);
@@ -606,7 +705,16 @@ export default function Topics() {
   const [promptDetails,   setPromptDetails]   = useState({});
   const [loadingDetails,  setLoadingDetails]  = useState(new Set());
   const [detailErrors,    setDetailErrors]    = useState({});
-  const [drawer, setDrawer] = useState({ open: false, engine: null, response: null, date: null, promptText: null });
+  const [drawer, setDrawer] = useState({ open: false, engine: null, promptText: null, promptId: null });
+  const [filters, setFilters] = useState({
+    engine: "All",
+    question_type: "All",
+    school: "All",
+    qc_mentioned: "All",
+    sentiment: "All",
+  });
+
+  const setFilter = (key, value) => setFilters(f => ({ ...f, [key]: value }));
 
   // Fetch the accordion list + the top chart in parallel
   useEffect(() => {
@@ -619,6 +727,11 @@ export default function Topics() {
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
+    if (filters.engine !== "All") params.append("engine", filters.engine);
+    if (filters.question_type !== "All") params.append("question_type", filters.question_type);
+    if (filters.school !== "All") params.append("school", filters.school);
+    if (filters.qc_mentioned !== "All") params.append("qc_mentioned", filters.qc_mentioned === "Yes");
+    if (filters.sentiment !== "All") params.append("sentiment", filters.sentiment);
     const qs = params.toString();
 
     Promise.all([
@@ -634,7 +747,7 @@ export default function Topics() {
         setError(err.message);
         setLoading(false);
       });
-  }, [days]);
+  }, [days, filters]);
 
   function toggleTopic(name) {
     setExpandedTopics(prev => {
@@ -679,62 +792,76 @@ export default function Topics() {
       });
   }
 
-  function openDrawer(engine, llm, promptText) {
-    setDrawer({
-      open:      true,
-      engine,
-      response:  llm?.latestResponse ?? null,
-      date:      llm?.latestResponseDate ?? null,
-      promptText,
-    });
+  function openDrawer(engine, promptText, promptId) {
+    setDrawer({ open: true, engine, promptText, promptId });
   }
 
   function closeDrawer() {
     setDrawer(d => ({ ...d, open: false }));
   }
 
-  if (loading) return <p className="state-msg">Loading…</p>;
-  if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;
-  if (!data.length) return <p className="state-empty">No topic data yet. Run the pipeline to collect responses.</p>;
-
   return (
     <>
       {/* Top line graph */}
       <TopicsOverTimeChart chartData={chartData} />
 
-      {/* Accordion table */}
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <table className="w-full text-left table-fixed">
-          <colgroup>
-            <col style={{ width: "55%" }} />
-            <col style={{ width: "22.5%" }} />
-            <col style={{ width: "22.5%" }} />
-          </colgroup>
-          <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
-              <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility / Sentiment</th>
-              <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map(topic => (
-              <TopicRow
-                key={topic.name}
-                topic={topic}
-                expanded={expandedTopics.has(topic.name)}
-                onToggle={() => toggleTopic(topic.name)}
-                expandedPrompts={expandedPrompts}
-                onTogglePrompt={togglePrompt}
-                promptDetails={promptDetails}
-                loadingDetails={loadingDetails}
-                detailErrors={detailErrors}
-                onOpenDrawer={openDrawer}
-              />
-            ))}
-          </tbody>
-        </table>
+      {/* Filters */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4" style={{ marginBottom: 12 }}>
+        <p className="font-medium mb-3">Filters</p>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <FilterSelect label="Engine" value={filters.engine} onChange={v => setFilter("engine", v)} options={ENGINES} />
+          <FilterSelect label="Question type" value={filters.question_type} onChange={v => setFilter("question_type", v)} options={TYPES} />
+          <FilterSelect label="School" value={filters.school} onChange={v => setFilter("school", v)} options={SCHOOLS} />
+          <FilterSelect label="QC mentioned" value={filters.qc_mentioned} onChange={v => setFilter("qc_mentioned", v)} options={["All", "Yes", "No"]} />
+          <FilterSelect label="Sentiment" value={filters.sentiment} onChange={v => setFilter("sentiment", v)} options={SENTIMENTS} />
+        </div>
       </div>
+
+      {/* Accordion table */}
+      {loading ? (
+        <p className="state-msg">Loading…</p>
+      ) : error ? (
+        <p className="state-msg state-msg--error">Error: {error}</p>
+      ) : !data.length ? (
+        <p className="state-empty">
+          {Object.values(filters).every(v => v === "All")
+            ? "No topic data yet. Run the pipeline to collect responses."
+            : "No prompts match your filters."}
+        </p>
+      ) : (
+        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+          <table className="w-full text-left table-fixed">
+            <colgroup>
+              <col style={{ width: "55%" }} />
+              <col style={{ width: "22.5%" }} />
+              <col style={{ width: "22.5%" }} />
+            </colgroup>
+            <thead>
+              <tr className="border-b border-gray-200 bg-gray-50">
+                <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
+                <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility / Sentiment</th>
+                <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map(topic => (
+                <TopicRow
+                  key={topic.name}
+                  topic={topic}
+                  expanded={expandedTopics.has(topic.name)}
+                  onToggle={() => toggleTopic(topic.name)}
+                  expandedPrompts={expandedPrompts}
+                  onTogglePrompt={togglePrompt}
+                  promptDetails={promptDetails}
+                  loadingDetails={loadingDetails}
+                  detailErrors={detailErrors}
+                  onOpenDrawer={openDrawer}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <ResponseDrawer drawer={drawer} onClose={closeDrawer} />
     </>

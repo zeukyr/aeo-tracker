@@ -16,13 +16,13 @@ from api.queries import (
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
-    get_responses,
     get_citation_rate_by_engine,
     get_citation_rate_by_category,
     get_citation_rate_by_school,
     get_topics,
     get_topics_over_time,
     get_prompt_detail,
+    get_prompt_responses,
 )
 
 from api.queries.recommendations_synthesis import (
@@ -114,22 +114,16 @@ def citations_by_school(days: int = None):
 def sentiment_citations(days: int = None):
     return get_sentiment_citations(days)
 
-@app.get("/api/responses")
-def responses(
+@app.get("/api/topics")
+def topics(
     days: int = None,
     engine: str = None,
     question_type: str = None,
     school: str = None,
     qc_mentioned: bool = None,
     sentiment: str = None,
-    page: int = 1,
-    page_size: int = 20
 ):
-    return get_responses(days, engine, question_type, school, qc_mentioned, sentiment, page, page_size)
-
-@app.get("/api/topics")
-def topics(days: int = None):
-    return get_topics(days)
+    return get_topics(days, engine, question_type, school, qc_mentioned, sentiment)
 
 @app.get("/api/competitor-wins")
 def competitor_wins(days: int = None):
@@ -164,12 +158,27 @@ def patch_recommendation_status(rec_id: str, status: str = Body(..., embed=True)
 
 
 @app.get("/api/topics-over-time")
-def topics_over_time(days: int = None):
-    return get_topics_over_time(days)
+def topics_over_time(
+    days: int = None,
+    engine: str = None,
+    question_type: str = None,
+    school: str = None,
+    qc_mentioned: bool = None,
+    sentiment: str = None,
+):
+    return get_topics_over_time(days, engine, question_type, school, qc_mentioned, sentiment)
 
 @app.get("/api/topic-prompt/{prompt_id}")
 def topic_prompt(prompt_id: str, days: int = None):
     result = get_prompt_detail(prompt_id, days)
+    if result is None:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Prompt not found")
+    return result
+
+@app.get("/api/topic-prompt/{prompt_id}/responses")
+def topic_prompt_responses(prompt_id: str, engine: str, days: int = None):
+    result = get_prompt_responses(prompt_id, engine, days)
     if result is None:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Prompt not found")

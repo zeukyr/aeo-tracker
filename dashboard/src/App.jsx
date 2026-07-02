@@ -4,13 +4,12 @@ import Visibility from "./tabs/Visibility";
 import Sentiment from "./tabs/Sentiment";
 import Competitors from "./tabs/Competitors";
 import Citations from "./tabs/Citations";
-import Explorer from "./tabs/Explorer";
 import { useFilter } from "./context/useFilter";
 import { PERIOD_OPTIONS } from "./context/FilterContextConstants";
-import Topics from "./tabs/Topics";
+import Prompts from "./tabs/Prompts";
 import Recommendations from "./tabs/Recommendations";
 
-const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Explorer", "Topics", "Recommendations"];
+const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Prompts", "Recommendations"];
 
 function App() {
   const [activeTab, setActiveTab] = useState("Overview");
@@ -52,8 +51,7 @@ function App() {
       {activeTab === "Sentiment" && <Sentiment />}
       {activeTab === "Competitors" && <Competitors />}
       {activeTab === "Citations" && <Citations />}
-      {activeTab === "Explorer" && <Explorer />}
-      {activeTab === "Topics" && <Topics />}
+      {activeTab === "Prompts" && <Prompts />}
       {activeTab === "Recommendations" && <Recommendations />}
     </div>
   );

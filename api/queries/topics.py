@@ -18,7 +18,54 @@ def _topic_sort_key(topic_name):
         return len(TOPIC_ORDER)  # unknown topics go last
 
 
-def get_topics(days=None):
+MENTION_TYPES = ("course", "general")
+SENTIMENT_TYPES = ("credibility", "competition")
+
+
+def _topic_filter_plan(question_type=None, engine=None, school=None, qc_mentioned=None, sentiment=None):
+    """
+    Shared filter-resolution logic for get_topics / get_topics_over_time.
+
+    Returns (include_mention, mention_types, mention_conditions, mention_params,
+             include_sentiment, sentiment_types, sentiment_conditions, sentiment_params)
+    where *_conditions/*_params are extra SQL condition strings (parameterized with %s)
+    and their bound values, beyond the base topic/question_type/date filters.
+    """
+    mention_types = [t for t in MENTION_TYPES if question_type in (None, "All", t)]
+    sentiment_types = [t for t in SENTIMENT_TYPES if question_type in (None, "All", t)]
+
+    # qc_mentioned only exists on mention_responses; sentiment only on sentiment_responses.
+    # Filtering by one implicitly excludes the other branch of the union.
+    include_mention = sentiment is None and bool(mention_types)
+    include_sentiment = qc_mentioned is None and bool(sentiment_types)
+
+    mention_conditions, mention_params = [], []
+    if engine:
+        mention_conditions.append("m.engine = %s")
+        mention_params.append(engine)
+    if school:
+        mention_conditions.append("q.school = %s")
+        mention_params.append(school)
+    if qc_mentioned is not None:
+        mention_conditions.append("m.qc_mentioned = %s")
+        mention_params.append(qc_mentioned)
+
+    sentiment_conditions, sentiment_params = [], []
+    if engine:
+        sentiment_conditions.append("s.engine = %s")
+        sentiment_params.append(engine)
+    if school:
+        sentiment_conditions.append("q.school = %s")
+        sentiment_params.append(school)
+    if sentiment:
+        sentiment_conditions.append("s.qc_sentiment = %s")
+        sentiment_params.append(sentiment)
+
+    return (include_mention, mention_types, mention_conditions, mention_params,
+            include_sentiment, sentiment_types, sentiment_conditions, sentiment_params)
+
+
+def get_topics(days=None, engine=None, question_type=None, school=None, qc_mentioned=None, sentiment=None):
     """
     Returns the lightweight topic/prompt list used by the accordion table.
     Groups by q.topic (new column, parallel to q.school).
@@ -31,62 +78,72 @@ def get_topics(days=None):
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
 
-    # ── mention-type prompts ─────────────────────────────────────────────────
-    mention_query = f"""
-        SELECT
-            COALESCE(q.topic, 'Uncategorized') AS topic,
-            q.id                               AS question_id,
-            q.question,
-            m.engine,
-            AVG(CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END) * 100  AS response_rate,
-            AVG(CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) * 100   AS citation_rate,
-            -- SOV numerator: total rows where QC was mentioned
-            SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float      AS qc_mentions,
-            -- SOV denominator: QC mentions + total distinct competitor slots
-            SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float
-              + COUNT(DISTINCT comp)::float                               AS total_brand_slots,
-            array_remove(array_agg(DISTINCT comp), NULL)                 AS competitors
-        FROM mention_responses m
-        JOIN questions q ON q.id = m.question_id
-        CROSS JOIN LATERAL unnest(
-            CASE WHEN m.competitors IS NULL OR array_length(m.competitors, 1) = 0
-                 THEN ARRAY[NULL::text]
-                 ELSE m.competitors
-            END
-        ) AS comp
-        WHERE q.topic IS NOT NULL
-          AND q.question_type IN ('course', 'general')
-          {date_m}
-        GROUP BY q.topic, q.id, q.question, m.engine
-        ORDER BY q.topic, q.id, m.engine;
-    """
+    (include_mention, mention_types, mention_extra, mention_params,
+     include_sentiment, sentiment_types, sentiment_extra, sentiment_params) = _topic_filter_plan(
+        question_type, engine, school, qc_mentioned, sentiment
+    )
 
-    # ── sentiment-type prompts ───────────────────────────────────────────────
-    sentiment_query = f"""
-        SELECT
-            COALESCE(q.topic, 'Uncategorized') AS topic,
-            q.id                               AS question_id,
-            q.question,
-            s.engine,
-            COUNT(*) FILTER (WHERE s.qc_sentiment = 'positive') AS pos_count,
-            COUNT(*) FILTER (WHERE s.qc_sentiment = 'neutral')  AS neu_count,
-            COUNT(*) FILTER (WHERE s.qc_sentiment = 'negative') AS neg_count,
-            COUNT(*)                                             AS total_count
-        FROM sentiment_responses s
-        JOIN questions q ON q.id = s.question_id
-        WHERE q.topic IS NOT NULL
-          AND q.question_type IN ('credibility', 'competition')
-          {date_s}
-        GROUP BY q.topic, q.id, q.question, s.engine
-        ORDER BY q.topic, q.id, s.engine;
-    """
+    mention_rows, sentiment_rows = [], []
 
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(mention_query)
-            mention_rows = cur.fetchall()
-            cur.execute(sentiment_query)
-            sentiment_rows = cur.fetchall()
+            if include_mention:
+                mention_where = " AND ".join(
+                    ["q.topic IS NOT NULL", "q.question_type = ANY(%s)"] + mention_extra
+                )
+                mention_query = f"""
+                    SELECT
+                        COALESCE(q.topic, 'Uncategorized') AS topic,
+                        q.id                               AS question_id,
+                        q.question,
+                        m.engine,
+                        AVG(CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END) * 100  AS response_rate,
+                        AVG(CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) * 100   AS citation_rate,
+                        -- SOV numerator: total rows where QC was mentioned
+                        SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float      AS qc_mentions,
+                        -- SOV denominator: QC mentions + total distinct competitor slots
+                        SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float
+                          + COUNT(DISTINCT comp)::float                               AS total_brand_slots,
+                        array_remove(array_agg(DISTINCT comp), NULL)                 AS competitors
+                    FROM mention_responses m
+                    JOIN questions q ON q.id = m.question_id
+                    CROSS JOIN LATERAL unnest(
+                        CASE WHEN m.competitors IS NULL OR array_length(m.competitors, 1) = 0
+                             THEN ARRAY[NULL::text]
+                             ELSE m.competitors
+                        END
+                    ) AS comp
+                    WHERE {mention_where}
+                      {date_m}
+                    GROUP BY q.topic, q.id, q.question, m.engine
+                    ORDER BY q.topic, q.id, m.engine;
+                """
+                cur.execute(mention_query, [mention_types] + mention_params)
+                mention_rows = cur.fetchall()
+
+            if include_sentiment:
+                sentiment_where = " AND ".join(
+                    ["q.topic IS NOT NULL", "q.question_type = ANY(%s)"] + sentiment_extra
+                )
+                sentiment_query = f"""
+                    SELECT
+                        COALESCE(q.topic, 'Uncategorized') AS topic,
+                        q.id                               AS question_id,
+                        q.question,
+                        s.engine,
+                        COUNT(*) FILTER (WHERE s.qc_sentiment = 'positive') AS pos_count,
+                        COUNT(*) FILTER (WHERE s.qc_sentiment = 'neutral')  AS neu_count,
+                        COUNT(*) FILTER (WHERE s.qc_sentiment = 'negative') AS neg_count,
+                        COUNT(*)                                             AS total_count
+                    FROM sentiment_responses s
+                    JOIN questions q ON q.id = s.question_id
+                    WHERE {sentiment_where}
+                      {date_s}
+                    GROUP BY q.topic, q.id, q.question, s.engine
+                    ORDER BY q.topic, q.id, s.engine;
+                """
+                cur.execute(sentiment_query, [sentiment_types] + sentiment_params)
+                sentiment_rows = cur.fetchall()
 
     # ── aggregate mention rows ───────────────────────────────────────────────
     mention_topics = {}  # topic → {prompts: {qid: {...}}}
@@ -236,7 +293,7 @@ def get_topics(days=None):
     return result
 
 
-def get_topics_over_time(days=None):
+def get_topics_over_time(days=None, engine=None, question_type=None, school=None, qc_mentioned=None, sentiment=None):
     """
     Returns time-series data for the top-level topics chart.
     One data point per (topic, day); score = visibility % for mention topics,
@@ -247,44 +304,56 @@ def get_topics_over_time(days=None):
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
 
-    mention_q = f"""
-        SELECT
-            COALESCE(q.topic, 'Uncategorized') AS topic,
-            date(m.created_at)                 AS day,
-            AVG(
-                (CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END +
-                 CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) / 2.0
-            ) * 100 AS score
-        FROM mention_responses m
-        JOIN questions q ON q.id = m.question_id
-        WHERE q.topic IS NOT NULL
-          AND q.question_type IN ('course', 'general')
-          {date_m}
-        GROUP BY q.topic, date(m.created_at)
-        ORDER BY day, q.topic;
-    """
+    (include_mention, mention_types, mention_extra, mention_params,
+     include_sentiment, sentiment_types, sentiment_extra, sentiment_params) = _topic_filter_plan(
+        question_type, engine, school, qc_mentioned, sentiment
+    )
 
-    sentiment_q = f"""
-        SELECT
-            COALESCE(q.topic, 'Uncategorized') AS topic,
-            date(s.created_at)                 AS day,
-            COUNT(*) FILTER (WHERE s.qc_sentiment = 'positive') * 100.0
-                / NULLIF(COUNT(*), 0)           AS score
-        FROM sentiment_responses s
-        JOIN questions q ON q.id = s.question_id
-        WHERE q.topic IS NOT NULL
-          AND q.question_type IN ('credibility', 'competition')
-          {date_s}
-        GROUP BY q.topic, date(s.created_at)
-        ORDER BY day, q.topic;
-    """
+    mention_rows, sentiment_rows = [], []
 
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(mention_q)
-            mention_rows = cur.fetchall()
-            cur.execute(sentiment_q)
-            sentiment_rows = cur.fetchall()
+            if include_mention:
+                mention_where = " AND ".join(
+                    ["q.topic IS NOT NULL", "q.question_type = ANY(%s)"] + mention_extra
+                )
+                mention_q = f"""
+                    SELECT
+                        COALESCE(q.topic, 'Uncategorized') AS topic,
+                        date(m.created_at)                 AS day,
+                        AVG(
+                            (CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END +
+                             CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) / 2.0
+                        ) * 100 AS score
+                    FROM mention_responses m
+                    JOIN questions q ON q.id = m.question_id
+                    WHERE {mention_where}
+                      {date_m}
+                    GROUP BY q.topic, date(m.created_at)
+                    ORDER BY day, q.topic;
+                """
+                cur.execute(mention_q, [mention_types] + mention_params)
+                mention_rows = cur.fetchall()
+
+            if include_sentiment:
+                sentiment_where = " AND ".join(
+                    ["q.topic IS NOT NULL", "q.question_type = ANY(%s)"] + sentiment_extra
+                )
+                sentiment_q = f"""
+                    SELECT
+                        COALESCE(q.topic, 'Uncategorized') AS topic,
+                        date(s.created_at)                 AS day,
+                        COUNT(*) FILTER (WHERE s.qc_sentiment = 'positive') * 100.0
+                            / NULLIF(COUNT(*), 0)           AS score
+                    FROM sentiment_responses s
+                    JOIN questions q ON q.id = s.question_id
+                    WHERE {sentiment_where}
+                      {date_s}
+                    GROUP BY q.topic, date(s.created_at)
+                    ORDER BY day, q.topic;
+                """
+                cur.execute(sentiment_q, [sentiment_types] + sentiment_params)
+                sentiment_rows = cur.fetchall()
 
     topics_seen = {}   # name → kind
     days_data   = {}   # day_str → {topic: score}
@@ -563,3 +632,33 @@ def get_prompt_detail(prompt_id: str, days=None):
         "competitors": competitors,
         "llms":        llms,
     }
+
+
+def get_prompt_responses(prompt_id: str, engine: str, days=None):
+    """
+    Full response history for one (prompt, engine) pair, newest first.
+    Powers the response-drawer's prev/next navigation.
+
+    Returns: [{response, date}, ...] or None if the prompt doesn't exist.
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT question_type FROM questions WHERE id = %s", (prompt_id,))
+            row = cur.fetchone()
+            if not row:
+                return None
+            question_type = row[0]
+
+            is_mention = question_type in MENTION_TYPES
+            table = "mention_responses" if is_mention else "sentiment_responses"
+            date_filter = _date_filter(days)
+
+            cur.execute(f"""
+                SELECT raw_response, created_at
+                FROM {table}
+                WHERE question_id = %s AND engine = %s {date_filter}
+                ORDER BY created_at DESC;
+            """, (prompt_id, engine))
+            rows = cur.fetchall()
+
+    return [{"response": r[0], "date": str(r[1])} for r in rows]
