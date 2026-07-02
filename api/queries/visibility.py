@@ -1,9 +1,8 @@
-from api.db import get_connection, _date_filter
+from api.db import get_connection, _date_filter, _school_clause_params
 
 def get_citation_rate_by_engine(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT DATE(m.created_at) as day, m.engine,
             AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as citation_rate
@@ -27,8 +26,7 @@ def get_citation_rate_by_engine(days=None, school=None):
 
 def get_citation_rate_by_category(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT q.question_type as category,
             AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as citation_rate
@@ -46,8 +44,7 @@ def get_citation_rate_by_category(days=None, school=None):
 
 def get_citation_rate_by_school(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT q.school,
             AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as citation_rate
@@ -66,8 +63,7 @@ def get_citation_rate_by_school(days=None, school=None):
 
 def get_mention_rate_by_engine(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT DATE(m.created_at) as day, m.engine,
             AVG(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END) as mention_rate
@@ -91,8 +87,7 @@ def get_mention_rate_by_engine(days=None, school=None):
 
 def get_mention_rate_by_category(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT q.question_type as category,
             AVG(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END) as mention_rate
@@ -110,8 +105,7 @@ def get_mention_rate_by_category(days=None, school=None):
 
 def get_mention_rate_by_school(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT q.school,
             AVG(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END) as mention_rate

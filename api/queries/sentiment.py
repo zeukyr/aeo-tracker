@@ -1,9 +1,8 @@
-from api.db import get_connection, _date_filter
+from api.db import get_connection, _date_filter, _school_clause_params
 
 def get_sentiment_distribution(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT DATE(s.created_at) as day, s.qc_sentiment, COUNT(*) as count
         FROM sentiment_responses s
@@ -27,8 +26,7 @@ def get_sentiment_distribution(days=None, school=None):
 
 def get_top_concerns(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(s.concerns_raised) as concern
@@ -50,8 +48,7 @@ def get_top_concerns(days=None, school=None):
 
 def get_top_positives(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(s.positives_raised) as positive

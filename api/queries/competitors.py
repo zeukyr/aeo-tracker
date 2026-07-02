@@ -1,9 +1,8 @@
-from api.db import get_connection, _date_filter
+from api.db import get_connection, _date_filter, _school_clause_params
 
 def get_top_competitors_by_school(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT
             b.brand_name as competitor,
@@ -25,8 +24,7 @@ def get_top_competitors_by_school(days=None, school=None):
 
 def get_competitor_win_rate(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         SELECT s.competitor_won,
             COUNT(*) as wins,

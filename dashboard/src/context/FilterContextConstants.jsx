@@ -7,6 +7,7 @@ export const PERIOD_OPTIONS = [
 
 export const SCHOOL_OPTIONS = [
   "All",
+  "General",
   "QC Pet Studies",
   "QC Event Planning",
   "QC Design School",

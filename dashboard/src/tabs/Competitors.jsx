@@ -5,6 +5,7 @@ import { CompetitorWinRate } from "./CompetitorWinRate";
 
 const ALL_SCHOOLS = [
   "All",
+  "General",
   "QC Pet Studies",
   "QC Event Planning",
   "QC Design School",

@@ -39,13 +39,20 @@ def _topic_filter_plan(question_type=None, engine=None, school=None, qc_mentione
     include_mention = sentiment is None and bool(mention_types)
     include_sentiment = qc_mentioned is None and bool(sentiment_types)
 
+    if school == "General":
+        school_cond, school_param = "q.school IS NULL", []
+    elif school:
+        school_cond, school_param = "q.school = %s", [school]
+    else:
+        school_cond, school_param = None, []
+
     mention_conditions, mention_params = [], []
     if engine:
         mention_conditions.append("m.engine = %s")
         mention_params.append(engine)
-    if school:
-        mention_conditions.append("q.school = %s")
-        mention_params.append(school)
+    if school_cond:
+        mention_conditions.append(school_cond)
+        mention_params.extend(school_param)
     if qc_mentioned is not None:
         mention_conditions.append("m.qc_mentioned = %s")
         mention_params.append(qc_mentioned)
@@ -54,9 +61,9 @@ def _topic_filter_plan(question_type=None, engine=None, school=None, qc_mentione
     if engine:
         sentiment_conditions.append("s.engine = %s")
         sentiment_params.append(engine)
-    if school:
-        sentiment_conditions.append("q.school = %s")
-        sentiment_params.append(school)
+    if school_cond:
+        sentiment_conditions.append(school_cond)
+        sentiment_params.extend(school_param)
     if sentiment:
         sentiment_conditions.append("s.qc_sentiment = %s")
         sentiment_params.append(sentiment)

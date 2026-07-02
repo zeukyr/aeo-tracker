@@ -1,7 +1,4 @@
-from api.db import get_connection, _date_filter, _prev_date_filter
-
-def _school_clause_params(school):
-    return ("AND q.school = %s" if school else ""), ([school] if school else [])
+from api.db import get_connection, _date_filter, _prev_date_filter, _school_clause_params
 
 def fetch_avg_rank(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)

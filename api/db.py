@@ -17,3 +17,10 @@ def _prev_date_filter(days, alias=None):
     if days:
         return f"AND {prefix}created_at >= now() - interval '{int(days) * 2} days' AND {prefix}created_at < now() - interval '{int(days)} days'"
     return ""
+
+def _school_clause_params(school):
+    if school == "General":
+        return "AND q.school IS NULL", []
+    if school:
+        return "AND q.school = %s", [school]
+    return "", []

@@ -1,4 +1,4 @@
-from api.db import get_connection, _date_filter
+from api.db import get_connection, _date_filter, _school_clause_params
 
 QC_ILIKE = """
     cited_url ILIKE '%%qccareerschool%%'
@@ -14,8 +14,7 @@ SOURCE_TYPE_CASE = f"""
 
 def get_citations(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(m.citations) as cited_url
@@ -38,8 +37,7 @@ def get_citations(days=None, school=None):
 
 def get_qc_citations(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(m.citations) as cited_url
@@ -61,8 +59,7 @@ def get_qc_citations(days=None, school=None):
 
 def get_citations_by_school(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(m.citations) as cited_url, q.school
@@ -85,8 +82,7 @@ def get_citations_by_school(days=None, school=None):
 
 def get_sentiment_citations(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
-    school_clause = "AND q.school = %s" if school else ""
-    params = [school] if school else []
+    school_clause, params = _school_clause_params(school)
     query = f"""
         WITH expanded AS (
             SELECT unnest(s.citations) as cited_url, q.school, q.question_type
