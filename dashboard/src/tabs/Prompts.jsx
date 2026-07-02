@@ -372,8 +372,8 @@ function ResponseDrawer({ drawer, onClose }) {
   }, [open, promptId, engine, days]);
 
   const total = history.length;
-  const goOlder = () => setIndex(i => Math.min(i + 1, total - 1));
-  const goNewer = () => setIndex(i => Math.max(i - 1, 0));
+  const goPrevious = () => setIndex(i => Math.min(i + 1, total - 1));
+  const goNext = () => setIndex(i => Math.max(i - 1, 0));
 
   useEffect(() => {
     if (!open) return;
@@ -447,28 +447,28 @@ function ResponseDrawer({ drawer, onClose }) {
             flexShrink: 0,
           }}>
             <button
-              onClick={goOlder}
+              onClick={goPrevious}
               disabled={index >= total - 1}
               style={{
                 background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
                 fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
                 display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
               }}
-              aria-label="Older response"
+              aria-label="Previous response"
             >
-              ← Older
+              ← Previous
             </button>
             <button
-              onClick={goNewer}
+              onClick={goNext}
               disabled={index <= 0}
               style={{
                 background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
                 fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
                 display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
               }}
-              aria-label="Newer response"
+              aria-label="Next response"
             >
-              Newer →
+              Next →
             </button>
           </div>
         )}
