@@ -25,7 +25,30 @@ def get_top_competitors_by_school(days=None, school=None):
 def get_competitor_citations(competitor, days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
     school_clause, school_params = _school_clause_params(school)
-    query = f"""
+
+    # Primary: read from pre-classified table populated at run time.
+    classified_query = f"""
+        SELECT ccm.url, COUNT(*) AS count
+        FROM competitor_citation_map ccm
+        JOIN mention_responses m ON m.id = ccm.mention_response_id
+        LEFT JOIN questions q ON q.id = m.question_id
+        WHERE ccm.competitor_name = %s
+          {filter_clause} {school_clause}
+        GROUP BY ccm.url
+        ORDER BY count DESC
+        LIMIT 10;
+    """
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(classified_query, [competitor] + school_params)
+            rows = cur.fetchall()
+
+    if rows:
+        return [{"url": r[0], "count": r[1]} for r in rows]
+
+    # Fallback for data predating the migration: sole-competitor responses only.
+    fallback_query = f"""
         WITH competitor_responses AS (
             SELECT DISTINCT m.id
             FROM mention_responses m
@@ -38,7 +61,16 @@ def get_competitor_citations(competitor, days=None, school=None):
         expanded AS (
             SELECT unnest(m.citations) AS cited_url
             FROM mention_responses m
-            WHERE m.id IN (SELECT id FROM competitor_responses)
+            WHERE m.id IN (
+                SELECT cr.id FROM competitor_responses cr
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM mention_response_brands b2
+                    WHERE b2.mention_response_id = cr.id
+                      AND b2.brand_type = 'competitor'
+                      AND b2.brand_name <> %s
+                )
+            )
+            AND m.citations IS NOT NULL
         )
         SELECT cited_url, COUNT(*) AS count
         FROM expanded
@@ -47,10 +79,12 @@ def get_competitor_citations(competitor, days=None, school=None):
         ORDER BY count DESC
         LIMIT 10;
     """
+
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query, [competitor] + school_params)
+            cur.execute(fallback_query, [competitor, competitor] + school_params)
             rows = cur.fetchall()
+
     return [{"url": r[0], "count": r[1]} for r in rows]
 
 
