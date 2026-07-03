@@ -10,6 +10,7 @@ from api.queries import (
     get_top_positives,
     get_top_concerns,
     get_top_competitors_by_school,
+    get_competitor_citations,
     get_citations,
     get_summary,
     get_competitor_win_rate,
@@ -108,6 +109,10 @@ def top_competitors_by_school(days: int = None, school: str = None):
 @app.get("/api/competitor-win-rate")
 def competitor_win_rate(days: int = None, school: str = None):
     return get_competitor_win_rate(days, school)
+
+@app.get("/api/competitor-citations")
+def competitor_citations(competitor: str, days: int = None, school: str = None):
+    return get_competitor_citations(competitor, days, school)
 
 
 @app.get("/api/qc-citations")
