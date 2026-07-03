@@ -14,6 +14,7 @@ from api.queries.sentiment import (
 from api.queries.competitors import (
     get_top_competitors_by_school,
     get_competitor_win_rate,
+    get_competitor_citations,
 )
 from api.queries.citations import (
     get_citations,
