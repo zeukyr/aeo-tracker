@@ -3,6 +3,7 @@ from src.logger import logger
 from src.database import get_questions, start_run, finish_run, save_mention_response, save_sentiment_response
 from src.querier import query_all_engines
 from src.parsing.parser import parse_response
+from src.classify_run_citations import classify_and_store
 import time
 
 def main():
@@ -57,6 +58,12 @@ def main():
             time.sleep(2)
         finish_run(run_id, status="success")
         logger.info("Run complete")
+        try:
+            logger.info("Classifying competitor citations...")
+            classify_and_store(run_id)
+            logger.info("Citation classification complete")
+        except Exception as e:
+            logger.error(f"Citation classification failed (non-fatal): {e}")
 
     except Exception as e:
         finish_run(run_id, status="failed", error=str(e))
