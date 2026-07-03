@@ -112,7 +112,7 @@ function CompetitorRow({ rank, name, count, maxCount, expanded, onToggle, citati
       </div>
 
       {expanded && (
-        <div style={{ paddingLeft: 32 }}>
+        <div style={{ paddingLeft: 50 }}>
           <CitationsPanel citations={citations} loading={loadingCitations} />
         </div>
       )}
