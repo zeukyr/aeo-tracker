@@ -13,7 +13,7 @@ const ALL_SCHOOLS = [
   "QC Wellness Studies",
 ];
 
-const PURPLE = "#7c3aed";
+const PURPLE = "#2563eb";
 const QC_RE  = /qccareerschool|qcpetstudies|qceventplanning|qcdesignschool|qcmakeupacademy/i;
 
 // ─── citation panel shown when a competitor is expanded ───────────────────────
@@ -88,18 +88,18 @@ function CompetitorRow({ rank, name, count, maxCount, expanded, onToggle, citati
       onClick={() => onToggle(name)}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
-          {rank}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+          <span style={{ fontSize: 14, color: expanded ? PURPLE : "#c4c4c0" }}>{expanded ? "▲" : "▼"}</span>
+          <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b" }}>
+            {rank}
+          </span>
+        </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
             <span style={{ fontSize: 13, color: expanded ? PURPLE : "#111", fontWeight: rank === 1 || expanded ? 500 : 400 }}>
               {name}
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-              <span style={{ fontSize: 12, color: "#6b6b6b" }}>{count}</span>
-              <span style={{ fontSize: 10, color: expanded ? PURPLE : "#c4c4c0" }}>{expanded ? "▲" : "▼"}</span>
-            </div>
+            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
           </div>
           <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
