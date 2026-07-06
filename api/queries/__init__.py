@@ -21,6 +21,7 @@ from api.queries.citations import (
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
+    get_citation_prompts,
 )
 from api.queries.cited_urls import get_reddit_targets, set_reddit_thread_status
 from api.queries.summary import get_summary

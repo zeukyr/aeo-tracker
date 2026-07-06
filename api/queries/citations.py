@@ -127,3 +127,29 @@ def get_sentiment_citations(days=None, school=None):
     rows = [{"url": r[0], "school": r[1], "question_type": r[2], "count": r[3], "source_type": r[4]}
             for r in rows]
     return _merge_normalized(rows, ["url", "school", "question_type"])
+
+
+def get_citation_prompts(url, competitor, days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
+    school_clause, school_params = _school_clause_params(school)
+    query = f"""
+        SELECT
+            q.id,
+            q.question,
+            q.school,
+            q.question_type,
+            COUNT(DISTINCT m.id) AS response_count
+        FROM competitor_citation_map ccm
+        JOIN mention_responses m ON m.id = ccm.mention_response_id
+        JOIN questions q ON q.id = m.question_id
+        WHERE ccm.url = %s
+          AND ccm.competitor_name = %s
+          {filter_clause} {school_clause}
+        GROUP BY q.id, q.question, q.school, q.question_type
+        ORDER BY response_count DESC, q.question;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [url, competitor] + school_params)
+            rows = cur.fetchall()
+    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4]} for r in rows]
