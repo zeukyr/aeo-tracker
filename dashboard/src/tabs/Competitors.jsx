@@ -80,7 +80,7 @@ function CitationsPanel({ citations, loading }) {
 }
 
 // ─── single competitor row with expandable citations ──────────────────────────
-function CompetitorRow({ rank, name, count, maxCount, expanded, onToggle, citations, loadingCitations }) {
+function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations }) {
   const pct = Math.round((count / maxCount) * 100);
   return (
     <div
@@ -99,7 +99,11 @@ function CompetitorRow({ rank, name, count, maxCount, expanded, onToggle, citati
             <span style={{ fontSize: 13, color: expanded ? PURPLE : "#111", fontWeight: rank === 1 || expanded ? 500 : 400 }}>
               {name}
             </span>
-            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+              <span title="Average mention rank" style={{ fontSize: 11, color: "#9b9b9b" }}>#{avgRank} avg rank</span>
+              <span title="Share of voice" style={{ fontSize: 11, color: "#9b9b9b" }}>{shareOfVoice}% SoV</span>
+              <span style={{ fontSize: 12, color: "#6b6b6b" }}>{count}</span>
+            </div>
           </div>
           <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
@@ -191,13 +195,15 @@ function Competitors() {
 
   const aggregated = Object.values(
     filtered.reduce((acc, c) => {
-      if (!acc[c.competitor]) acc[c.competitor] = { competitor: c.competitor, count: 0 };
+      if (!acc[c.competitor]) acc[c.competitor] = { competitor: c.competitor, count: 0, sum_rank: 0 };
       acc[c.competitor].count += c.count;
+      acc[c.competitor].sum_rank += c.sum_rank ?? 0;
       return acc;
     }, {})
   ).sort((a, b) => b.count - a.count).slice(0, 10);
 
   const maxCount = aggregated[0]?.count ?? 1;
+  const totalCount = aggregated.reduce((s, c) => s + c.count, 0);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -235,6 +241,8 @@ function Competitors() {
                 name={c.competitor}
                 count={c.count}
                 maxCount={maxCount}
+                shareOfVoice={Math.round(c.count / totalCount * 100)}
+                avgRank={(c.sum_rank / c.count).toFixed(1)}
                 expanded={expandedCompetitor === c.competitor}
                 onToggle={toggleCompetitor}
                 citations={citationsCache[c.competitor]}

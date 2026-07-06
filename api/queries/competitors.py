@@ -7,7 +7,8 @@ def get_top_competitors_by_school(days=None, school=None):
         SELECT
             b.brand_name as competitor,
             q.school,
-            COUNT(*) as count
+            COUNT(*) as count,
+            SUM(b.rank_position) as sum_rank
         FROM mention_response_brands b
         JOIN mention_responses m ON m.id = b.mention_response_id
         LEFT JOIN questions q ON q.id = m.question_id
@@ -19,7 +20,7 @@ def get_top_competitors_by_school(days=None, school=None):
         with conn.cursor() as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
-    return [{"competitor": r[0], "school": r[1], "count": r[2]} for r in rows]
+    return [{"competitor": r[0], "school": r[1], "count": r[2], "sum_rank": r[3]} for r in rows]
 
 
 def get_competitor_citations(competitor, days=None, school=None):
