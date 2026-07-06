@@ -3,16 +3,6 @@ import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 import { CompetitorWinRate } from "./CompetitorWinRate";
 
-const ALL_SCHOOLS = [
-  "All",
-  "General",
-  "QC Pet Studies",
-  "QC Event Planning",
-  "QC Design School",
-  "QC Makeup Academy",
-  "QC Wellness Studies",
-];
-
 const PURPLE = "#2563eb";
 const QC_RE  = /qccareerschool|qcpetstudies|qceventplanning|qcdesignschool|qcmakeupacademy/i;
 
@@ -79,31 +69,53 @@ function CitationsPanel({ citations, loading }) {
   );
 }
 
+// fixed widths for the right-side metric columns only
+const COL = { left: 44, avgRank: 72, sov: 52 };
+
+function ColHeader({ label, colKey, sortBy, onSort, width, style = {} }) {
+  const active = sortBy === colKey;
+  return (
+    <button
+      onClick={() => onSort(colKey)}
+      style={{
+        width, flexShrink: 0,
+        textAlign: "right", fontSize: 10, fontWeight: 700,
+        textTransform: "uppercase", letterSpacing: "0.06em",
+        color: active ? PURPLE : "#9b9b9b",
+        background: "none", border: "none", cursor: "pointer",
+        padding: 0, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 3,
+        ...style,
+      }}
+    >
+      {label}
+      <span style={{ fontSize: 9 }}>{active ? "▼" : ""}</span>
+    </button>
+  );
+}
+
 // ─── single competitor row with expandable citations ──────────────────────────
 function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations }) {
   const pct = Math.round((count / maxCount) * 100);
   return (
-    <div
-      style={{ cursor: "pointer" }}
-      onClick={() => onToggle(name)}
-    >
+    <div style={{ cursor: "pointer" }} onClick={() => onToggle(name)}>
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+        {/* arrow + rank */}
+        <div style={{ width: COL.left, display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
           <span style={{ fontSize: 14, color: expanded ? PURPLE : "#c4c4c0" }}>{expanded ? "▲" : "▼"}</span>
-          <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b" }}>
-            {rank}
-          </span>
+          <span style={{ width: 20, textAlign: "right", fontSize: 12, color: "#9b9b9b" }}>{rank}</span>
         </div>
+        {/* name + count integrated with bar */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-            <span style={{ fontSize: 13, color: expanded ? PURPLE : "#111", fontWeight: rank === 1 || expanded ? 500 : 400 }}>
+            <span style={{
+              fontSize: 13, color: expanded ? PURPLE : "#111",
+              fontWeight: rank === 1 || expanded ? 500 : 400,
+              whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+              marginRight: 8,
+            }}>
               {name}
             </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-              <span title="Average mention rank" style={{ fontSize: 11, color: "#9b9b9b" }}>#{avgRank} avg rank</span>
-              <span title="Share of voice" style={{ fontSize: 11, color: "#9b9b9b" }}>{shareOfVoice}% SoV</span>
-              <span style={{ fontSize: 12, color: "#6b6b6b" }}>{count}</span>
-            </div>
+            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
           </div>
           <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
@@ -113,6 +125,9 @@ function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, exp
             }} />
           </div>
         </div>
+        {/* right-side metric columns */}
+        <span style={{ width: COL.avgRank, textAlign: "right", fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>#{avgRank}</span>
+        <span style={{ width: COL.sov,     textAlign: "right", fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{shareOfVoice}%</span>
       </div>
 
       {expanded && (
@@ -128,20 +143,20 @@ function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, exp
 function Competitors() {
   const { days, school } = useFilter();
   const [competitorsBySchool, setCompetitorsBySchool] = useState([]);
-  const [selectedSchool, setSelectedSchool] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [expandedCompetitor, setExpandedCompetitor] = useState(null);
   const [citationsCache, setCitationsCache]         = useState({});
   const [loadingCitations, setLoadingCitations]     = useState(new Set());
+  const [sortBy, setSortBy]                         = useState("count");
 
   // Clear citation cache whenever the effective filter changes
   useEffect(() => {
     setExpandedCompetitor(null);
     setCitationsCache({});
     setLoadingCitations(new Set());
-  }, [days, school, selectedSchool]);
+  }, [days, school]);
 
   useEffect(() => {
     setLoading(true);
@@ -164,10 +179,7 @@ function Competitors() {
 
     if (citationsCache[name] !== undefined || loadingCitations.has(name)) return;
 
-    // Effective school: local filter takes precedence over global
-    const effectiveSchool = selectedSchool !== "All" ? selectedSchool
-                          : (school && school !== "All") ? school
-                          : null;
+    const effectiveSchool = (school && school !== "All") ? school : null;
 
     setLoadingCitations(prev => new Set([...prev, name]));
     const params = new URLSearchParams({ competitor: name });
@@ -189,66 +201,71 @@ function Competitors() {
   if (loading) return <p className="state-msg">Loading...</p>;
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;
 
-  const filtered = selectedSchool === "All"
-    ? competitorsBySchool
-    : competitorsBySchool.filter(c => c.school === selectedSchool);
-
-  const aggregated = Object.values(
-    filtered.reduce((acc, c) => {
+  const base = Object.values(
+    competitorsBySchool.reduce((acc, c) => {
       if (!acc[c.competitor]) acc[c.competitor] = { competitor: c.competitor, count: 0, sum_rank: 0 };
       acc[c.competitor].count += c.count;
       acc[c.competitor].sum_rank += c.sum_rank ?? 0;
       return acc;
     }, {})
-  ).sort((a, b) => b.count - a.count).slice(0, 10);
+  ).slice(0, 10);
 
-  const maxCount = aggregated[0]?.count ?? 1;
-  const totalCount = aggregated.reduce((s, c) => s + c.count, 0);
+  const totalCount = base.reduce((s, c) => s + c.count, 0);
+
+  // Attach derived metrics then sort
+  const withMetrics = base.map(c => ({
+    ...c,
+    shareOfVoice: Math.round(c.count / totalCount * 100),
+    avgRank: parseFloat((c.sum_rank / c.count).toFixed(1)),
+  }));
+
+  const aggregated = [...withMetrics].sort((a, b) => {
+    if (sortBy === "avgRank") return a.avgRank - b.avgRank;   // lower = better
+    if (sortBy === "sov")     return b.shareOfVoice - a.shareOfVoice;
+    return b.count - a.count;
+  });
+
+  const maxCount = Math.max(...aggregated.map(c => c.count), 1);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
       <div className="card">
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 4 }}>
-          <div>
-            <p className="panel-title">Top competitors mentioned</p>
-            <p className="panel-subtitle">
-              {selectedSchool === "All" ? "Across all schools" : `In ${selectedSchool} questions`}
-            </p>
-          </div>
-          <select
-            style={{
-              fontSize: 12, color: "#6b6b6b",
-              border: "0.5px solid rgba(0,0,0,0.15)",
-              borderRadius: 6, padding: "4px 8px",
-              background: "#fff", cursor: "pointer", flexShrink: 0,
-            }}
-            value={selectedSchool}
-            onChange={e => setSelectedSchool(e.target.value)}
-          >
-            {ALL_SCHOOLS.map(s => <option key={s} value={s}>{s}</option>)}
-          </select>
+        <div style={{ marginBottom: 4 }}>
+          <p className="panel-title">Top competitors mentioned</p>
+          <p className="panel-subtitle">Across all schools</p>
         </div>
 
         {aggregated.length === 0 ? (
           <p className="state-empty">No competitor data for this selection.</p>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 8 }}>
-            {aggregated.map((c, i) => (
-              <CompetitorRow
-                key={c.competitor}
-                rank={i + 1}
-                name={c.competitor}
-                count={c.count}
-                maxCount={maxCount}
-                shareOfVoice={Math.round(c.count / totalCount * 100)}
-                avgRank={(c.sum_rank / c.count).toFixed(1)}
-                expanded={expandedCompetitor === c.competitor}
-                onToggle={toggleCompetitor}
-                citations={citationsCache[c.competitor]}
-                loadingCitations={loadingCitations.has(c.competitor)}
-              />
-            ))}
+          <div style={{ marginTop: 8 }}>
+            {/* table header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 6, borderBottom: "1px solid #f0efec", marginBottom: 6 }}>
+              <div style={{ width: COL.left, flexShrink: 0 }} />
+              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                <ColHeader label="Citations" colKey="count" sortBy={sortBy} onSort={setSortBy} width="auto" />
+              </div>
+              <ColHeader label="Avg rank" colKey="avgRank" sortBy={sortBy} onSort={setSortBy} width={COL.avgRank} />
+              <ColHeader label="SoV"      colKey="sov"     sortBy={sortBy} onSort={setSortBy} width={COL.sov} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {aggregated.map((c, i) => (
+                <CompetitorRow
+                  key={c.competitor}
+                  rank={i + 1}
+                  name={c.competitor}
+                  count={c.count}
+                  maxCount={maxCount}
+                  shareOfVoice={c.shareOfVoice}
+                  avgRank={c.avgRank}
+                  expanded={expandedCompetitor === c.competitor}
+                  onToggle={toggleCompetitor}
+                  citations={citationsCache[c.competitor]}
+                  loadingCitations={loadingCitations.has(c.competitor)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
