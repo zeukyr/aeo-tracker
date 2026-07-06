@@ -112,10 +112,15 @@ def get_citation_prompts(url, competitor, days=None, school=None):
             q.question,
             q.school,
             q.question_type,
-            COUNT(DISTINCT m.id) AS response_count
+            COUNT(DISTINCT m.id) AS response_count,
+            ROUND(AVG(b.rank_position)::numeric, 1) AS avg_rank
         FROM competitor_citation_map ccm
         JOIN mention_responses m ON m.id = ccm.mention_response_id
         JOIN questions q ON q.id = m.question_id
+        JOIN mention_response_brands b
+          ON b.mention_response_id = m.id
+         AND b.brand_name = ccm.competitor_name
+         AND b.brand_type = 'competitor'
         WHERE ccm.url = %s
           AND ccm.competitor_name = %s
           {filter_clause} {school_clause}
@@ -126,4 +131,4 @@ def get_citation_prompts(url, competitor, days=None, school=None):
         with conn.cursor() as cur:
             cur.execute(query, [url, competitor] + school_params)
             rows = cur.fetchall()
-    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4]} for r in rows]
+    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4], "avg_rank": float(r[5]) if r[5] is not None else None} for r in rows]
