@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body
 
@@ -23,6 +23,7 @@ from api.queries import (
     get_topics_over_time,
     get_prompt_detail,
     get_prompt_responses,
+    get_health_summary,
 )
 
 from api.queries.recommendations_synthesis import (
@@ -30,6 +31,7 @@ from api.queries.recommendations_synthesis import (
     save_recommendations,
     get_saved_recommendations,
     update_recommendation_status,
+    get_generation_status,
 )
 
 app = FastAPI()
@@ -138,18 +140,32 @@ def recurring_concerns(days: int = None):
     return get_recurring_concerns(days)
 
 @app.get("/api/generate-recommendations")
-def trigger_recommendations(days: int = None):
+def trigger_recommendations(days: int = None, force: bool = False):
+    status = get_generation_status()
+    if not status["can_generate"] and not force:
+        raise HTTPException(status_code=429, detail={
+            "message": "Recommendations were generated recently; cooldown still active.",
+            **status,
+        })
     recs = generate_recommendations(days)
-    save_recommendations(recs)
-    return {"generated": len(recs), "recommendations": recs}
+    result = save_recommendations(recs)
+    return result
+
+@app.get("/api/recommendations/generation-status")
+def recommendations_generation_status():
+    return get_generation_status()
+
+@app.get("/api/recommendations/health-summary")
+def recommendations_health_summary(days: int = None, school: str = None):
+    return get_health_summary(days, school)
 
 @app.get("/api/recommendations")
-def list_recommendations():
-    return get_saved_recommendations()
+def list_recommendations(include_superseded: bool = False):
+    return get_saved_recommendations(include_superseded)
 
 @app.patch("/api/recommendations/{rec_id}")
-def patch_recommendation_status(rec_id: str, status: str = Body(..., embed=True)):
-    update_recommendation_status(rec_id, status)
+def patch_recommendation_status(rec_id: str, status: str = Body(...), implemented_at: str = Body(None)):
+    update_recommendation_status(rec_id, status, implemented_at)
     return {"updated": True}
 
 

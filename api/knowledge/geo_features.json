@@ -1,0 +1,99 @@
+{
+  "_readme": [
+    "GEO feature taxonomy - the spine of the Tab 2 scorecard",
+    "(docs/ai/recommendation-two-tab-plan.md). Each feature is scored",
+    "identically against the QC page and the top cited pages for a topic.",
+    "detection: 'deterministic' = parsed from HTML by page_facts.py;",
+    "'semantic' = judged by the scorecard's LLM pass over the extracted text.",
+    "geo_weight is a VETO FLOOR, not a ranker: prevalence among cited pages",
+    "ranks, weight only stops recommending high-prevalence-but-worthless",
+    "features. Features with weight 'low' are never auto-recommended.",
+    "Recommend rule: prevalence high AND QC missing AND geo_weight > low."
+  ],
+  "features": [
+    {
+      "id": "direct_answer_first",
+      "label": "Direct answer near top",
+      "detection": "semantic",
+      "geo_weight": "high",
+      "description": "Answers the topic's core question within the first ~150 words, before any product pitch. Judged against the topic's representative question."
+    },
+    {
+      "id": "certification_pathway",
+      "label": "Certification / pathway section",
+      "detection": "semantic",
+      "geo_weight": "high",
+      "description": "Explains certification requirements, professional bodies, and the path into the career - not just the course being sold."
+    },
+    {
+      "id": "career_outcomes",
+      "label": "Career outcomes / salary",
+      "detection": "semantic",
+      "geo_weight": "high",
+      "description": "Concrete outcomes: salary ranges, job titles, employment prospects, alumni results."
+    },
+    {
+      "id": "faq_section",
+      "label": "FAQ section",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "A visible Q&A section answering common questions in plain language."
+    },
+    {
+      "id": "faq_schema",
+      "label": "FAQPage structured data",
+      "detection": "deterministic",
+      "geo_weight": "medium",
+      "description": "FAQPage JSON-LD present in the page source."
+    },
+    {
+      "id": "question_headings",
+      "label": "Question-style headings",
+      "detection": "deterministic",
+      "geo_weight": "medium",
+      "description": "H2/H3s phrased as the questions people ask (how/what/can/should... or ending in '?'). Counted; >=2 counts as present."
+    },
+    {
+      "id": "tuition_pricing",
+      "label": "Tuition / cost breakdown",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "Actual costs stated - tuition, fees, payment plans - not 'contact us for pricing'. Deterministic pricing_signals flag is a hint, the semantic pass confirms."
+    },
+    {
+      "id": "comparison_table",
+      "label": "Comparison table",
+      "detection": "deterministic",
+      "geo_weight": "medium",
+      "description": "At least one HTML table comparing options/features/costs."
+    },
+    {
+      "id": "author_expertise",
+      "label": "Named author / expert byline",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "A named author with stated credentials or first-hand experience (E-E-A-T signal)."
+    },
+    {
+      "id": "primary_sources",
+      "label": "Cites primary sources / professional bodies",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "References professional associations, government statistics, or original data rather than only self-referential claims."
+    },
+    {
+      "id": "org_schema",
+      "label": "Organization/Course schema",
+      "detection": "deterministic",
+      "geo_weight": "low",
+      "description": "Organization or Course JSON-LD present. Low weight: rarely distinguishes cited pages."
+    },
+    {
+      "id": "video_embed",
+      "label": "Embedded video",
+      "detection": "deterministic",
+      "geo_weight": "low",
+      "description": "Embedded YouTube/Vimeo/native video. Low weight: engagement signal, weak citation signal."
+    }
+  ]
+}
