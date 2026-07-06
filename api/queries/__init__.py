@@ -21,6 +21,7 @@ from api.queries.citations import (
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
+    get_citation_prompts,
 )
 from api.queries.summary import get_summary
 from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses
