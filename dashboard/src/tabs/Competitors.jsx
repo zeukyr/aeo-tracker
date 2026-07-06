@@ -93,8 +93,9 @@ function CitationPromptsDrawer({ url, competitor, days, school, promptsCache, on
                     {p.question_type}
                   </span>
                 )}
-                <span style={{ fontSize: 10, color: "#9b9b9b", marginLeft: "auto" }}>
-                  {p.response_count} response{p.response_count === 1 ? "" : "s"}
+                <span style={{ fontSize: 10, color: "#9b9b9b", marginLeft: "auto", display: "flex", gap: 8 }}>
+                  {p.avg_rank != null && <span>#{p.avg_rank} avg rank</span>}
+                  <span>{p.response_count} response{p.response_count === 1 ? "" : "s"}</span>
                 </span>
               </div>
             </div>
