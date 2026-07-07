@@ -158,6 +158,482 @@ function TopicsOverTimeChart({ chartData }) {
   );
 }
 
+// ─── chart legend helper ───────────────────────────────────────────────────────
+function ChartLegend({ items }) {
+  return (
+    <div style={{ display: "flex", gap: 14, marginBottom: 10, flexWrap: "wrap" }}>
+      {items.map(({ label, color, dashed }) => (
+        <span key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
+          <span style={{
+            width: dashed ? 14 : 8,
+            height: dashed ? 0 : 8,
+            borderRadius: dashed ? 0 : "50%",
+            background: dashed ? "none" : color,
+            borderTop: dashed ? `2px dashed ${color}` : "none",
+            flexShrink: 0,
+            opacity: dashed ? 0.5 : 1,
+          }} />
+          {label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+// ─── visibility trend line chart (mention-type prompts) ───────────────────────
+function VisibilityChart({ data }) {
+  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
+        <YAxis
+          tickFormatter={v => `${v}%`}
+          tick={{ fontSize: 11, fill: "#888780" }}
+          axisLine={false} tickLine={false}
+          width={36} domain={[0, 100]}
+        />
+        <Tooltip content={<ChartTooltip />} />
+        <Line type="monotone" dataKey="mentionRate"  name="Mention rate"  stroke={QC_BLUE}   strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="citationRate" name="Citation rate" stroke="#1d9e75"  strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="visibility"   name="Visibility"    stroke={QC_BLUE}   strokeWidth={2.5} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ─── sentiment area chart (sentiment-type prompts) ────────────────────────────
+function SentimentChart({ data }) {
+  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <AreaChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+        <defs>
+          <linearGradient id="tGradPos" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#3b6d11" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#3b6d11" stopOpacity={0.02} />
+          </linearGradient>
+          <linearGradient id="tGradNeu" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#854f0b" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#854f0b" stopOpacity={0.02} />
+          </linearGradient>
+          <linearGradient id="tGradNeg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#a32d2d" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#a32d2d" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
+        <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} width={36} />
+        <Tooltip content={<ChartTooltip />} />
+        <Area type="monotone" dataKey="positive" name="Positive" stroke="#3b6d11" strokeWidth={2} fill="url(#tGradPos)" dot={false} />
+        <Area type="monotone" dataKey="neutral"  name="Neutral"  stroke="#854f0b" strokeWidth={2} fill="url(#tGradNeu)" dot={false} />
+        <Area type="monotone" dataKey="negative" name="Negative" stroke="#a32d2d" strokeWidth={2} fill="url(#tGradNeg)" dot={false} />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ─── competitor ranking panel (right ⅓) ──────────────────────────────────────
+// Branching behaviour:
+//   • visibility != null  → ranked bar rows by mention-rate %
+//   • visibility == null  → plain name pills (sentiment prompts, no mention data)
+function CompetitorRanking({ competitors }) {
+  if (!competitors?.length) {
+    return <p className="text-xs text-gray-400 italic">No competitor data.</p>;
+  }
+
+  const hasVisibility = competitors.some(c => c.visibility != null);
+
+  if (!hasVisibility) {
+    // Plain pill list for sentiment prompts
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {competitors.map(c => (
+          <span key={c.name} style={{
+            fontSize: 11, padding: "3px 10px", borderRadius: 99,
+            background: c.isQC ? "#dbeafe" : "#f0efec",
+            color:      c.isQC ? QC_BLUE   : "#4b5563",
+            fontWeight: c.isQC ? 600 : 400,
+          }}>
+            {c.name}{c.isQC ? " (YOU)" : ""}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  // Ranked bars by visibility (mention rate %)
+  const maxVis = Math.max(...competitors.map(c => c.visibility || 0), 1);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {competitors.slice(0, 8).map((comp, i) => {
+        const barPct   = Math.round(((comp.visibility || 0) / maxVis) * 100);
+        const barColor = comp.isQC ? QC_BLUE : "#7c3aed";
+        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * ((comp.visibility || 0) / maxVis));
+        return (
+          <div key={comp.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ width: 18, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
+              {i + 1}
+            </span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: comp.isQC ? QC_BLUE : "#111", fontWeight: comp.isQC ? 600 : i === 0 ? 500 : 400 }}>
+                  {comp.name}
+                  {comp.isQC && (
+                    <span className="badge badge--you" style={{ marginLeft: 6, fontSize: 10 }}>YOU</span>
+                  )}
+                </span>
+                <span style={{ fontSize: 11, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>
+                  {comp.visibility}%
+                </span>
+              </div>
+              <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
+                <div style={{
+                  height: "100%", width: `${barPct}%`,
+                  background: barColor, opacity,
+                  borderRadius: 99, transition: "width 0.4s ease",
+                }} />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── LLM stat node badge ──────────────────────────────────────────────────────
+function StatNode({ label, value, color }) {
+  if (value == null) return null;
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      background: "#f4f4f2", borderRadius: 8,
+      padding: "4px 10px", minWidth: 52,
+    }}>
+      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>
+        {label}
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: color || "#374151", lineHeight: 1.3 }}>
+        {value}%
+      </span>
+    </div>
+  );
+}
+
+// ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
+function ResponseDrawer({ drawer, onClose }) {
+  const { open, engine, promptText, promptId } = drawer;
+  const { days } = useFilter();
+  const [history, setHistory] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch the full response history for this (prompt, engine) pair whenever the drawer opens
+  useEffect(() => {
+    if (!open || !promptId || !engine) return;
+    setLoading(true);
+    setIndex(0);
+    const params = new URLSearchParams({ engine });
+    if (days) params.append("days", days);
+
+    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/responses?${params}`)
+      .then(r => r.json())
+      .then(rows => {
+        setHistory(Array.isArray(rows) ? rows : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setHistory([]);
+        setLoading(false);
+      });
+  }, [open, promptId, engine, days]);
+
+  const total = history.length;
+  const goPrevious = () => setIndex(i => Math.min(i + 1, total - 1));
+  const goNext = () => setIndex(i => Math.max(i - 1, 0));
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = e => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") setIndex(i => Math.min(i + 1, total - 1));
+      if (e.key === "ArrowRight") setIndex(i => Math.max(i - 1, 0));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose, total]);
+
+  if (!open) return null;
+  const color = LLM_COLORS[engine] || "#888";
+  const current = history[index];
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(520px, 90vw)",
+        background: "#fff",
+        borderLeft: "1px solid #e5e7eb",
+        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
+        zIndex: 50,
+        display: "flex", flexDirection: "column",
+        overflow: "hidden",
+      }}>
+        {/* header */}
+        <div style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid #e5e7eb",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
+        }}>
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
+              {LLM_LABELS[engine] || engine}
+            </p>
+            <p style={{ fontSize: 11, color: "#9b9b9b" }}>
+              {loading
+                ? "Loading…"
+                : total > 0
+                  ? `Response ${index + 1} of ${total} · ${current?.date ?? ""}`
+                  : "No responses"}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* prompt context */}
+        {promptText && (
+          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
+            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{promptText}"</p>
+          </div>
+        )}
+
+        {/* prev / next navigation */}
+        {total > 1 && (
+          <div style={{
+            padding: "8px 20px",
+            borderBottom: "1px solid #f0efec",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexShrink: 0,
+          }}>
+            <button
+              onClick={goPrevious}
+              disabled={index >= total - 1}
+              style={{
+                background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
+                fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Previous response"
+            >
+              ← Previous
+            </button>
+            <button
+              onClick={goNext}
+              disabled={index <= 0}
+              style={{
+                background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
+                fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Next response"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+
+        {/* response body */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
+          {loading
+            ? <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
+            : current?.response
+              ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{current.response}</p>
+              : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
+          }
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── fanout queries expandable section ───────────────────────────────────────
+function FanoutQueriesSection({ promptId }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div style={{ borderTop: "1px solid #f0efec", marginTop: 4 }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          width: "100%", background: "none", border: "none",
+          cursor: "pointer", padding: "8px 0", textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 10, color: "#9b9b9b", transition: "transform 0.15s", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)" }}>
+          ▶
+        </span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          Fanout Queries
+        </span>
+      </button>
+
+      {open && (
+        <div style={{ paddingBottom: 8 }}>
+          <p className="text-xs text-gray-400 italic">No fanout queries loaded yet.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── expanded prompt detail panel ─────────────────────────────────────────────
+function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
+  if (loading) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-4 pb-4 pt-1">
+          <div className="ml-8 bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-400 italic">Loading…</p>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (error) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-4 pb-4 pt-1">
+          <div className="ml-8 bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-red-500">Failed to load detail ({error}). Restart the backend server and reload.</p>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (!detail) return null;
+
+  const { kind, timeseries, competitors, llms } = detail;
+
+  return (
+    <tr>
+      <td colSpan={3} className="px-4 pb-4 pt-1">
+        <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
+
+          {/* prompt text */}
+          <p className="italic text-gray-600 text-sm">"{prompt.text}"</p>
+
+          {/* chart (⅔) + competitors (⅓) */}
+          <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+
+            {/* chart */}
+            <div style={{ flex: 2, minWidth: 0 }}>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">
+                {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
+              </p>
+              {kind === "mention" ? (
+                <>
+                  <ChartLegend items={[
+                    { label: "Visibility",    color: QC_BLUE },
+                    { label: "Mention rate",  color: QC_BLUE,  dashed: true },
+                    { label: "Citation rate", color: "#1d9e75", dashed: true },
+                  ]} />
+                  <VisibilityChart data={timeseries} />
+                </>
+              ) : (
+                <>
+                  <ChartLegend items={[
+                    { label: "Positive", color: "#3b6d11" },
+                    { label: "Neutral",  color: "#854f0b" },
+                    { label: "Negative", color: "#a32d2d" },
+                  ]} />
+                  <SentimentChart data={timeseries} />
+                </>
+              )}
+            </div>
+
+            {/* competitor panel */}
+            <div style={{ flex: 1, minWidth: 140 }}>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
+              <CompetitorRanking competitors={competitors} />
+            </div>
+          </div>
+
+          {/* per-LLM breakdown */}
+          <div>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
+            <div className="space-y-2">
+              {LLM_ENGINES.map(engine => {
+                const llm   = llms?.find(l => l.engine === engine);
+                const color = LLM_COLORS[engine];
+                return (
+                  <div key={engine} style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    background: "#fff", borderRadius: 8, padding: "8px 12px",
+                    border: "1px solid #f0efec",
+                  }}>
+                    {/* engine label */}
+                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
+                      {LLM_LABELS[engine]}
+                    </span>
+
+                    {/* stat node badges */}
+                    {llm ? (
+                      <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                        {llm.kind === "mention" ? (
+                          <>
+                            <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
+                            <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
+                            <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
+                            <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
+                          </>
+                        ) : (
+                          <>
+                            <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
+                            <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
+                            <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-400 flex-1">No data</span>
+                    )}
+
+                    {/* arrow → response drawer */}
+                    <button
+                      onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
+                      style={{
+                        background: "none", border: "none", cursor: "pointer",
+                        color: llm ? color : "#d1d5db",
+                        fontSize: 13, padding: "2px 4px", flexShrink: 0,
+                      }}
+                      title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
+                      aria-label={`Open ${LLM_LABELS[engine]} response`}
+                    >
+                      ▶
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <FanoutQueriesSection promptId={prompt.id} />
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
 // ─── prompt row ───────────────────────────────────────────────────────────────
 // The inline expanded card is gone — every prompt now has its own question
 // page at /prompts/:promptId (metrics, matched page, citations, responses).
