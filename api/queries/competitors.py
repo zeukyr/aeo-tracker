@@ -89,6 +89,94 @@ def get_competitor_citations(competitor, days=None, school=None):
     return [{"url": r[0], "count": r[1]} for r in rows]
 
 
+def get_competitor_stats(competitor, days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
+    school_clause, school_params = _school_clause_params(school)
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            # Total responses (denominator for rates)
+            cur.execute(f"""
+                SELECT COUNT(*)
+                FROM mention_responses m
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE 1=1 {filter_clause} {school_clause};
+            """, school_params)
+            total_responses = cur.fetchone()[0] or 0
+
+            # Mention count and avg rank
+            cur.execute(f"""
+                SELECT COUNT(DISTINCT m.id), AVG(b.rank_position)
+                FROM mention_response_brands b
+                JOIN mention_responses m ON m.id = b.mention_response_id
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE b.brand_name = %s AND b.brand_type = 'competitor'
+                {filter_clause} {school_clause};
+            """, [competitor] + school_params)
+            row = cur.fetchone()
+            mention_count = row[0] or 0
+            avg_rank = round(float(row[1]), 2) if row[1] else None
+
+            # Responses where this competitor has at least one citation URL
+            cur.execute(f"""
+                SELECT COUNT(DISTINCT ccm.mention_response_id)
+                FROM competitor_citation_map ccm
+                JOIN mention_responses m ON m.id = ccm.mention_response_id
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE ccm.competitor_name = %s
+                {filter_clause} {school_clause};
+            """, [competitor] + school_params)
+            cited_responses = cur.fetchone()[0] or 0
+
+            # Total citation count (individual URLs)
+            cur.execute(f"""
+                SELECT COUNT(*)
+                FROM competitor_citation_map ccm
+                JOIN mention_responses m ON m.id = ccm.mention_response_id
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE ccm.competitor_name = %s
+                {filter_clause} {school_clause};
+            """, [competitor] + school_params)
+            citation_count = cur.fetchone()[0] or 0
+
+            # SoV: competitor mentions vs all brand mentions
+            cur.execute(f"""
+                SELECT
+                    SUM(CASE WHEN b.brand_name = %s THEN 1 ELSE 0 END) AS comp_mentions,
+                    COUNT(*) AS total_mentions
+                FROM mention_response_brands b
+                JOIN mention_responses m ON m.id = b.mention_response_id
+                LEFT JOIN questions q ON q.id = m.question_id
+                WHERE 1=1 {filter_clause} {school_clause};
+            """, [competitor] + school_params)
+            sov_row = cur.fetchone()
+            comp_mentions = sov_row[0] or 0
+            total_mentions = sov_row[1] or 0
+
+    mention_rate = round(mention_count / total_responses * 100, 1) if total_responses else 0
+    citation_rate = round(cited_responses / total_responses * 100, 1) if total_responses else 0
+    sov = round(comp_mentions / total_mentions * 100, 1) if total_mentions else None
+
+    # Visibility score: mirrors QC composite formula (mention 40%, rank 45%, citation 15%)
+    if avg_rank is not None:
+        rank_val = avg_rank
+        rank_score = 100 if rank_val <= 1 else 75 if rank_val <= 2 else 50 if rank_val <= 3 else 25
+    else:
+        rank_score = 0
+    visibility_score = round(
+        (mention_rate / 100) * 100 * 0.40 + rank_score * 0.45 + citation_rate * 0.15, 1
+    )
+
+    return {
+        "mention_rate": mention_rate,
+        "citation_count": citation_count,
+        "citation_rate": citation_rate,
+        "sov": sov,
+        "avg_rank": avg_rank,
+        "visibility_score": visibility_score,
+    }
+
+
 def get_competitor_win_rate(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
     school_clause, params = _school_clause_params(school)

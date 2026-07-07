@@ -16,6 +16,9 @@ venv/
 # Results (raw data, don't need in git)
 results/
 
+# Claude Code
+.claude/
+
 # OS
 .DS_Store
 Thumbs.dblogs/
