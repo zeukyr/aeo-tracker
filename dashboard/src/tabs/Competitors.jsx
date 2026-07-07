@@ -201,7 +201,7 @@ function ColHeader({ label, colKey, sortBy, onSort, width, style = {} }) {
 }
 
 // ─── compare panel showing side-by-side QC vs competitor stats ───────────────
-function ComparePanel({ competitor, qcStats, competitorStats, loading, onClose }) {
+function ComparePanel({ competitors, compareTarget, onSelectCompetitor, qcStats, competitorStats, loading }) {
   const metrics = [
     { label: "Visibility score", qcVal: qcStats?.visibility_score, compVal: competitorStats?.visibility_score, format: v => v != null ? v.toFixed(1) : "—", lowerIsBetter: false },
     { label: "Citation rate",    qcVal: qcStats?.citation_rate,     compVal: competitorStats?.citation_rate,    format: v => v != null ? `${v}%` : "—",       lowerIsBetter: false },
@@ -212,22 +212,26 @@ function ComparePanel({ competitor, qcStats, competitorStats, loading, onClose }
 
   return (
     <div className="card" style={{ marginTop: 0 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-        <div>
-          <p className="panel-title">Head-to-head comparison</p>
-          <p className="panel-subtitle">QC vs {competitor}</p>
-        </div>
-        <button
-          onClick={onClose}
-          style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, color: "#9b9b9b", padding: "0 0 0 8px", lineHeight: 1 }}
-          aria-label="Close comparison"
-        >✕</button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+        <p className="panel-title" style={{ margin: 0 }}>Competitor Comparison</p>
+        <select
+          value={compareTarget ?? ""}
+          onChange={e => onSelectCompetitor(e.target.value)}
+          style={{
+            fontSize: 13, border: "1px solid #e5e7eb", borderRadius: 6,
+            padding: "4px 8px", color: "#111", background: "#fff", cursor: "pointer",
+          }}
+        >
+          {competitors.map(name => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+        </select>
       </div>
 
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {[1,2,3,4,5].map(i => (
-            <div key={i} style={{ height: 28, background: "#f4f4f2", borderRadius: 6, animation: "pulse 1.5s infinite" }} />
+            <div key={i} style={{ height: 28, background: "#f4f4f2", borderRadius: 6 }} />
           ))}
         </div>
       ) : (
@@ -236,7 +240,7 @@ function ComparePanel({ competitor, qcStats, competitorStats, loading, onClose }
             <tr>
               <th style={{ textAlign: "left", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: "#9b9b9b", paddingBottom: 8, borderBottom: "1px solid #f0efec" }}>Metric</th>
               <th style={{ textAlign: "right", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: "#378add", paddingBottom: 8, borderBottom: "1px solid #f0efec", paddingRight: 24 }}>QC</th>
-              <th style={{ textAlign: "right", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: PURPLE, paddingBottom: 8, borderBottom: "1px solid #f0efec" }}>{competitor}</th>
+              <th style={{ textAlign: "right", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: PURPLE, paddingBottom: 8, borderBottom: "1px solid #f0efec" }}>{compareTarget}</th>
             </tr>
           </thead>
           <tbody>
@@ -269,7 +273,7 @@ function ComparePanel({ competitor, qcStats, competitorStats, loading, onClose }
 }
 
 // ─── single competitor row with expandable citations ──────────────────────────
-function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations, onUrlClick, isComparing, onCompare }) {
+function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations, onUrlClick }) {
   const pct = Math.round((count / maxCount) * 100);
   return (
     <div style={{ cursor: "pointer" }} onClick={() => onToggle(name)}>
@@ -282,27 +286,15 @@ function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, exp
         {/* name + count integrated with bar */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
-              <span style={{
-                fontSize: 13, color: expanded ? PURPLE : "#111",
-                fontWeight: rank === 1 || expanded ? 500 : 400,
-                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-              }}>
-                {name}
-              </span>
-              <button
-                onClick={e => { e.stopPropagation(); onCompare(name); }}
-                style={{
-                  fontSize: 10, fontWeight: 600,
-                  color: isComparing ? "#fff" : "#9b9b9b",
-                  background: isComparing ? PURPLE : "transparent",
-                  border: `1px solid ${isComparing ? PURPLE : "#e5e7eb"}`,
-                  borderRadius: 4, padding: "1px 6px", cursor: "pointer",
-                  flexShrink: 0, lineHeight: 1.6, whiteSpace: "nowrap",
-                }}
-              >vs QC</button>
-            </div>
-            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>{count}</span>
+            <span style={{
+              fontSize: 13, color: expanded ? PURPLE : "#111",
+              fontWeight: rank === 1 || expanded ? 500 : 400,
+              whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+              marginRight: 8,
+            }}>
+              {name}
+            </span>
+            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
           </div>
           <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
@@ -347,7 +339,7 @@ function Competitors() {
   const [competitorStats, setCompetitorStats]   = useState(null);
   const [compareLoading, setCompareLoading]     = useState(false);
 
-  // Clear citation cache whenever the effective filter changes
+  // Clear caches whenever the effective filter changes
   useEffect(() => {
     setExpandedCompetitor(null);
     setCitationsCache({});
@@ -355,6 +347,30 @@ function Competitors() {
     setCompareTarget(null);
     setQcStats(null);
     setCompetitorStats(null);
+  }, [days, school]);
+
+  useEffect(() => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
+
+    fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`)
+      .then(r => r.json())
+      .then(data => {
+        setCompetitorsBySchool(data);
+        setLoading(false);
+        // Default to first competitor
+        if (data.length > 0) {
+          const first = data.reduce((acc, c) => {
+            acc[c.competitor] = (acc[c.competitor] || 0) + c.count;
+            return acc;
+          }, {});
+          const firstName = Object.entries(first).sort((a, b) => b[1] - a[1])[0]?.[0];
+          if (firstName) setCompareTarget(firstName);
+        }
+      })
+      .catch(err => { setError(err.message); setLoading(false); });
   }, [days, school]);
 
   useEffect(() => {
@@ -374,22 +390,6 @@ function Competitors() {
       .then(([qc, comp]) => { setQcStats(qc); setCompetitorStats(comp); setCompareLoading(false); })
       .catch(() => setCompareLoading(false));
   }, [compareTarget, days, school]);
-
-  useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (days) params.append("days", days);
-    if (school && school !== "All") params.append("school", school);
-
-    fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`)
-      .then(r => r.json())
-      .then(data => { setCompetitorsBySchool(data); setLoading(false); })
-      .catch(err => { setError(err.message); setLoading(false); });
-  }, [days, school]);
-
-  function handleCompare(name) {
-    setCompareTarget(prev => prev === name ? null : name);
-  }
 
   function toggleCompetitor(name) {
     if (expandedCompetitor === name) {
@@ -485,8 +485,6 @@ function Competitors() {
                   citations={citationsCache[c.competitor]}
                   loadingCitations={loadingCitations.has(c.competitor)}
                   onUrlClick={url => { setDrawerUrl(url); setDrawerCompetitor(c.competitor); }}
-                  isComparing={compareTarget === c.competitor}
-                  onCompare={handleCompare}
                 />
               ))}
             </div>
@@ -504,13 +502,14 @@ function Competitors() {
         onClose={() => setDrawerUrl(null)}
       />
 
-      {compareTarget && (
+      {aggregated.length > 0 && (
         <ComparePanel
-          competitor={compareTarget}
+          competitors={aggregated.map(c => c.competitor)}
+          compareTarget={compareTarget}
+          onSelectCompetitor={setCompareTarget}
           qcStats={qcStats}
           competitorStats={competitorStats}
           loading={compareLoading}
-          onClose={() => setCompareTarget(null)}
         />
       )}
 
