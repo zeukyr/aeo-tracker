@@ -200,8 +200,76 @@ function ColHeader({ label, colKey, sortBy, onSort, width, style = {} }) {
   );
 }
 
+// ─── compare panel showing side-by-side QC vs competitor stats ───────────────
+function ComparePanel({ competitor, qcStats, competitorStats, loading, onClose }) {
+  const metrics = [
+    { label: "Visibility score", qcVal: qcStats?.visibility_score, compVal: competitorStats?.visibility_score, format: v => v != null ? v.toFixed(1) : "—", lowerIsBetter: false },
+    { label: "Citation rate",    qcVal: qcStats?.citation_rate,     compVal: competitorStats?.citation_rate,    format: v => v != null ? `${v}%` : "—",       lowerIsBetter: false },
+    { label: "Share of voice",   qcVal: qcStats?.sov,               compVal: competitorStats?.sov,              format: v => v != null ? `${v}%` : "—",       lowerIsBetter: false },
+    { label: "Avg rank",         qcVal: qcStats?.avg_rank,          compVal: competitorStats?.avg_rank,         format: v => v != null ? `#${v}` : "—",       lowerIsBetter: true },
+    { label: "Citations",        qcVal: null,                        compVal: competitorStats?.citation_count,   format: v => v != null ? v : "—",             lowerIsBetter: false, qcNote: true },
+  ];
+
+  return (
+    <div className="card" style={{ marginTop: 0 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+        <div>
+          <p className="panel-title">Head-to-head comparison</p>
+          <p className="panel-subtitle">QC vs {competitor}</p>
+        </div>
+        <button
+          onClick={onClose}
+          style={{ background: "none", border: "none", cursor: "pointer", fontSize: 16, color: "#9b9b9b", padding: "0 0 0 8px", lineHeight: 1 }}
+          aria-label="Close comparison"
+        >✕</button>
+      </div>
+
+      {loading ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {[1,2,3,4,5].map(i => (
+            <div key={i} style={{ height: 28, background: "#f4f4f2", borderRadius: 6, animation: "pulse 1.5s infinite" }} />
+          ))}
+        </div>
+      ) : (
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: "left", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: "#9b9b9b", paddingBottom: 8, borderBottom: "1px solid #f0efec" }}>Metric</th>
+              <th style={{ textAlign: "right", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: "#378add", paddingBottom: 8, borderBottom: "1px solid #f0efec", paddingRight: 24 }}>QC</th>
+              <th style={{ textAlign: "right", fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", color: PURPLE, paddingBottom: 8, borderBottom: "1px solid #f0efec" }}>{competitor}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {metrics.map(({ label, qcVal, compVal, format, lowerIsBetter, qcNote }) => {
+              let qcWins = null;
+              if (!qcNote && qcVal != null && compVal != null) {
+                qcWins = lowerIsBetter ? qcVal < compVal : qcVal > compVal;
+              }
+              const qcColor  = qcNote ? "#9b9b9b" : qcWins === true ? "#378add" : qcWins === false ? "#c4c4c0" : "#6b6b6b";
+              const cmpColor = qcNote ? "#6b6b6b" : qcWins === false ? PURPLE : qcWins === true ? "#c4c4c0" : "#6b6b6b";
+
+              return (
+                <tr key={label}>
+                  <td style={{ padding: "9px 0", borderBottom: "1px solid #f9f9f7", color: "#6b6b6b", fontSize: 12 }}>{label}</td>
+                  <td style={{ padding: "9px 24px 9px 0", textAlign: "right", borderBottom: "1px solid #f9f9f7", fontWeight: qcWins === true ? 600 : 400, color: qcColor, fontSize: 13 }}>
+                    {qcNote ? "—" : format(qcVal)}
+                  </td>
+                  <td style={{ padding: "9px 0", textAlign: "right", borderBottom: "1px solid #f9f9f7", fontWeight: qcWins === false ? 600 : 400, color: cmpColor, fontSize: 13 }}>
+                    {format(compVal)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+      <p style={{ marginTop: 10, fontSize: 10, color: "#c4c4c0" }}>Winning value shown in color · Avg rank: lower is better</p>
+    </div>
+  );
+}
+
 // ─── single competitor row with expandable citations ──────────────────────────
-function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations, onUrlClick }) {
+function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, expanded, onToggle, citations, loadingCitations, onUrlClick, isComparing, onCompare }) {
   const pct = Math.round((count / maxCount) * 100);
   return (
     <div style={{ cursor: "pointer" }} onClick={() => onToggle(name)}>
@@ -214,15 +282,27 @@ function CompetitorRow({ rank, name, count, maxCount, shareOfVoice, avgRank, exp
         {/* name + count integrated with bar */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
-            <span style={{
-              fontSize: 13, color: expanded ? PURPLE : "#111",
-              fontWeight: rank === 1 || expanded ? 500 : 400,
-              whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-              marginRight: 8,
-            }}>
-              {name}
-            </span>
-            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{count}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+              <span style={{
+                fontSize: 13, color: expanded ? PURPLE : "#111",
+                fontWeight: rank === 1 || expanded ? 500 : 400,
+                whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+              }}>
+                {name}
+              </span>
+              <button
+                onClick={e => { e.stopPropagation(); onCompare(name); }}
+                style={{
+                  fontSize: 10, fontWeight: 600,
+                  color: isComparing ? "#fff" : "#9b9b9b",
+                  background: isComparing ? PURPLE : "transparent",
+                  border: `1px solid ${isComparing ? PURPLE : "#e5e7eb"}`,
+                  borderRadius: 4, padding: "1px 6px", cursor: "pointer",
+                  flexShrink: 0, lineHeight: 1.6, whiteSpace: "nowrap",
+                }}
+              >vs QC</button>
+            </div>
+            <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>{count}</span>
           </div>
           <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
             <div style={{
@@ -262,12 +342,38 @@ function Competitors() {
   const [drawerCompetitor, setDrawerCompetitor] = useState(null);
   const [promptsCache, setPromptsCache]   = useState({});
 
+  const [compareTarget, setCompareTarget]       = useState(null);
+  const [qcStats, setQcStats]                   = useState(null);
+  const [competitorStats, setCompetitorStats]   = useState(null);
+  const [compareLoading, setCompareLoading]     = useState(false);
+
   // Clear citation cache whenever the effective filter changes
   useEffect(() => {
     setExpandedCompetitor(null);
     setCitationsCache({});
     setLoadingCitations(new Set());
+    setCompareTarget(null);
+    setQcStats(null);
+    setCompetitorStats(null);
   }, [days, school]);
+
+  useEffect(() => {
+    if (!compareTarget) return;
+    setCompareLoading(true);
+    setQcStats(null);
+    setCompetitorStats(null);
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    if (school && school !== "All") params.append("school", school);
+    const compParams = new URLSearchParams(params);
+    compParams.append("competitor", compareTarget);
+    Promise.all([
+      fetch(`${API_BASE_URL}/api/summary?${params}`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/competitor-stats?${compParams}`).then(r => r.json()),
+    ])
+      .then(([qc, comp]) => { setQcStats(qc); setCompetitorStats(comp); setCompareLoading(false); })
+      .catch(() => setCompareLoading(false));
+  }, [compareTarget, days, school]);
 
   useEffect(() => {
     setLoading(true);
@@ -280,6 +386,10 @@ function Competitors() {
       .then(data => { setCompetitorsBySchool(data); setLoading(false); })
       .catch(err => { setError(err.message); setLoading(false); });
   }, [days, school]);
+
+  function handleCompare(name) {
+    setCompareTarget(prev => prev === name ? null : name);
+  }
 
   function toggleCompetitor(name) {
     if (expandedCompetitor === name) {
@@ -375,6 +485,8 @@ function Competitors() {
                   citations={citationsCache[c.competitor]}
                   loadingCitations={loadingCitations.has(c.competitor)}
                   onUrlClick={url => { setDrawerUrl(url); setDrawerCompetitor(c.competitor); }}
+                  isComparing={compareTarget === c.competitor}
+                  onCompare={handleCompare}
                 />
               ))}
             </div>
@@ -391,6 +503,16 @@ function Competitors() {
         onCached={(key, data) => setPromptsCache(prev => ({ ...prev, [key]: data }))}
         onClose={() => setDrawerUrl(null)}
       />
+
+      {compareTarget && (
+        <ComparePanel
+          competitor={compareTarget}
+          qcStats={qcStats}
+          competitorStats={competitorStats}
+          loading={compareLoading}
+          onClose={() => setCompareTarget(null)}
+        />
+      )}
 
       <div className="card">
         <p className="panel-title">Competitor win rate</p>
