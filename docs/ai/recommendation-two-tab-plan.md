@@ -243,17 +243,32 @@ page edits) and measurable (a trackable unit of work for the closed-loop diff-in
   full `generate_recommendations()` dry run routes content/outreach/strategy → strategic and
   technical → on_page. Penn Foster/Indeed 403s degrade to domain-level classification.
 
-### Phase 4 — Tab 2 scorecard + emergent pass
-- [ ] For each weak `have_page` topic: rank cited URLs, take top-N fetchable non-QC winners.
-- [ ] Detect features across winners + the QC page (hybrid). Build the scored table.
-- [ ] Layer 2 emergent-pattern LLM call.
-- [ ] Generate section-level recs from the scored gaps; judge enforces each claim traces to
-      a `page_facts` fact.
+### Phase 4 — Tab 2 scorecard + emergent pass — **DONE (2026-07-06)**
+- [x] `api/queries/tab2_scorecard.py`: `build_scorecard(topic, qc_url, question)` ranks cited
+      URLs, takes top-N fetchable comparable winners, detects the 12 `geo_features` across QC's
+      page + winners (deterministic from page_facts + one semantic LLM pass per page), and scores
+      each: prevalence among winners × QC-has × geo_weight veto → recommend.
+- [x] Emergent-pattern LLM call (`_emergent_pattern`): what cited pages share that QC lacks.
+- [x] `scorecard_to_recommendation` builds the Tab 2 rec **deterministically** from the scorecard
+      (names the page + missing sections) — not LLM prose — so it can't come out generic.
+      `build_tab2_recommendations` drives it for the weakest `have_page` topics; wired into
+      `generate_recommendations` (replaces any generic LLM `technical` rec for the same topic).
+- [x] The scorecard rides on the rec's new `detail` jsonb column (migration 003, applied).
+- Verified: a real run produced a scorecard rec targeting QC's own page, comparing against the
+  cited winners, flagging the certification/pathway + primary-source sections it lacks, with
+  concrete section-level edits; `detail` round-trips through the DB.
 
-### Phase 5 — Frontend build-out
-- [ ] Tab 1 card: Why / Evidence / Action (action shaped by page type), + ecosystem-pattern cards.
-- [ ] Tab 2 card: Page / compared-against / scorecard table / emergent insight / suggested edits.
-- [ ] Keep the health summary as a shared header above the tabs.
+### Phase 5 — Frontend build-out — **DONE (2026-07-06)**
+- [x] Tab 2 card: `Scorecard` component in `Recommendations.jsx` renders page URL / compared-against
+      cited pages / scorecard table (feature × GEO × cited-page prevalence × QC × recommend) /
+      emergent insight / section-level edits, styled from the dashboard tokens.
+- [x] Tab 1 card: `StrategicEvidence` component renders the truthful citation-bar block (what AI
+      cites for the topic + counts, vs QC's own count), fed by `strategic_evidence()` on the rec's
+      `detail`. Degrades to the plain card when the segment has no citation data. `npm run build` passes.
+- [x] Health summary kept as a shared header above the tabs.
+- Note: Tab 1 "seek-inclusion / benchmark / ecosystem" *variant* cards from the mockup are not
+  separate components — the single evidence card covers all strategic recs. Revisit if the
+  variant-specific layouts are wanted.
 
 ---
 
@@ -273,9 +288,29 @@ different QC page — so the label matched nothing useful (all stopwords → `un
   → dog-behavior, genuinely-absent intents (event decorator, canine care expert) → uncovered;
   well-named "Dog Grooming" still `have_all` (no regression).
 
-## Open question
-- Earlier "3 segments" vs. the settled 2-tab model — treating the health summary as a shared
-  header, not a third tab. Revisit if a third stream (e.g. measurement/quick-wins) is wanted.
+## Pre–Phase-4 validation (2026-07-06)
+
+**Two tabs is final** — no third tab. (The earlier "3 segments" idea is dropped.)
+
+**Judge hardening — the original bug is now prevented deterministically.** Stress-testing the
+LLM judge with planted fabrications ("APDT lists Penn Foster", "eventbrite ranks Coursera",
+"competitors are cited more") showed it caught **0 of 3** — an LLM can't reliably police an
+LLM's fabrications. Added `_fabrication_guard()` in `recommendations_synthesis.py`, a
+deterministic pre-filter that runs before the LLM judge:
+- a page-contents claim ("[page/domain] lists/ranks/names/omits X", matched by *adjacency* so
+  an honest "QC ranks below competitors" doesn't trip it) is dropped unless the domain is a
+  page_facts-**verified** roundup/directory (`inclusion_opportunity`); QC's own domains are
+  exempt (verified separately);
+- a comparative claim about competitors with no supporting number is dropped.
+- Verified: all 3 planted fabrications dropped 0/3 survive; 2 legit recs survive 3/3; a real
+  7-rec generation batch passes with zero false drops.
+
+**Fetch feasibility (gates Phase 4).** Across the mention-topics with enough sample, **3 of 4**
+have ≥3 fetchable non-QC pages to compare; ~58% of cited URLs fetch, ~29% block (Penn Foster,
+Indeed) and degrade to domain-level classification. Workable, **but the topic universe is tiny
+(4 topics)** — the elaborate Tab 2 scorecard would run on ~3 topics. **Recommendation: defer
+Phase 4** until the tracked-topic set grows; the citation + coverage recs already serve these
+few topics well. Revisit when there are more weak topics with fetchable winners.
 
 ## Sequencing
 **Phase 1 first** — shippable, truthful, de-risks the rest. Phase 2 (fetching + extraction) is

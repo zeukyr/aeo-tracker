@@ -753,6 +753,481 @@
    "status": "not_fetched",
    "page_type": "community",
    "page_type_source": "domain"
+  },
+  "https://www.youtube.com/watch?v=eyEP8HDB39o": {
+   "url": "https://www.youtube.com/watch?v=eyEP8HDB39o",
+   "domain": "youtube.com",
+   "fetched_at": "2026-07-06T15:50:32.590225+00:00",
+   "status": "not_fetched",
+   "page_type": "video",
+   "page_type_source": "domain"
+  },
+  "https://community.cvent.com/discussion/how-do-i-get-started-in-event-planning-business": {
+   "url": "https://community.cvent.com/discussion/how-do-i-get-started-in-event-planning-business",
+   "domain": "community.cvent.com",
+   "fetched_at": "2026-07-06T15:50:32.590402+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://community.cvent.com/discussion/how-do-i-get-started-in-event-planning-business",
+   "title": "How Do I Get Started in Event Planning Business? | Open Forum",
+   "headings": [],
+   "schema_types": [],
+   "word_count": 504,
+   "content_excerpt": "Starting an event planning business can be thrilling and rewarding. It combines creativity with organization and business savvy. If you're passionate about creating memorable events and know how to manage details, you're on the right path. Here's a personal\u00a0event planning guide to help you get started.\u00a0\n\u00a0\n1. First, conduct thorough market research. Understanding your local market, identifying competitors, targeting clients, and staying on top of trends is essential. Knowing what types of events are in demand-weddings, corporate events, or social gatherings-will help you tailor your services effectively.\u00a0\n\u00a0\n2. Next, develop a solid business plan. This plan should outline your event planning business goals, target market, services offered, pricing strategy, and marketing plan. It will serve as your roadmap, keeping you focused and organized. \u00a0\n\u00a0\n3. Choosing a niche can significantly set you apart from competitors. Whether you specialize in weddings, corporate events, or birthday parties, focusing on a specific area allows you to build expertise and attract clients looking for those services.\u00a0\n\u00a0\n4. Creating a strong brand identity is also crucial. Invest time developing a professional logo, a user-friendly website, and a consistent social media presence. Your brand should reflect trust, creativity, and professionalism.\u00a0\n\u00a0\n5. Building a professional network is key in this industry. Establish relationships with vendors, venues, photographers, caterers, and other event professionals. A strong network can lead to referrals, collaborations, and valuable partnerships that enhance your services.\u00a0\n\u00a0\n6. Continuously developing your skills and knowledge is essential. Attend workshops and conferences to stay updated on the latest trends, technologies, event management software, and best practices. Joining professional associations like the Event Planning Association or Meeting Professionals International (MPI) can also boost your credibility.\u00a0 You can check the industry training & certification to level up your skills\n \n7. Creating a portfolio is a powerful tool for attracting clients. Document your events with high-quality photos and detailed descriptions of your role. Highlight your creativity, problem-solving skills, and attention to detail. If you're starting out, consider offering services at a discounted rate or even for free to build your portfolio.\u00a0\n\u00a0\n8. Setting realistic goals and a budget is crucial for sustainability. Determine your startup costs, establish a pricing strategy, and keep track of your finances. Adjust your budget as needed to ensure long-term success.\u00a0\n\u00a0\n9. Effective marketing is essential. Utilize a mix of online and offline strategies, including social media marketing, SEO, email marketing, and attending networking events. Word-of-mouth referrals are powerful, so encourage satisfied clients to spread the word.\u00a0\n\u00a0\n10. Lastly, providing exceptional customer service is paramount. Go above and beyond to meet your client's needs and exceed their expectations. Clear communication, attention to detail, and a personalized approach will help you build a loyal client base and earn positive reviews and referrals.\u00a0\n\u00a0\nStarting your own event planning business is an exciting journey. By following these tips and staying committed to your goals, you'll be well on your way to becoming a trusted and sought-after event planner in your community.\u00a0\n\u00a0\nAnswer this\u00a0\u00a0\n \n#EventApp\n#ManagingEvents\n------------------------------\nMegha Jetley\nManager, Customer Marketing\nCvent Marketing Department\n------------------------------",
+   "brand_mentions": {
+    "Cvent": 1,
+    "Meeting Professionals International": 1,
+    "caterers": 1
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 0,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://lesroches.edu/blog/event-planning-business/": {
+   "url": "https://lesroches.edu/blog/event-planning-business/",
+   "domain": "lesroches.edu",
+   "fetched_at": "2026-07-06T15:50:34.431760+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://lesroches.edu/blog/event-planning-business/",
+   "title": "Event planning business: how to start and grow your own company - Les Roches",
+   "headings": [
+    "Event planning business: how to start and grow your own company",
+    "1. Define your event planning niche and direction",
+    "2. Build your skills through training and real-world experience",
+    "3. Conduct detailed market research",
+    "4. Write a business plan",
+    "5. Create a brand that reflects your niche",
+    "6. Market yourself like a pro",
+    "Website",
+    "Social media",
+    "Email marketing",
+    "Networking and word of mouth",
+    "7. Set your pricing and packages",
+    "8. Deliver standout service and experiences",
+    "9. Scale smart: when and how to grow",
+    "10. Keep learning, keep improving",
+    "Considering formal education?",
+    "Final thoughts: success in your hands"
+   ],
+   "schema_types": [
+    "Article",
+    "BreadcrumbList",
+    "EntryPoint",
+    "ImageObject",
+    "ListItem",
+    "Organization",
+    "PropertyValueSpecification",
+    "ReadAction",
+    "SearchAction",
+    "WebPage",
+    "WebSite"
+   ],
+   "word_count": 2149,
+   "content_excerpt": "Event planning business: how to start and grow your own company\n6th October, 2025\nIn this article\n- 1. Define your event planning niche and direction\n- 2. Build your skills through training and real-world experience\n- 3. Conduct detailed market research\n- 4. Write a business plan\n- 5. Create a brand that reflects your niche\n- 6. Market yourself like a pro\n- 7. Set your pricing and packages\n- 8. Deliver standout service and experiences\n- 9. Scale smart: when and how to grow\n- 10. Keep learning, keep improving\n- Final thoughts: success in your hands\nThinking of launching your own event planning business? Whether you\u2019re passionate about weddings, music festivals, corporate conferences or non-profit fundraisers, the events industry offers a diverse and dynamic opportunity for entrepreneurs who thrive on creativity, logistics and delivering memorable experiences.\nSetting up a successful event planning company requires a clear roadmap, from business licenses and branding to networking and pricing strategies, and the resilience to manage the backstage chaos and the spotlight moments.\nIn this step-by-step guide, we\u2019ll walk you through how to start and grow your own event planning business, with practical tips for building credibility, attracting clients and scaling your services sustainably.\n1. Define your event planning niche and direction\nEvery great venture begins with a clear vision. You need to define what kind of events you\u2019ll plan and the customer base you want to serve. Specialization helps you stand out in a competitive industry and win trust more quickly.\nPopular niches include:\n- Corporate event planning: conferences, team-building retreats and product launches\n- Social event planning: birthdays, anniversaries and baby showers\n- Destination event planning: weddings and luxury events abroad\n- Full event production: for large-scale experiences such as festivals and expos\n- Luxury event planning: for VIP clients, exclusive brands and private experiences\nThink about the type of customer experience you want to deliver. Will your business focus on white-glove, high-touch service? Or fast, affordable solutions for small businesses?\nEnsure you check available domain names and social media handles early. A business name generator or checker tool can spark ideas and confirm availability before you commit.\n2. Build your skills through training and real-world experience\nBasic proficiency in vendor coordination, venue sourcing, marketing and budget planning is essential for growing a successful event company.\nKey areas to develop include:\n- Event management software: tools such as Cvent, Bizzabo or Whova to manage logistics and attendees\n- Vendor contract negotiation and sourcing: from caterers and florists to lighting and AV suppliers\n- Event design: layout, mood boards, flow and experience strategy\n- Marketing strategy and execution: especially for public events or ticketed series\n- Social media management and analytics: essential for brand-building and promotion\nConsider formal education, such as a Master in Sport Management and Events at Les Roches. You\u2019ll learn to plan complex event series, manage cross-functional teams and develop brand-led experiences that can scale.\nYou can also gain valuable experience by volunteering for local social events, interning with established event planners or taking short courses in specialized areas such as media management, sustainability or digital events.\n3. Conduct detailed market research\nInformation is crucial for understanding the landscape of your chosen event industry. Market research will provide you with invaluable insight into client preferences, help you analyze competitor pricing strategies and identify potential growth areas within your specific location or chosen niche. To effectively conduct this research, you\u2019ll need to analyze several key factors:\n- Popular event planning businesses in your region: identify who the major players are, what services they offer and what their reputat",
+   "brand_mentions": {
+    "Cvent": 1,
+    "Eventbrite": 1,
+    "Les Roches": 3,
+    "caterers": 1
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": true,
+    "question_headings": 1,
+    "comparison_table": true,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://www.youtube.com/watch?v=CdFVWEKKfkU": {
+   "url": "https://www.youtube.com/watch?v=CdFVWEKKfkU",
+   "domain": "youtube.com",
+   "fetched_at": "2026-07-06T15:50:36.109097+00:00",
+   "status": "not_fetched",
+   "page_type": "video",
+   "page_type_source": "domain"
+  },
+  "https://www.youtube.com/watch?v=Gmwji4b3H4M": {
+   "url": "https://www.youtube.com/watch?v=Gmwji4b3H4M",
+   "domain": "youtube.com",
+   "fetched_at": "2026-07-06T15:50:36.109136+00:00",
+   "status": "not_fetched",
+   "page_type": "video",
+   "page_type_source": "domain"
+  },
+  "https://www.entrepreneur.com/starting-a-business/how-to-start-an-event-planning-service/37892": {
+   "url": "https://www.entrepreneur.com/starting-a-business/how-to-start-an-event-planning-service/37892",
+   "domain": "entrepreneur.com",
+   "fetched_at": "2026-07-06T15:50:36.109159+00:00",
+   "status": "fetch_failed",
+   "page_type": "editorial",
+   "page_type_source": "domain"
+  },
+  "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate": {
+   "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate",
+   "domain": "pennfoster.edu",
+   "fetched_at": "2026-07-06T15:51:04.249645+00:00",
+   "status": "fetch_failed",
+   "page_type": "competitor",
+   "page_type_source": "domain"
+  },
+  "https://www.yeseventdecor.com/classes": {
+   "url": "https://www.yeseventdecor.com/classes",
+   "domain": "yeseventdecor.com",
+   "fetched_at": "2026-07-06T15:51:05.249639+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://www.yeseventdecor.com/classes",
+   "title": "Online Classes For Event Decorators \u2014 Yes! Event Decor & More",
+   "headings": [
+    "YES! EVENT ACADEMY",
+    "Creating Moments\u2026",
+    "That Become Memories\u2026",
+    "Level 1: Beginners",
+    "Level 2: Backdrops",
+    "Level 3: In-Person",
+    "Level 4: YouTube",
+    "Meet Your Instructor",
+    "Giving you the confidence to start your business!",
+    "How It Works",
+    "1",
+    "2",
+    "3",
+    "FAQs"
+   ],
+   "schema_types": [
+    "LocalBusiness",
+    "WebSite"
+   ],
+   "word_count": 635,
+   "content_excerpt": "Welcome To\nYES! EVENT ACADEMY\nCreating Moments\u2026\nThat Become Memories\u2026\n- \n      \n      \n      \n        \n  \n      Level 1: BeginnersLearn how to create simple, beautiful decorations. Also, learn how to start and build the foundation of your business. \n- \n      \n      \n      \n        \n  \n      Level 2: BackdropsLearn how to create trendy, popular balloon backdrops for your events. Also, learn how to price and market your backdrops \n- \n      \n      \n      \n        \n  \n      Level 3: In-PersonLevel up your balloon decorating skills during an in-person training. Perfect for those looking for hands-on classes. \n- \n      \n      \n      \n        \n  \n      Level 4: YouTubeLearn how to create your own YouTube channel to market your decorations and earn monthly income. \nMeet Your Instructor\nMy name is Lonielle Cousar, the owner of Yes! Event Decor & More. I built an event decorating business from the ground up, going from zero dollars to over 6 figures.\nI graduated from Hampton University with a degree in Finance and spent 10 years working as an analyst in project management. I pushed my way up the corporate ladder while always dreaming about owning my own business one day.\nMy decorations have gone viral all over social media, inspiring people to create unique and stylish designs. It\u2019s my mission to help you tap into your creativity to create beautiful events.\nGiving you the confidence to start your business!\nWhat People Are Saying\u2026\nHow It Works\n1\nSelect Your Level\nSelect the level of the training program to start learning. It\u2019s highly recommended that you start from the first level to ensure you learn the essentials of running a successful event decorating business.\nPurchase Classes\nAfter you select your level, you\u2019ll have the option to purchase individual classes or the class bundle. If you\u2019re looking for the most comprehensive training at the lowest cost, the bundle is best.\n2\n3\nAccess Class Material\nOnce you make your purchase, you\u2019ll have immediate access. Simply log into your account, locate the class(es), and get started! You\u2019ll also get access to the Q&A call to address any questions you may have.\nFAQs\n- \n      \n        \n          \n        \n      \n      If you purchase the class bundle on any level, you will get access to LIVE classes each month. For the online courses, you will watch prerecorded videos that guide you through a particular topic. These videos are interactive, fun, and walk you through information step-by-step. If you have any questions after taking the online course(s), there\u2019s also a monthly Zoom call for you to join. \n- \n      \n        \n      \n      Once you purchase the class, you will have immediate access. Simply log into your account and you will see the course(s) in your purchases. \n- \n      \n        \n      \n      You will have lifetime access to the class content. This includes the videos and all of the materials included in the class. \n- \n      \n        \n      \n      Payment plans are available through PayPal, Klarna, and Affirm! - For PayPal, select that payment option during the checkout process. \n- For Klarna and Affirm, you would just need to create a virtual credit card on their website. Then use that credit card to make payment during checkout. Please reach out if you have any issues. \n \n- \n      \n        \n      \n      Unfortunately, all sale are FINAL. However, I am confident that you will be more than satisfied with the online course materials. If you have any suggestions or feedback, please feel free to send an email to info@yeseventdecor.com. \n- \n      \n        \n      \n      The information in the online course is designed for everyone to understand, even if you don\u2019t have any experience at all. These courses cover the fundamentals of an event decorating. If you have already started decorating events, these courses will help confirm that you\u2019re on the right track! \n- \n      \n        \n      \n      Questions are more than welcome! Email is the best method of communication. Feel free to send your que",
+   "brand_mentions": {
+    "Event Academy": 1,
+    "YES! Event Decor & More": 1,
+    "Yes! Event Academy": 1,
+    "Yes! Event Decor": 1,
+    "Yes! Event Decor & More": 1
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 1,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": false
+   }
+  },
+  "https://careertraining.uh.edu/training-programs/master-event-design/": {
+   "url": "https://careertraining.uh.edu/training-programs/master-event-design/",
+   "domain": "careertraining.uh.edu",
+   "fetched_at": "2026-07-06T15:51:07.210820+00:00",
+   "status": "fetch_failed",
+   "page_type": "editorial",
+   "page_type_source": "domain"
+  },
+  "https://iwedglobal.com": {
+   "url": "https://iwedglobal.com",
+   "domain": "iwedglobal.com",
+   "fetched_at": "2026-07-06T15:51:08.467618+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://iwedglobal.com/",
+   "title": null,
+   "headings": [
+    "The Wedding & Event Industry's Best and Brightest Choose IWED",
+    "Learn The Right Way to Operate In This Industry",
+    "Event Decor & Design",
+    "Floral Decor & Design",
+    "Luxury & Pro Courses",
+    "25,000+",
+    "1200+",
+    "1000+",
+    "\"I learned so much from being here.... it's an investment in yourself that is definitely worth it\"",
+    "PRIVATE & CORPORATE EVENT DESIGN TRAINING",
+    "Hands-On",
+    "Customized Curriculum",
+    "On-Site Training",
+    "Certificates",
+    "GET 3 LESSONS FOR FREE*",
+    "Hear from Our Students"
+   ],
+   "schema_types": [],
+   "word_count": 623,
+   "content_excerpt": "The Wedding & Event Industry's Best and Brightest Choose IWED\nGet ready for an unforgettable experience at the IWED Global SPRING 2026 Summit. This premier event brings together creativity, innovation, and industry leadership. Whether you\u2019re a new designer or a seasoned creative, the Summit offers access to expert-led sessions, trend insights, and high-value networking. Space will be limited so join the IWED waitlist so that you can get your ticket as soon as they are available.\n                \n            Learn The Right Way to Operate In This Industry\nOur classes allow you to quickly gain the knowledge, experience and confidence you need to succeed.\n            Event Decor & Design\nOur training is designed to provide the skills in a practical approach. Our students' success is our best asset in showing the quality of our training. You can get recognized and certified as an AED Accredited Event Designer\n            Floral Decor & Design\nStrategies shared and knowledge earned allows our students to immediately set up their business and start offering their services around the globe. This is how to get recognized and certified as a PEF Professional Event Florist\n            Luxury & Pro Courses\n                \n                \n                \n                Whether you are an experienced professional or just starting your career in event design, IWED has a perfect course made just for you. Our hands-on approach will help you at any stage of your career.\n            25,000+\n    STUDENTS & PARTICIPANTS\n                1200+\n5-Star reviews from students\n                1000+\nEVENT BUSINESSES LAUNCHED\n                \"I learned so much from being here.... it's an investment in yourself that is definitely worth it\"\nAre you feeling overwhelmed by the explosion of digital platforms and channels? Are you unsure how to best navigate this new environment to engage even more successfully with your colleagues?\n                \n                \n                \n                \n            Studying with us will help you learn how to create, capture and deliver value in a digital world. You'll leave with smart strategies to optimize your performance and satisfaction both online AND offline.\nPRIVATE & CORPORATE EVENT DESIGN TRAINING\n    We offer in-person private training programs designed to help companies enhance the creative and technical skills of their team. Training is delivered at the client\u2019s location or ours, and tailored based on your team\u2019s goals.\n                \n            Hands-On\n    Event Design, Florals, Advanced Draping & Luxury Styling, and more. Our instructors will use their years of experience to help your staff shine.\n                    Customized Curriculum\n    We will tailor the training to suit your needs. This is truly your training and we want to make it amazing.\n                    On-Site Training\n    Whether we come to you, or you choose to visit our headquarters, we will spend the day training your whole team.\n                    Certificates\nYour staff can and will become certified event designers, helping you attract higher end clients and achieve your business goals.\n                    here's an offer you can't refuse....\n                \n                \n                \n                \nGET 3 LESSONS FOR FREE*\n    Thank you!\n                            *We really do mean FREE. You pay nothing... zero... zilch... nada. Oh ya, we don't require your credit card info either. Why are you even still reading this? Get those free lessons!\u00a0\n            Hear from Our Students\n\"Investing in IWED Classes is not just spending on education; it's unlocking the door to a world of creativity and opportunity. Let your talents flourish and your dreams take flight. Trust me, it's a journey worth embarking on.\"\n                \n                \n                \nCLIVE GRAVES\n            \"Without a doubt, IWED's hands-on approach helped me to learn everything I needed to launch my new business and to get my first client. ",
+   "brand_mentions": {
+    "IWED Global": 1
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 0,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": false
+   }
+  },
+  "https://www.iapcollege.com/program/event-planner-course/": {
+   "url": "https://www.iapcollege.com/program/event-planner-course/",
+   "domain": "iapcollege.com",
+   "fetched_at": "2026-07-06T15:51:10.259365+00:00",
+   "status": "fetch_failed",
+   "page_type": "editorial",
+   "page_type_source": "domain"
+  },
+  "https://www.reddit.com/r/jobs/comments/3i4ijh/im_interested_in_being_an_event_planner_but_where/": {
+   "url": "https://www.reddit.com/r/jobs/comments/3i4ijh/im_interested_in_being_an_event_planner_but_where/",
+   "domain": "reddit.com",
+   "fetched_at": "2026-07-06T19:16:43.119139+00:00",
+   "status": "not_fetched",
+   "page_type": "community",
+   "page_type_source": "domain"
+  },
+  "https://www.qcpetstudies.com/resources/your-dog-grooming-career": {
+   "url": "https://www.qcpetstudies.com/resources/your-dog-grooming-career",
+   "domain": "qcpetstudies.com",
+   "fetched_at": "2026-07-06T19:22:30.091680+00:00",
+   "status": "ok",
+   "page_type": "qc_owned",
+   "page_type_source": "domain",
+   "final_url": "https://www.qcpetstudies.com/resources/your-dog-grooming-career",
+   "title": "Your Dog Grooming Career - QC Pet Studies",
+   "headings": [
+    "Your Dog Grooming Career",
+    "Run Your Own Dog Grooming Salon",
+    "Work for a Grooming Salon or Pet Retailer",
+    "Work as a Dog Groomer from Home",
+    "Become a Mobile Dog Groomer",
+    "Explore the Dog Industry",
+    "Free Business Training",
+    "A Blog for Groomers",
+    "Exclusive Discounts from Vendors",
+    "Dog Grooming Business Resources",
+    "Dog Grooming Associations"
+   ],
+   "schema_types": [],
+   "word_count": 817,
+   "content_excerpt": "Your Dog Grooming Career\nCareer Paths for Professional Dog Groomers\nDog grooming is a diverse industry with a variety of exciting career possibilities. Whether you enjoy working from home or aspire to open your own business, you're sure to find a career path that works for you.\nRun Your Own Dog Grooming Salon\nBe Your Own Boss!\nDog grooming is a great industry for aspiring entrepreneurs who want to run the show. When you enroll in the Dog Grooming course, you\u2019ll also be trained in the essentials of running a dog grooming business. This optional training prepares you to launch your own business and grow your clientele.\nWork for a Grooming Salon or Pet Retailer\nFrom independent salons to major pet retailers, a skilled dog groomer is always in demand. If your goal is to work for an established grooming salon or as an in-house groomer at a retailer, a solid dog grooming education will be a huge asset. You\u2019ll stand out as a candidate who has the skills and dedication to get the job done properly and safely.\nWork as a Dog Groomer from Home\nWant to cut the commute?\nQC Pet Studies prepares you to start a grooming business in the comfort of your home. You\u2019ll be able to run your own business and set your own hours without worrying about additional retail and location costs. Work part-time or full-time, the choice is completely up to you!\nBecome a Mobile Dog Groomer\nIn today\u2019s fast-paced world, mobile dog groomers are in extremely high demand, so you can charge a premium for your services! You may choose to invest in a mobile grooming van or work out of your clients\u2019 homes. Your clients will be looking for a credible professional groomer, and that\u2019s where a solid dog grooming education will come in handy!\nExplore the Dog Industry\nOnce you have an education and experience in dog grooming, you can always branch out into other areas of the animal care industry. Many dog groomers try their hand at teaching, obedience training, or even competition dog grooming!\nRegardless of your career aspirations, QC Pet Studies will provide you with the skills and support you need to succeed.\nI'm 2 units [into the Dog Grooming Course] and love it! It has a great background, written learning, supplies, and more! I came from a vet assisting background and wanted to open up my own grooming salon, but I have two kids, so I needed to do distance [training]. I love this course so much! I highly recommend this course and the First Aid for Groomers Course. With my background knowledge, I could tell the topics were well-researched. By far, blew me away!\nMackenzie Lafleur\nQC Graduate\nRead other reviews like this one by checking out our Student & Graduate Features!\nCareer Resources for\nGrooming Students and Graduates\nAs a student of QC Pet Studies, you'll be provided with resources to build a profitable and\nenjoyable career as a professional dog groomer.\nFree Business Training\nQC's comprehensive Online Dog Grooming Class comes with complete business training at no extra cost! This training will teach you the skills you'll need to start a successful dog grooming business!\nA Blog for Groomers\nThe Sniffin'Around dog grooming blog is full of articles that will help you thrive in your chosen career path. From adding accessories to setting your grooming prices to designing your business logo, the blog content aims to help you succeed as a professional dog groomer and business owner.\nExclusive Discounts from Vendors\nInvesting in professional-grade dog grooming tools and materials enables you to do your best work. Students of QC Pet Studies receive exclusive discounts to some of the best pet retailers. You'll be able to build your grooming toolkit with quality products and equipment at a fraction of the cost!\nDog Grooming Business Resources\nQC Students are provided with templates and reference sheets to help them write business plans, manage client information, and make quick and accurate decisions in the grooming environment. You'll be able to download all of the following f",
+   "brand_mentions": {
+    "NDGAA": 1
+   },
+   "qc_mentioned": true,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 0,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://www.indeed.com/career-advice/finding-a-job/jobs-without-a-degree": {
+   "url": "https://www.indeed.com/career-advice/finding-a-job/jobs-without-a-degree",
+   "domain": "indeed.com",
+   "fetched_at": "2026-07-06T19:22:32.559387+00:00",
+   "status": "fetch_failed",
+   "page_type": "editorial",
+   "page_type_source": "domain"
+  },
+  "https://www.qceventplanning.com/online-event-courses/accelerate-your-business": {
+   "url": "https://www.qceventplanning.com/online-event-courses/accelerate-your-business",
+   "domain": "qceventplanning.com",
+   "fetched_at": "2026-07-06T19:22:43.746284+00:00",
+   "status": "ok",
+   "page_type": "qc_owned",
+   "page_type_source": "domain",
+   "final_url": "https://www.qceventplanning.com/online-event-courses/accelerate-your-business",
+   "title": "Accelerate Your Business Workshop - QC Event School",
+   "headings": [
+    "Accelerate Your Business Workshop",
+    "Your Independent Development Project",
+    "Hear From Students and Grads",
+    "Here's What You'll Learn",
+    "Course Outline",
+    "Your Online Presence",
+    "Have Questions About the Course?",
+    "Access an Exclusive Virtual Community Where Creativity Thrives",
+    "Frequently Asked Questions",
+    "Ready to Grow a Successful Event Planning Business?",
+    "Contact Us"
+   ],
+   "schema_types": [
+    "Course",
+    "CourseInstance",
+    "EducationalOrganization",
+    "Offer"
+   ],
+   "word_count": 1016,
+   "content_excerpt": "Accelerate Your Business Workshop\nMarket & Grow Your Event Planning Business\nWhy Choose\nQC Event School\nQC's Accelerate Your Business course provides students with the most comprehensive training available to grow your event planning business.\n- Our professional workshop is designed to help you take your existing event business to the next level\n- Thriving virtual community to connect with other event professionals, get feedback, and gain access to bonus material\n- Catapult your career with access to real-world templates, self-study assignments, and bonus materials\nYour Independent Development Project\nYour business is unique, and so are your business needs. Work with a QC tutor to advance your business. Learn in-depth marketing strategies, work on building a strong portfolio, fine tune your project management practices, become more comfortable with financing and budgeting, and more. During the optional final unit of this workshop, you'll have the opportunity to hone in on the areas of your business you would most like to work on! You can ask your tutor for specific advice on your marketing strategy or website copy, or seek general advice on a tricky event plan. This is a great opportunity to learn and improve!\nHear From Students and Grads\nWe've helped 30,000+ students and graduates start their own successful event and wedding planning businesses!\n\u201cI decided that this was the school for me and took the chance! Looking back, I can confirm that this was the BEST. DECISION. EVER!\u201d\n\u201cThese certifications will give me a definite advantage! Having these courses attached to my name and business shows the dedication I have for this industry; that I'm a true wedding and event professional.\u201d\n\u201cMy experiences were 10/10 overall. As a QC Event School graduate, I would definitely recommend these courses!\u201d\n\u201cQC's Event & Wedding Planning Course provided me with useful knowledge and skills to start my own planning company. It gave me the confidence to work with clients from the first meeting right up to the day of their wedding.\u201d\n\u201cIt took me less than an hour chatting with Student Support to convince me of the professionalism of this planning school was at the caliber I was looking for.\u201d\n\u201cI wish someone would have told me to do it earlier because it is an awesome starting point.\u201d\nHere's What You'll Learn\nQC's comprehensive Accelerate Your Business Workshop will show you how to turn your event planning business into a thriving success. You'll learn how to:\n- Build a brand and gain all the knowledge you need to grow a thriving event business\n- Use branding, social media, content marketing, search engine optimization and other advanced marketing tools\n- Master business communications, project management and financial management, allowing you to target the aspects of business ownership you need to succeed\n- Create a personalized development project that targets your unique business needs\nCourse Outline\nThe Accelerate Your Business Workshop is divided into 4 parts, each comprising separate training units.\n- Discover the importance of creating a strong brand identity for your business and how to target your ideal clients\n- Consider your business and your goals as you work on establishing your brand while developing your customer personas\n- Start thinking about different types of promotions you might run for your business\n- Explore your online presence, from your website to your social media presence\n- Learn how to market your business online through developing an effective website, the art of blogging, content marketing and more\n- Discover how to effectively manage your social media presence, and how to handle negative reviews\n- Discover how you can present your business to appeal to the right clients\n- Learn how to develop an eye-catching professional portfolio\n- Study the art of communicating effectively as a business owner\n- Practice preparing client proposals designed to impress\n- Discover the different tools you can use to stay organized and to m",
+   "brand_mentions": {},
+   "qc_mentioned": true,
+   "features": {
+    "faq_schema": false,
+    "course_schema": true,
+    "org_schema": false,
+    "question_headings": 2,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://www.youtube.com/watch?v=J7SU3Y2YbVc": {
+   "url": "https://www.youtube.com/watch?v=J7SU3Y2YbVc",
+   "domain": "youtube.com",
+   "fetched_at": "2026-07-06T19:22:45.628653+00:00",
+   "status": "not_fetched",
+   "page_type": "video",
+   "page_type_source": "domain"
+  },
+  "https://easybusypets.com/blog/starting-a-dog-grooming-business-the-complete-guide": {
+   "url": "https://easybusypets.com/blog/starting-a-dog-grooming-business-the-complete-guide",
+   "domain": "easybusypets.com",
+   "fetched_at": "2026-07-06T19:22:45.628695+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://easybusypets.com/blog/starting-a-dog-grooming-business-the-complete-guide",
+   "title": "Starting a Dog Grooming Business: The Complete Guide | MyOwnWebsite.com",
+   "headings": [
+    "Starting a Dog Grooming Business: The Complete Guide",
+    "Starting a Dog Grooming Business: The Complete Guide",
+    "Obtaining Licenses and Permits"
+   ],
+   "schema_types": [],
+   "word_count": 2518,
+   "content_excerpt": "- Starting a Dog Grooming Business: The Complete Guide\nStarting a business can be overwhelming, especially when it comes to all the legal paperwork, licensing, and other important details. But don't worry, we're here to help you every step of the way.\nOur comprehensive guide covers everything you need to know to get your dog grooming business up and running, from selecting a business name to designing a logo. Get started today and take the first step towards success in the pet care industry.\nYou may also want to consider registering your business as a legal entity, such as:\nLimited Liability Company (LLC): This business structure protects the owners from being personally responsible for the debts and liabilities of the business. It combines the characteristics of a corporation and either a partnership or sole proprietorship and is only available in the US.\nCorporation: A corporation operates as a single legal entity, made up of a group of individuals.\nSole Proprietorship: A business owned and run by a single individual, with no legal distinction between the owner and the business.\nPartnership: A business owned by two or more individuals, with different arrangements for sharing liability and profits.\nWhen considering your options, it is recommended that you seek legal advice to determine the best option for your new dog grooming business.\u00a0\nIn the United States, obtaining licenses and permits for a dog grooming business is an important step in starting a successful business. There are several federal, state, and local regulations that must be followed in order to legally operate a dog grooming business:\nAt the federal level, you may need to obtain an Employer Identification Number (EIN) from the Internal Revenue Service (IRS). This number is used for tax purposes and is required if you plan to hire employees.\nAt the state level, you may need to obtain a business license, as well as any necessary certification or registration for your business. Some states require dog groomers to be licensed by the state, which may include passing an exam and completing a certain number of hours of training.\nLocal regulations may also come into play, such as obtaining a permit to operate your business within a specific municipality. This may include obtaining a zoning permit to ensure that your business complies with local land use regulations.\nHere are some of the key licenses and permits that are typically required for a dog grooming business:\nBusiness license: A business license is a general license required by most cities and states to operate a business within their jurisdiction. The requirements and fees vary depending on the location and type of business, so it's essential to check with the local government to determine the specific requirements.\nSales tax license: A sales tax license is required if the dog grooming business will be selling retail products, such as grooming supplies and pet accessories. The sales tax license allows the business to collect and remit sales tax on retail sales.\nZoning permit: A zoning permit is required to ensure that the business is operating in a commercially zoned area and that the use of the space is in compliance with local zoning laws. This permit is obtained from the local government and typically requires submission of a floor plan and proof of liability insurance.\nAnimal care license: An animal care license is required for businesses that provide care for animals, such as a dog grooming business. This license verifies that the business meets specific standards for the care and handling of animals and that the groomers are trained and qualified to provide safe and professional grooming services.\nIt's important to research and understand all the licenses and permits (if any) that you may need in order to legally operate your dog grooming business in the United States. You can start by contacting your local government's business registration office or the Small Business Administration (SBA) for more inf",
+   "brand_mentions": {
+    "Easy Busy Pets": 1
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 0,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://www.facebook.com/groups/945398623599681/posts/1032923194847223/": {
+   "url": "https://www.facebook.com/groups/945398623599681/posts/1032923194847223/",
+   "domain": "facebook.com",
+   "fetched_at": "2026-07-06T19:22:47.839099+00:00",
+   "status": "not_fetched",
+   "page_type": "community",
+   "page_type_source": "domain"
+  },
+  "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai": {
+   "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai",
+   "domain": "pennfoster.edu",
+   "fetched_at": "2026-07-06T19:22:55.858387+00:00",
+   "status": "fetch_failed",
+   "page_type": "competitor",
+   "page_type_source": "domain"
+  },
+  "https://courses.msicertified.com/course/event-planner-certification": {
+   "url": "https://courses.msicertified.com/course/event-planner-certification",
+   "domain": "courses.msicertified.com",
+   "fetched_at": "2026-07-06T19:22:56.881803+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://courses.msicertified.com/course/event-planner-certification",
+   "title": "Event Planning Certification Online | Get Certified Fast",
+   "headings": [
+    "Event Planner Certification",
+    "Event Planner Certification",
+    "MSI Has Thousands Of Reviews!",
+    "What's included?",
+    "Easy To Understand",
+    "Self-Paced",
+    "About This Certification Course",
+    "View 2026 Course Syllabus",
+    "Frequently asked questions",
+    "Are There Prerequisites?",
+    "How long is the training course?",
+    "How is the exam structured?",
+    "How in-depth is the training?",
+    "Pay Scale for a certified office manager",
+    "Influence of CQEP certification on promotions",
+    "Event Planner Certification"
+   ],
+   "schema_types": [
+    "AggregateRating",
+    "Audience",
+    "Course",
+    "CourseInstance",
+    "Offer",
+    "Organization",
+    "Product",
+    "Thing"
+   ],
+   "word_count": 1163,
+   "content_excerpt": "Event Planner Certification\nGet Your\u00a0Event Planner Certification Online!\n                \n            Event Planner Certification\nThis online event planning certification covers everything you need to\nplan and manage successful events. Complete the self-paced course and\nearn your certification in just a few hours.\nBuild the skills, confidence, and professionalism needed to design successful events and launch a thriving career in the event industry.\n                \n            Build the skills, confidence, and professionalism needed to design successful events and launch a thriving career in the event industry.\nMSI Has Thousands Of Reviews!\nWhat's included?\nEasy To Understand\n                        \n                        \n                        \n                        We've designed our programs to make them easy to learn, even if you haven't taken training in years.\u00a0 Everything you need is included.\n                    Self-Paced\nMove at whatever speed is comfortable for you.\u00a0 Take the certification exam as soon as you're ready.\u00a0 You have access for 1-year!\n                    About This Certification Course\n                \n                \n                \n                \nThe Certified Quality Event Planner (CQEP)\n designation is a professional credential designed to elevate your\nexpertise and credibility in the world of event planning. This event planner certification provides a structured understanding of how to plan,\nmanage, and execute events with precision and professionalism - covering\nevery aspect from budgeting and logistics to branding and business\noperations. It's not just about organizing events; it's about mastering\nthe systems, strategies, and standards that define excellence in the\nfield. This Event Planner certification gives you the confidence and recognition to operate in both\ncorporate and independent settings with skill and authority.\nUnderstanding the fundamentals of event planning is vital for both individuals and organizations because it fosters efficiency, creativity, and strategic thinking. A well-developed comprehension of planning processes allows professionals to anticipate challenges, allocate resources effectively, and deliver meaningful experiences that align with organizational goals [1]. For businesses, effective event planning strengthens brand reputation, enhances stakeholder engagement, and drives measurable outcomes. For individuals, it refines leadership, communication, and problem-solving skills-qualities that extend beyond the event industry and contribute to broader professional success.\nEarning this event planner certification is an investment in your professional growth. Whether you're new to the industry or seeking to strengthen your credentials, the event planner program helps you stand out in a competitive marketplace. It signals to employers, clients, and collaborators that you understand not only how to create successful events but also how to run the business behind them. By completing the program, you gain practical experience, strategic insight, and the credibility needed to build a sustainable career in event planning.\n            Understanding the fundamentals of event planning is vital for both individuals and organizations because it fosters efficiency, creativity, and strategic thinking. A well-developed comprehension of planning processes allows professionals to anticipate challenges, allocate resources effectively, and deliver meaningful experiences that align with organizational goals [1]. For businesses, effective event planning strengthens brand reputation, enhances stakeholder engagement, and drives measurable outcomes. For individuals, it refines leadership, communication, and problem-solving skills-qualities that extend beyond the event industry and contribute to broader professional success.\nEarning this event planner certification is an investment in your professional growth. Whether you're new to the industry or seeking to strengthen your credentials, t",
+   "brand_mentions": {},
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": true,
+    "org_schema": true,
+    "question_headings": 5,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": true
+   }
+  },
+  "https://alison.com/tag/event-planning": {
+   "url": "https://alison.com/tag/event-planning",
+   "domain": "alison.com",
+   "fetched_at": "2026-07-06T19:22:58.647828+00:00",
+   "status": "ok",
+   "page_type": "competitor",
+   "page_type_source": "domain",
+   "final_url": "https://alison.com/tag/event-planning",
+   "title": "Free Online Event Planning Courses | Alison",
+   "headings": [
+    "Best Event Planning Courses",
+    "Benefits Of An Alison Certificate",
+    "Explore Courses By Category",
+    "Explore In-Demand Careers",
+    "Popular Course Creators",
+    "Over 50 million learners have used Alison to empower themselves"
+   ],
+   "schema_types": [],
+   "word_count": 178,
+   "content_excerpt": "- All Courses\n- Event planning\nBest Event Planning Courses\nThese free online event planning courses will teach you what you need to know about the effective planning and management of large events. Life involves many large events like graduations, weddings and awards ceremonies both big and small. Behind each of these events is an event planner who knows how to handle crowds, venues, catering, entertainment and more. These courses teach you those skills....\u2026Read More\nBenefits Of An Alison Certificate\n- Certify Your SkillsA CPD accredited Alison Certificate certifies the skills you\u2019ve learned\n- Stand Out From The CrowdAdd your Alison Certification to your resum\u00e9 and stay ahead of the competition\n- Advance in Your CareerShare your Alison Certification with potential employers to show off your skills and capabilities\nExplore Courses By Category\nExplore In-Demand Careers\nDiscover More CareersPopular Course Creators\nOver 50 million learners have used Alison to empower themselves\nNot sure where to begin?\nWhat is your main goal on Alison?\n- 6000 free courses\n- 50 million+ learners\n- 15 million+ graduates\n- 195 countries",
+   "brand_mentions": {
+    "Alison": 6
+   },
+   "qc_mentioned": false,
+   "features": {
+    "faq_schema": false,
+    "course_schema": false,
+    "org_schema": false,
+    "question_headings": 0,
+    "comparison_table": false,
+    "video_embed": false,
+    "pricing_signals": false
+   }
   }
  }
 }

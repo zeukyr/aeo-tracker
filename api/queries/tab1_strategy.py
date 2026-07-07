@@ -88,6 +88,59 @@ def get_topic_cited_urls(segment, days=None, limit=_TOP_N_URLS):
     return [{"url": r[0], "count": r[1]} for r in rows]
 
 
+def _qc_citation_count(segment, days=None):
+    """How many times QC's own domains are cited in this segment (usually low)."""
+    date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
+    from api.queries.recommendation_signals import _segment_clause_params
+    seg_clause, seg_params = _segment_clause_params(segment)
+    qc_ilike = " OR ".join(f"cited_url ILIKE '%%{t}%%'" for t in QC_DOMAIN_TOKENS)
+    query = f"""
+        WITH expanded AS (
+            SELECT unnest(m.citations) as cited_url
+            FROM mention_responses m
+            JOIN questions q ON q.id = m.question_id
+            WHERE 1=1 {date_m} {seg_clause}
+        )
+        SELECT COUNT(*) FROM expanded WHERE {qc_ilike};
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, seg_params)
+            return cur.fetchone()[0]
+
+
+def strategic_evidence(segment, days=None, school=None, limit=5):
+    """
+    Truthful citation evidence for a Tab 1 card (no fetching, all Tier A): the
+    top external domains AI cites for this segment with counts, plus QC's own
+    citation count. Falls back to the rec's SCHOOL when the segment value isn't
+    a real topic (the LLM sometimes puts a specific phrase there), so a card
+    almost always has evidence. Returns None only when nothing matches.
+    """
+    from collections import Counter
+    from api.queries.page_facts import _domain_of
+
+    scope_label = (segment or {}).get("value")
+    urls = get_topic_cited_urls(segment, days, limit=60)
+    if not urls and school and school not in ("both", "Both", "All", "General"):
+        segment = {"dimension": "school", "value": school}
+        scope_label = school
+        urls = get_topic_cited_urls(segment, days, limit=60)
+    if not urls:
+        return None
+
+    dom = Counter()
+    for u in urls:
+        dom[_domain_of(u["url"])] += u["count"]
+    cited = [{"domain": d, "count": c} for d, c in dom.most_common(limit)]
+    return {
+        "cited": cited,
+        "qc_citations": _qc_citation_count(segment, days),
+        "max_count": cited[0]["count"] if cited else 0,
+        "scope_label": scope_label,
+    }
+
+
 def _coarse(count, total):
     """Coarse prevalence label — avoids false precision on small N."""
     if total == 0:

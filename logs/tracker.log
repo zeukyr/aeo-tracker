@@ -7529,3 +7529,158 @@
 2026-07-06 09:26:13,738 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-07-06 10:06:19,933 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
 2026-07-06 10:06:33,250 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 11:30:26,274 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 11:30:44,660 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 11:51:03,821 [WARNING] page_facts fetch failed for https://www.entrepreneur.com/starting-a-business/how-to-start-an-event-planning-service/37892: 406 Client Error: Not Acceptable for url: https://www.entrepreneur.com/starting-a-business/how-to-start-an-event-planning-service/37892
+2026-07-06 11:51:05,249 [WARNING] page_facts fetch failed for https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate: 403 Client Error: Forbidden for url: https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate
+2026-07-06 11:51:08,467 [WARNING] page_facts fetch failed for https://careertraining.uh.edu/training-programs/master-event-design/: 403 Client Error: Forbidden for url: https://careertraining.uh.edu/training-programs/master-event-design/
+2026-07-06 11:51:11,704 [WARNING] page_facts fetch failed for https://www.iapcollege.com/program/event-planner-course/: 403 Client Error: Forbidden for url: https://www.iapcollege.com/program/event-planner-course/
+2026-07-06 11:54:09,567 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 11:54:15,072 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 11:54:22,917 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:19:42,380 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:42,381 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:42,381 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:19:54,042 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:19:54,062 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:54,062 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:54,062 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:19:56,534 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:19:56,546 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:56,548 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:19:56,548 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:19:59,362 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:31:35,438 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:31:35,469 [INFO] Fabrication guard dropped (QC Pet Studies is invisible in competitive searches for 'best distance): asserts animalbehaviorcollege.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:31:35,470 [INFO] Fabrication guard dropped (Engines cite Citations for 'how to become a certified dog trainer onli): asserts animalbehaviorcollege.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:31:35,471 [INFO] Fabrication guard dropped (QC Event Planning is struggling with recognition where competitors lik): asserts coursera.org lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:31:35,472 [INFO] Fabrication guard dropped (QC Event Planning is not being recognized for 'event decoration course): asserts coursera.org lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:31:35,473 [INFO] Fabrication guard dropped (QC Pet Studies' content is lacking in third-party citations that compe): asserts kpcourses.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:31:38,792 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:35:00,596 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:00,597 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:00,597 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:35:15,780 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:35:15,811 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:15,813 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:15,814 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:35:27,981 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:35:27,991 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:27,992 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:35:27,992 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:35:38,139 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:36:18,317 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:36:18,332 [INFO] Fabrication guard dropped (QC Pet Studies is invisible in the question 'how to become a certified): asserts animalbehaviorcollege.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:36:18,332 [INFO] Fabrication guard dropped (QC Event Planning ranks below competitors for the query 'event plannin): asserts coursera.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:36:22,569 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:49:33,611 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:33,612 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:33,612 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:49:43,286 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:49:43,313 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:43,314 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:43,314 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:49:52,120 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:49:52,126 [INFO] Fabrication guard dropped (AI cites the APDT resource page for dog trainers.): asserts apdt.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:52,129 [INFO] Fabrication guard dropped (A roundup ranks competitors above QC for event planning.): asserts eventbrite.com lists/ranks providers, but it is not a verified roundup/directory
+2026-07-06 12:49:52,130 [INFO] Fabrication guard dropped (Competitors are cited much more than QC.): comparative claim about competitors with no supporting count
+2026-07-06 12:49:56,258 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:50:29,329 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 12:50:37,983 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 14:36:25,752 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 14:36:25,782 [INFO] Fabrication guard dropped (Competitors outperform QC in discussions about dog grooming certificat): comparative claim about competitors with no supporting count
+2026-07-06 14:36:31,071 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:46,345 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:47,451 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:48,432 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:49,729 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:51,379 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:52,438 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:16:54,463 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:26,581 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:27,692 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:28,944 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:29,977 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:31,141 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:32,303 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:17:34,291 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:13,763 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:13,776 [INFO] Fabrication guard dropped (Competing sources dominate the topic of 'pet grooming' with high citat): comparative claim about competitors with no supporting count
+2026-07-06 15:22:19,659 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:22,237 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:23,736 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:24,810 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:25,653 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:26,717 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:27,823 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:29,124 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:33,635 [WARNING] page_facts fetch failed for https://www.indeed.com/career-advice/finding-a-job/jobs-without-a-degree: 403 Client Error: Forbidden for url: https://www.indeed.com/career-advice/finding-a-job/jobs-without-a-degree
+2026-07-06 15:22:34,667 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:36,022 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:37,147 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:38,272 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:39,411 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:41,648 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:43,282 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:49,247 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:50,537 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:51,550 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:52,917 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:54,972 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:22:56,881 [WARNING] page_facts fetch failed for https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai: 403 Client Error: Forbidden for url: https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai
+2026-07-06 15:23:02,311 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:03,559 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:04,912 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:05,963 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:07,350 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:08,601 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:23:10,053 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:07,277 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:12,174 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:15,468 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:16,839 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:17,905 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:18,968 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:20,155 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:21,394 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:23,081 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:25,188 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:26,301 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:27,640 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:29,283 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:30,468 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:31,725 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:34,319 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:36,505 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:37,399 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:38,629 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:40,284 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:42,100 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:44,479 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:46,218 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:48,306 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:50,787 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:52,436 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:53,959 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:24:55,594 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:19,391 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:27,024 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:29,895 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:31,344 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:32,667 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:33,630 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:34,937 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:36,018 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:37,225 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:39,494 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:40,717 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:42,268 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:44,198 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:45,300 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:46,597 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:48,520 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:50,687 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:51,830 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:52,897 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:54,879 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-06 15:45:57,306 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"

@@ -580,6 +580,179 @@ p, h1, h2, h3, h4 {
   margin: 0;
 }
 
+/* Tab 1 citation evidence (what AI cites vs QC) */
+.tab1ev {
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.tab1ev__eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.tab1ev__rows { display: flex; flex-direction: column; gap: 4px; }
+
+.tab1ev__row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1.4fr) 3fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.tab1ev__domain {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tab1ev__bar { height: 7px; background: var(--surface-primary); border-radius: var(--radius-pill); overflow: hidden; }
+.tab1ev__bar > i { display: block; height: 100%; background: var(--color-blue); border-radius: var(--radius-pill); }
+
+.tab1ev__n {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 34px;
+  text-align: right;
+}
+
+.tab1ev__row--qc .tab1ev__domain { color: var(--color-down-text); font-weight: 500; }
+.tab1ev__row--qc .tab1ev__bar > i { background: var(--color-down-text); }
+
+/* Tab 2 scorecard card (Phase 4) */
+.scorecard {
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scorecard__eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.scorecard__page { display: flex; flex-direction: column; gap: 2px; }
+
+.scorecard__url {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--color-blue-dark);
+  word-break: break-all;
+}
+
+.scorecard__winners { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.scorecard__src {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  color: var(--text-secondary);
+}
+
+.scorecard__src-n { color: var(--text-muted); margin-left: 5px; }
+
+.scorecard__scroll { overflow-x: auto; border-radius: var(--radius-sm); }
+
+.scoretable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 440px;
+  background: var(--surface-primary);
+}
+
+.scoretable th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 8px 10px;
+  border-bottom: 0.5px solid var(--border-default);
+  white-space: nowrap;
+}
+
+.scoretable th.num, .scoretable td.num { text-align: center; }
+
+.scoretable td {
+  padding: 7px 10px;
+  border-bottom: 0.5px solid var(--border-default);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.scoretable tbody tr:last-child td { border-bottom: 0; }
+.scoretable__rec { background: var(--color-up-bg); }
+
+.geo { text-transform: capitalize; color: var(--text-secondary); font-size: 11px; }
+.geo--high { color: var(--color-blue-dark); font-weight: 500; }
+.geo--low { color: var(--text-muted); }
+
+.prev { color: var(--text-muted); font-size: 11px; }
+
+.mark { font-weight: 700; font-family: ui-monospace, monospace; }
+.mark--yes { color: var(--color-up-text); }
+.mark--no { color: var(--color-down-text); }
+
+.verdict { font-weight: 600; font-size: 12px; white-space: nowrap; }
+.verdict--yes { color: var(--color-up-text); }
+.verdict--no { color: var(--text-muted); }
+
+.scorecard__insight {
+  border-left: 2px solid var(--color-amber);
+  background: #fbf0de;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.scorecard__insight-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-amber);
+}
+
+.scorecard__insight p { margin: 5px 0 0; font-size: 12.5px; color: var(--text-secondary); }
+
+.scorecard__edits { display: flex; flex-direction: column; gap: 5px; }
+
+.scorecard__edit {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  background: var(--surface-primary);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+}
+
+.scorecard__plus { color: var(--color-up-text); font-weight: 700; }
+
 .rec-track-bar {
   display: flex;
   align-items: center;

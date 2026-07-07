@@ -30,6 +30,15 @@ const WORK_STREAMS = [
 
 const streamOf = (rec) => rec.work_stream ?? (rec.action_type === "technical" ? "on_page" : "strategic");
 
+// Match a rec against the global school filter. Recs tagged "both" apply to any
+// specific school; unscoped recs (no school) show only under "All"/"General".
+function matchesSchool(rec, school) {
+  if (!school || school === "All") return true;
+  const s = (rec.school || "").toLowerCase();
+  if (school === "General") return !rec.school;
+  return rec.school === school || s === "both";
+}
+
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
 const PRIORITY_LABELS = { high: "High priority", medium: "Medium priority", low: "Low priority" };
 
@@ -193,6 +202,101 @@ function TrackBar({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover
   return null;
 }
 
+const PREVALENCE_LABEL = { most: "most", some: "some", few: "few", none: "none" };
+
+function StrategicEvidence({ ev }) {
+  const max = Math.max(ev.max_count || 0, 1);
+  return (
+    <div className="tab1ev">
+      <span className="tab1ev__eyebrow">
+        What AI cites{ev.scope_label ? ` for “${ev.scope_label}”` : " for this topic"}
+      </span>
+      <div className="tab1ev__rows">
+        {ev.cited.map((c, i) => (
+          <div className="tab1ev__row" key={i}>
+            <span className="tab1ev__domain">{c.domain}</span>
+            <span className="tab1ev__bar"><i style={{ width: `${(c.count / max) * 100}%` }} /></span>
+            <span className="tab1ev__n">{c.count}×</span>
+          </div>
+        ))}
+        <div className="tab1ev__row tab1ev__row--qc">
+          <span className="tab1ev__domain">QC (third-party citations)</span>
+          <span className="tab1ev__bar"><i style={{ width: `${(ev.qc_citations / max) * 100}%` }} /></span>
+          <span className="tab1ev__n">{ev.qc_citations}×</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Scorecard({ sc }) {
+  return (
+    <div className="scorecard">
+      <div className="scorecard__page">
+        <span className="scorecard__eyebrow">Your page</span>
+        <a className="scorecard__url" href={sc.qc_url} target="_blank" rel="noreferrer">{sc.qc_url}</a>
+      </div>
+
+      <span className="scorecard__eyebrow">Compared against {sc.winners_total} pages AI cites for this topic</span>
+      <div className="scorecard__winners">
+        {sc.winners.map((w, i) => (
+          <span className="scorecard__src" key={i}>
+            {w.domain}<span className="scorecard__src-n">{w.citation_count}×</span>
+          </span>
+        ))}
+      </div>
+
+      <div className="scorecard__scroll">
+        <table className="scoretable">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>GEO</th>
+              <th className="num">Cited pages</th>
+              <th className="num">QC</th>
+              <th>Recommend?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sc.features.map((f) => (
+              <tr key={f.id} className={f.recommend ? "scoretable__rec" : ""}>
+                <td>{f.label}</td>
+                <td className={`geo geo--${f.geo_weight}`}>{f.geo_weight}</td>
+                <td className="num">
+                  {f.winners_present}/{f.winners_total}{" "}
+                  <span className="prev">{PREVALENCE_LABEL[f.prevalence] ?? f.prevalence}</span>
+                </td>
+                <td className="num">
+                  <span className={f.qc_has ? "mark mark--yes" : "mark mark--no"}>{f.qc_has ? "✓" : "✗"}</span>
+                </td>
+                <td className={f.recommend ? "verdict verdict--yes" : "verdict verdict--no"}>
+                  {f.recommend ? "✅ Add" : "—"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {sc.emergent_insight && (
+        <div className="scorecard__insight">
+          <span className="scorecard__insight-tag">◆ Discovered pattern · lower confidence</span>
+          <p>{sc.emergent_insight}</p>
+        </div>
+      )}
+
+      {sc.suggested_edits?.length > 0 && (
+        <div className="scorecard__edits">
+          <span className="scorecard__eyebrow">Suggested edits · section level</span>
+          {sc.suggested_edits.map((e, i) => (
+            <div className="scorecard__edit" key={i}><span className="scorecard__plus">+</span><span>{e}</span></div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented }) {
   const [expanded, setExpanded] = useState(false);
   const metricLabel = formatMetric(rec);
@@ -219,9 +323,13 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
         {rec.confidence != null && <span className="chip">confidence {Math.round(rec.confidence * 100)}%</span>}
       </div>
 
-      {rec.target && <p className="rec-card__target">Target: {rec.target}</p>}
+      {rec.target && !rec.detail?.scorecard && <p className="rec-card__target">Target: {rec.target}</p>}
 
-      {rec.evidence && (
+      {rec.detail?.scorecard && <Scorecard sc={rec.detail.scorecard} />}
+
+      {rec.detail?.evidence && <StrategicEvidence ev={rec.detail.evidence} />}
+
+      {rec.evidence && !rec.detail?.scorecard && (
         <button className="evidence-toggle" onClick={() => setExpanded(!expanded)}>
           {expanded ? "Hide evidence" : "Show evidence"}
         </button>
@@ -318,15 +426,16 @@ function Recommendations() {
   if (error) return <p className="state-msg state-msg--error">Error: {error}</p>;
   if (loading) return <p className="state-msg">Loading...</p>;
 
+  const schoolFiltered = recommendations.filter((r) => matchesSchool(r, school));
   const streamCounts = Object.fromEntries(
     WORK_STREAMS.map((s) => [
       s.key,
-      recommendations.filter(
+      schoolFiltered.filter(
         (r) => streamOf(r) === s.key && (r.status === "proposed" || ACTIVE_STATUSES.includes(r.status))
       ).length,
     ])
   );
-  const streamFiltered = recommendations.filter((r) => streamOf(r) === stream);
+  const streamFiltered = schoolFiltered.filter((r) => streamOf(r) === stream);
   const activeRecs = streamFiltered.filter((r) => ACTIVE_STATUSES.includes(r.status));
   const proposedRecs = streamFiltered.filter((r) => r.status === "proposed");
 

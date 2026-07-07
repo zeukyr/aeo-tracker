@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -26,7 +27,9 @@ from api.queries.recommendation_signals import (
 from api.queries.sentiment import get_top_positives
 from api.queries.citations import get_qc_citations
 from api.queries.sitemap_coverage import diagnose_coverage, diagnose_text_coverage
-from api.queries.tab1_strategy import analyze_strategic_topic
+from api.queries.tab1_strategy import analyze_strategic_topic, strategic_evidence
+from api.queries.tab2_scorecard import build_tab2_recommendations
+from api.queries.page_facts import load_cache, inclusion_opportunity
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -199,9 +202,9 @@ def save_recommendations(recommendations):
                         problem, action, priority, school, evidence,
                         action_type, target, segment, metric_impact,
                         expected_direction, expected_magnitude, effort, confidence,
-                        batch_id
+                        batch_id, detail
                     )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
                     rec["problem"],
                     rec["action"],
@@ -217,6 +220,7 @@ def save_recommendations(recommendations):
                     rec.get("effort"),
                     rec.get("confidence"),
                     batch_id,
+                    Json(rec["detail"]) if rec.get("detail") is not None else None,
                 ))
                 inserted += 1
         conn.commit()
@@ -269,7 +273,7 @@ def get_saved_recommendations(include_superseded=False):
                 SELECT id, generated_at, problem, action, priority, school, evidence, status,
                        action_type, target, segment, metric_impact,
                        expected_direction, expected_magnitude, effort, confidence,
-                       implemented_at, measurement_window_days, batch_id
+                       implemented_at, measurement_window_days, batch_id, detail
                 FROM recommendations
                 {where}
                 ORDER BY generated_at DESC, priority ASC;
@@ -296,6 +300,7 @@ def get_saved_recommendations(include_superseded=False):
             "implemented_at": str(r[16]) if r[16] is not None else None,
             "measurement_window_days": r[17],
             "batch_id": str(r[18]) if r[18] is not None else None,
+            "detail": r[19],
             "work_stream": _work_stream(r[8]),
         }
         for r in rows
@@ -449,16 +454,94 @@ Never assert a page's contents beyond the classification/`lists_competitors` sho
 """
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Deterministic fabrication guard - runs BEFORE the LLM judge.
+# In testing the LLM judge passed all three planted fabrications ("APDT lists
+# Penn Foster", etc.) - an LLM can't be trusted to police an LLM's fabrications.
+# These regex checks hard-drop the exact two claim shapes that caused the
+# original bug, verifying the only page-contents claim we allow against
+# page_facts (a real roundup/directory that actually lists providers).
+# ─────────────────────────────────────────────────────────────────────────────
+
+# A page-contents claim: a page/domain SUBJECT immediately followed (within a few
+# words) by a listing verb - "APDT's page lists Penn Foster", "the eventbrite.com
+# comparison ranks Coursera". The adjacency requirement is what keeps an honest
+# "QC ranks below competitors" (subject is QC, not a page) from tripping it, even
+# when the text mentions "comparison articles" and a domain elsewhere.
+_PAGE_CONTENTS_CLAIM = re.compile(
+    r"(?P<subj>[a-z0-9][a-z0-9-]*\.(?:com|org|edu|net|gov|io|co|us)|"
+    r"\b(?:page|roundup|article|comparison|listicle|directory|directories|guide|resource)\b)"
+    r"(?:['’]s)?\s+(?:\w+\s+){0,3}?"
+    r"(?:lists?|listed|names?|named|mentions?|ranks?|ranked|omits?|omitting|excludes?|excluding)\b",
+    re.I)
+_COMPARATIVE = re.compile(
+    r"\b(more|higher|greater|better|ahead|outrank\w*|dominat\w*|outperform\w*)\b", re.I)
+_COMPETITOR_WORD = re.compile(r"\b(competitors?|rivals?)\b", re.I)
+_HAS_NUMBER = re.compile(r"\d")
+_DOMAIN_RE = re.compile(r"\b([a-z0-9][a-z0-9-]*\.(?:com|org|edu|net|gov|io|co|us))\b", re.I)
+_QC_TOKENS = ("qccareerschool", "qcpetstudies", "qceventplanning", "qcdesignschool", "qcmakeupacademy")
+
+
+def _domain_is_verified_lister(domain):
+    """True only if page_facts has a cached page on this domain that is a
+    verified roundup/directory actually listing providers (inclusion_opportunity)."""
+    cache = load_cache()
+    for url, facts in cache.get("pages", {}).items():
+        if domain in url.lower() and inclusion_opportunity(facts):
+            return True
+    return False
+
+
+def _fabrication_guard(rec):
+    """
+    (keep, reason). Deterministically rejects the two claim shapes the LLM
+    judge misses:
+      1. a page-contents claim ("X lists/ranks Penn Foster") about a specific
+         third-party page that page_facts has NOT verified as a roundup/directory
+         actually listing providers;
+      2. a comparative claim about competitors with no supporting number
+         (the vague "competitors are cited more" that started all this).
+    """
+    text = " ".join(str(rec.get(k) or "") for k in ("problem", "evidence", "action"))
+    if _COMPARATIVE.search(text) and _COMPETITOR_WORD.search(text) and not _HAS_NUMBER.search(text):
+        return False, "comparative claim about competitors with no supporting count"
+
+    m = _PAGE_CONTENTS_CLAIM.search(text)
+    if m:
+        dom = (_DOMAIN_RE.search(m.group("subj"))
+               or _DOMAIN_RE.search(str(rec.get("target") or ""))
+               or _DOMAIN_RE.search(text))
+        if dom:
+            d = dom.group(1).lower()
+            # QC's own pages are verified via a different mechanism (Phase 4); the
+            # guard polices claims about THIRD-PARTY pages.
+            if not any(tok in d for tok in _QC_TOKENS) and not _domain_is_verified_lister(d):
+                return False, f"asserts {d} lists/ranks providers, but it is not a verified roundup/directory"
+    return True, ""
+
+
 def critique_recommendations(recommendations, evidence):
     """
-    Second, cheap LLM pass that scores each candidate recommendation on
-    specificity, evidence-grounding, GEO-soundness, and measurability, and
-    drops anything that fails badly. This is the quality gate: recs that
-    can't be tied to real data or aren't concrete/measurable don't get saved.
+    Quality gate. First a deterministic fabrication guard (page-contents claims
+    must trace to page_facts; no numberless comparatives), then a cheap LLM pass
+    scoring specificity / evidence-grounding / GEO-soundness / measurability.
+    The guard is the hard floor - the LLM pass is unreliable at catching
+    fabrication, so it only trims for vagueness/soundness on top.
 
-    Fails open - if the judge call errors or a rec is missing from its
-    response, that rec is kept rather than silently dropped.
+    Fails open on the LLM pass - if the judge call errors or a rec is missing
+    from its response, that rec is kept. The guard never fails open.
     """
+    if not recommendations:
+        return recommendations
+
+    guarded = []
+    for rec in recommendations:
+        keep, reason = _fabrication_guard(rec)
+        if keep:
+            guarded.append(rec)
+        else:
+            logger.info(f"Fabrication guard dropped ({rec.get('problem', '')[:70]}): {reason}")
+    recommendations = guarded
     if not recommendations:
         return recommendations
 
@@ -629,4 +712,32 @@ Return as JSON: {{
     recommendations = [_normalize_recommendation(r) for r in result["recommendations"]]
     recommendations = [_apply_coverage_diagnosis(r) for r in recommendations]
     recommendations = critique_recommendations(recommendations, evidence)
+
+    # Tab 2 recs are built deterministically from the scorecard (page + cited-page
+    # comparison + section edits), not from LLM prose - so they name the page and
+    # the missing sections concretely. They replace any generic LLM `technical`
+    # rec for the same topic.
+    scorecard_recs = build_tab2_recommendations(days)
+    scored_topics = {(r["segment"]["dimension"], r["segment"]["value"]) for r in scorecard_recs}
+
+    def _is_superseded_technical(r):
+        seg = r.get("segment") or {}
+        return r.get("action_type") == "technical" and (seg.get("dimension"), seg.get("value")) in scored_topics
+
+    recommendations = [r for r in recommendations if not _is_superseded_technical(r)]
+    recommendations = recommendations + scorecard_recs
+
+    # Attach truthful citation evidence (what AI cites for the topic + QC's count)
+    # to strategic recs so the Tab 1 card can show it. Tab 2 recs already carry a
+    # scorecard in `detail`; leave those untouched.
+    for rec in recommendations:
+        if rec.get("detail") or rec.get("action_type") == "technical":
+            continue
+        seg = rec.get("segment") or {}
+        try:
+            ev = strategic_evidence(seg, school=rec.get("school"))
+            if ev:
+                rec["detail"] = {"evidence": ev}
+        except Exception as e:
+            logger.warning(f"strategic_evidence failed for {seg}: {e}")
     return recommendations
