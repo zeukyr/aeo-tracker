@@ -492,8 +492,81 @@ function ResponseDrawer({ drawer, onClose }) {
   );
 }
 
+// ─── fanout query result drawer ───────────────────────────────────────────────
+function FanoutDrawer({ drawer, onClose }) {
+  const { open, queryText } = drawer;
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(520px, 90vw)",
+        background: "#fff",
+        borderLeft: "1px solid #e5e7eb",
+        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
+        zIndex: 50,
+        display: "flex", flexDirection: "column",
+        overflow: "hidden",
+      }}>
+        {/* header */}
+        <div style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid #e5e7eb",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
+        }}>
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 2 }}>
+              Fanout Query Results
+            </p>
+            <p style={{ fontSize: 11, color: "#9b9b9b" }}>Placeholder — logic not wired yet</p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* query text */}
+        {queryText && (
+          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
+            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{queryText}"</p>
+          </div>
+        )}
+
+        {/* body placeholder */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
+          <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>
+            Results will appear here once the logic is implemented.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// placeholder fanout items — will be replaced with real data
+const PLACEHOLDER_FANOUT_QUERIES = [
+  { id: "fq-1", text: "Fanout query 1" },
+  { id: "fq-2", text: "Fanout query 2" },
+  { id: "fq-3", text: "Fanout query 3" },
+];
+
 // ─── fanout queries expandable section ───────────────────────────────────────
-function FanoutQueriesSection({ promptId }) {
+function FanoutQueriesSection({ promptId, onOpenFanoutDrawer }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -506,17 +579,36 @@ function FanoutQueriesSection({ promptId }) {
           cursor: "pointer", padding: "8px 0", textAlign: "left",
         }}
       >
-        <span style={{ fontSize: 10, color: "#9b9b9b", transition: "transform 0.15s", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)" }}>
+        <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
           ▶
         </span>
         <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
           Fanout Queries
         </span>
+        <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>
+          ({PLACEHOLDER_FANOUT_QUERIES.length})
+        </span>
       </button>
 
       {open && (
-        <div style={{ paddingBottom: 8 }}>
-          <p className="text-xs text-gray-400 italic">No fanout queries loaded yet.</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 8 }}>
+          {PLACEHOLDER_FANOUT_QUERIES.map(fq => (
+            <button
+              key={fq.id}
+              onClick={() => onOpenFanoutDrawer(fq.text)}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
+                padding: "7px 12px", cursor: "pointer", textAlign: "left",
+                transition: "border-color 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = "#d1d5db"}
+              onMouseLeave={e => e.currentTarget.style.borderColor = "#f0efec"}
+            >
+              <span style={{ fontSize: 12, color: "#374151" }}>{fq.text}</span>
+              <span style={{ fontSize: 12, color: "#9b9b9b", flexShrink: 0, marginLeft: 8 }}>▶</span>
+            </button>
+          ))}
         </div>
       )}
     </div>
@@ -525,6 +617,15 @@ function FanoutQueriesSection({ promptId }) {
 
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
 function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
+  const [fanoutDrawer, setFanoutDrawer] = useState({ open: false, queryText: null });
+
+  function openFanoutDrawer(queryText) {
+    setFanoutDrawer({ open: true, queryText });
+  }
+  function closeFanoutDrawer() {
+    setFanoutDrawer(d => ({ ...d, open: false }));
+  }
+
   if (loading) {
     return (
       <tr>
@@ -552,6 +653,7 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   const { kind, timeseries, competitors, llms } = detail;
 
   return (
+    <>
     <tr>
       <td colSpan={3} className="px-4 pb-4 pt-1">
         <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
@@ -653,11 +755,13 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
               })}
             </div>
 
-            <FanoutQueriesSection promptId={prompt.id} />
+            <FanoutQueriesSection promptId={prompt.id} onOpenFanoutDrawer={openFanoutDrawer} />
           </div>
         </div>
       </td>
     </tr>
+    <FanoutDrawer drawer={fanoutDrawer} onClose={closeFanoutDrawer} />
+    </>
   );
 }
 
