@@ -254,6 +254,32 @@ def get_win_reasons(days=None, school=None, limit=15):
     return [{"competitor": r[0], "reason": r[1], "count": r[2]} for r in rows]
 
 
+def get_competitive_loss_topics(days=None, min_losses=1):
+    """
+    {topic: {"losses": n, "competitors": [names]}} - topics where competitors
+    appear while QC is invisible. Phase 7 item 3: competitive intel is a
+    PRIORITY/ROUTING input for the existing topic recs (boost + targets),
+    not its own rec family.
+    """
+    date_f = _date_filter(days).replace("AND created_at", "AND mr.created_at")
+    query = f"""
+        SELECT q.topic, COUNT(*) AS losses,
+               array_agg(DISTINCT b.brand_name) AS competitors
+        FROM mention_response_brands b
+        JOIN mention_responses mr ON mr.id = b.mention_response_id
+        JOIN questions q ON q.id = mr.question_id
+        WHERE b.brand_type = 'competitor' AND mr.qc_mentioned = false
+          AND q.topic IS NOT NULL {date_f}
+        GROUP BY q.topic
+        HAVING COUNT(*) >= %s;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [min_losses])
+            rows = cur.fetchall()
+    return {r[0]: {"losses": r[1], "competitors": r[2][:4]} for r in rows}
+
+
 def get_qc_verdict_distribution(days=None, school=None):
     """
     Distribution of the qc_verdict column - captured on every sentiment

@@ -28,7 +28,7 @@ from openai import OpenAI
 
 from src.logger import logger
 from api.queries.tab1_strategy import get_topic_cited_urls
-from api.queries.page_facts import get_pages_facts, get_page_facts
+from api.queries.page_facts import get_pages_facts, get_page_facts, school_for_url
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -251,21 +251,6 @@ def build_scorecard(topic, qc_url, question=None, days=None):
 # Scorecard -> recommendation (deterministic; bypasses the generic-prose LLM)
 # ─────────────────────────────────────────────────────────────────────────────
 
-_DOMAIN_SCHOOL = {
-    "qcpetstudies": "QC Pet Studies",
-    "qceventplanning": "QC Event Planning",
-    "qcdesignschool": "QC Design School",
-    "qcmakeupacademy": "QC Makeup Academy",
-}
-
-
-def _school_for(url):
-    for tok, name in _DOMAIN_SCHOOL.items():
-        if tok in (url or ""):
-            return name
-    return None
-
-
 def scorecard_to_recommendation(sc):
     """
     Turn a scorecard into a Tab 2 (technical) recommendation, or None if there's
@@ -292,7 +277,7 @@ def scorecard_to_recommendation(sc):
         "problem": problem,
         "action": action,
         "priority": "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium",
-        "school": _school_for(sc["qc_url"]),
+        "school": school_for_url(sc["qc_url"]),
         "evidence": evidence,
         "action_type": "technical",
         "target": sc["qc_url"],

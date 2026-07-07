@@ -27,9 +27,18 @@ from api.queries.recommendation_signals import (
 from api.queries.sentiment import get_top_positives
 from api.queries.citations import get_qc_citations
 from api.queries.sitemap_coverage import diagnose_coverage, diagnose_text_coverage
-from api.queries.tab1_strategy import analyze_strategic_topic, strategic_evidence
+from api.queries.tab1_strategy import (
+    analyze_strategic_topic,
+    strategic_evidence,
+    genre_check,
+    coverage_genre_mismatches,
+    build_tab1_recommendations,
+)
 from api.queries.tab2_scorecard import build_tab2_recommendations
 from api.queries.page_facts import load_cache, inclusion_opportunity
+from api.queries.concern_engine import build_concern_recommendations
+from api.queries.credibility import build_credibility_recommendation
+from api.queries.recommendation_signals import get_competitive_loss_topics
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -123,6 +132,12 @@ def _apply_coverage_diagnosis(rec):
     so a missing-page rec is never phrased as "restructure your page" and
     vice versa, regardless of what the model chose. Citation/outreach recs
     are left alone; so is anything without a sitemap verdict.
+
+    Wrong-genre exception (Phase 6): `have_page` is really three-way. When the
+    matched QC page is the wrong GENRE for what engines cite (course sales page
+    where the winners are how-to guides), a "content" rec is legitimate even
+    though a page topically exists - building the missing genre IS the fix -
+    so genre_check gets a veto over the technical flip.
     """
     segment = rec.get("segment") or {}
     if segment.get("dimension") != "topic" or rec.get("action_type") not in ("content", "technical"):
@@ -136,10 +151,68 @@ def _apply_coverage_diagnosis(rec):
     if coverage["verdict"] == "missing_page":
         rec["action_type"] = "content"
     elif coverage["verdict"] == "have_page":
-        rec["action_type"] = "technical"
-        if coverage.get("qc_url") and not rec.get("target"):
-            rec["target"] = coverage["qc_url"]
+        mismatch = None
+        if rec.get("action_type") == "content":
+            try:
+                mismatch = genre_check(segment, coverage.get("qc_url"))
+            except Exception as e:
+                logger.warning(f"genre_check failed in coverage diagnosis for {segment}: {e}")
+        if mismatch:
+            # have_wrong_genre: keep the build - the existing page answers a
+            # different intent than the genre engines reward here.
+            rec["action_type"] = "content"
+        else:
+            rec["action_type"] = "technical"
+            if coverage.get("qc_url") and not rec.get("target"):
+                rec["target"] = coverage["qc_url"]
     return rec
+
+
+_URLISH = re.compile(r"https?://|(^|\s)[a-z0-9][a-z0-9-]*\.(com|org|net|edu)(/|\s|$)", re.I)
+
+
+def _is_actionable(rec):
+    """
+    Bucket dimensions (category/engine/school/global) are diagnostic rollups,
+    not rec scopes: 'general' spans half the question set, so a page rec scoped
+    to it ("improve general course visibility") has no page to improve and no
+    intent to build for. A content/technical rec must either be topic-scoped
+    (the deterministic coverage/genre pipeline can serve it) or name a concrete
+    URL target. Ecosystem action types (citation/outreach/strategy) may stay
+    bucket-scoped - they are not page work.
+    """
+    segment = rec.get("segment") or {}
+    if segment.get("dimension") in (None, "topic"):
+        return True
+    if rec.get("action_type") not in ("content", "technical"):
+        return True
+    return bool(_URLISH.search(rec.get("target") or ""))
+
+
+def _apply_competitive_boost(recommendations, days=None):
+    """
+    Phase 7 item 3: competitive losses are a PRIORITY input, not a rec family.
+    The plan's "compounding evidence" rule, computed: a topic-scoped rec whose
+    topic is also a competitive loss (rivals appear while QC is invisible)
+    gets bumped one priority level, with the loss count appended to evidence.
+    """
+    try:
+        losses = get_competitive_loss_topics(days, min_losses=3)
+    except Exception as e:
+        logger.warning(f"Competitive loss lookup failed: {e}")
+        return recommendations
+    bump = {"low": "medium", "medium": "high"}
+    for rec in recommendations:
+        seg = rec.get("segment") or {}
+        loss = losses.get(seg.get("value")) if seg.get("dimension") == "topic" else None
+        if not loss:
+            continue
+        if rec.get("priority") in bump:
+            rec["priority"] = bump[rec["priority"]]
+        note = (f" Compounding: competitors ({', '.join(loss['competitors'][:3])}) appear on "
+                f"{loss['losses']} responses in this topic where QC is absent.")
+        rec["evidence"] = (rec.get("evidence") or "") + note
+    return recommendations
 
 
 def _work_stream(action_type):
@@ -362,9 +435,14 @@ def build_evidence(days=None):
         # classify the pages AI cites instead and derive page-type-templated
         # actions + a build-vs-earn verdict. `coverage` rides along so the model
         # targets the specific uncovered intents, not the bucket label.
-        if coverage.get("uncovered"):
+        # A covered intent whose QC page is the WRONG GENRE for what engines
+        # cite (have_wrong_genre) is a strategic gap too - the fix is building
+        # the missing genre, not tuning the existing page.
+        genre_mismatches = coverage_genre_mismatches(seg, coverage, days)
+        if coverage.get("uncovered") or genre_mismatches:
             strat = analyze_strategic_topic(seg, days)
             strat["coverage"] = coverage
+            strat["genre_mismatches"] = genre_mismatches
             strategic_topics.append(strat)
 
     return f"""
@@ -449,7 +527,11 @@ recommendation on THIS, not on guesswork. Fields:
 - `coverage.uncovered`: the specific intents in this topic QC has NO page for. A build ("content")
   rec must target one of these exact intents (e.g. "become an event decorator"), never the bucket
   label. `coverage.covered` intents already have a page — those belong in Tab 2 (fix), not here.
-Never assert a page's contents beyond the classification/`lists_competitors` shown here.
+- `genre_mismatches`: covered intents where QC's page is the WRONG KIND of page — e.g. QC has a
+  commercial course page but the cited winners are informational how-to guides. For these,
+  recommend building a NEW asset of the winners' genre (action_type "content", target the exact
+  intent) alongside the existing page — do NOT recommend restructuring the existing page here.
+Never assert a page's contents beyond the classification/`lists_competitors`/genre shown here.
 {json.dumps(strategic_topics, indent=2, default=str)}
 """
 
@@ -476,6 +558,20 @@ _PAGE_CONTENTS_CLAIM = re.compile(
     re.I)
 _COMPARATIVE = re.compile(
     r"\b(more|higher|greater|better|ahead|outrank\w*|dominat\w*|outperform\w*)\b", re.I)
+# Two DIFFERENT metrics compared as if equivalent ("mention rate of 3.9 compared
+# to the citation rate of 14.8") - apples-to-oranges output that reads as data.
+# Same-metric comparisons ("QC's citation rate vs Penn Foster's citation rate")
+# and mere juxtaposition without a comparator ("mention rate 40%, citation rate
+# 5%" - a legitimate mentioned-but-not-cited observation) are untouched.
+_METRIC_TERM = (r"(mention rate|citation rate|positive sentiment rate|sentiment rate|"
+                r"visibility score|av(?:era)?ge? rank|share of voice|sov)")
+# The gap may not cross a sentence boundary, but must admit decimal points
+# inside numbers ("3.9") - hence "." only between digits.
+_GAP = r"(?:[^.;]|(?<=\d)\.(?=\d)){0,60}?"
+_CROSS_METRIC = re.compile(
+    _METRIC_TERM + _GAP + r"\b(compared (?:to|with)|versus|vs\.?|relative to|against)\b"
+    + _GAP + _METRIC_TERM,
+    re.I)
 _COMPETITOR_WORD = re.compile(r"\b(competitors?|rivals?)\b", re.I)
 _HAS_NUMBER = re.compile(r"\d")
 _DOMAIN_RE = re.compile(r"\b([a-z0-9][a-z0-9-]*\.(?:com|org|edu|net|gov|io|co|us))\b", re.I)
@@ -505,6 +601,11 @@ def _fabrication_guard(rec):
     text = " ".join(str(rec.get(k) or "") for k in ("problem", "evidence", "action"))
     if _COMPARATIVE.search(text) and _COMPETITOR_WORD.search(text) and not _HAS_NUMBER.search(text):
         return False, "comparative claim about competitors with no supporting count"
+
+    xm = _CROSS_METRIC.search(text)
+    if xm and xm.group(1).lower() != xm.group(3).lower():
+        return False, (f"compares two different metrics as if equivalent "
+                       f"({xm.group(1).lower()} vs {xm.group(3).lower()})")
 
     m = _PAGE_CONTENTS_CLAIM.search(text)
     if m:
@@ -655,7 +756,11 @@ Generate 5-8 specific, actionable recommendations. For each one:
   the classification doesn't support.
 - target: the specific page, topic, competitor, or domain the action addresses
 - segment: {{"dimension": "engine|topic|school|category|global", "value": "..."}} - the segment this
-  recommendation is scoped to (use the exact engine/topic/school/category name from the evidence)
+  recommendation is scoped to (use the exact engine/topic/school/category name from the evidence).
+  A "content" or "technical" rec MUST be scoped to a topic segment with a specific intent or URL
+  as target - never to a category/engine/school bucket ("improve general visibility" is not a
+  recommendation; there is no page it names). Category/engine/school segments are only valid for
+  citation/outreach/strategy actions.
 - metric_impact: the one metric this should move - one of "mention_rate", "citation_rate",
   "positive_sentiment_rate", "avg_rank", "sov", "visibility_score"
 - expected_direction: 1 if the metric should increase, -1 if it should decrease (avg_rank is the
@@ -664,6 +769,14 @@ Generate 5-8 specific, actionable recommendations. For each one:
   rates, rank positions for avg_rank), or null if you can't estimate one
 - effort: "S", "M", or "L" or null if you can't estimate one
 - confidence: your own confidence 0.0-1.0 that this recommendation is correct and will work
+
+Two rec families are generated deterministically OUTSIDE this call - do not produce them:
+- Do NOT generate recommendations from the RECURRING CONCERNS section (sentiment concerns are
+  handled by a separate objection-response engine). Concerns are context for you, not a rec source.
+- Do NOT produce a recommendation whose substance is "a competitor beats QC" or "improve
+  credibility/reputation" in general. Competitive losses and credibility verdicts inform the
+  priority and targets of concrete page/citation work - every rec you write must name a specific
+  QC action on a specific target.
 
 Prioritize recommendations using this rubric, in order:
 1. How often the underlying pattern repeats in the data (frequency)
@@ -710,6 +823,19 @@ Return as JSON: {{
 
     result = json.loads(response.choices[0].message.content)
     recommendations = [_normalize_recommendation(r) for r in result["recommendations"]]
+
+    actionable = []
+    for rec in recommendations:
+        if _is_actionable(rec):
+            actionable.append(rec)
+        else:
+            logger.info(
+                f"Dropped bucket-scoped page rec without a concrete target "
+                f"({(rec.get('segment') or {}).get('dimension')}={ (rec.get('segment') or {}).get('value') }): "
+                f"{rec.get('problem', '')[:80]}"
+            )
+    recommendations = actionable
+
     recommendations = [_apply_coverage_diagnosis(r) for r in recommendations]
     recommendations = critique_recommendations(recommendations, evidence)
 
@@ -726,6 +852,33 @@ Return as JSON: {{
 
     recommendations = [r for r in recommendations if not _is_superseded_technical(r)]
     recommendations = recommendations + scorecard_recs
+
+    # Tab 1 recs for analyzed strategic topics are likewise built deterministically
+    # (verified inclusion gates, build-vs-earn composition, genre mismatches) and
+    # replace the LLM's strategic prose for those topics - the LLM's version of
+    # the same rec adds phrasing and subtracts trust.
+    tab1_recs = build_tab1_recommendations(days)
+    tab1_topics = {(r["segment"]["dimension"], r["segment"]["value"]) for r in tab1_recs}
+
+    def _is_superseded_strategic(r):
+        seg = r.get("segment") or {}
+        return (r.get("action_type") in ("content", "outreach", "citation", "strategy")
+                and (seg.get("dimension"), seg.get("value")) in tab1_topics)
+
+    recommendations = [r for r in recommendations if not _is_superseded_strategic(r)]
+    recommendations = recommendations + tab1_recs
+
+    # Concern + credibility recs are likewise deterministic (Phase 7): concerns
+    # run the objection-response engine (taxonomy -> QC-content check -> state),
+    # credibility keys the citation contrast on the sentiment verdicts. The LLM
+    # is instructed not to author these families at all.
+    recommendations = recommendations + build_concern_recommendations(days)
+    cred_rec = build_credibility_recommendation(days)
+    if cred_rec:
+        recommendations.append(cred_rec)
+
+    # Competitive losses boost priority on topic recs; they are not a rec family.
+    recommendations = _apply_competitive_boost(recommendations, days)
 
     # Attach truthful citation evidence (what AI cites for the topic + QC's count)
     # to strategic recs so the Tab 1 card can show it. Tab 2 recs already carry a

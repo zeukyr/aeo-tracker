@@ -24,6 +24,12 @@ The sitemap is only the **first filter** — it answers "does QC have a page?" I
 question is answered by classifying what AI cites (see Tab 1 engine). Routing between tabs is
 deterministic (sitemap verdict); routing *within* Tab 1 comes from page classification.
 
+It also cannot answer "is it the right **kind** of page?" — a topical slug match can hide a
+**genre mismatch** (QC's dog-grooming *course* page matches "how to become a dog groomer", but
+engines cite how-to *guides* there). Phase 6 makes the verdict three-way: `missing_page` →
+build (Tab 1), `have_page` + right genre → fix (Tab 2), `have_page` + **wrong genre** → build
+the missing genre alongside the existing page (Tab 1).
+
 ---
 
 ## Core principle — only claim what we verified
@@ -269,6 +275,60 @@ page edits) and measurable (a trackable unit of work for the closed-loop diff-in
 - Note: Tab 1 "seek-inclusion / benchmark / ecosystem" *variant* cards from the mockup are not
   separate components — the single evidence card covers all strategic recs. Revisit if the
   variant-specific layouts are wanted.
+
+### Phase 6 — Deterministic Tab 1 + the wrong-genre gray area — **DONE (2026-07-07)**
+
+**6a — content genre (`have_wrong_genre`).** Slug matching says "QC has a page on this topic";
+it can't say "QC has the right *kind* of page". Genre is a second, orthogonal axis over the same
+verified facts:
+- [x] `page_facts.page_genre(facts)`: **informational** (how-to / career-guide architecture) vs
+      **commercial** (course/program page), from deterministic signals only — Course schema,
+      pricing, URL section (`/blog/`, `/resources/`, `/courses/`…), HowTo schema, title. Ambiguity
+      → None, never a guess. `pricing_signals` is deliberately the weakest commercial vote (career
+      guides quote salaries, which the pricing regex also matches — the bug the first live sweep
+      caught on QC's own `/resources/your-dog-grooming-career`).
+- [x] `_winner_genre`: format-implied types map directly (guide/association/government →
+      informational; roundup/directory → commercial); ownership types (competitor) read content
+      signals, then URL hints (403'd Penn Foster `/blog/how-to-*` pages still vote informational
+      from the URL), then default commercial. Community/video don't vote.
+- [x] `genre_gap(qc_facts, winner_facts)`: mismatch only when QC's genre is clear, ≥3 winners
+      carry a clear genre, and ≥60% share a genre QC's page doesn't have — same "most" bar as
+      build-vs-earn. `tab1_strategy.genre_check` / `coverage_genre_mismatches` run it per covered
+      intent over cached page_facts.
+- [x] Routing: `_apply_coverage_diagnosis` gives genre_check a **veto over the technical flip** —
+      a `content` rec for a covered-but-wrong-genre intent stays `content` (Tab 1) instead of
+      being forced to `technical`. `build_evidence` analyzes a strategic topic when it has
+      uncovered intents **or** genre mismatches, and the prompt forbids phrasing a mismatch as
+      "restructure the existing page".
+- The mismatch doesn't cancel the Tab 2 tune-up — QC keeps and improves the course page *and*
+  builds the guide; the wrong-genre rec is the leveraged move.
+
+**6b — Tab 1 recs are templated, not LLM-authored.** The mirror of Phase 4's
+`scorecard_to_recommendation`: `analyze_strategic_topic` already computed everything the LLM was
+re-deriving as prose, so the LLM's version added phrasing and subtracted trust.
+- [x] `strategy_to_recommendations(analysis)`: every field derived from verified analysis facts,
+      ordered most-specific-first — (1) verified inclusion opportunities (`outreach`/`citation`,
+      target = the gated URL, evidence quotes `lists_competitors`), (2) wrong-genre builds
+      (`content`, target = the exact intent), (3) gap builds/earns (`content`, target = the top
+      uncovered intent, authorities as the benchmark spec; skipped when `sufficient` is False),
+      (4) ecosystem `strategy` rec only when community share is "most". Priority/effort/confidence
+      are rules (citation volume, gap kind), not model feel. Capped at 3 per topic.
+- [x] `build_tab1_recommendations(days)`: same weak-topic selection as Tab 2's builder, opposite
+      coverage branch (uncovered intents or wrong-genre covered ones), bounded to 2 topics.
+- [x] `generate_recommendations`: deterministic Tab 1 recs **supersede** the LLM's
+      content/outreach/citation/strategy recs for the same topic segments (exactly the Tab 2
+      pattern), and bypass the judge — nothing in them is unverified. `detail` carries
+      `evidence` (+ `genre_mismatch`/`opportunity`), so the existing Tab 1 card renders unchanged.
+- Verified live: genre classifiers pass all known cases (QC course page → commercial, QC career
+  resource → informational, APDT guide → informational, unread PF blog → informational via URL,
+  NYIAD course page → commercial); `build_tab1_recommendations` produced the exact motivating
+  rec — QC's grooming course page flagged `have_wrong_genre` (6/8 cited pages informational) →
+  "build a standalone how-to/career guide, keep the course page" — plus two gap-build recs with
+  truthful domain-count evidence and zero invented inclusion opportunities. Full
+  `generate_recommendations` dry run: LLM strategic prose for analyzed topics superseded, other
+  segments' LLM recs untouched.
+- Follow-up (optional): render `detail.genre_mismatch` / `detail.opportunity` as their own card
+  variants in `Recommendations.jsx`; today they display via the shared evidence card.
 
 ---
 

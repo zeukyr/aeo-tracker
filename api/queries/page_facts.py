@@ -429,6 +429,153 @@ def inclusion_opportunity(facts):
     )
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Content genre (informational vs commercial) - the "wrong kind of page" axis
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Genre is orthogonal to page_type: page_type says who owns/what format a page
+# is (competitor, roundup, guide); genre says what INTENT it serves - does it
+# educate (how-to guide, career guide) or sell (course/program page). This is
+# what resolves the sitemap gray area: QC can HAVE a topically-matching page
+# (the dog-grooming course page) while engines reward the OTHER genre for the
+# query (a how-to guide). Slug matching can't see that; genre can.
+
+# page_types whose genre is implied by the format itself. Ownership types
+# (competitor, qc_owned) and unconfirmed ones (editorial) don't imply a genre -
+# a competitor's page might be their sales page OR their how-to guide, and
+# that difference is exactly the signal we're after.
+PAGE_TYPE_GENRE = {
+    "guide":       "informational",
+    "association": "informational",
+    "government":  "informational",
+    "roundup":     "commercial",   # "best X courses" serves buying intent
+    "directory":   "commercial",
+}
+
+# URL section hints work even for pages that couldn't be fetched (403s degrade
+# to a URL-level genre read instead of no read at all). Informational is
+# checked FIRST: a "/blog/best-certifications" slug is editorial content about
+# certifications, not a certification sales page.
+_INFORMATIONAL_URL_HINT = re.compile(
+    r"/(blog|resources?|resource-center|articles?|advice|career-advice|guides?|learn|how[\s-]to)(/|$|-)", re.I)
+_COMMERCIAL_URL_HINT = re.compile(
+    r"/(courses?|certification[^/]*|programs?|enroll\w*|pricing|tuition|admissions?)(/|$)", re.I)
+_HOWTO_TITLE = re.compile(
+    r"\b(how to|guide|steps? to|tips|what (is|does)|career)\b", re.I)
+
+
+def _url_genre(url):
+    """URL-only genre hint - all we have for pages that blocked the fetch."""
+    if _INFORMATIONAL_URL_HINT.search(url or ""):
+        return "informational"
+    if _COMMERCIAL_URL_HINT.search(url or ""):
+        return "commercial"
+    return None
+
+
+def page_genre(facts):
+    """
+    "informational" (educates: how-to / career-guide architecture) vs
+    "commercial" (sells: course/program page) for a FETCHED page, from
+    deterministic signals only. None when the page wasn't read or the signals
+    don't clearly separate - callers must not guess in that case.
+
+    pricing_signals is deliberately the weakest commercial vote: career guides
+    quote salary figures, which the pricing regex also matches - a lone
+    pricing signal must not out-vote an informational URL section or title.
+    """
+    if facts.get("status") != "ok":
+        return None
+    f = facts.get("features") or {}
+    url = facts.get("final_url") or facts.get("url") or ""
+    title = facts.get("title") or ""
+
+    commercial = 0
+    informational = 0
+    if f.get("course_schema"):
+        commercial += 2
+    if f.get("pricing_signals"):
+        commercial += 1
+    if _COMMERCIAL_URL_HINT.search(url):
+        commercial += 1
+    if _INFORMATIONAL_URL_HINT.search(url):
+        informational += 2
+    if _HOWTO_TITLE.search(title):
+        informational += 2
+    if "HowTo" in (facts.get("schema_types") or []):
+        informational += 2
+    if (f.get("question_headings") or 0) >= 3:
+        informational += 1
+
+    if commercial > informational:
+        return "commercial"
+    if informational > commercial:
+        return "informational"
+    return None
+
+
+def _winner_genre(facts):
+    """Genre of one cited page: format-implied types first, content signals for
+    ownership types, URL hints for pages that blocked the fetch. Unread
+    competitor pages with no URL hint default to commercial (a rival's cited
+    page is overwhelmingly their sales/course page)."""
+    page_type = facts.get("page_type")
+    url = facts.get("final_url") or facts.get("url")
+    if page_type in PAGE_TYPE_GENRE:
+        return PAGE_TYPE_GENRE[page_type]
+    if page_type == "competitor":
+        return page_genre(facts) or _url_genre(url) or "commercial"
+    if page_type in ("community", "video"):
+        return None  # their own ecosystem signal; they don't vote on genre
+    return page_genre(facts) or _url_genre(url)
+
+
+_GENRE_DOMINANCE = 0.6  # same "most" bar the composition rules use
+
+
+def genre_gap(qc_facts, winner_facts, min_classified=3):
+    """
+    The "have a page, wrong page" detector. Returns a mismatch dict when QC's
+    page has a clear genre, enough cited winners carry a clear genre, and the
+    dominant winner genre differs from QC's - i.e. engines reward a KIND of
+    page QC doesn't have for this topic, so the fix is to build the missing
+    genre (Tab 1), not just tune the existing page (Tab 2). None otherwise -
+    ambiguity never asserts a mismatch.
+    """
+    qc_genre = page_genre(qc_facts)
+    if not qc_genre:
+        return None
+    genres = [g for g in (_winner_genre(f) for f in winner_facts) if g]
+    if len(genres) < min_classified:
+        return None
+    dominant = max(set(genres), key=genres.count)
+    share = genres.count(dominant) / len(genres)
+    if share < _GENRE_DOMINANCE or dominant == qc_genre:
+        return None
+    return {
+        "qc_genre":            qc_genre,
+        "winner_genre":        dominant,
+        "winners_with_genre":  genres.count(dominant),
+        "winners_classified":  len(genres),
+    }
+
+
+# Which QC school a QC-owned URL belongs to (shared by tab1/tab2 rec builders).
+SCHOOL_BY_DOMAIN_TOKEN = {
+    "qcpetstudies":    "QC Pet Studies",
+    "qceventplanning": "QC Event Planning",
+    "qcdesignschool":  "QC Design School",
+    "qcmakeupacademy": "QC Makeup Academy",
+}
+
+
+def school_for_url(url):
+    for token, name in SCHOOL_BY_DOMAIN_TOKEN.items():
+        if token in (url or ""):
+            return name
+    return None
+
+
 if __name__ == "__main__":
     import sys
     urls = sys.argv[1:]

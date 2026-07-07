@@ -11,9 +11,15 @@ branch by matching against QC's own sitemap URLs. Two entry points:
   - diagnose_text_coverage(text): binary have_page/missing_page for one
     specific intent string - used to set a rec's action_type from its target.
 
-Matching drops only function/role words (NOT subject nouns like "training"),
-stems morphology (trainer/training -> train), and weights tokens by IDF so a
-shared word like "dog" can't carry a match to the wrong page.
+Matching is two-stage. Slug tokens (function/role words dropped, morphology
+stemmed, IDF-weighted) propose CANDIDATES - but slugs hit an information
+ceiling: /certification-courses/dog-grooming, the /rm/become-a-professional-
+dog-groomer lander and /grooming-career-guide all collapse to the same stemmed
+subject nouns, because the words that distinguish them (become, professional,
+guide, career, how) are exactly the slug-stopwords. So candidates are reranked
+by fetched page TITLE (via page_facts, cached) with function words KEPT -
+"How to Become a Professional Dog Groomer" carries the intent verbatim -
+preferring informational genre on ties.
 
 Competitor sitemaps are deliberately NOT fetched - the competitor pages that
 matter are the cited URLs already stored in mention_responses.citations.
@@ -230,19 +236,19 @@ def _matches(t, slug_tokens):
     )
 
 
-def _best_page(q_tokens, pages, df, n_slugs):
+def _scored_pages(q_tokens, pages, df, n_slugs):
     """
-    (url, coverage, precision) for the page best covering the question.
+    [(coverage, precision, url)] for every page matching >=1 question token.
     coverage = IDF-weighted fraction of question tokens matched, so landing a
     distinctive token ("train", "behavior") counts far more than a shared one
     ("dog") - which is what stops "professional dog trainer" matching the
-    grooming page. precision (matched / slug tokens) breaks ties toward the
-    cleanest slug (/dog-training over /dog-training/500-off).
+    grooming page. precision (matched / slug tokens) prefers the cleanest slug
+    (/dog-training over /dog-training/500-off).
     """
     total_w = sum(_idf(t, df, n_slugs) for t in q_tokens)
     if total_w <= 0:
-        return None, 0.0, 0.0
-    best = (None, 0.0, 0.0)
+        return []
+    scored = []
     for url, slug_tokens in pages:
         if not slug_tokens:
             continue
@@ -251,9 +257,106 @@ def _best_page(q_tokens, pages, df, n_slugs):
             continue
         coverage = sum(_idf(t, df, n_slugs) for t in matched) / total_w
         precision = len(matched) / len(slug_tokens)
-        if (coverage, precision) > (best[1], best[2]):
-            best = (url, coverage, precision)
-    return best
+        scored.append((coverage, precision, url))
+    return scored
+
+
+def _best_page(q_tokens, pages, df, n_slugs):
+    """(url, coverage, precision) for the best SLUG match - see _scored_pages."""
+    scored = _scored_pages(q_tokens, pages, df, n_slugs)
+    if not scored:
+        return None, 0.0, 0.0
+    coverage, precision, url = max(scored)
+    return url, coverage, precision
+
+
+# ── content rerank: titles decide among slug candidates ─────────────────────
+
+# Function words only. Unlike the slug _STOPWORDS, intent verbs and role words
+# (become, professional, certified, how, guide, career) are KEPT - among pages
+# already on the same subject, they are precisely the distinguishing signal.
+_CONTENT_STOPWORDS = {
+    "a", "an", "and", "or", "the", "of", "to", "for", "in", "on", "with",
+    "your", "my", "me", "is", "are", "do", "does", "can", "should", "you",
+    "it", "as", "at", "by", "from", "about", "qc",
+}
+
+_RERANK_FLOOR = 0.35   # slug score needed to be worth a content look
+_RERANK_MAX   = 15     # max candidate pages fetched (cached) per intent
+_TITLE_FLOOR  = 0.5    # a title must cover half the intent to override slugs
+
+
+def _content_tokens(text):
+    words = re.split(r"[^a-z0-9]+", (text or "").lower())
+    return {
+        _stem(w) for w in words
+        if len(w) >= 3 and w not in _CONTENT_STOPWORDS and not w.isdigit()
+    }
+
+
+def _title_score(intent_tokens, subject_tokens, facts):
+    """
+    Fraction of the intent's tokens present in the fetched page title - but a
+    title scores at all only if it covers EVERY subject token (the slug-style
+    tokens: dog, train, groom). Function words (become, professional, how) are
+    the rerank signal among same-subject pages, but must never carry a match to
+    the WRONG subject: the dog-TRAINER intent otherwise matches the dog-GROOMER
+    lander's near-perfect "Become a Professional Dog Groomer" title.
+    """
+    if facts.get("status") != "ok" or not intent_tokens:
+        return 0.0
+    title_tokens = _content_tokens(facts.get("title") or "")
+    if not title_tokens:
+        return 0.0
+    if not all(_matches(t, title_tokens) for t in subject_tokens):
+        return 0.0
+    matched = [t for t in intent_tokens if _matches(t, title_tokens)]
+    return len(matched) / len(intent_tokens)
+
+
+def _best_page_content(intent_text, pages, df, n_slugs):
+    """
+    Content-aware match: slug scoring proposes candidates, fetched page TITLES
+    decide. Candidates above _RERANK_FLOOR are fetched via page_facts (own-site,
+    cached, monthly refresh) and reranked by title coverage of the FULL intent
+    (function words kept - they're the genre markers slugs stopword away),
+    preferring informational genre on ties (engines cite pages that answer over
+    pages that sell). Headings are deliberately NOT scored: course pages embed
+    "Become a Certified Dog Groomer" H2s - the exact confusion this breaks.
+
+    Falls back to pure slug order when nothing fetched or no title clears
+    _TITLE_FLOOR. Returns (url, score, precision); score = max(slug coverage,
+    title coverage), so a page titled exactly the intent counts as covered
+    even when its slug is oblique (/grooming-career-guide).
+    """
+    q_tokens = _tokens(intent_text)
+    scored = _scored_pages(q_tokens, pages, df, n_slugs)
+    if not scored:
+        return None, 0.0, 0.0
+    slug_cov, slug_prec, slug_url = max(scored)
+
+    candidates = sorted(
+        (s for s in scored if s[0] >= _RERANK_FLOOR), reverse=True
+    )[:_RERANK_MAX]
+    if not candidates:
+        return slug_url, slug_cov, slug_prec
+
+    from api.queries.page_facts import get_pages_facts, page_genre
+    facts_by = {f["url"]: f for f in get_pages_facts([u for _c, _p, u in candidates])}
+    intent_tokens = _content_tokens(intent_text)
+
+    ranked = []
+    for cov, prec, url in candidates:
+        facts = facts_by.get(url) or {}
+        title = _title_score(intent_tokens, q_tokens, facts)
+        informational = 1 if page_genre(facts) == "informational" else 0
+        ranked.append((round(title, 2), informational, cov, prec, url))
+    ranked.sort(reverse=True)
+
+    title, _info, cov, prec, url = ranked[0]
+    if title < _TITLE_FLOOR:
+        return slug_url, slug_cov, slug_prec
+    return url, max(cov, title), prec
 
 
 def _segment_questions(segment):
@@ -280,12 +383,22 @@ def _segment_questions(segment):
             return cur.fetchall()
 
 
+# Promo variants, funnel pages and course-internal utility pages are never the
+# answer to an intent - the /NNN-off clones flood the candidate list with
+# identical token sets, and the /get-a-*-preview lead-gen pages carry perfect
+# intent titles ("Become a Professional Dog Trainer") that would out-rank the
+# real page in the content rerank.
+_NOISE_SLUG = re.compile(
+    r"\d+-off(-\d+)?($|/)|email-preferences|thank-you|@footer"
+    r"|/get-a-|course-preview|course-outline|assignments$|/videos?(/|$)", re.I)
+
+
 def _pages_for_school(cache, school):
     domains = SCHOOL_DOMAINS.get(school, QC_DOMAINS)
     pages = []
     for domain in domains:
         for url in cache["domains"].get(domain, []):
-            if _is_page_url(url):
+            if _is_page_url(url) and not _NOISE_SLUG.search(url):
                 pages.append((url, _slug_tokens(url)))
     return pages
 
@@ -326,13 +439,13 @@ def diagnose_coverage(segment, school=None):
         q_tokens = _tokens(question)
         if not q_tokens:
             continue
-        url, coverage, _p = _best_page(q_tokens, pages_by_school.get(sch, []), df, n_slugs)
+        url, coverage, _p = _best_page_content(question, pages_by_school.get(sch, []), df, n_slugs)
         if url and coverage >= _MATCH_THRESHOLD:
             if url not in seen:
                 seen.add(url)
-                covered.append({"intent": question, "qc_url": url, "score": round(coverage, 2)})
+                covered.append({"intent": question, "school": sch, "qc_url": url, "score": round(coverage, 2)})
         else:
-            uncovered.append({"intent": question, "score": round(coverage, 2)})
+            uncovered.append({"intent": question, "school": sch, "score": round(coverage, 2)})
 
     if not covered and not uncovered:
         verdict = "unknown"
@@ -368,7 +481,7 @@ def diagnose_text_coverage(text, school=None):
         return {"verdict": "unknown", "qc_url": None, "score": None}
     pages = _pages_for_school(cache, school)
     df = _slug_df([toks for _u, toks in pages])
-    url, coverage, _p = _best_page(q_tokens, pages, df, max(len(pages), 1))
+    url, coverage, _p = _best_page_content(text, pages, df, max(len(pages), 1))
     if url and coverage >= _MATCH_THRESHOLD:
         return {"verdict": "have_page", "qc_url": url, "score": round(coverage, 2)}
     return {"verdict": "missing_page", "qc_url": None, "score": round(coverage, 2)}
