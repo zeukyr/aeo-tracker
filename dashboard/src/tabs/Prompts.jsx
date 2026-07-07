@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   LineChart, Line,
   AreaChart, Area,
@@ -119,44 +119,38 @@ function TopicsOverTimeChart({ chartData }) {
   if (!chartData) return null;
   const { topics, series } = chartData;
 
-  return (
-    <div className="card" style={{ marginBottom: 12 }}>
-      <p className="panel-title">Topics over time</p>
-      <p className="panel-subtitle">Visibility (mention topics) or positive-sentiment rate (credibility/comparison topics)</p>
+  const visTopics  = topics.filter(t => t.kind === "mention");
+  const sentTopics = topics.filter(t => t.kind === "sentiment");
 
-      {/* legend */}
-      <div style={{ display: "flex", gap: 14, marginBottom: 12, flexWrap: "wrap" }}>
-        {topics.map((t, i) => {
-          const color = TOPIC_COLORS[t.name] || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+  const renderHalf = (halfTopics, subtitle) => (
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <p style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 8 }}>
+        {subtitle}
+      </p>
+      <div style={{ display: "flex", gap: 12, marginBottom: 10, flexWrap: "wrap" }}>
+        {halfTopics.map(t => {
+          const color = TOPIC_COLORS[t.name] || "#888";
           return (
-            <span key={t.name} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
+            <span key={t.name} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "#6b6b6b" }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
               {t.name}
             </span>
           );
         })}
       </div>
-
-      {series?.length ? (
-        <ResponsiveContainer width="100%" height={220}>
+      {series?.length && halfTopics.length ? (
+        <ResponsiveContainer width="100%" height={200}>
           <LineChart data={series} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-            <XAxis
-              dataKey="day"
-              tick={{ fontSize: 11, fill: "#888780" }}
-              axisLine={false}
-              tickLine={false}
-            />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
             <YAxis
               tickFormatter={v => `${v}%`}
               tick={{ fontSize: 11, fill: "#888780" }}
-              axisLine={false}
-              tickLine={false}
-              width={36}
-              domain={[0, 100]}
+              axisLine={false} tickLine={false}
+              width={36} domain={[0, 100]}
             />
             <Tooltip content={<ChartTooltip />} />
-            {topics.map((t, i) => {
-              const color = TOPIC_COLORS[t.name] || FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+            {halfTopics.map(t => {
+              const color = TOPIC_COLORS[t.name] || "#888";
               return (
                 <Line
                   key={t.name}
@@ -165,7 +159,8 @@ function TopicsOverTimeChart({ chartData }) {
                   name={t.name}
                   stroke={color}
                   strokeWidth={2}
-                  dot={false}
+                  dot={{ r: 3, strokeWidth: 0, fill: color }}
+                  activeDot={{ r: 5 }}
                   connectNulls
                 />
               );
@@ -173,8 +168,19 @@ function TopicsOverTimeChart({ chartData }) {
           </LineChart>
         </ResponsiveContainer>
       ) : (
-        <p className="state-empty">No time-series data yet.</p>
+        <p className="state-empty" style={{ fontSize: 12 }}>No data yet.</p>
       )}
+    </div>
+  );
+
+  return (
+    <div className="card" style={{ marginBottom: 12 }}>
+      <p className="panel-title">Topics over time</p>
+      <div style={{ display: "flex", gap: 24, marginTop: 4 }}>
+        {renderHalf(visTopics, "Visibility")}
+        <div style={{ width: 1, background: "#f0efec", flexShrink: 0 }} />
+        {renderHalf(sentTopics, "Sentiment")}
+      </div>
     </div>
   );
 }
@@ -627,6 +633,7 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailEr
   return (
     <>
       <tr
+        id={`prompt-${prompt.id}`}
         className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
         onClick={onToggle}
       >
@@ -692,6 +699,134 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
   );
 }
 
+// ─── sortable column header ───────────────────────────────────────────────────
+function SortableHeader({ children, field, sort, onSort, className }) {
+  const active = sort.field === field;
+  return (
+    <th className={`${className} cursor-pointer select-none`} onClick={() => onSort(field)}>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+        {children}
+        <span style={{ fontSize: 8, color: active ? "#374151" : "#d1d5db", lineHeight: 1 }}>
+          {active ? (sort.dir === "asc" ? "▲" : "▼") : "▲▼"}
+        </span>
+      </span>
+    </th>
+  );
+}
+
+// sort topics list + prompts within each topic by the given field
+function applySort(topics, sort) {
+  if (!sort.field) return topics;
+  const f = sort.field;
+  const cmp = (a, b) => sort.dir === "asc"
+    ? (a[f] ?? -1) - (b[f] ?? -1)
+    : (b[f] ?? -1) - (a[f] ?? -1);
+  return [...topics]
+    .sort(cmp)
+    .map(t => ({ ...t, prompts: [...(t.prompts || [])].sort(cmp) }));
+}
+
+// ─── prompt search box ────────────────────────────────────────────────────────
+function PromptSearch({ data, onSelect }) {
+  const [text, setText] = useState("");
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  const results = useMemo(() => {
+    const q = text.trim().toLowerCase();
+    if (!q) return [];
+    const out = [];
+    for (const topic of data) {
+      for (const prompt of (topic.prompts || [])) {
+        if (prompt.text.toLowerCase().includes(q)) {
+          out.push({ ...prompt, topicName: topic.name });
+          if (out.length >= 8) return out;
+        }
+      }
+    }
+    return out;
+  }, [text, data]);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleSelect(result) {
+    onSelect(result);
+    setText("");
+    setOpen(false);
+  }
+
+  return (
+    <div ref={containerRef} style={{ position: "relative", marginBottom: 14 }}>
+      <input
+        type="text"
+        placeholder="Search prompts…"
+        value={text}
+        onChange={e => { setText(e.target.value); setOpen(true); }}
+        onFocus={() => { if (text) setOpen(true); }}
+        style={{
+          width: "100%",
+          fontSize: 13,
+          padding: "7px 12px",
+          border: "1px solid #e5e7eb",
+          borderRadius: 8,
+          outline: "none",
+          color: "#374151",
+          background: "#f9f9f8",
+          boxSizing: "border-box",
+        }}
+      />
+
+      {open && results.length > 0 && (
+        <div style={{
+          position: "absolute",
+          top: "calc(100% + 4px)",
+          left: 0, right: 0,
+          background: "#fff",
+          border: "1px solid #e5e7eb",
+          borderRadius: 8,
+          boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+          zIndex: 100,
+          maxHeight: 300,
+          overflowY: "auto",
+        }}>
+          {results.map((result, i) => (
+            <button
+              key={result.id}
+              onMouseDown={e => { e.preventDefault(); handleSelect(result); }}
+              style={{
+                display: "block",
+                width: "100%",
+                textAlign: "left",
+                padding: "9px 14px",
+                background: "none",
+                border: "none",
+                borderBottom: i < results.length - 1 ? "1px solid #f5f5f3" : "none",
+                cursor: "pointer",
+              }}
+              className="hover:bg-gray-50"
+            >
+              <span style={{ fontSize: 11, color: "#9b9b9b", display: "block", marginBottom: 2 }}>
+                {result.topicName}
+              </span>
+              <span style={{ fontSize: 13, color: "#374151", display: "block" }}>
+                "{result.text}"
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── main Prompts component ───────────────────────────────────────────────────
 export default function Prompts() {
   const { days, school } = useFilter();
@@ -711,8 +846,26 @@ export default function Prompts() {
     qc_mentioned: "All",
     sentiment: "All",
   });
+  const [sortUnbranded, setSortUnbranded] = useState({ field: null, dir: "desc" });
+  const [sortBranded,   setSortBranded]   = useState({ field: null, dir: "desc" });
 
   const setFilter = (key, value) => setFilters(f => ({ ...f, [key]: value }));
+
+  function toggleSortUnbranded(field) {
+    setSortUnbranded(prev => ({ field, dir: prev.field === field && prev.dir === "desc" ? "asc" : "desc" }));
+  }
+  function toggleSortBranded(field) {
+    setSortBranded(prev => ({ field, dir: prev.field === field && prev.dir === "desc" ? "asc" : "desc" }));
+  }
+
+  const sortedUnbranded = useMemo(
+    () => applySort(data.filter(t => t.kind === "mention"), sortUnbranded),
+    [data, sortUnbranded]
+  );
+  const sortedBranded = useMemo(
+    () => applySort(data.filter(t => t.kind === "sentiment"), sortBranded),
+    [data, sortBranded]
+  );
 
   // Fetch the accordion list + the top chart in parallel
   useEffect(() => {
@@ -798,6 +951,17 @@ export default function Prompts() {
     setDrawer(d => ({ ...d, open: false }));
   }
 
+  function selectSearchResult(result) {
+    setExpandedTopics(prev => { const next = new Set(prev); next.add(result.topicName); return next; });
+    setExpandedPrompts(prev => { const next = new Set(prev); next.add(result.id); return next; });
+    if (!promptDetails[result.id] && !loadingDetails.has(result.id)) {
+      fetchPromptDetail(result.id);
+    }
+    setTimeout(() => {
+      document.getElementById(`prompt-${result.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 120);
+  }
+
   return (
     <>
       {/* Top line graph */}
@@ -806,6 +970,7 @@ export default function Prompts() {
       {/* Filters */}
       <div className="bg-white border border-gray-200 rounded-lg p-4" style={{ marginBottom: 12 }}>
         <p className="font-medium mb-3">Filters</p>
+        <PromptSearch data={data} onSelect={selectSearchResult} />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <FilterSelect label="Engine" value={filters.engine} onChange={v => setFilter("engine", v)} options={ENGINES} />
           <FilterSelect label="Question type" value={filters.question_type} onChange={v => setFilter("question_type", v)} options={TYPES} />
@@ -814,7 +979,7 @@ export default function Prompts() {
         </div>
       </div>
 
-      {/* Accordion table */}
+      {/* Accordion tables */}
       {loading ? (
         <p className="state-msg">Loading…</p>
       ) : error ? (
@@ -826,37 +991,90 @@ export default function Prompts() {
             : "No prompts match your filters."}
         </p>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-          <table className="w-full text-left table-fixed">
-            <colgroup>
-              <col style={{ width: "55%" }} />
-              <col style={{ width: "22.5%" }} />
-              <col style={{ width: "22.5%" }} />
-            </colgroup>
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
-                <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility / Sentiment</th>
-                <th className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map(topic => (
-                <TopicRow
-                  key={topic.name}
-                  topic={topic}
-                  expanded={expandedTopics.has(topic.name)}
-                  onToggle={() => toggleTopic(topic.name)}
-                  expandedPrompts={expandedPrompts}
-                  onTogglePrompt={togglePrompt}
-                  promptDetails={promptDetails}
-                  loadingDetails={loadingDetails}
-                  detailErrors={detailErrors}
-                  onOpenDrawer={openDrawer}
-                />
-              ))}
-            </tbody>
-          </table>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+
+          {/* ── Unbranded ──────────────────────────────────────────────── */}
+          {sortedUnbranded.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+              <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb" }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Unbranded
+                </span>
+              </div>
+              <table className="w-full text-left table-fixed">
+                <colgroup>
+                  <col style={{ width: "55%" }} />
+                  <col style={{ width: "22.5%" }} />
+                  <col style={{ width: "22.5%" }} />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
+                    <SortableHeader field="visibility" sort={sortUnbranded} onSort={toggleSortUnbranded} className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Visibility</SortableHeader>
+                    <SortableHeader field="sov"        sort={sortUnbranded} onSort={toggleSortUnbranded} className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</SortableHeader>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedUnbranded.map(topic => (
+                    <TopicRow
+                      key={topic.name}
+                      topic={topic}
+                      expanded={expandedTopics.has(topic.name)}
+                      onToggle={() => toggleTopic(topic.name)}
+                      expandedPrompts={expandedPrompts}
+                      onTogglePrompt={togglePrompt}
+                      promptDetails={promptDetails}
+                      loadingDetails={loadingDetails}
+                      detailErrors={detailErrors}
+                      onOpenDrawer={openDrawer}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* ── Branded ────────────────────────────────────────────────── */}
+          {sortedBranded.length > 0 && (
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+              <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb" }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Branded
+                </span>
+              </div>
+              <table className="w-full text-left table-fixed">
+                <colgroup>
+                  <col style={{ width: "55%" }} />
+                  <col style={{ width: "22.5%" }} />
+                  <col style={{ width: "22.5%" }} />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50">
+                    <th className="px-4 py-2.5 text-xs text-gray-500 uppercase font-medium">Prompt / Topic</th>
+                    <SortableHeader field="sentiment" sort={sortBranded} onSort={toggleSortBranded} className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Sentiment</SortableHeader>
+                    <SortableHeader field="sov"       sort={sortBranded} onSort={toggleSortBranded} className="px-3 py-2.5 text-xs text-gray-500 uppercase font-medium">Share of Voice</SortableHeader>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedBranded.map(topic => (
+                    <TopicRow
+                      key={topic.name}
+                      topic={topic}
+                      expanded={expandedTopics.has(topic.name)}
+                      onToggle={() => toggleTopic(topic.name)}
+                      expandedPrompts={expandedPrompts}
+                      onTogglePrompt={togglePrompt}
+                      promptDetails={promptDetails}
+                      loadingDetails={loadingDetails}
+                      detailErrors={detailErrors}
+                      onOpenDrawer={openDrawer}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
         </div>
       )}
 
