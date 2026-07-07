@@ -492,6 +492,37 @@ function ResponseDrawer({ drawer, onClose }) {
   );
 }
 
+// ─── fanout queries expandable section ───────────────────────────────────────
+function FanoutQueriesSection({ promptId }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div style={{ borderTop: "1px solid #f0efec", marginTop: 4 }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          width: "100%", background: "none", border: "none",
+          cursor: "pointer", padding: "8px 0", textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 10, color: "#9b9b9b", transition: "transform 0.15s", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)" }}>
+          ▶
+        </span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          Fanout Queries
+        </span>
+      </button>
+
+      {open && (
+        <div style={{ paddingBottom: 8 }}>
+          <p className="text-xs text-gray-400 italic">No fanout queries loaded yet.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
 function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   if (loading) {
@@ -621,6 +652,8 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
                 );
               })}
             </div>
+
+            <FanoutQueriesSection promptId={prompt.id} />
           </div>
         </div>
       </td>
