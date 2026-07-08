@@ -40,3 +40,10 @@ from api.queries.recommendation_signals import (
     get_competitor_profile,
     get_health_summary,
 )
+from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses, get_prompt_fanout_queries
+from api.queries.recommendations import (
+    get_competitor_wins,
+    get_qc_buried_positions,
+    get_citation_gaps,
+    get_recurring_concerns,
+)
