@@ -1,9 +1,9 @@
 """
 Phase 1 of the closed-loop recommendation system: richer evidence signals.
 
-Groups the metrics already tracked across the dashboard into four buckets so
-the recommendation LLM sees trends, weak segments, competitive "why we lose"
-detail, and "what's already working" - not just a snapshot of negatives.
+Groups the metrics already tracked across the dashboard into four buckets -
+trends, weak segments, competitive "why we lose" detail, and "what's already
+working" - consumed by the deterministic rec builders and the health summary.
 
 Bucket A - Momentum:        trend direction on the headline KPIs
 Bucket B - Segment gaps:    weakest engine / category / school / topic
@@ -306,7 +306,7 @@ def get_qc_verdict_distribution(days=None, school=None):
 # Bucket D: Content leverage - what's already working, worth reinforcing
 # ─────────────────────────────────────────────────────────────────────────────
 # get_top_positives (sentiment.py) and get_qc_citations (citations.py) are
-# reused as-is in build_evidence(); only the domain rollup below is new.
+# reused as-is elsewhere; only the domain rollup below is new.
 
 def get_competitor_profile(competitor, days=None, limit=10):
     """

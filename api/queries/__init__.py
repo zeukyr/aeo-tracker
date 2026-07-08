@@ -43,7 +43,6 @@ from api.queries.recommendation_signals import (
 )
 from api.queries.recommendations_synthesis import (
     generate_recommendations,
-    build_evidence,
     save_recommendations,
     get_saved_recommendations,
     update_recommendation_status,
