@@ -99,6 +99,38 @@ def get_topic_cited_urls(segment, days=None, limit=_TOP_N_URLS):
     return [{"url": r[0], "count": r[1]} for r in rows]
 
 
+def get_question_cited_urls(question_id, days=None, limit=_TOP_N_URLS):
+    """
+    Top external (non-QC) URLs cited for ONE question, ranked by citation
+    count - the per-question mirror of get_topic_cited_urls, for the question
+    router (plan §5.3). Question grain matters: winning domains barely overlap
+    between questions in the same topic (Jaccard 0.05-0.19), so a topic-level
+    winner set blends unrelated pages.
+    """
+    date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
+    qc_not_ilike = " AND ".join(
+        f"cited_url NOT ILIKE '%%{tok}%%'" for tok in QC_DOMAIN_TOKENS
+    )
+    query = f"""
+        WITH expanded AS (
+            SELECT unnest(m.citations) as cited_url
+            FROM mention_responses m
+            WHERE m.question_id = %s {date_m}
+        )
+        SELECT cited_url, COUNT(*) as count
+        FROM expanded
+        WHERE {qc_not_ilike}
+        GROUP BY cited_url
+        ORDER BY count DESC
+        LIMIT %s;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [question_id, limit])
+            rows = cur.fetchall()
+    return [{"url": r[0], "count": r[1]} for r in rows]
+
+
 def _qc_citation_count(segment, days=None):
     """How many times QC's own domains are cited in this segment (usually low)."""
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")

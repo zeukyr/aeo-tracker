@@ -6,8 +6,12 @@ longer authors recommendations at all (it only fills classification slots
 inside the builders: page-type classification, semantic feature checks,
 concern-rebuttal confirmation — all cached, single-fact, quote-enforced):
 
-  - Tab 2 "Improve Existing Pages":  tab2_scorecard.build_tab2_recommendations
+  - Tab 2 "Improve Existing Pages":  question_router.build_router_recommendations
+                                     (per-question fix branch; non-fix losing
+                                     questions go to its triage list)
   - Tab 1 "Strategic Growth":        tab1_strategy.build_tab1_recommendations
+                                     (transitional - retires when the router's
+                                     build/reach-out branches land)
   - Concern objection-response:      concern_engine.build_concern_recommendations
   - Credibility:                     credibility.build_credibility_recommendation
   - Competitive losses:              a priority/evidence input, not a rec family
@@ -25,7 +29,7 @@ from psycopg2.extras import Json
 from src.logger import logger
 from api.queries.recommendation_signals import get_competitive_loss_topics
 from api.queries.tab1_strategy import build_tab1_recommendations, strategic_evidence
-from api.queries.tab2_scorecard import build_tab2_recommendations
+from api.queries.question_router import build_router_recommendations
 from api.queries.concern_engine import build_concern_recommendations
 from api.queries.credibility import build_credibility_recommendation
 
@@ -241,13 +245,20 @@ def generate_recommendations(days=None):
     batch is builder order; ranking/prioritization beyond the per-rec priority
     field is left to the frontend tabs.
     """
-    # Tab 2 recs are built deterministically from the scorecard (page + cited-page
-    # comparison + section edits), so they name the page and the missing sections
-    # concretely.
-    recommendations = build_tab2_recommendations(days)
+    # The question router owns the fix branch (per-question winners, winner-
+    # type classified BEFORE the feature-diff runs). Losing questions it can't
+    # confidently action land in `triage` - logged here, surfaced on the
+    # dashboard when R10 threads it through the API.
+    recommendations, triage = build_router_recommendations(days)
+    if triage:
+        reasons = {}
+        for t in triage:
+            reasons[t["reason"]] = reasons.get(t["reason"], 0) + 1
+        logger.info(f"Router triage: {len(triage)} losing question(s) not auto-actioned: {reasons}")
 
-    # Tab 1 recs are likewise deterministic (verified inclusion gates,
-    # build-vs-earn composition, genre mismatches, per-intent coverage).
+    # Tab 1 recs stay topic-grained for now (verified inclusion gates,
+    # build-vs-earn composition, genre mismatches, per-intent coverage) -
+    # they retire when the router's build/reach-out branches land.
     recommendations = recommendations + build_tab1_recommendations(days)
 
     # Concern + credibility recs (Phase 7): concerns run the objection-response

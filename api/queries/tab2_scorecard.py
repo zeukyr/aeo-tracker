@@ -183,22 +183,31 @@ def _prevalence_label(present, total):
     return "most" if frac >= _PREVALENCE_MOST else ("some" if frac >= 0.3 else "few")
 
 
-def build_scorecard(topic, qc_url, question=None, days=None):
+def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     """
     Full Tab 2 scorecard comparing QC's page against the pages AI cites for the
     topic. `sufficient` is False when too few comparable pages could be fetched
     (caller should fall back to a generic rec rather than assert a comparison).
+
+    `winner_facts` (plan §5.4): the question router passes THIS question's
+    already-fetched winners (with citation_count attached) so the comparison is
+    per-question and nothing is refetched; None falls back to the topic-level
+    cited-URL path.
     """
     question = question or f"{topic}"
     features = _load_features()
 
     qc_facts = get_page_facts(qc_url)
 
-    cited = get_topic_cited_urls({"dimension": "topic", "value": topic}, days, limit=TOP_N_WINNERS + 4)
-    counts = {c["url"]: c["count"] for c in cited}
-    winner_facts = [f for f in get_pages_facts([c["url"] for c in cited])
+    if winner_facts is None:
+        cited = get_topic_cited_urls({"dimension": "topic", "value": topic}, days, limit=TOP_N_WINNERS + 4)
+        counts = {c["url"]: c["count"] for c in cited}
+        winner_facts = get_pages_facts([c["url"] for c in cited])
+        for f in winner_facts:
+            f["citation_count"] = counts.get(f["url"], 0)
+    winner_facts = [f for f in winner_facts
                     if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
-    winner_facts.sort(key=lambda f: -counts.get(f["url"], 0))
+    winner_facts.sort(key=lambda f: -(f.get("citation_count") or 0))
     winner_facts = winner_facts[:TOP_N_WINNERS]
     n = len(winner_facts)
 
@@ -236,7 +245,7 @@ def build_scorecard(topic, qc_url, question=None, days=None):
         "qc_readable": qc_facts.get("status") == "ok",
         "winners": [
             {"url": f["url"], "domain": f.get("domain"), "page_type": f.get("page_type"),
-             "citation_count": counts.get(f["url"], 0)}
+             "citation_count": f.get("citation_count") or 0}
             for f in winner_facts
         ],
         "winners_total": n,
@@ -293,6 +302,11 @@ def scorecard_to_recommendation(sc):
 
 def build_tab2_recommendations(days=None, max_topics=2):
     """
+    RETIRED as a top-level entry point (question-router plan §6): the router
+    (question_router.build_router_recommendations) now owns the fix branch at
+    question grain, dispatching to build_scorecard/scorecard_to_recommendation
+    directly. Kept for standalone topic-level dry runs only.
+
     Deterministic Tab 2 recs for the weakest topics where QC has a page engines
     skip: for each, score QC's covered page against the cited winners and emit a
     scorecard-backed rec. Bounded to keep fetch/LLM cost small.

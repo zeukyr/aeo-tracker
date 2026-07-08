@@ -560,6 +560,78 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
     }
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Source-type rollup (question-router plan §5.2) - who OWNS the winning slot
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# A router-level layer over page_type - no new page_type values (so
+# _COMPARABLE_TYPES, PAGE_TYPE_ACTIONS and the genre maps are untouched).
+# Domain rules run first because a review platform like coursera.org would
+# otherwise read as "competitor" via brand-token match; then the existing
+# page_type maps onto ownability buckets:
+#   ownable      editorial / competitor - QC could hold this slot with a page
+#   non-ownable  ugc / review / reference - the slot belongs to a third party
+#   other        doesn't vote (video, qc_owned, unclassified)
+
+_REVIEW_DOMAINS = {
+    "g2.com", "capterra.com", "trustpilot.com", "coursera.org",
+    "udemy.com", "classcentral.com", "coursereport.com",
+    "switchup.org", "careerkarma.com",
+}
+_REFERENCE_DOMAINS = {"wikipedia.org", "wikidata.org", "britannica.com"}
+
+_PAGE_TYPE_TO_SOURCE = {
+    "community":   "ugc",
+    "competitor":  "competitor",
+    "guide":       "editorial",
+    "editorial":   "editorial",
+    "association": "editorial",
+    "roundup":     "editorial",
+    "directory":   "editorial",
+    "government":  "reference",
+    "video":       "other",
+    "qc_owned":    "other",
+}
+
+SOURCE_TYPE_DOMINANCE = 0.6  # same "most" bar as genre_gap / composition rules
+
+
+def source_type(facts):
+    """Ownability bucket for one cited page: ugc | review | reference |
+    editorial | competitor | other. Domain allowlists override page_type."""
+    root = _root_domain(facts.get("domain", ""))
+    if root in _REVIEW_DOMAINS:
+        return "review"
+    if root in _REFERENCE_DOMAINS:
+        return "reference"
+    return _PAGE_TYPE_TO_SOURCE.get(facts.get("page_type"), "other")
+
+
+def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
+    """
+    Citation-weighted dominant bucket over a question's cited winners, or
+    (None, share) when nothing clears `threshold` (a fragmented field - the
+    router sends those to triage, never to a forced comparison). "other"
+    pages don't vote: they neither confirm nor deny ownability. Weights come
+    from facts["citation_count"] (attached by the caller); a URL cited 40x
+    outweighs one cited once.
+    """
+    votes = {}
+    for f in winner_facts:
+        bucket = source_type(f)
+        if bucket == "other":
+            continue
+        votes[bucket] = votes.get(bucket, 0) + (f.get("citation_count") or 1)
+    total = sum(votes.values())
+    if not total:
+        return None, 0.0
+    bucket, weight = max(votes.items(), key=lambda kv: kv[1])
+    share = round(weight / total, 2)
+    if share < threshold:
+        return None, share
+    return bucket, share
+
+
 # Which QC school a QC-owned URL belongs to (shared by tab1/tab2 rec builders).
 SCHOOL_BY_DOMAIN_TOKEN = {
     "qcpetstudies":    "QC Pet Studies",
