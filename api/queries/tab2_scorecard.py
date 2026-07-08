@@ -27,7 +27,7 @@ import json
 from openai import OpenAI
 
 from src.logger import logger
-from api.queries.tab1_strategy import get_topic_cited_urls
+from api.queries.tab1_strategy import get_topic_cited_urls, genre_check
 from api.queries.page_facts import get_pages_facts, get_page_facts, school_for_url
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -311,6 +311,23 @@ def build_tab2_recommendations(days=None, max_topics=2):
         if not coverage.get("covered"):
             continue
         top = coverage["covered"][0]
+        # Genre gate: when engines reward a different KIND of page than QC's
+        # (how-to guides winning over QC's course page), feature-tuning the
+        # existing page is the wrong action - Tab 1's genre-gap build rec owns
+        # that topic. Skip before any scorecard LLM pass runs. Deterministic,
+        # all cached inputs; ambiguity returns None and never suppresses.
+        try:
+            gm = genre_check(seg, top["qc_url"], days)
+        except Exception as e:
+            logger.warning(f"Tab 2 genre check failed for {t['topic']}: {e}")
+            gm = None
+        if gm:
+            logger.info(
+                f"Tab 2 skipping '{t['topic']}': winners are {gm['winner_genre']} "
+                f"({gm['winners_with_genre']}/{gm['winners_classified']}) but QC's page "
+                f"is {gm['qc_genre']} - genre-gap build rec owns this topic"
+            )
+            continue
         try:
             sc = build_scorecard(t["topic"], top["qc_url"], question=top["intent"], days=days)
             rec = scorecard_to_recommendation(sc)
