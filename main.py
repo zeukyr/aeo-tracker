@@ -1,6 +1,6 @@
 import sys
 from src.logger import logger
-from src.database import get_questions, start_run, finish_run, save_mention_response, save_sentiment_response
+from src.database import get_questions, start_run, finish_run, save_mention_response, save_sentiment_response, save_fanout_queries
 from src.querier import query_all_engines
 from src.parsing.parser import parse_response
 from src.classify_run_citations import classify_and_store
@@ -23,6 +23,14 @@ def main():
                 if "error" in result:
                     logger.error(f"[{engine}] Failed for '{question}': {result['error']}")
                     continue
+
+                fanout = result.get("fanout_queries", [])
+                if fanout:
+                    save_fanout_queries(run_id, question_id, engine, fanout)
+                    logger.info(f"[{engine}] Saved {len(fanout)} fanout queries for '{question}'")
+
+                if "text" not in result:
+                    continue  # fanout-only engine (e.g. gemini), no response to parse/store
 
                 parsed = parse_response(
                     question=question,

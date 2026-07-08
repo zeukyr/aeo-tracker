@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import {
   LineChart, Line,
   XAxis, YAxis, Tooltip,
@@ -467,7 +468,8 @@ function ResponseDrawer({ drawer, onClose }) {
 
 // ─── fanout query result drawer ───────────────────────────────────────────────
 function FanoutDrawer({ drawer, onClose }) {
-  const { open, queryText } = drawer;
+  const { open, queryText, engine } = drawer;
+  const color = LLM_COLORS[engine] || "#374151";
 
   useEffect(() => {
     if (!open) return;
@@ -478,7 +480,7 @@ function FanoutDrawer({ drawer, onClose }) {
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <>
       <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
       <div style={{
@@ -499,10 +501,10 @@ function FanoutDrawer({ drawer, onClose }) {
           flexShrink: 0,
         }}>
           <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 2 }}>
-              Fanout Query Results
+            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
+              {engine ? LLM_LABELS[engine] || engine : "Fanout Query"}
             </p>
-            <p style={{ fontSize: 11, color: "#9b9b9b" }}>Placeholder — logic not wired yet</p>
+            <p style={{ fontSize: 11, color: "#9b9b9b" }}>Fanout search query</p>
           </div>
           <button
             onClick={onClose}
@@ -523,29 +525,43 @@ function FanoutDrawer({ drawer, onClose }) {
         {/* body placeholder */}
         <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
           <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>
-            Results will appear here once the logic is implemented.
+            Per-query result tracking coming soon.
           </p>
         </div>
       </div>
-    </>
+    </>,
+    document.body
   );
 }
 
-// placeholder fanout items — will be replaced with real data
-const PLACEHOLDER_FANOUT_QUERIES = [
-  { id: "fq-1", text: "Fanout query 1" },
-  { id: "fq-2", text: "Fanout query 2" },
-  { id: "fq-3", text: "Fanout query 3" },
-];
-
 // ─── fanout queries expandable section ───────────────────────────────────────
-function FanoutQueriesSection({ promptId, onOpenFanoutDrawer }) {
+function FanoutQueriesSection({ promptId, days, onOpenFanoutDrawer }) {
   const [open, setOpen] = useState(false);
+  const [queries, setQueries] = useState(null);  // null = not yet fetched
+  const [loading, setLoading] = useState(false);
+
+  function handleToggle() {
+    setOpen(o => {
+      const next = !o;
+      if (next && queries === null && !loading) {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (days) params.append("days", days);
+        fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/fanout-queries?${params}`)
+          .then(r => r.json())
+          .then(data => { setQueries(Array.isArray(data) ? data : []); setLoading(false); })
+          .catch(() => { setQueries([]); setLoading(false); });
+      }
+      return next;
+    });
+  }
+
+  const count = queries ? queries.length : null;
 
   return (
     <div style={{ borderTop: "1px solid #f0efec", marginTop: 4 }}>
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={handleToggle}
         style={{
           display: "flex", alignItems: "center", gap: 6,
           width: "100%", background: "none", border: "none",
@@ -558,30 +574,44 @@ function FanoutQueriesSection({ promptId, onOpenFanoutDrawer }) {
         <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
           Fanout Queries
         </span>
-        <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>
-          ({PLACEHOLDER_FANOUT_QUERIES.length})
-        </span>
+        {count !== null && (
+          <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({count})</span>
+        )}
       </button>
 
       {open && (
         <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 8 }}>
-          {PLACEHOLDER_FANOUT_QUERIES.map(fq => (
-            <button
-              key={fq.id}
-              onClick={() => onOpenFanoutDrawer(fq.text)}
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
-                padding: "7px 12px", cursor: "pointer", textAlign: "left",
-                transition: "border-color 0.15s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = "#d1d5db"}
-              onMouseLeave={e => e.currentTarget.style.borderColor = "#f0efec"}
-            >
-              <span style={{ fontSize: 12, color: "#374151" }}>{fq.text}</span>
-              <span style={{ fontSize: 12, color: "#9b9b9b", flexShrink: 0, marginLeft: 8 }}>▶</span>
-            </button>
-          ))}
+          {loading && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
+          )}
+          {!loading && queries !== null && queries.length === 0 && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>No fanout queries recorded yet.</p>
+          )}
+          {!loading && queries && queries.map((fq, i) => {
+            const color = LLM_COLORS[fq.engine] || "#9b9b9b";
+            return (
+              <button
+                key={i}
+                onClick={() => onOpenFanoutDrawer(fq.query, fq.engine)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
+                  padding: "7px 12px", cursor: "pointer", textAlign: "left",
+                  transition: "border-color 0.15s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = "#d1d5db"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "#f0efec"}
+              >
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[fq.engine] || fq.engine}
+                </span>
+                <span style={{ fontSize: 12, color: "#374151", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {fq.query}
+                </span>
+                <span style={{ fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>▶</span>
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
@@ -590,10 +620,11 @@ function FanoutQueriesSection({ promptId, onOpenFanoutDrawer }) {
 
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
 function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
-  const [fanoutDrawer, setFanoutDrawer] = useState({ open: false, queryText: null });
+  const { days } = useFilter();
+  const [fanoutDrawer, setFanoutDrawer] = useState({ open: false, queryText: null, engine: null });
 
-  function openFanoutDrawer(queryText) {
-    setFanoutDrawer({ open: true, queryText });
+  function openFanoutDrawer(queryText, engine) {
+    setFanoutDrawer({ open: true, queryText, engine });
   }
   function closeFanoutDrawer() {
     setFanoutDrawer(d => ({ ...d, open: false }));
@@ -728,7 +759,7 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
               })}
             </div>
 
-            <FanoutQueriesSection promptId={prompt.id} onOpenFanoutDrawer={openFanoutDrawer} />
+            <FanoutQueriesSection promptId={prompt.id} days={days} onOpenFanoutDrawer={openFanoutDrawer} />
           </div>
         </div>
       </td>
