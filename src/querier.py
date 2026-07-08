@@ -9,7 +9,7 @@ load_dotenv()
 
 # ---- ChatGPT ----
 def query_chatgpt(question):
-    try: 
+    try:
         client = OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
             max_retries=1)
@@ -21,7 +21,11 @@ def query_chatgpt(question):
 
         text = response.output_text
         citations = []
+        fanout_queries = []
         for item in response.output:
+            if hasattr(item, "type") and item.type == "web_search_call":
+                if hasattr(item, "query") and item.query:
+                    fanout_queries.append(item.query)
             if hasattr(item, "content"):
                 for block in item.content:
                     if hasattr(block, "annotations"):
@@ -34,9 +38,31 @@ def query_chatgpt(question):
 
     return {
         "text": text,
-        "citations": citations
+        "citations": citations,
+        "fanout_queries": fanout_queries,
     }
     
+
+def query_gemini_fanout(question):
+    try:
+        client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=question,
+            config=genai.types.GenerateContentConfig(
+                tools=[genai.types.Tool(google_search=genai.types.GoogleSearch())]
+            )
+        )
+        queries = []
+        if response.candidates:
+            meta = response.candidates[0].grounding_metadata
+            if meta and meta.web_search_queries:
+                queries = list(meta.web_search_queries)
+        return {"fanout_queries": queries}
+    except Exception as e:
+        logger.error(f"Gemini fanout failed: {e}")
+        return {"fanout_queries": []}
+
 
 def query_perplexity(question):
     client = Perplexity()
@@ -70,9 +96,18 @@ def query_all_engines(question):
         results["chatgpt"] = {
             "text": chatgpt["text"],
             "citations": chatgpt["citations"],
+            "fanout_queries": chatgpt.get("fanout_queries", []),
         }
     except Exception as e:
         results["chatgpt"] = {"error": str(e)}
+
+    try:
+        gemini = query_gemini_fanout(question)
+        results["gemini"] = {
+            "fanout_queries": gemini.get("fanout_queries", []),
+        }
+    except Exception as e:
+        results["gemini"] = {"error": str(e)}
 
     # try:
     #     perplexity = query_perplexity(question)
@@ -82,13 +117,5 @@ def query_all_engines(question):
     #     }
     # except Exception as e:
     #     results["perplexity"] = {"error": str(e)}
-
-    # try:
-    #     results["gemini"] = {
-    #         "text": query_gemini(question),
-    #         "citations": [],
-    #     }
-    # except Exception as e:
-    #     results["gemini"] = {"error": str(e)}
 
     return results
