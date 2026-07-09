@@ -28,3 +28,11 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: python main.py
+
+      # Closed-loop lift: measure implemented recommendations whose 30-day
+      # window has elapsed (post-window rate vs recorded baseline -> outcome).
+      - name: Measure due recommendations
+        if: always()
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: python -m api.queries.recommendation_measurement

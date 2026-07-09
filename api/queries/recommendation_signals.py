@@ -406,6 +406,11 @@ def _segment_clause_params(segment):
     """
     dimension = (segment or {}).get("dimension")
     value = (segment or {}).get("value")
+    if dimension == "question":
+        # R6: question-grained segments ({dimension, value: question text,
+        # question_id}) - measurement scopes to exactly the question the rec
+        # targets, more precise than its topic.
+        return "AND m.question_id = %s", [(segment or {}).get("question_id") or value]
     if dimension == "topic":
         return "AND q.topic = %s", [value]
     if dimension == "category":

@@ -319,12 +319,13 @@ def test_every_question_routes_exactly_once_and_branches_disjoint(monkeypatch):
         if router["branch"] == "inclusion_opportunity":
             continue  # per-winner extras, may share a question with a branch rec
         qids_by_branch.setdefault(router["branch"], set()).add(router["question_id"])
-    triage_qids = {t["question_id"] for t in triage}
+    # question_id is stringified in detail/triage (uuids in production)
+    triage_qids = {str(t["question_id"]) for t in triage}
 
-    assert qids_by_branch.get("fix") == {2}
-    assert qids_by_branch.get("build") == {1}
-    assert qids_by_branch.get("reach_out") == {3}
-    assert triage_qids == {5, 7}
+    assert qids_by_branch.get("fix") == {"2"}
+    assert qids_by_branch.get("build") == {"1"}
+    assert qids_by_branch.get("reach_out") == {"3"}
+    assert triage_qids == {"5", "7"}
 
     # (c) no question emits both a fix and a build
     assert not (qids_by_branch.get("fix", set()) & qids_by_branch.get("build", set()))

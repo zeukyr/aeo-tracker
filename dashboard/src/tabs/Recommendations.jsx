@@ -10,15 +10,15 @@ const ACTIVE_STATUSES = [
   "measuring", "validated", "failed", "inconclusive",
 ];
 
-// The two work-streams (docs/ai/recommendation-two-tab-plan.md). Which tab a
-// rec lands in comes from the API (work_stream, derived from action_type +
-// the sitemap coverage verdict); streamOf falls back for older payloads.
+// The three work-streams (question-router plan §5.8), one per router branch.
+// Which tab a rec lands in comes from the API (work_stream, derived from
+// action_type); streamOf falls back for older payloads.
 const WORK_STREAMS = [
   {
     key: "strategic",
     label: "Strategic Growth",
     question: "What don't we have?",
-    note: "For marketing / leadership — build new content or earn presence on the sources AI engines already cite.",
+    note: "For marketing / leadership — build the owned content AI engines reward but QC lacks.",
   },
   {
     key: "on_page",
@@ -26,9 +26,22 @@ const WORK_STREAMS = [
     question: "Why isn't AI using our page?",
     note: "For the web / content team — the page exists but engines skip it. Fix the page, not the footprint.",
   },
+  {
+    key: "outreach",
+    label: "Outreach & Earn",
+    question: "Where does AI look that we can't own?",
+    note: "For PR / partnerships / community — earn presence on the third-party sources engines cite. Each card shows whether a channel exists (open / requires approval).",
+  },
 ];
 
-const streamOf = (rec) => rec.work_stream ?? (rec.action_type === "technical" ? "on_page" : "strategic");
+const OUTREACH_ACTION_TYPES = ["outreach", "citation", "community"];
+const streamOf = (rec) =>
+  rec.work_stream ??
+  (rec.action_type === "technical"
+    ? "on_page"
+    : OUTREACH_ACTION_TYPES.includes(rec.action_type)
+      ? "outreach"
+      : "strategic");
 
 // Match a rec against the global school filter. Recs tagged "both" apply to any
 // specific school; unscoped recs (no school) show only under "All"/"General".
@@ -41,6 +54,12 @@ function matchesSchool(rec, school) {
 
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
 const PRIORITY_LABELS = { high: "High priority", medium: "Medium priority", low: "Low priority" };
+
+// Outreach cards carry a channel-feasibility verdict (§5.7): open = self-serve
+// channel exists, gated = application/partnership required.
+const FEASIBILITY_LABELS = { open: "channel: open", gated: "channel: requires approval" };
+const feasibilityOf = (rec) =>
+  rec.detail?.outreach_feasibility ?? rec.detail?.router?.outreach_feasibility;
 
 function formatDate(iso) {
   if (!iso) return null;
@@ -300,6 +319,7 @@ function Scorecard({ sc }) {
 function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented }) {
   const [expanded, setExpanded] = useState(false);
   const metricLabel = formatMetric(rec);
+  const feasibility = feasibilityOf(rec);
 
   return (
     <div className="card rec-card">
@@ -309,6 +329,14 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
           {rec.action_type && <span className="chip">{rec.action_type}</span>}
           {rec.school && <span className="chip">{rec.school}</span>}
           {rec.effort && <span className="chip" title={EFFORT_LABELS[rec.effort]}>effort: {rec.effort}</span>}
+          {FEASIBILITY_LABELS[feasibility?.feasibility] && (
+            <span
+              className={`chip chip--feas-${feasibility.feasibility}`}
+              title={feasibility.mechanism || feasibility.evidence}
+            >
+              {FEASIBILITY_LABELS[feasibility.feasibility]}
+            </span>
+          )}
         </div>
       </div>
 
@@ -321,6 +349,14 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
         )}
         {metricLabel && <span className="chip chip--metric">{metricLabel}</span>}
         {rec.confidence != null && <span className="chip">confidence {Math.round(rec.confidence * 100)}%</span>}
+        {rec.outcome?.lift != null && (
+          <span
+            className={`chip ${rec.outcome.lift >= 0 ? "chip--feas-open" : "chip--feas-gated"}`}
+            title={`${rec.metric_impact}: ${Math.round((rec.outcome.baseline_value ?? 0) * 100)}% before → ${Math.round((rec.outcome.post_value ?? 0) * 100)}% after (${rec.outcome.verdict})`}
+          >
+            lift {rec.outcome.lift >= 0 ? "+" : ""}{Math.round(rec.outcome.lift * 100)}pts · {rec.outcome.verdict}
+          </span>
+        )}
       </div>
 
       {rec.target && !rec.detail?.scorecard && <p className="rec-card__target">Target: {rec.target}</p>}
@@ -348,6 +384,58 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
   );
 }
 
+// Human-readable framing per triage reason (question-router plan §5.9).
+const TRIAGE_REASONS = {
+  fragmented_field: "No single source type wins this query",
+  insufficient_voters: "Too few citations to call it",
+  no_cited_winners: "QC loses but nothing external is cited",
+  feasibility_unknown: "Winners can't be owned; no channel found",
+  reputation_no_channel: "Reputation question with nothing to pitch",
+};
+
+// The losing questions the router could not auto-action - ranked by how much
+// is at stake (rank_score = citation volume x how badly QC is losing), so the
+// strongest own-the-field candidates surface first. Collapsed by default;
+// lives OUTSIDE the three action tabs because these rows need a human
+// decision, not a team's backlog.
+function TriagePanel({ items }) {
+  const [open, setOpen] = useState(false);
+  if (!items.length) return null;
+  return (
+    <section className="triage-panel">
+      <button className="triage-panel__toggle" onClick={() => setOpen(!open)}>
+        <span>{open ? "▾" : "▸"} Needs triage — {items.length} losing question{items.length === 1 ? "" : "s"} the router couldn't auto-action</span>
+      </button>
+      {open && (
+        <div className="triage-panel__list">
+          {items.map((t, i) => (
+            <div className="triage-row" key={t.question_id ?? i}>
+              <span className="triage-row__rank">#{i + 1}</span>
+              <div className="triage-row__body">
+                <p className="triage-row__question">{t.question}</p>
+                <p className="triage-row__meta">
+                  {TRIAGE_REASONS[t.reason] ?? t.reason}
+                  {t.topic ? ` · ${t.topic}` : ""}
+                  {t.n_citations != null ? ` · ${t.n_citations} citations` : ""}
+                  {t.qc_share != null ? ` · QC cited ${Math.round(t.qc_share * 100)}%` : ""}
+                </p>
+              </div>
+              <div className="triage-row__chips">
+                <span className="chip">{t.reason}</span>
+                {t.build_candidate && (
+                  <span className="chip chip--metric" title="Buildable topic — QC could plausibly own this query with one strong page. Needs a human green-light.">
+                    build candidate
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function Recommendations() {
   const { days, school } = useFilter();
   const [recommendations, setRecommendations] = useState(null);
@@ -357,6 +445,7 @@ function Recommendations() {
   const [generating, setGenerating] = useState(false);
   const [stream, setStream] = useState("strategic");
   const [popoverId, setPopoverId] = useState(null);
+  const [triage, setTriage] = useState([]);
 
   const loading = recommendations === null && error === null;
 
@@ -364,10 +453,12 @@ function Recommendations() {
     Promise.all([
       fetch(`${API_BASE_URL}/api/recommendations`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/recommendations/generation-status`).then((r) => r.json()),
+      fetch(`${API_BASE_URL}/api/recommendations/triage`).then((r) => r.json()),
     ])
-      .then(([recs, gen]) => {
+      .then(([recs, gen, tri]) => {
         setRecommendations(recs);
         setGenStatus(gen);
+        setTriage(Array.isArray(tri) ? tri : []);
       })
       .catch((err) => setError(err.message));
   };
@@ -526,6 +617,8 @@ function Recommendations() {
             )
         )
       )}
+
+      <TriagePanel items={triage} />
     </div>
   );
 }

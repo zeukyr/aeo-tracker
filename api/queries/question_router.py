@@ -332,13 +332,10 @@ def route_question(q, days=None):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _segment_for(q):
-    """Topic segment when there is one (R6 will move this to question grain);
-    school as fallback so measurement never scopes to nothing."""
-    if q.get("topic"):
-        return {"dimension": "topic", "value": q["topic"]}
-    if q.get("school"):
-        return {"dimension": "school", "value": q["school"]}
-    return {"dimension": "global", "value": None}
+    """Question-grained segment (R6): measurement scopes to exactly the
+    question the rec targets. Topic stays in detail.router for rollups."""
+    return {"dimension": "question", "value": q["question"],
+            "question_id": str(q["question_id"])}
 
 
 def _winner_summary(facts, limit=5):
@@ -362,8 +359,9 @@ def _router_detail(route, group=None):
     detail = {
         "branch": route["branch"],
         "reason": route.get("reason"),
-        "question_id": q["question_id"],
+        "question_id": str(q["question_id"]),
         "question": q["question"],
+        "topic": q.get("topic"),
         "qc_share": q["qc_share"],
         "n_citations": q.get("n_citations"),
         "dominant_source": bucket,

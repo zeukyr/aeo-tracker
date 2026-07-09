@@ -30,6 +30,7 @@ from api.queries.recommendations_synthesis import (
     generate_recommendations,
     save_recommendations,
     get_saved_recommendations,
+    get_triage,
     update_recommendation_status,
     get_generation_status,
 )
@@ -147,9 +148,13 @@ def trigger_recommendations(days: int = None, force: bool = False):
             "message": "Recommendations were generated recently; cooldown still active.",
             **status,
         })
-    recs = generate_recommendations(days)
-    result = save_recommendations(recs)
+    recs, triage = generate_recommendations(days)
+    result = save_recommendations(recs, triage)
     return result
+
+@app.get("/api/recommendations/triage")
+def list_triage():
+    return get_triage()
 
 @app.get("/api/recommendations/generation-status")
 def recommendations_generation_status():
