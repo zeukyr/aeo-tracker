@@ -695,14 +695,15 @@ def get_prompt_fanout_queries(prompt_id: str, days=None):
     Returns fanout queries (LLM sub-search queries) for a prompt, newest first.
     Each row: { engine, query, query_order, run_date }
     """
-    date_fq = _date_filter(days).replace("AND created_at", "AND fq.created_at")
+    date_run = _date_filter(days).replace("AND created_at", "AND r.started_at")
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(f"""
-                SELECT fq.engine, fq.query, fq.query_order, date(fq.created_at) AS run_date
+                SELECT fq.engine, fq.query, fq.query_order, date(r.started_at) AS run_date
                 FROM fanout_queries fq
-                WHERE fq.question_id = %s {date_fq}
-                ORDER BY fq.created_at DESC, fq.engine, fq.query_order
+                JOIN runs r ON r.id = fq.run_id
+                WHERE fq.question_id = %s {date_run}
+                ORDER BY r.started_at DESC, fq.engine, fq.query_order
             """, (prompt_id,))
             rows = cur.fetchall()
     return [
