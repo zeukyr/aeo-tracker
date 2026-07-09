@@ -383,14 +383,25 @@ def _segment_questions(segment):
             return cur.fetchall()
 
 
-# Promo variants, funnel pages and course-internal utility pages are never the
-# answer to an intent - the /NNN-off clones flood the candidate list with
-# identical token sets, and the /get-a-*-preview lead-gen pages carry perfect
-# intent titles ("Become a Professional Dog Trainer") that would out-rank the
-# real page in the content rerank.
+# Pages that are never the answer to an intent, by CLASS (not one-off URLs):
+#   - promo variants / funnel pages: the /NNN-off clones flood the candidate
+#     list with identical token sets, and the /get-a-*-preview lead-gen pages
+#     carry perfect intent titles ("Become a Professional Dog Trainer") that
+#     would out-rank the real page in the content rerank.
+#   - paid-campaign landers: -rlsa suffixes and the /rm/ (remarketing) section
+#     are ad-audience duplicates of real pages; a fix rec must target the
+#     canonical page, not the campaign clone.
+#   - post-conversion / utility / legal: thank-you, follow-up, checkout,
+#     contact, privacy/terms, 404 - structural pages with no answer content.
+# Anchored deliberately: "staging" (home staging) and "testimonials" must NOT
+# match a test/junk pattern.
 _NOISE_SLUG = re.compile(
     r"\d+-off(-\d+)?($|/)|email-preferences|thank-you|@footer"
-    r"|/get-a-|course-preview|course-outline|assignments$|/videos?(/|$)", re.I)
+    r"|/get-a-|course-preview|course-outline|assignments$|/videos?(/|$)"
+    r"|-rlsa($|/)|/rm/|[/-]ppc($|[/-])|[/-]sem($|/)|adwords|google-ads"
+    r"|follow-up($|/)|confirmation($|/)|checkout|/cart($|/)|/payment"
+    r"|privacy-policy|/terms(-[a-z]{2})?($|/)|cookie-policy|/404(-\d+)?($|/)"
+    r"|unsubscribe|/log-?in($|/)|affiliate-program|/contact(-us)?($|/)", re.I)
 
 
 def _pages_for_school(cache, school):
