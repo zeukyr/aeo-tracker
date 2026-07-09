@@ -340,14 +340,37 @@ def _classify_editorial(url, title, headings, excerpt):
 # Public API
 # ─────────────────────────────────────────────────────────────────────────────
 
+# Failed fetches (403/404/robots/timeout) are cached too, so a dead URL isn't
+# re-hit every run - but they must not be permanently dead: hosts unblock,
+# pages come back. A failure entry older than this window is treated as a
+# cache miss and refetched. Success entries ("ok") and domain-only
+# classifications ("not_fetched") never expire this way (monthly force
+# refresh covers those).
+_FAILURE_RETRY_DAYS = 14
+
+
+def _is_stale_failure(facts):
+    if facts.get("status") in ("ok", "not_fetched"):
+        return False
+    try:
+        fetched = datetime.fromisoformat(facts.get("fetched_at", ""))
+    except (TypeError, ValueError):
+        return True  # a failure entry with no readable timestamp: retry
+    if fetched.tzinfo is None:
+        fetched = fetched.replace(tzinfo=timezone.utc)
+    age = datetime.now(timezone.utc) - fetched
+    return age.days >= _FAILURE_RETRY_DAYS
+
+
 def get_page_facts(url, force=False, _cache=None):
     """
     Facts for one cited URL, from cache unless force=True. Always returns a
     dict with at least {url, status, page_type}; status != "ok" means no
-    content facts are available (and no content claim may be made).
+    content facts are available (and no content claim may be made). Cached
+    failures are retried once they're older than _FAILURE_RETRY_DAYS.
     """
     cache = _cache if _cache is not None else load_cache()
-    if not force and url in cache["pages"]:
+    if not force and url in cache["pages"] and not _is_stale_failure(cache["pages"][url]):
         return cache["pages"][url]
 
     brands = load_competitor_brands()
