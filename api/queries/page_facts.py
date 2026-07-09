@@ -15,12 +15,12 @@ assert page contents truthfully (Tier B):
     (direct-answer-first, certification section) are detected later by the
     scorecard's LLM pass over `content_excerpt`.
 
-Cache: api/knowledge/page_facts.json, keyed per URL (one authority page
-serves many topics). Community/video URLs are classified from the domain
-alone and never fetched. Fetches respect robots.txt, a size cap, and a
-content-type guard; failures are cached too, so a bad URL isn't re-hit
-every run. Refresh by passing force=True (aligned with the ~monthly
-generation cadence).
+Cache: the `page_facts` table (migrations/004_page_facts_cache.sql), one row
+per URL (one authority page serves many topics). Community/video URLs are
+classified from the domain alone and never fetched. Fetches respect
+robots.txt, a size cap, and a content-type guard; failures are cached too, so
+a bad URL isn't re-hit every run (retried after _FAILURE_RETRY_DAYS). Refresh
+by passing force=True (aligned with the ~monthly generation cadence).
 """
 
 import os
@@ -33,11 +33,10 @@ from urllib.parse import urlparse
 import requests
 import trafilatura
 from lxml import html as lxml_html
+from psycopg2.extras import Json
 
 from src.logger import logger
 from api.db import get_connection
-
-CACHE_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "page_facts.json")
 
 _FETCH_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; qc-ai-tracker page analysis)"}
 _FETCH_TIMEOUT = 25
@@ -63,20 +62,73 @@ _PRICING_SIGNAL = re.compile(r"\$\s?\d{2,}|\b(tuition|pricing|cost of|fees?)\b",
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Cache
+# Cache (page_facts table; migrations/004_page_facts_cache.sql)
+#
+# One row per URL. `facts` jsonb is the full dict we return verbatim; the
+# promoted scalar columns are written from that same dict for SQL/dashboards.
 # ─────────────────────────────────────────────────────────────────────────────
 
-def load_cache():
+_UPSERT_SQL = """
+    INSERT INTO page_facts
+        (url, domain, status, page_type, page_type_source, fetched_at, facts, updated_at)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, now())
+    ON CONFLICT (url) DO UPDATE SET
+        domain           = EXCLUDED.domain,
+        status           = EXCLUDED.status,
+        page_type        = EXCLUDED.page_type,
+        page_type_source = EXCLUDED.page_type_source,
+        fetched_at       = EXCLUDED.fetched_at,
+        facts            = EXCLUDED.facts,
+        updated_at       = now()
+"""
+
+
+def get_cached_fact(url):
+    """The facts dict cached for one URL, or None if it isn't cached yet."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT facts FROM page_facts WHERE url = %s", (url,))
+            row = cur.fetchone()
+    return row[0] if row else None
+
+
+def get_cached_facts(urls):
+    """{url: facts} for the subset of `urls` already cached (one query)."""
+    urls = list(dict.fromkeys(urls))
+    if not urls:
+        return {}
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT url, facts FROM page_facts WHERE url = ANY(%s)", (urls,))
+            return {u: f for u, f in cur.fetchall()}
+
+
+def _upsert_params(facts):
+    return (facts["url"], facts.get("domain"), facts.get("status"),
+            facts.get("page_type"), facts.get("page_type_source"),
+            facts.get("fetched_at"), Json(facts))
+
+
+def _upsert_fact(facts, conn=None):
+    """Write one facts dict, keyed on url (insert or overwrite). Pass an open
+    `conn` to reuse it across a batch; otherwise one is opened and closed."""
+    own = conn is None
+    conn = conn or get_connection()
     try:
-        with open(CACHE_PATH, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return {"version": 1, "pages": {}}
+        with conn.cursor() as cur:
+            cur.execute(_UPSERT_SQL, _upsert_params(facts))
+        conn.commit()
+    finally:
+        if own:
+            conn.close()
 
 
-def _save_cache(cache):
-    with open(CACHE_PATH, "w", encoding="utf-8") as f:
-        json.dump(cache, f, indent=1)
+def _store(facts, _cache):
+    """Persist a freshly-computed fact and mirror it into the batch preload."""
+    _upsert_fact(facts)
+    if _cache is not None:
+        _cache[facts["url"]] = facts
+    return facts
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -368,10 +420,15 @@ def get_page_facts(url, force=False, _cache=None):
     dict with at least {url, status, page_type}; status != "ok" means no
     content facts are available (and no content claim may be made). Cached
     failures are retried once they're older than _FAILURE_RETRY_DAYS.
+
+    _cache: an optional {url: facts} preload dict (from get_cached_facts) that
+    lets a batch skip per-URL reads; freshly-computed facts are mirrored into
+    it. Pass None for a standalone single-URL lookup.
     """
-    cache = _cache if _cache is not None else load_cache()
-    if not force and url in cache["pages"] and not _is_stale_failure(cache["pages"][url]):
-        return cache["pages"][url]
+    if not force:
+        cached = _cache.get(url) if _cache is not None else get_cached_fact(url)
+        if cached is not None and not _is_stale_failure(cached):
+            return cached
 
     brands = load_competitor_brands()
     facts = {
@@ -387,19 +444,13 @@ def get_page_facts(url, force=False, _cache=None):
     if domain_type in ("community", "video"):
         facts["status"] = "not_fetched"
         facts["page_type"] = domain_type
-        cache["pages"][url] = facts
-        if _cache is None:
-            _save_cache(cache)
-        return facts
+        return _store(facts, _cache)
 
     raw_html, final_url, error = _fetch_html(url)
     if error:
         facts["status"] = error
         facts["page_type"] = domain_type or "editorial"
-        cache["pages"][url] = facts
-        if _cache is None:
-            _save_cache(cache)
-        return facts
+        return _store(facts, _cache)
 
     text = trafilatura.extract(raw_html, url=final_url, include_comments=False) or ""
     structure = _extract_structure(raw_html, main_text=text)
@@ -424,18 +475,13 @@ def get_page_facts(url, force=False, _cache=None):
             url, structure["title"], structure["headings"], facts["content_excerpt"]
         )
 
-    cache["pages"][url] = facts
-    if _cache is None:
-        _save_cache(cache)
-    return facts
+    return _store(facts, _cache)
 
 
 def get_pages_facts(urls, force=False):
-    """Batch variant: one cache load/save around N lookups."""
-    cache = load_cache()
-    results = [get_page_facts(u, force=force, _cache=cache) for u in urls]
-    _save_cache(cache)
-    return results
+    """Batch variant: one preload query, then per-URL lookups against it."""
+    preload = {} if force else get_cached_facts(urls)
+    return [get_page_facts(u, force=force, _cache=preload) for u in urls]
 
 
 def inclusion_opportunity(facts):
