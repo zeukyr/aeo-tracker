@@ -1,0 +1,281 @@
+"""
+Router invariants (question-router plan §9 R11), as durable regression tests:
+
+  (a) a clear genre-mismatch question emits NO fix rec - the scorecard is
+      suppressed and the build branch owns it
+  (b) every losing question yields exactly one route - triage is a
+      first-class outcome, nothing is silently dropped
+  (c) no question emits both a fix and a build
+  plus branch behavior: non-ownable -> reach-out when a channel exists,
+  known-closed (wikipedia/.gov) -> build, fragmented -> triage (never
+  auto-built), reputation with no channel -> triage.
+
+All DB / network / LLM boundaries are stubbed; the classification logic
+(source_type, dominant_source_type, genre_gap, outreach_feasibility registry
+and defaults) runs for real over crafted page facts.
+"""
+
+import pytest
+
+import api.queries.question_router as qr
+from api.queries.page_facts import source_type
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Crafted facts / questions
+# ─────────────────────────────────────────────────────────────────────────────
+
+def facts(domain, page_type, url=None, status="ok", **overrides):
+    f = {
+        "url": url or f"https://{domain}/page",
+        "final_url": url or f"https://{domain}/page",
+        "domain": domain,
+        "status": status,
+        "page_type": page_type,
+        "title": "",
+        "headings": [],
+        "schema_types": [],
+        "features": {},
+        "brand_mentions": {},
+        "qc_mentioned": False,
+    }
+    f.update(overrides)
+    return f
+
+
+def commercial_winner(domain, url=None):
+    """A rival's course page: course schema + pricing + /courses/ URL."""
+    return facts(domain, "competitor", url=url or f"https://{domain}/courses/x",
+                 features={"course_schema": True, "pricing_signals": True})
+
+
+def informational_winner(domain):
+    """An editorial how-to guide."""
+    return facts(domain, "guide", url=f"https://{domain}/blog/how-to-x",
+                 title="How to Become an X")
+
+
+QC_INFORMATIONAL = facts(
+    "qcpetstudies.com", "qc_owned",
+    url="https://www.qcpetstudies.com/blog/how-to-become-a-dog-groomer",
+    title="How to Become a Dog Groomer", features={"question_headings": 4})
+
+QC_COMMERCIAL = facts(
+    "qcpetstudies.com", "qc_owned",
+    url="https://www.qcpetstudies.com/certification-courses/dog-training",
+    title="Dog Training Course",
+    features={"course_schema": True, "pricing_signals": True})
+
+
+def question(qid, text, topic="How to Become", school="QC Pet Studies"):
+    return {"question_id": qid, "question": text, "topic": topic, "school": school,
+            "qc_share": 0.0, "n_responses": 10, "n_citations": 30}
+
+
+def wire(monkeypatch, winners_by_qid, coverage_by_qid=None, qc_facts=None):
+    """Stub the router's DB/network boundaries for a set of questions."""
+    monkeypatch.setattr(qr, "get_question_cited_urls",
+                        lambda qid, days=None, **kw: [
+                            {"url": f["url"], "count": c}
+                            for f, c in winners_by_qid.get(qid, [])])
+    all_facts = {f["url"]: f for pairs in winners_by_qid.values() for f, _c in pairs}
+    monkeypatch.setattr(qr, "get_pages_facts",
+                        lambda urls, **kw: [dict(all_facts[u]) for u in urls])
+    monkeypatch.setattr(qr, "diagnose_text_coverage",
+                        lambda text, school=None: (coverage_by_qid or {}).get(
+                            text, {"verdict": "missing_page", "qc_url": None}))
+    monkeypatch.setattr(qr, "get_page_facts", lambda url, **kw: qc_facts or {})
+
+
+def forbid_scorecard(monkeypatch):
+    def _boom(*a, **kw):
+        raise AssertionError("build_scorecard must not run for this route")
+    monkeypatch.setattr(qr, "build_scorecard", _boom)
+
+
+def stub_scorecard(monkeypatch, calls):
+    monkeypatch.setattr(qr, "build_scorecard",
+                        lambda *a, **kw: calls.append(a) or {"stub": True})
+    monkeypatch.setattr(qr, "scorecard_to_recommendation",
+                        lambda sc: {"problem": "p", "action": "a", "priority": "medium",
+                                    "school": None, "evidence": "e",
+                                    "action_type": "technical", "target": "t",
+                                    "segment": {}, "metric_impact": "citation_rate",
+                                    "expected_direction": 1, "expected_magnitude": None,
+                                    "effort": "M", "confidence": 0.7, "detail": {}})
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# (a) genre mismatch suppresses the fix / feature-diff
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_genre_mismatch_routes_build_and_never_runs_scorecard(monkeypatch):
+    q = question(1, "how to become a dog groomer")
+    winners = [(informational_winner(f"guide{i}.com"), 5) for i in range(3)]
+    wire(monkeypatch, {1: winners},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "ownable_wrong_kind_page"
+    assert route["genre_mismatch"]["winner_genre"] == "informational"
+
+    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: [q])
+    recs, triage = qr.build_router_recommendations()
+    assert not any(r["action_type"] == "technical" for r in recs)
+    assert len(recs) == 1 and recs[0]["detail"]["router"]["branch"] == "build"
+    assert triage == []
+
+
+def test_same_kind_page_routes_fix_and_scorecard_runs(monkeypatch):
+    q = question(2, "best dog training course")
+    winners = [(commercial_winner(f"rival{i}.com"), 4) for i in range(3)]
+    wire(monkeypatch, {2: winners},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "fix"
+    assert route["genre_mismatch"] is None
+
+    calls = []
+    stub_scorecard(monkeypatch, calls)
+    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: [q])
+    recs, _ = qr.build_router_recommendations()
+    assert len(calls) == 1
+    assert [r["action_type"] for r in recs] == ["technical"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# branch behavior: reach-out / closed / fragmented / reputation
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_ugc_winners_reach_out_open(monkeypatch):
+    q = question(3, "is dog grooming worth it reddit")
+    winners = [(facts("reddit.com", "community", status="not_fetched",
+                      url=f"https://reddit.com/r/dogs/{i}"), 6) for i in range(3)]
+    wire(monkeypatch, {3: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "reach_out"
+    assert route["feasibility"]["feasibility"] == "open"
+    assert route["feasibility"]["channel"] == "participate"
+
+
+def test_wikipedia_closed_routes_build_earn_indirect(monkeypatch):
+    q = question(4, "what is a dog groomer")
+    winners = [(facts("en.wikipedia.org", "guide",
+                      url=f"https://en.wikipedia.org/wiki/Dog_{i}"), 8) for i in range(3)]
+    wire(monkeypatch, {4: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "earn_indirect"
+    assert route["feasibility"]["feasibility"] == "closed"
+
+
+def test_fragmented_field_stays_triage_flagged_build_candidate(monkeypatch):
+    q = question(5, "careers with dogs")
+    winners = [
+        (commercial_winner("rival1.com"), 2),
+        (commercial_winner("rival2.com"), 2),
+        (facts("reddit.com", "community", status="not_fetched"), 2),
+        (facts("quora.com", "community", status="not_fetched",
+               url="https://quora.com/q1"), 2),
+        (informational_winner("someblog.com"), 1),
+    ]
+    wire(monkeypatch, {5: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "triage"
+    assert route["reason"] == "fragmented_field"
+    assert route["build_candidate"] is True  # buildable topic, human green-light
+
+
+def test_reputation_topic_without_channel_triages(monkeypatch):
+    q = question(6, "is QC Pet Studies legit", topic="Brand Credibility")
+    winners = [(commercial_winner(f"rival{i}.com"), 3) for i in range(3)]
+    wire(monkeypatch, {6: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "triage"
+    assert route["reason"] == "reputation_no_channel"
+
+
+def test_no_cited_winners_triages(monkeypatch):
+    q = question(7, "obscure question nothing cites")
+    wire(monkeypatch, {7: []})
+    route = qr.route_question(q)
+    assert route["branch"] == "triage"
+    assert route["reason"] == "no_cited_winners"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# (b) + (c): full dispatch accounting over a mixed set
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_every_question_routes_exactly_once_and_branches_disjoint(monkeypatch):
+    q_build = question(1, "how to become a dog groomer")
+    q_fix = question(2, "best dog training course")
+    q_reach = question(3, "is dog grooming worth it reddit")
+    q_frag = question(5, "careers with dogs")
+    q_empty = question(7, "obscure question nothing cites")
+    questions = [q_build, q_fix, q_reach, q_frag, q_empty]
+
+    winners_by_qid = {
+        1: [(informational_winner(f"guide{i}.com"), 5) for i in range(3)],
+        2: [(commercial_winner(f"rival{i}.com"), 4) for i in range(3)],
+        3: [(facts("reddit.com", "community", status="not_fetched",
+                   url=f"https://reddit.com/r/dogs/{i}"), 6) for i in range(3)],
+        5: [
+            (commercial_winner("rival1.com"), 2),
+            (commercial_winner("rival2.com"), 2),
+            (facts("reddit.com", "community", status="not_fetched",
+                   url="https://reddit.com/r/x"), 2),
+            (facts("quora.com", "community", status="not_fetched",
+                   url="https://quora.com/q1"), 2),
+        ],
+        7: [],
+    }
+    coverage = {
+        q_build["question"]: {"verdict": "have_page", "qc_url": QC_COMMERCIAL["url"]},
+        q_fix["question"]:   {"verdict": "have_page", "qc_url": QC_COMMERCIAL["url"]},
+    }
+    wire(monkeypatch, winners_by_qid, coverage_by_qid=coverage, qc_facts=QC_COMMERCIAL)
+    calls = []
+    stub_scorecard(monkeypatch, calls)
+    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: questions)
+
+    # (b) every question yields exactly one route
+    routes = [qr.route_question(q) for q in questions]
+    assert [r["branch"] for r in routes] == ["build", "fix", "reach_out", "triage", "triage"]
+
+    recs, triage = qr.build_router_recommendations()
+
+    # accounting: every question lands in exactly one place
+    qids_by_branch = {}
+    for r in recs:
+        router = r["detail"]["router"]
+        if router["branch"] == "inclusion_opportunity":
+            continue  # per-winner extras, may share a question with a branch rec
+        qids_by_branch.setdefault(router["branch"], set()).add(router["question_id"])
+    triage_qids = {t["question_id"] for t in triage}
+
+    assert qids_by_branch.get("fix") == {2}
+    assert qids_by_branch.get("build") == {1}
+    assert qids_by_branch.get("reach_out") == {3}
+    assert triage_qids == {5, 7}
+
+    # (c) no question emits both a fix and a build
+    assert not (qids_by_branch.get("fix", set()) & qids_by_branch.get("build", set()))
+    # and no routed question is also triaged
+    routed = set().union(*qids_by_branch.values())
+    assert not (routed & triage_qids)
