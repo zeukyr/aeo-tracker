@@ -629,7 +629,15 @@ def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
     editorial | competitor | other. Domain rules override page_type - a
     community.* / forum.* subdomain is ugc even when the root domain matched
-    a competitor brand token."""
+    a competitor brand token.
+
+    A page we FAILED to read whose domain matched no rule carries the
+    "editorial" page_type as a fallback guess, not a classification - it
+    buckets as "other" so it abstains from the dominance vote. Domain-derived
+    types (competitor brand token, .gov, community/video - and the ugc/review/
+    reference rules above) still vote when unfetched: their type came from
+    the domain, not the page body.
+    """
     domain = facts.get("domain", "")
     if _UGC_SUBDOMAIN.match(domain):
         return "ugc"
@@ -638,7 +646,10 @@ def source_type(facts):
         return "review"
     if root in _REFERENCE_DOMAINS:
         return "reference"
-    return _PAGE_TYPE_TO_SOURCE.get(facts.get("page_type"), "other")
+    page_type = facts.get("page_type")
+    if page_type == "editorial" and facts.get("status") not in ("ok", "not_fetched"):
+        return "other"
+    return _PAGE_TYPE_TO_SOURCE.get(page_type, "other")
 
 
 def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):

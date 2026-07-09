@@ -31,8 +31,31 @@ def test_review_platform_beats_competitor_classification():
 
 def test_reference_and_default_buckets():
     assert source_type({"domain": "en.wikipedia.org", "page_type": "guide"}) == "reference"
-    assert source_type({"domain": "someblog.com", "page_type": "guide"}) == "editorial"
+    assert source_type({"domain": "someblog.com", "page_type": "guide", "status": "ok"}) == "editorial"
     assert source_type({"domain": "youtube.com", "page_type": "video"}) == "other"
+
+
+def test_unread_unclassified_page_abstains_from_vote():
+    # fetch failed + no domain rule -> page_type is the "editorial" FALLBACK,
+    # not a classification: bucket as other, abstain from the dominance vote.
+    for status in ("fetch_failed", "blocked_robots", "not_html", "too_large"):
+        assert source_type({"domain": "indeed.com", "page_type": "editorial",
+                            "status": status}) == "other", status
+    # a successfully READ editorial page still votes
+    assert source_type({"domain": "indeed.com", "page_type": "editorial",
+                        "status": "ok"}) == "editorial"
+
+
+def test_domain_classified_pages_vote_even_unfetched():
+    # type came from the domain, not the page body - the vote stands
+    assert source_type({"domain": "pennfoster.edu", "page_type": "competitor",
+                        "status": "fetch_failed"}) == "competitor"
+    assert source_type({"domain": "usa.gov", "page_type": "government",
+                        "status": "fetch_failed"}) == "reference"
+    assert source_type({"domain": "reddit.com", "page_type": "community",
+                        "status": "not_fetched"}) == "ugc"
+    assert source_type({"domain": "trustpilot.com", "page_type": "editorial",
+                        "status": "fetch_failed"}) == "review"  # allowlist beats fallback
 
 
 # ─────────────────────────────────────────────────────────────────────────────
