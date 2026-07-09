@@ -7637,3 +7637,92 @@
 2026-07-07 05:43:40,758 [INFO] [classify] Stored 137 competitor-citation rows for run 1cab887f-0ce5-45c6-a4c3-7cf9e83dfcd2
 2026-07-07 05:43:41,505 [INFO] [classify] Processing run 9d356dc7-7575-4261-9141-8b2bf251b8cc
 2026-07-07 05:43:42,254 [INFO] [classify] No eligible responses for run 9d356dc7-7575-4261-9141-8b2bf251b8cc
+2026-07-14 04:24:40,147 [INFO] Starting run...
+2026-07-14 04:24:41,604 [INFO] Loaded 6 questions
+2026-07-14 04:24:41,604 [INFO] Querying: how to become a certified dog trainer online
+2026-07-14 04:24:50,839 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:24:50,899 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:25:08,044 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:25:10,914 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:25:10,924 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Certification Council for Professional Dog Trainers",
+            "text_as_written": "Certification Council for Professional Dog Trainers (CCPDT)"
+        },
+        {
+            "name": "International Association of Canine Professionals",
+            "text_as_written": "International Association of Canine Professionals (IACP)"
+        },
+        {
+            "name": "Animal Behavior College",
+            "text_as_written": "Animal Behavior College (ABC)"
+        },
+        {
+            "name": "Karen Pryor Academy for Animal Training & Behavior",
+            "text_as_written": "Karen Pryor Academy for Animal Training & Behavior"
+        }
+    ],
+    "links": []
+}
+2026-07-14 04:25:12,006 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-07-14 04:25:13,600 [INFO] [gemini] Saved 12 fanout queries for 'how to become a certified dog trainer online'
+2026-07-14 04:25:15,605 [INFO] Querying: is dog grooming a good career
+2026-07-14 04:25:20,333 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:25:20,363 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:25:29,346 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:25:30,265 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:25:30,266 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-14 04:25:31,001 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-07-14 04:25:32,322 [INFO] [gemini] Saved 8 fanout queries for 'is dog grooming a good career'
+2026-07-14 04:25:34,327 [INFO] Querying: careers working with dogs
+2026-07-14 04:25:40,096 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:25:40,116 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:25:52,546 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:25:53,410 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:25:53,411 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-14 04:25:54,167 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-07-14 04:25:55,295 [INFO] [gemini] Saved 6 fanout queries for 'careers working with dogs'
+2026-07-14 04:25:57,300 [INFO] Querying: pet business ideas from home
+2026-07-14 04:26:04,059 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:26:04,080 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:26:12,046 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:26:12,967 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:26:12,968 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-14 04:26:13,701 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-07-14 04:26:14,418 [INFO] [gemini] Saved 1 fanout queries for 'pet business ideas from home'
+2026-07-14 04:26:16,423 [INFO] Querying: jobs with dogs that pay well
+2026-07-14 04:26:22,654 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:26:22,695 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:26:36,931 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:26:37,644 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:26:37,645 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-14 04:26:38,398 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-07-14 04:26:39,916 [INFO] [gemini] Saved 11 fanout queries for 'jobs with dogs that pay well'
+2026-07-14 04:26:41,921 [INFO] Querying: high paying careers working with animals
+2026-07-14 04:26:54,880 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 04:26:54,901 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 04:27:02,427 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 04:27:03,256 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 04:27:03,258 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": []
+}
+2026-07-14 04:27:04,007 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-07-14 04:27:04,809 [INFO] [gemini] Saved 2 fanout queries for 'high paying careers working with animals'
+2026-07-14 04:27:07,551 [INFO] Run complete
+2026-07-14 04:27:07,551 [INFO] Classifying competitor citations...
+2026-07-14 04:27:08,279 [INFO] [classify] No eligible responses for run d0af36fd-9142-4d7c-9834-e1e1c03ad055
+2026-07-14 04:27:08,280 [INFO] Citation classification complete
