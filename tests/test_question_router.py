@@ -181,6 +181,7 @@ def test_wikipedia_closed_routes_build_earn_indirect(monkeypatch):
 
 
 def test_fragmented_field_stays_triage_flagged_build_candidate(monkeypatch):
+    # ownable 4/8 and non-ownable 4/8 - neither side clears 0.6
     q = question(5, "careers with dogs")
     winners = [
         (commercial_winner("rival1.com"), 2),
@@ -188,7 +189,6 @@ def test_fragmented_field_stays_triage_flagged_build_candidate(monkeypatch):
         (facts("reddit.com", "community", status="not_fetched"), 2),
         (facts("quora.com", "community", status="not_fetched",
                url="https://quora.com/q1"), 2),
-        (informational_winner("someblog.com"), 1),
     ]
     wire(monkeypatch, {5: winners})
     forbid_scorecard(monkeypatch)
@@ -197,6 +197,58 @@ def test_fragmented_field_stays_triage_flagged_build_candidate(monkeypatch):
     assert route["branch"] == "triage"
     assert route["reason"] == "fragmented_field"
     assert route["build_candidate"] is True  # buildable topic, human green-light
+    assert route["vote"]["voters"] == 8
+
+
+def test_two_stage_vote_unites_competitor_and_editorial(monkeypatch):
+    # competitor 45% + editorial 36% - neither leads a FLAT vote, but the
+    # slot is 82% ownable: the two-stage vote routes it instead of triaging.
+    q = question(8, "how to become a dog trainer in canada")
+    winners = [
+        (commercial_winner("rival1.com"), 5),
+        (informational_winner("guide1.com"), 4),
+        (facts("reddit.com", "community", status="not_fetched",
+               url="https://reddit.com/r/dogs/z"), 2),
+    ]
+    wire(monkeypatch, {8: winners})  # no QC page -> build (buildable topic)
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "ownable_no_qc_page"
+    assert route["vote"]["ownable_share"] == 0.82
+    assert route["dominant"][0] == "competitor"  # stage leader, for wording
+
+
+def test_insufficient_voters_triages_regardless_of_share(monkeypatch):
+    # 100% ownable - but only 3 voting citations. One page's opinion.
+    q = question(9, "niche question with thin citations")
+    winners = [(commercial_winner("rival1.com"), 3)]
+    wire(monkeypatch, {9: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "triage"
+    assert route["reason"] == "insufficient_voters"
+    assert route["vote"]["voters"] == 3
+
+
+def test_stage_two_picks_leading_non_ownable_bucket(monkeypatch):
+    # non-ownable 78% (ugc 5 + review 2); ugc leads -> participate, not claim
+    q = question(10, "dog grooming course reviews")
+    winners = [
+        (facts("reddit.com", "community", status="not_fetched",
+               url="https://reddit.com/r/dogs/rev"), 5),
+        (facts("trustpilot.com", "editorial", url="https://trustpilot.com/review/x"), 2),
+        (commercial_winner("rival1.com"), 2),
+    ]
+    wire(monkeypatch, {10: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "reach_out"
+    assert route["dominant"][0] == "ugc"
+    assert route["feasibility"]["channel"] == "participate"
 
 
 def test_reputation_topic_without_channel_triages(monkeypatch):

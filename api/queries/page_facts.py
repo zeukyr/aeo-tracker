@@ -340,7 +340,11 @@ def _classify_by_domain(url, competitor_brands):
 def _classify_editorial_llm(url, title, headings, excerpt):
     """
     LLM disambiguation for editorial pages: roundup vs directory vs
-    association resource vs guide. Falls back to 'editorial' on any failure -
+    association resource vs guide vs provider. "provider" (an organization
+    selling its OWN courses/training - a rival school not in the brand list,
+    e.g. icti.org) maps to page_type "competitor": that type's downstream
+    semantics (comparable page, commercial slot, ownable) are exactly right
+    for a rival provider's page. Falls back to 'editorial' on any failure -
     callers treat that as "don't assert the page's genre".
     """
     from openai import OpenAI
@@ -350,6 +354,7 @@ def _classify_editorial_llm(url, title, headings, excerpt):
 - "directory": a searchable/browsable listing of providers or programs
 - "association": a professional association's or industry body's resource/guidance page
 - "guide": an editorial how-to or career guide that does not rank providers
+- "provider": the website of a school/company selling ITS OWN courses, training programs, or services
 - "other": anything else
 
 URL: {url}
@@ -357,7 +362,7 @@ TITLE: {title or "(none)"}
 HEADINGS: {json.dumps(headings[:15])}
 FIRST PARAGRAPHS: {excerpt[:1500]}
 
-Return JSON: {{"page_type": "roundup|directory|association|guide|other"}}"""
+Return JSON: {{"page_type": "roundup|directory|association|guide|provider|other"}}"""
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -369,6 +374,8 @@ Return JSON: {{"page_type": "roundup|directory|association|guide|other"}}"""
             response_format={"type": "json_object"},
         )
         page_type = json.loads(response.choices[0].message.content).get("page_type")
+        if page_type == "provider":
+            return "competitor", "llm"
         if page_type in ("roundup", "directory", "association", "guide", "other"):
             return page_type, "llm"
     except Exception as e:
@@ -670,6 +677,14 @@ _PAGE_TYPE_TO_SOURCE = {
 
 SOURCE_TYPE_DOMINANCE = 0.6  # same "most" bar as genre_gap / composition rules
 
+# The router's first branching decision is one bit - can QC own the winning
+# slot or not. competitor and editorial route identically (ownable: build/fix),
+# so they must not split the vote against each other; WHICH non-ownable bucket
+# leads does change behavior (ugc -> participate, review -> claim,
+# reference -> align), so that's asked second.
+OWNABLE_SOURCE_BUCKETS     = ("competitor", "editorial")
+NON_OWNABLE_SOURCE_BUCKETS = ("ugc", "review", "reference")
+
 
 def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
@@ -698,14 +713,12 @@ def source_type(facts):
     return _PAGE_TYPE_TO_SOURCE.get(page_type, "other")
 
 
-def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
+def source_votes(winner_facts):
     """
-    Citation-weighted dominant bucket over a question's cited winners, or
-    (None, share) when nothing clears `threshold` (a fragmented field - the
-    router sends those to triage, never to a forced comparison). "other"
-    pages don't vote: they neither confirm nor deny ownability. Weights come
-    from facts["citation_count"] (attached by the caller); a URL cited 40x
-    outweighs one cited once.
+    Citation-weighted vote per source bucket over a question's cited winners;
+    "other" pages abstain (they neither confirm nor deny ownability). Weights
+    come from facts["citation_count"] (attached by the caller); a URL cited
+    40x outweighs one cited once.
     """
     votes = {}
     for f in winner_facts:
@@ -713,6 +726,17 @@ def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
         if bucket == "other":
             continue
         votes[bucket] = votes.get(bucket, 0) + (f.get("citation_count") or 1)
+    return votes
+
+
+def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
+    """
+    Citation-weighted dominant bucket over a question's cited winners, or
+    (None, share) when nothing clears `threshold`. Single-stage flat vote -
+    kept for reports/diagnostics; the router uses the two-stage vote over
+    source_votes() (ownable vs non-ownable first, §5.2).
+    """
+    votes = source_votes(winner_facts)
     total = sum(votes.values())
     if not total:
         return None, 0.0

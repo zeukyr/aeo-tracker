@@ -21,10 +21,14 @@ Branches (each losing question terminates in exactly one):
              reputation question whose ownable winners are pitchable.
   TRIAGE     everything the router cannot action with confidence - visible,
              never a silent drop:
-               fragmented_field       no winner type clears the dominance bar
+               fragmented_field       neither the ownable nor the non-ownable
+                                      side clears the dominance bar
                                       (deliberately NOT auto-built; flagged
                                       build_candidate when the topic is
                                       buildable, for a human to green-light)
+               insufficient_voters    fewer than MIN_VOTING_CITATIONS voting
+                                      citations after abstentions - a share
+                                      over a handful of votes is not a verdict
                no_cited_winners       QC loses but nothing external is cited
                feasibility_unknown    non-ownable winners, no channel found
                reputation_no_channel  can't build credibility, nothing to pitch
@@ -45,10 +49,13 @@ from api.queries.page_facts import (
     get_pages_facts,
     genre_gap,
     source_type,
-    dominant_source_type,
+    source_votes,
     inclusion_opportunity,
     school_for_url,
     _root_domain,
+    SOURCE_TYPE_DOMINANCE,
+    OWNABLE_SOURCE_BUCKETS,
+    NON_OWNABLE_SOURCE_BUCKETS,
 )
 from api.queries.tab1_strategy import get_question_cited_urls
 from api.queries.tab2_scorecard import build_scorecard, scorecard_to_recommendation
@@ -63,7 +70,11 @@ BUILDABLE_TOPICS = {
 REPUTATION_TOPICS = {"Brand Credibility", "Competitor Comparison"}
 
 _MAX_QC_SHARE = 0.15          # "losing": QC cited in <= 15% of responses
-_NON_OWNABLE = ("ugc", "review", "reference")
+
+# Below this many VOTING citations (after "other" abstentions) a share is
+# noise, not a verdict - 64% of 3 voters is one page's opinion. Triage as
+# insufficient_voters regardless of share.
+MIN_VOTING_CITATIONS = 4
 
 _CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "outreach_channels.json")
 
@@ -221,8 +232,16 @@ def route_question(q, days=None):
     """
     Classify one losing question's cited winners and pick its branch.
     Returns {"branch": "fix"|"build"|"reach_out"|"triage", "question": q,
-    "winners": [...facts], "dominant": (bucket, share), "qc_url",
-    "genre_mismatch", "feasibility", "reason", ...}.
+    "winners": [...facts], "vote": {...}, "dominant": (bucket, share),
+    "qc_url", "genre_mismatch", "feasibility", "reason", ...}.
+
+    The vote is TWO-STAGE: the first branching decision is one bit - can QC
+    own the winning slot - so competitor and editorial (which route
+    identically) must not split the vote against each other. Only when the
+    non-ownable side clears the bar do we ask WHICH non-ownable bucket leads,
+    because that choice changes behavior (ugc -> participate, review ->
+    claim, reference -> align). `dominant` carries (stage-leader bucket,
+    stage share) for wording/dedup; `vote` carries the full tally.
     """
     winners = get_question_cited_urls(q["question_id"], days)
     if not winners:
@@ -233,17 +252,31 @@ def route_question(q, days=None):
     for f in facts:
         f["citation_count"] = counts.get(f["url"], 0)
 
-    bucket, share = dominant_source_type(facts)
+    votes = source_votes(facts)
+    voters = sum(votes.values())
     buildable = q["topic"] in BUILDABLE_TOPICS
-    common = {"question": q, "winners": facts, "dominant": (bucket, share)}
+    ownable = sum(votes.get(b, 0) for b in OWNABLE_SOURCE_BUCKETS)
+    vote = {
+        "voters": voters,
+        "buckets": votes,
+        "ownable_share": round(ownable / voters, 2) if voters else 0.0,
+        "non_ownable_share": round((voters - ownable) / voters, 2) if voters else 0.0,
+    }
 
-    # ── no dominant winner type: a finding for a human, not an auto-build ──
-    if bucket is None:
-        return triage(q, "fragmented_field", build_candidate=buildable,
-                      winners=facts, dominant=(bucket, share))
+    def _lead(bucket_names):
+        eligible = {b: w for b, w in votes.items() if b in bucket_names and w}
+        return max(eligible.items(), key=lambda kv: kv[1])[0] if eligible else None
 
-    # ── non-ownable winners: reach out if a channel exists ──
-    if bucket in _NON_OWNABLE:
+    # ── too few voters: a share over a handful of citations is not a verdict ──
+    if voters < MIN_VOTING_CITATIONS:
+        return triage(q, "insufficient_voters", build_candidate=buildable,
+                      winners=facts, vote=vote, dominant=(None, 0.0))
+
+    # ── stage 1b: non-ownable field -> stage 2: which non-ownable bucket leads ──
+    if vote["non_ownable_share"] >= SOURCE_TYPE_DOMINANCE:
+        bucket = _lead(NON_OWNABLE_SOURCE_BUCKETS)
+        common = {"question": q, "winners": facts, "vote": vote,
+                  "dominant": (bucket, vote["non_ownable_share"])}
         feas, target = _bucket_feasibility(facts, bucket)
         if feas["feasibility"] in ("open", "gated"):
             return {"branch": "reach_out", "reason": "non_ownable_winners",
@@ -252,10 +285,19 @@ def route_question(q, days=None):
             return {"branch": "build", "reason": "earn_indirect",
                     "feasibility": feas, "feasibility_target": target,
                     "qc_url": None, "genre_mismatch": None, **common}
-        return triage(q, "feasibility_unknown", winners=facts,
-                      dominant=(bucket, share), feasibility=feas)
+        return triage(q, "feasibility_unknown", winners=facts, vote=vote,
+                      dominant=(bucket, vote["non_ownable_share"]), feasibility=feas)
 
-    # ── ownable winners (editorial / competitor): does QC have this page? ──
+    # ── neither side clears the bar: a finding for a human, not an auto-build ──
+    if vote["ownable_share"] < SOURCE_TYPE_DOMINANCE:
+        return triage(q, "fragmented_field", build_candidate=buildable,
+                      winners=facts, vote=vote, dominant=(None, vote["ownable_share"]))
+
+    # ── stage 1a: ownable field (competitor + editorial vote together) ──
+    bucket = _lead(OWNABLE_SOURCE_BUCKETS)
+    common = {"question": q, "winners": facts, "vote": vote,
+              "dominant": (bucket, vote["ownable_share"])}
+
     cov = diagnose_text_coverage(q["question"], school=q["school"])
     qc_url = cov.get("qc_url") if cov.get("verdict") == "have_page" else None
     gm = None
@@ -280,8 +322,9 @@ def route_question(q, days=None):
         return {"branch": "reach_out", "reason": "reputation_reach_out",
                 "feasibility": feas, "feasibility_target": target,
                 "qc_url": qc_url, "genre_mismatch": gm, **common}
-    return triage(q, "reputation_no_channel", winners=facts,
-                  dominant=(bucket, share), qc_url=qc_url, genre_mismatch=gm)
+    return triage(q, "reputation_no_channel", winners=facts, vote=vote,
+                  dominant=(bucket, vote["ownable_share"]),
+                  qc_url=qc_url, genre_mismatch=gm)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -322,8 +365,10 @@ def _router_detail(route, group=None):
         "question_id": q["question_id"],
         "question": q["question"],
         "qc_share": q["qc_share"],
+        "n_citations": q.get("n_citations"),
         "dominant_source": bucket,
         "dominant_share": share,
+        "vote": route.get("vote"),
         "winners": _winner_summary(route.get("winners")),
     }
     if group:
@@ -500,6 +545,7 @@ def _triage_entry(route):
         "build_candidate": route.get("build_candidate", False),
         "dominant_source": bucket,
         "dominant_share":  share,
+        "vote":            route.get("vote"),
         "qc_url":          route.get("qc_url"),
         "genre_mismatch":  route.get("genre_mismatch"),
         "winners":         _winner_summary(route.get("winners")),
