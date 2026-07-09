@@ -603,6 +603,12 @@ _REVIEW_DOMAINS = {
 }
 _REFERENCE_DOMAINS = {"wikipedia.org", "wikidata.org", "britannica.com"}
 
+# Vendor-hosted forums (community.cvent.com/discussion/...) classify as
+# "competitor" at page_type level - the brand token wins the domain match -
+# but the SLOT is user-generated discussion, not the vendor's editorial page.
+# The subdomain says so deterministically.
+_UGC_SUBDOMAIN = re.compile(r"^(community|forums?|discuss(ions?)?|boards?)\.", re.I)
+
 _PAGE_TYPE_TO_SOURCE = {
     "community":   "ugc",
     "competitor":  "competitor",
@@ -621,8 +627,13 @@ SOURCE_TYPE_DOMINANCE = 0.6  # same "most" bar as genre_gap / composition rules
 
 def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
-    editorial | competitor | other. Domain allowlists override page_type."""
-    root = _root_domain(facts.get("domain", ""))
+    editorial | competitor | other. Domain rules override page_type - a
+    community.* / forum.* subdomain is ugc even when the root domain matched
+    a competitor brand token."""
+    domain = facts.get("domain", "")
+    if _UGC_SUBDOMAIN.match(domain):
+        return "ugc"
+    root = _root_domain(domain)
     if root in _REVIEW_DOMAINS:
         return "review"
     if root in _REFERENCE_DOMAINS:
