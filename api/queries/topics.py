@@ -650,6 +650,31 @@ def get_prompt_fanout_queries(prompt_id: str, days=None):
     ]
 
 
+def get_prompt_qc_citations(prompt_id: str, days=None):
+    """
+    Returns QC-citing URLs for a prompt, from mention_response_links.
+    Each row: { url, is_internal, engine, run_date }
+    """
+    date_r = _date_filter(days).replace("AND created_at", "AND r.started_at")
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"""
+                SELECT DISTINCT mrl.url, mrl.is_qc_internal, m.engine, date(r.started_at) AS run_date
+                FROM mention_response_links mrl
+                JOIN mention_responses m ON m.id = mrl.mention_response_id
+                JOIN runs r ON r.id = m.run_id
+                WHERE m.question_id = %s
+                  AND mrl.is_qc = true
+                  {date_r}
+                ORDER BY run_date DESC, m.engine
+            """, (prompt_id,))
+            rows = cur.fetchall()
+    return [
+        {"url": r[0], "is_internal": r[1], "engine": r[2], "run_date": str(r[3])}
+        for r in rows
+    ]
+
+
 def get_prompt_responses(prompt_id: str, engine: str, days=None):
     """
     Full response history for one (prompt, engine) pair, newest first.

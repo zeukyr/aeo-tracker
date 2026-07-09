@@ -27,6 +27,7 @@ from api.queries import (
     get_prompt_detail,
     get_prompt_responses,
     get_prompt_fanout_queries,
+    get_prompt_qc_citations,
 )
 
 from api.queries.recommendations_synthesis import (
@@ -199,3 +200,7 @@ def topic_prompt_responses(prompt_id: str, engine: str, days: int = None):
 @app.get("/api/topic-prompt/{prompt_id}/fanout-queries")
 def topic_prompt_fanout_queries(prompt_id: str, days: int = None):
     return get_prompt_fanout_queries(prompt_id, days)
+
+@app.get("/api/topic-prompt/{prompt_id}/qc-citations")
+def topic_prompt_qc_citations(prompt_id: str, days: int = None):
+    return get_prompt_qc_citations(prompt_id, days)

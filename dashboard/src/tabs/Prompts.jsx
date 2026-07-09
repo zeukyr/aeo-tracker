@@ -645,6 +645,94 @@ function FanoutQueriesSection({ promptId, days, onOpenFanoutDrawer }) {
   );
 }
 
+// ─── qc citations collapsible ─────────────────────────────────────────────────
+function QCCitationsSection({ promptId, days }) {
+  const [open, setOpen] = useState(false);
+  const [citations, setCitations] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  function handleToggle() {
+    setOpen(o => {
+      const next = !o;
+      if (next && citations === null && !loading) {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (days) params.append("days", days);
+        fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/qc-citations?${params}`)
+          .then(r => r.json())
+          .then(data => { setCitations(Array.isArray(data) ? data : []); setLoading(false); })
+          .catch(() => { setCitations([]); setLoading(false); });
+      }
+      return next;
+    });
+  }
+
+  const count = citations ? citations.length : null;
+
+  return (
+    <div style={{ borderBottom: "1px solid #f0efec", paddingBottom: 4, marginBottom: 8 }}>
+      <button
+        onClick={handleToggle}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          width: "100%", background: "none", border: "none",
+          cursor: "pointer", padding: "6px 0", textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
+          ▶
+        </span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          QC Citations
+        </span>
+        {count !== null && (
+          <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({count})</span>
+        )}
+      </button>
+
+      {open && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 4 }}>
+          {loading && <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>Loading…</p>}
+          {!loading && citations !== null && citations.length === 0 && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>No QC citations in this period.</p>
+          )}
+          {!loading && citations && citations.map((c, i) => {
+            const color = LLM_COLORS[c.engine] || "#9b9b9b";
+            let domain = "";
+            try { domain = new URL(c.url).hostname.replace(/^www\./, ""); } catch {}
+            return (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", gap: 10,
+                background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
+                padding: "6px 12px",
+              }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[c.engine] || c.engine}
+                </span>
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: "#374151", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                  title={c.url}
+                >
+                  {domain}
+                </a>
+                {c.is_internal && (
+                  <span style={{ fontSize: 10, fontWeight: 600, color: "#1d9e75", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>
+                    internal
+                  </span>
+                )}
+                <span style={{ fontSize: 11, color: "#9b9b9b", flexShrink: 0 }}>{c.run_date}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
 function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   const { days } = useFilter();
@@ -727,6 +815,8 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
               <CompetitorRanking competitors={competitors} />
             </div>
           </div>
+
+          <QCCitationsSection promptId={prompt.id} days={days} />
 
           {/* per-LLM breakdown */}
           <div>
