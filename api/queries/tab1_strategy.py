@@ -487,6 +487,11 @@ def strategy_to_recommendations(analysis, days=None, max_per_topic=3, rival_gap=
 
 def build_tab1_recommendations(days=None, max_topics=2):
     """
+    RETIRED as a top-level entry point (question-router plan §6): the router's
+    build and reach-out branches (question_router.py) now cover this family at
+    question grain - genre-mismatch builds, gap builds, and the inclusion/earn
+    recs. Kept for standalone topic-level dry runs only.
+
     Deterministic Tab 1 recs for the weakest topics with a strategic gap - the
     mirror of tab2_scorecard.build_tab2_recommendations: same weak-topic
     selection, opposite coverage branch (uncovered intents, or covered intents
