@@ -526,6 +526,14 @@ p, h1, h2, h3, h4 {
   margin: 0;
 }
 
+/* why this priority: the rank driver written by _apply_priority_ranking */
+.rec-card__rank-reason {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
 .chip {
   display: inline-flex;
   align-items: center;
@@ -544,6 +552,11 @@ p, h1, h2, h3, h4 {
 /* Outreach channel feasibility (§5.7): open = self-serve, gated = approval */
 .chip--feas-open  { background: var(--color-up-bg); color: var(--color-up-text); }
 .chip--feas-gated { background: var(--color-warn-bg, #fdf3e0); color: var(--color-warn-text, #8a5a00); }
+
+/* Evidence tier: a low-confidence card must READ as low confidence, not carry
+   the same visual weight as a verified structural gap. */
+.chip--tier-high { background: var(--color-up-bg); color: var(--color-up-text); }
+.chip--tier-low  { background: var(--color-warn-bg, #fdf3e0); color: var(--color-warn-text, #8a5a00); }
 
 /* Triage panel (§5.9): ranked queue of losing questions needing a human call */
 .triage-panel { margin-top: 24px; }
@@ -612,6 +625,195 @@ p, h1, h2, h3, h4 {
   padding: 8px 10px;
   margin: 0;
 }
+
+.prompt-open-btn {
+  font-size: var(--text-xs);
+  color: var(--color-blue-dark);
+  background: var(--color-blue-light);
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+
+.prompt-open-btn:hover { background: #d8eaf9; }
+
+.question-view {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-view__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.question-view__header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.question-view__back { width: fit-content; }
+
+.question-view__rec-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: 320px;
+}
+
+.question-view__rec-message {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.question-view__stack { display: flex; flex-direction: column; gap: 12px; }
+
+.prompt-metrics-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prompt-metrics-panel__question {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.prompt-metrics-panel__layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.prompt-metrics-panel__chart { flex: 2; min-width: 0; }
+.prompt-metrics-panel__competitors { flex: 1; min-width: 160px; }
+
+.question-evidence { display: flex; flex-direction: column; gap: 10px; }
+
+.question-evidence__table-wrap { overflow-x: auto; border-radius: var(--radius-sm); }
+
+.question-evidence__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  font-size: 12px;
+  background: var(--surface-primary);
+}
+
+.question-evidence__table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  padding: 8px 10px;
+  border-bottom: 0.5px solid var(--border-default);
+}
+
+.question-evidence__table th.num,
+.question-evidence__table td.num { text-align: center; }
+
+.question-evidence__table td {
+  padding: 8px 10px;
+  border-bottom: 0.5px solid var(--border-default);
+  vertical-align: top;
+}
+
+.question-evidence__table tbody tr:last-child td { border-bottom: 0; }
+
+.question-evidence__url,
+.question-view__matched-url {
+  color: var(--color-blue-dark);
+  word-break: break-all;
+}
+
+.question-view__matched-body { display: flex; flex-direction: column; gap: 4px; }
+.question-view__matched-meta { font-size: var(--text-xs); color: var(--text-secondary); }
+
+.rec-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--surface-secondary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.rec-evidence__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.rec-evidence__summary p,
+.rec-evidence__vote-row p { margin: 0; }
+
+.rec-evidence__label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.rec-evidence__vote-bars { display: flex; flex-direction: column; gap: 6px; }
+
+.rec-evidence__vote-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.rec-evidence__buckets { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.rec-evidence__section { display: flex; flex-direction: column; gap: 6px; }
+
+.rec-evidence__list { display: flex; flex-direction: column; gap: 6px; }
+
+.rec-evidence__item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+}
+
+.rec-evidence__item a,
+.rec-evidence__linkbtn {
+  color: var(--color-blue-dark);
+}
+
+.rec-evidence__linkbtn {
+  text-align: left;
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.rec-evidence__linkbtn:hover { background: var(--color-blue-light); }
 
 /* Tab 1 citation evidence (what AI cites vs QC) */
 .tab1ev {
@@ -705,6 +907,13 @@ p, h1, h2, h3, h4 {
 }
 
 .scorecard__src-n { color: var(--text-muted); margin-left: 5px; }
+
+.scorecard__unreadable { display: flex; flex-direction: column; gap: 4px; }
+.scorecard__src--unreadable {
+  border-style: dashed;
+  color: var(--text-muted);
+  background: transparent;
+}
 
 .scorecard__scroll { overflow-x: auto; border-radius: var(--radius-sm); }
 

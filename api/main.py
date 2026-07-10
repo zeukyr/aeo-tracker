@@ -30,9 +30,12 @@ from api.queries.recommendations_synthesis import (
     generate_recommendations,
     save_recommendations,
     get_saved_recommendations,
+    get_recommendation,
     get_triage,
     update_recommendation_status,
     get_generation_status,
+    get_question_recommendation_status,
+    generate_question_recommendation,
 )
 
 app = FastAPI()
@@ -168,10 +171,25 @@ def recommendations_health_summary(days: int = None, school: str = None):
 def list_recommendations(include_superseded: bool = False):
     return get_saved_recommendations(include_superseded)
 
+@app.get("/api/recommendations/{rec_id}")
+def single_recommendation(rec_id: str):
+    rec = get_recommendation(rec_id)
+    if rec is None:
+        raise HTTPException(status_code=404, detail="Recommendation not found")
+    return rec
+
 @app.patch("/api/recommendations/{rec_id}")
 def patch_recommendation_status(rec_id: str, status: str = Body(...), implemented_at: str = Body(None)):
     update_recommendation_status(rec_id, status, implemented_at)
     return {"updated": True}
+
+@app.get("/api/questions/{question_id}/recommendation-status")
+def question_recommendation_status(question_id: str):
+    return get_question_recommendation_status(question_id)
+
+@app.post("/api/questions/{question_id}/recommendation")
+def question_recommendation(question_id: str, days: int = None):
+    return generate_question_recommendation(question_id, days)
 
 
 @app.get("/api/topics-over-time")

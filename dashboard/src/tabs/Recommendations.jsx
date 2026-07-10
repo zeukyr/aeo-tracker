@@ -249,6 +249,8 @@ function StrategicEvidence({ ev }) {
 }
 
 function Scorecard({ sc }) {
+  const citedTotal = sc.winners_cited_total ?? sc.winners_total;
+  const unreadable = sc.winners_unreadable || [];
   return (
     <div className="scorecard">
       <div className="scorecard__page">
@@ -256,7 +258,10 @@ function Scorecard({ sc }) {
         <a className="scorecard__url" href={sc.qc_url} target="_blank" rel="noreferrer">{sc.qc_url}</a>
       </div>
 
-      <span className="scorecard__eyebrow">Compared against {sc.winners_total} pages AI cites for this topic</span>
+      <span className="scorecard__eyebrow">
+        Compared against {sc.winners_total}
+        {citedTotal !== sc.winners_total ? ` of ${citedTotal}` : ""} pages AI cites for this topic
+      </span>
       <div className="scorecard__winners">
         {sc.winners.map((w, i) => (
           <span className="scorecard__src" key={i}>
@@ -264,6 +269,21 @@ function Scorecard({ sc }) {
           </span>
         ))}
       </div>
+
+      {unreadable.length > 0 && (
+        <div className="scorecard__unreadable">
+          <span className="scorecard__eyebrow">
+            Not analyzed — {unreadable.length} cited page{unreadable.length > 1 ? "s" : ""} could not be fetched
+          </span>
+          <div className="scorecard__winners">
+            {unreadable.map((w, i) => (
+              <span className="scorecard__src scorecard__src--unreadable" key={i} title={`${w.url} (${w.status})`}>
+                {w.domain || w.url}<span className="scorecard__src-n">{w.citation_count}×</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="scorecard__scroll">
         <table className="scoretable">
@@ -282,7 +302,8 @@ function Scorecard({ sc }) {
                 <td>{f.label}</td>
                 <td className={`geo geo--${f.geo_weight}`}>{f.geo_weight}</td>
                 <td className="num">
-                  {f.winners_present}/{f.winners_total}{" "}
+                  {f.winners_present}/{f.winners_total}
+                  {f.winners_pct != null ? ` (${f.winners_pct}%)` : ""}{" "}
                   <span className="prev">{PREVALENCE_LABEL[f.prevalence] ?? f.prevalence}</span>
                 </td>
                 <td className="num">
@@ -316,16 +337,141 @@ function Scorecard({ sc }) {
   );
 }
 
-function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented }) {
+function RecommendationEvidence({ rec, onOpenPrompt }) {
+  const router = rec.detail?.router;
+  if (!router) {
+    const detailEntries = Object.entries(rec.detail || {}).filter(([key]) => !["router", "scorecard", "priority_rank"].includes(key));
+    return (
+      <div className="rec-evidence">
+        {detailEntries.length > 0 && (
+          <div className="rec-evidence__section">
+            <span className="rec-evidence__label">Structured detail</span>
+            <div className="rec-evidence__list">
+              {detailEntries.map(([key, value]) => (
+                <div className="rec-evidence__item" key={key}>
+                  <span>{key}</span>
+                  <span>{typeof value === "object" ? JSON.stringify(value) : String(value)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {rec.evidence && <p className="rec-card__evidence">{rec.evidence}</p>}
+      </div>
+    );
+  }
+
+  const vote = router.vote || {};
+  const buckets = vote.buckets || {};
+  const sourceQuestions = router.source_questions || [];
+  const abstentions = router.abstentions || [];
+  const bucketEntries = Object.entries(buckets);
+
+  return (
+    <div className="rec-evidence">
+      <div className="rec-evidence__summary">
+        <div>
+          <span className="rec-evidence__label">Route</span>
+          <p>{router.branch ?? "unknown"}{router.reason ? ` · ${router.reason}` : ""}</p>
+        </div>
+        <div>
+          <span className="rec-evidence__label">Cleared 0.6 bar</span>
+          <p>{vote.cleared_bar ? "Yes" : "No"}</p>
+        </div>
+        <div>
+          <span className="rec-evidence__label">Voters</span>
+          <p>{vote.voters ?? 0}</p>
+        </div>
+        <div>
+          <span className="rec-evidence__label">Dominant</span>
+          <p>{router.dominant_source ?? "—"} · {router.dominant_share != null ? `${Math.round(router.dominant_share * 100)}%` : "—"}</p>
+        </div>
+      </div>
+
+      <div className="rec-evidence__vote-bars">
+        <div className="rec-evidence__vote-row">
+          <span>Ownable</span>
+          <span>{vote.ownable_share != null ? `${Math.round(vote.ownable_share * 100)}%` : "—"}</span>
+        </div>
+        <div className="rec-evidence__vote-row">
+          <span>Non-ownable</span>
+          <span>{vote.non_ownable_share != null ? `${Math.round(vote.non_ownable_share * 100)}%` : "—"}</span>
+        </div>
+        {bucketEntries.length > 0 && (
+          <div className="rec-evidence__buckets">
+            {bucketEntries.map(([bucket, count]) => (
+              <span className="chip" key={bucket}>{bucket}: {count}</span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {abstentions.length > 0 && (
+        <div className="rec-evidence__section">
+          <span className="rec-evidence__label">Abstentions</span>
+          <div className="rec-evidence__list">
+            {abstentions.map((a) => (
+              <div className="rec-evidence__item" key={a.url}>
+                <a href={a.url} target="_blank" rel="noreferrer">{a.domain || a.url}</a>
+                <span>{a.reason}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sourceQuestions.length > 0 && (
+        <div className="rec-evidence__section">
+          <span className="rec-evidence__label">Source question pages</span>
+          <div className="rec-evidence__list">
+            {sourceQuestions.map((q) => (
+              <button
+                type="button"
+                key={q.question_id}
+                className="rec-evidence__linkbtn"
+                onClick={() => onOpenPrompt?.(q.question_id)}
+              >
+                {q.question}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {rec.evidence && (
+        <p className="rec-card__evidence">{rec.evidence}</p>
+      )}
+    </div>
+  );
+}
+
+function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented, onOpenPrompt }) {
   const [expanded, setExpanded] = useState(false);
   const metricLabel = formatMetric(rec);
   const feasibility = feasibilityOf(rec);
+  const hasEvidence = Boolean(rec.detail || rec.evidence);
 
   return (
     <div className="card rec-card">
       <div className="rec-card__top">
         <div className="rec-card__chips">
-          <span className={`priority-pill priority-pill--${rec.priority}`}>{rec.priority}</span>
+          <span
+            className={`priority-pill priority-pill--${rec.priority}`}
+            title={rec.detail?.priority_rank?.reason}
+          >
+            {rec.priority}
+            {rec.detail?.priority_rank && ` · #${rec.detail.priority_rank.rank}/${rec.detail.priority_rank.of}`}
+          </span>
+          {rec.detail?.evidence_tier && (
+            <span
+              className={`chip chip--tier-${rec.detail.evidence_tier}`}
+              title={rec.detail.evidence_tier === "high"
+                ? "Verified structural gap: most analyzed cited pages share a feature QC's page lacks."
+                : "Weaker signal: thin winner sample, sub-threshold gaps, or an LLM-observed pattern — treat as a lead, not a verified gap."}
+            >
+              {rec.detail.evidence_tier === "high" ? "verified gap" : "low-confidence signal"}
+            </span>
+          )}
           {rec.action_type && <span className="chip">{rec.action_type}</span>}
           {rec.school && <span className="chip">{rec.school}</span>}
           {rec.effort && <span className="chip" title={EFFORT_LABELS[rec.effort]}>effort: {rec.effort}</span>}
@@ -342,6 +488,10 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
 
       <p className="rec-card__problem">{rec.problem}</p>
       <p className="rec-card__action">{rec.action}</p>
+
+      {rec.detail?.priority_rank?.reason && (
+        <p className="rec-card__rank-reason">{rec.detail.priority_rank.reason}</p>
+      )}
 
       <div className="rec-card__chips">
         {rec.segment?.value && (
@@ -365,12 +515,12 @@ function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCan
 
       {rec.detail?.evidence && <StrategicEvidence ev={rec.detail.evidence} />}
 
-      {rec.evidence && !rec.detail?.scorecard && (
+      {hasEvidence && (
         <button className="evidence-toggle" onClick={() => setExpanded(!expanded)}>
           {expanded ? "Hide evidence" : "Show evidence"}
         </button>
       )}
-      {expanded && <p className="rec-card__evidence">{rec.evidence}</p>}
+      {expanded && <RecommendationEvidence rec={rec} onOpenPrompt={onOpenPrompt} />}
 
       <TrackBar
         rec={rec}
@@ -436,7 +586,7 @@ function TriagePanel({ items }) {
   );
 }
 
-function Recommendations() {
+function Recommendations({ onOpenPrompt, focusedRecId, onCloseRecommendation }) {
   const { days, school } = useFilter();
   const [recommendations, setRecommendations] = useState(null);
   const [genStatus, setGenStatus] = useState(null);
@@ -446,6 +596,7 @@ function Recommendations() {
   const [stream, setStream] = useState("strategic");
   const [popoverId, setPopoverId] = useState(null);
   const [triage, setTriage] = useState([]);
+  const [fetchedRec, setFetchedRec] = useState(null);
 
   const loading = recommendations === null && error === null;
 
@@ -466,6 +617,25 @@ function Recommendations() {
   useEffect(() => {
     loadRecommendations();
   }, []);
+
+  // Resolve the focused rec: prefer the loaded list (stays in sync with
+  // patches); the by-id fetch covers recs outside the default list (e.g.
+  // superseded since it was opened).
+  const focusedRec = focusedRecId
+    ? recommendations?.find((r) => r.id === focusedRecId) ??
+      (fetchedRec?.id === focusedRecId ? fetchedRec : null)
+    : null;
+
+  useEffect(() => {
+    if (!focusedRecId) return undefined;
+    if (recommendations?.some((r) => r.id === focusedRecId)) return undefined;
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/recommendations/${focusedRecId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((rec) => { if (!cancelled && rec) setFetchedRec(rec); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [focusedRecId, recommendations]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -501,6 +671,7 @@ function Recommendations() {
   const patchRecommendation = (id, body) => {
     setPopoverId(null);
     setRecommendations((prev) => prev.map((r) => (r.id === id ? { ...r, ...body } : r)));
+    setFetchedRec((prev) => (prev && prev.id === id ? { ...prev, ...body } : prev));
     fetch(`${API_BASE_URL}/api/recommendations/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -516,6 +687,41 @@ function Recommendations() {
 
   if (error) return <p className="state-msg state-msg--error">Error: {error}</p>;
   if (loading) return <p className="state-msg">Loading...</p>;
+
+  // Focused single-card view (opened from a question's "View recommendation") -
+  // the recommendation analogue of the Prompts tab's question view.
+  if (focusedRecId) {
+    return (
+      <div className="rec-page">
+        <div className="card rec-header">
+          <div>
+            <button className="btn btn--ghost" onClick={() => onCloseRecommendation?.()}>
+              ← Back to all recommendations
+            </button>
+            <p className="panel-title">Recommendation</p>
+            {focusedRec?.generated_at && (
+              <p className="rec-header__meta">Generated {formatDate(focusedRec.generated_at)}</p>
+            )}
+          </div>
+        </div>
+        {focusedRec ? (
+          <div className="rec-list">
+            <RecommendationCard
+              rec={focusedRec}
+              isPopoverOpen={popoverId === focusedRec.id}
+              onAccept={handleAccept}
+              onOpenPopover={setPopoverId}
+              onCancelPopover={() => setPopoverId(null)}
+              onConfirmImplemented={handleConfirmImplemented}
+              onOpenPrompt={onOpenPrompt}
+            />
+          </div>
+        ) : (
+          <p className="state-msg">Loading…</p>
+        )}
+      </div>
+    );
+  }
 
   const schoolFiltered = recommendations.filter((r) => matchesSchool(r, school));
   const streamCounts = Object.fromEntries(
@@ -580,6 +786,7 @@ function Recommendations() {
                 onOpenPopover={cardProps.onOpenPopover}
                 onCancelPopover={cardProps.onCancelPopover}
                 onConfirmImplemented={cardProps.onConfirmImplemented}
+                onOpenPrompt={onOpenPrompt}
               />
             ))}
           </div>
@@ -610,6 +817,7 @@ function Recommendations() {
                       onOpenPopover={cardProps.onOpenPopover}
                       onCancelPopover={cardProps.onCancelPopover}
                       onConfirmImplemented={cardProps.onConfirmImplemented}
+                      onOpenPrompt={onOpenPrompt}
                     />
                   ))}
                 </div>

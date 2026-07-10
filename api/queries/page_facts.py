@@ -36,6 +36,7 @@ from lxml import html as lxml_html
 from psycopg2.extras import Json
 
 from src.logger import logger
+from src.parsing.urls import normalize_url
 from api.db import get_connection
 
 _FETCH_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; qc-ai-tracker page analysis)"}
@@ -54,6 +55,34 @@ _COMMUNITY_DOMAINS = {
     "twitter.com", "x.com", "pinterest.com", "medium.com", "linkedin.com",
 }
 _VIDEO_DOMAINS = {"youtube.com", "youtu.be", "vimeo.com"}
+
+# Distinct product surfaces living under a community/review root, keyed by
+# (root domain, first path segment) - the LinkedIn Learning problem: the
+# domain-only rule filed linkedin.com/learning/* as "community" (ugc slot,
+# "participate in the discussion"), but that subtree is LinkedIn Learning's
+# course catalog - a platform slot QC counters by getting listed (review),
+# not by joining a discussion. coursera.org/learn/<slug> is an individual
+# course product page - the approved Udemy pattern (competitor, ownable
+# slot) - unlike coursera's /courses catalog/search pages, which stay review.
+# Survey of all cited community/review-domain URLs (2026-07-10): every other
+# subpath on these roots is genuinely the root's own surface (facebook
+# /groups, reddit /r, instagram profiles).
+_SUBPATH_SOURCE_TYPES = {
+    ("linkedin.com", "learning"): "review",
+    ("coursera.org", "learn"):    "competitor",
+}
+
+
+def _first_path_segment(url):
+    try:
+        segments = [s for s in urlparse(url or "").path.split("/") if s]
+    except ValueError:
+        return None
+    return segments[0].lower() if segments else None
+
+
+def _subpath_source_type(domain, url):
+    return _SUBPATH_SOURCE_TYPES.get((_root_domain(domain), _first_path_segment(url)))
 
 _ROUNDUP_HINT = re.compile(r"\b(best|top[\s-]?\d+|review|compar\w+|\bvs\b|ranked|rating)\b", re.I)
 _DIRECTORY_HINT = re.compile(r"\b(director(y|ies)|listings?|find[\s-]a[\s-])\b", re.I)
@@ -93,8 +122,9 @@ def get_cached_fact(url):
 
 
 def get_cached_facts(urls):
-    """{url: facts} for the subset of `urls` already cached (one query)."""
-    urls = list(dict.fromkeys(urls))
+    """{url: facts} for the subset of `urls` already cached (one query).
+    Keys are normalized URLs - the table stores one row per normalized URL."""
+    urls = list(dict.fromkeys(normalize_url(u) for u in urls))
     if not urls:
         return {}
     with get_connection() as conn:
@@ -132,6 +162,63 @@ def _store(facts, _cache):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Brand registry (api/knowledge/brand_registry.json - built by
+# scripts/build_brand_registry.py)
+#
+# The reviewed brand->type mapping is the AUTHORITY on what a brand is:
+# competitor | platform | certifying_body | not_actionable. The runtime used
+# to re-derive "competitor" from the raw LLM-extracted brand list + domain
+# rules, so a registry ruling (skillshare=platform, careervillage=job board)
+# changed nothing at runtime - the registry was decorative. Now registry
+# types feed both the competitor brand list and source_type.
+# ─────────────────────────────────────────────────────────────────────────────
+
+_BRAND_REGISTRY_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "knowledge", "brand_registry.json")
+
+_registry_rows = None
+
+
+def _load_brand_registry():
+    """Registry rows with match tokens precomputed, highest-volume first
+    (the build sorts by n desc; first match wins a contested domain).
+    [] when the artifact is missing - consumers fall back to the old
+    registry-less behavior."""
+    global _registry_rows
+    if _registry_rows is None:
+        try:
+            with open(_BRAND_REGISTRY_PATH, encoding="utf-8") as f:
+                raw = json.load(f)["brands"]
+        except (OSError, ValueError, KeyError):
+            logger.warning("brand_registry.json missing/unreadable - "
+                           "registry layer disabled, using raw brand list")
+            raw = []
+        _registry_rows = [{
+            "name": r["name"],
+            "type": r["type"],
+            "names": [r["name"]] + (r.get("variants") or []),
+            "tokens": {t for t in (_brand_token(n) for n in
+                                   [r["name"]] + (r.get("variants") or []))
+                       if len(t) >= 6},
+            "domains": set(r.get("domains") or []),
+        } for r in raw]
+    return _registry_rows
+
+
+def registry_brand_type(domain):
+    """The registry's type for the brand that owns `domain` - literal registry
+    domain (exact or parent) or label-boundary token match - or None when no
+    row claims it."""
+    if not domain:
+        return None
+    for row in _load_brand_registry():
+        if any(domain == d or domain.endswith("." + d) for d in row["domains"]) \
+                or any(_token_matches_domain(t, domain) for t in row["tokens"]):
+            return row["type"]
+    return None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Competitor brand list (for brand-mention detection)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -155,19 +242,30 @@ def _is_generic_brand(name):
 
 def load_competitor_brands(min_len=4):
     """
-    Distinct competitor brand names seen in mention_response_brands. Very
-    short names are dropped - substring noise ("PPG") isn't worth the false
-    positives in page text - as are names made purely of generic words.
+    Brand names treated as competitors - for the domain match and on-page
+    mention detection (the "seek inclusion" gate). Registry-typed: only rows
+    the brand registry types 'competitor' contribute, so platforms,
+    certifying bodies, universities and job boards in the noisy extracted
+    list can no longer stamp pages competitor. Falls back to the raw
+    mention_response_brands list when the registry artifact hasn't been
+    built. Very short names are dropped - substring noise ("PPG") isn't
+    worth the false positives in page text - as are names made purely of
+    generic words.
     """
     global _brands_cache
     if _brands_cache is not None:
         return _brands_cache
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                "SELECT DISTINCT brand_name FROM mention_response_brands WHERE brand_type = 'competitor'"
-            )
-            names = [r[0] for r in cur.fetchall()]
+    registry = _load_brand_registry()
+    if registry:
+        names = [n for row in registry if row["type"] == "competitor"
+                 for n in row["names"]]
+    else:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "SELECT DISTINCT brand_name FROM mention_response_brands WHERE brand_type = 'competitor'"
+                )
+                names = [r[0] for r in cur.fetchall()]
     _brands_cache = sorted({
         n.strip() for n in names
         if n and len(n.strip()) >= min_len and not _is_generic_brand(n)
@@ -317,22 +415,61 @@ def _root_domain(domain):
     return ".".join(domain.split(".")[-2:]) if "." in domain else domain
 
 
+def _domain_labels(domain):
+    """Dot-separated hostname labels, each squashed to [a-z0-9]
+    ('w-edx-university.selar.com' -> ['wedxuniversity', 'selar', 'com'])."""
+    return [re.sub(r"[^a-z0-9]", "", part) for part in domain.lower().split(".") if part]
+
+
+def _token_matches_domain(token, domain):
+    """
+    Does a brand token name this domain on LABEL boundaries? True when the
+    token equals a label (pennfoster.edu, caninecollege.akc.org,
+    posheventscourse.thinkific.com), is a prefix of one (pennfostergroup.com,
+    jessronacourses.com), or equals a squashed trailing label chain - the
+    domain-form brands whose token keeps the TLD ('nyiad.edu' -> nyiadedu,
+    'calmcanines.academy' -> calmcaninesacademy, 'cvent.com' matching
+    community.cvent.com). Never an arbitrary substring: a hypothetical
+    "edX University" token must not claim wedxuniversity.selar.com, and
+    'eventplanning.com' must not claim qceventplanning.com.
+    """
+    labels = _domain_labels(domain)
+    if any(label == token or label.startswith(token) for label in labels):
+        return True
+    return any("".join(labels[i:]) == token for i in range(len(labels)))
+
+
 def _classify_by_domain(url, competitor_brands):
-    """Classes decidable from the URL alone; None means content is needed."""
+    """
+    Classes decidable from the URL alone; None means content is needed.
+
+    "competitor" here is PROVISIONAL: the brand list is LLM-extracted from
+    responses and noisy (it contains job boards, universities and insurers -
+    "Purdue", "unity.edu", "US Career Institute", "Pet Care Ins"), so a
+    brand-token domain match is only trusted outright for pages we could not
+    read. For fetched pages the content classifier decides (its "provider"
+    class maps back to competitor when the page really is a rival's own).
+
+    All rules match on domain-label boundaries, never substrings - a squat
+    host like wedxuniversity.selar.com must not inherit a brand's class from
+    a token buried in its subdomain.
+    """
     domain = _domain_of(url)
     root = _root_domain(domain)
-    if any(tok in domain for tok in QC_DOMAIN_TOKENS):
+    labels = _domain_labels(domain)
+    if any(label in QC_DOMAIN_TOKENS for label in labels):
         return "qc_owned"
     if root in _VIDEO_DOMAINS:
         return "video"
-    if root in _COMMUNITY_DOMAINS:
+    if root in _COMMUNITY_DOMAINS and not _subpath_source_type(domain, url):
+        # carved-out subpaths (linkedin.com/learning) are product surfaces:
+        # fall through so the page is fetched and content-classified
         return "community"
     if domain.endswith(".gov"):
         return "government"
-    domain_squashed = re.sub(r"[^a-z0-9]", "", domain)
     for brand in competitor_brands:
         token = _brand_token(brand)
-        if len(token) >= 6 and token in domain_squashed:
+        if len(token) >= 6 and _token_matches_domain(token, domain):
             return "competitor"
     return None
 
@@ -383,8 +520,11 @@ Return JSON: {{"page_type": "roundup|directory|association|guide|provider|other"
     return "editorial", "fallback"
 
 
-def _classify_editorial(url, title, headings, excerpt):
-    """Heuristic hints first; LLM only when the hints disagree or say nothing."""
+def _classify_editorial(url, title, headings, excerpt, llm_ok=True):
+    """Heuristic hints first; LLM only when the hints disagree or say nothing.
+    llm_ok=False (bulk populate) stores the ambiguity instead of resolving it:
+    ("editorial", "deferred") - a provisional row the next normal read
+    upgrades via _upgrade_deferred."""
     haystack = f"{url} {title or ''} {' '.join(headings[:10])}"
     roundup = bool(_ROUNDUP_HINT.search(haystack))
     directory = bool(_DIRECTORY_HINT.search(haystack))
@@ -392,6 +532,8 @@ def _classify_editorial(url, title, headings, excerpt):
         return "roundup", "heuristic"
     if directory and not roundup:
         return "directory", "heuristic"
+    if not llm_ok:
+        return "editorial", "deferred"
     return _classify_editorial_llm(url, title, headings, excerpt)
 
 
@@ -421,20 +563,64 @@ def _is_stale_failure(facts):
     return age.days >= _FAILURE_RETRY_DAYS
 
 
-def get_page_facts(url, force=False, _cache=None):
+def _upgrade_deferred(facts, _cache=None):
+    """
+    Run the LLM tiebreak a defer_llm populate skipped, reusing the cached
+    fetch (title/headings/content_excerpt) - no network refetch. Deferred rows
+    are always status "ok" (failed fetches classify without the LLM), and
+    carry one of two provisional types: "competitor" (brand-token domain
+    match, content never confirmed) or "editorial" (hints silent). The domain
+    verdict is recomputed to pick the same branch the eager path would take.
+    On LLM failure the row STAYS deferred - unlike the eager path's terminal
+    "fallback"/"domain" stamp - so the next winner pass retries instead of
+    freezing the guess.
+    """
+    facts = dict(facts)
+    domain_type = _classify_by_domain(facts["url"], load_competitor_brands())
+    title = facts.get("title")
+    headings = facts.get("headings") or []
+    excerpt = facts.get("content_excerpt") or ""
+    if domain_type == "competitor":
+        page_type, source = _classify_editorial_llm(facts["url"], title, headings, excerpt)
+    else:
+        page_type, source = _classify_editorial(facts["url"], title, headings, excerpt)
+    if source == "fallback":
+        page_type = "competitor" if domain_type == "competitor" else "editorial"
+        source = "deferred"
+    facts["page_type"], facts["page_type_source"] = page_type, source
+    return _store(facts, _cache)
+
+
+def get_page_facts(url, force=False, defer_llm=False, _cache=None):
     """
     Facts for one cited URL, from cache unless force=True. Always returns a
     dict with at least {url, status, page_type}; status != "ok" means no
     content facts are available (and no content claim may be made). Cached
     failures are retried once they're older than _FAILURE_RETRY_DAYS.
 
+    defer_llm=True (bulk pre-populate) never calls the LLM: pages the
+    deterministic layers can't classify are stored provisionally
+    (page_type_source "deferred", page_type "editorial" - or "competitor"
+    when the domain matched a brand token). The first normal read of such a
+    row upgrades it in place from the cached fetch, so the tiebreak is paid
+    only for URLs something actually consumes (router winners), not per
+    populated URL.
+
     _cache: an optional {url: facts} preload dict (from get_cached_facts) that
     lets a batch skip per-URL reads; freshly-computed facts are mirrored into
     it. Pass None for a standalone single-URL lookup.
+
+    The URL is normalized first (tracking params stripped, https, no www, no
+    trailing slash) - the normalized form is the cache key, the fetch target,
+    and the "url" in the returned facts, so ?utm_source variants of one page
+    share one cache row and one classification.
     """
+    url = normalize_url(url)
     if not force:
         cached = _cache.get(url) if _cache is not None else get_cached_fact(url)
         if cached is not None and not _is_stale_failure(cached):
+            if not defer_llm and cached.get("page_type_source") == "deferred":
+                return _upgrade_deferred(cached, _cache)
             return cached
 
     brands = load_competitor_brands()
@@ -475,20 +661,37 @@ def get_page_facts(url, force=False, _cache=None):
         "features": _deterministic_features(structure, text),
     })
 
-    if domain_type:
+    if domain_type == "competitor":
+        # Brand-token domain match, but the page WAS read: content decides.
+        # Straight to the LLM (no roundup/directory heuristics - a rival's
+        # "Best Online X Course" sales page would false-positive as roundup);
+        # its "provider" class maps to competitor, so a real rival's page
+        # keeps the label while a job board's career guide loses it.
+        if defer_llm:
+            page_type, source = "competitor", "deferred"
+        else:
+            page_type, source = _classify_editorial_llm(
+                url, structure["title"], structure["headings"], facts["content_excerpt"]
+            )
+            if source == "fallback":   # LLM unavailable - the domain match stands
+                page_type, source = "competitor", "domain"
+        facts["page_type"], facts["page_type_source"] = page_type, source
+    elif domain_type:
         facts["page_type"] = domain_type
     else:
         facts["page_type"], facts["page_type_source"] = _classify_editorial(
-            url, structure["title"], structure["headings"], facts["content_excerpt"]
+            url, structure["title"], structure["headings"], facts["content_excerpt"],
+            llm_ok=not defer_llm,
         )
 
     return _store(facts, _cache)
 
 
-def get_pages_facts(urls, force=False):
+def get_pages_facts(urls, force=False, defer_llm=False):
     """Batch variant: one preload query, then per-URL lookups against it."""
     preload = {} if force else get_cached_facts(urls)
-    return [get_page_facts(u, force=force, _cache=preload) for u in urls]
+    return [get_page_facts(u, force=force, defer_llm=defer_llm, _cache=preload)
+            for u in urls]
 
 
 def inclusion_opportunity(facts):
@@ -646,12 +849,20 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
 # otherwise read as "competitor" via brand-token match; then the existing
 # page_type maps onto ownability buckets:
 #   ownable      editorial / competitor - QC could hold this slot with a page
-#   non-ownable  ugc / review / reference - the slot belongs to a third party
+#   non-ownable  ugc / review / reference / certifying_body - the slot belongs
+#                to a third party
 #   other        doesn't vote (video, qc_owned, unclassified)
 
+# udemy.com is deliberately NOT here: engines cite its individual course
+# product pages as places to take the course instead of QC (a competitive
+# loss, ownable slot), so it classifies competitor via the brand-token match.
+# skillshare.com and alison.com likewise (approved 2026-07-10, pinned in the
+# registry). Coursera stays: its cited slots are mostly catalog/search pages
+# ("courses?query=..."), where "get listed" is the right counter - except
+# /learn/<slug> product pages, carved out via _SUBPATH_SOURCE_TYPES.
 _REVIEW_DOMAINS = {
     "g2.com", "capterra.com", "trustpilot.com", "coursera.org",
-    "udemy.com", "classcentral.com", "coursereport.com",
+    "classcentral.com", "coursereport.com",
     "switchup.org", "careerkarma.com",
 }
 _REFERENCE_DOMAINS = {"wikipedia.org", "wikidata.org", "britannica.com"}
@@ -667,7 +878,10 @@ _PAGE_TYPE_TO_SOURCE = {
     "competitor":  "competitor",
     "guide":       "editorial",
     "editorial":   "editorial",
-    "association": "editorial",
+    # An industry body's page (CCPDT, NDGAA) is not a slot QC can out-publish:
+    # engines cite it for its AUTHORITY, not its content depth. Non-ownable;
+    # routes to reach-out (listing / accreditation), default gated.
+    "association": "certifying_body",
     "roundup":     "editorial",
     "directory":   "editorial",
     "government":  "reference",
@@ -681,27 +895,62 @@ SOURCE_TYPE_DOMINANCE = 0.6  # same "most" bar as genre_gap / composition rules
 # slot or not. competitor and editorial route identically (ownable: build/fix),
 # so they must not split the vote against each other; WHICH non-ownable bucket
 # leads does change behavior (ugc -> participate, review -> claim,
-# reference -> align), so that's asked second.
+# reference -> align, certifying_body -> pursue listing/accreditation),
+# so that's asked second.
 OWNABLE_SOURCE_BUCKETS     = ("competitor", "editorial")
-NON_OWNABLE_SOURCE_BUCKETS = ("ugc", "review", "reference")
+NON_OWNABLE_SOURCE_BUCKETS = ("ugc", "review", "reference", "certifying_body")
+
+# How a registry brand type pins the bucket for pages on that brand's domain.
+# not_actionable is deliberately absent: "not a rival" doesn't say what the
+# page IS (indeed.com's career guide is still an editorial slot), it only
+# vetoes the competitor verdict - handled at the end of source_type().
+_REGISTRY_SOURCE_BUCKETS = {
+    "competitor":      "competitor",
+    "platform":        "review",
+    "certifying_body": "certifying_body",
+    "not_actionable":  "other",
+}
+
+
+def _registry_source_type(domain):
+    """The registry override bucket for `domain`, or None when unpinned."""
+    registry_type = registry_brand_type(domain)
+    if registry_type is None:
+        return None
+    return _REGISTRY_SOURCE_BUCKETS.get(registry_type)
 
 
 def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
-    editorial | competitor | other. Domain rules override page_type - a
+    certifying_body | editorial | competitor | other. Domain rules override
+    page_type - a
     community.* / forum.* subdomain is ugc even when the root domain matched
     a competitor brand token.
+
+    The brand registry outranks everything below the subdomain/subpath rules:
+    a domain owned by a registry-typed brand buckets by that type (competitor/
+    platform/certifying_body pin the bucket; not_actionable vetoes only a
+    competitor verdict, so a stale competitor stamp on a job board's page
+    abstains instead of swinging the vote).
 
     A page we FAILED to read whose domain matched no rule carries the
     "editorial" page_type as a fallback guess, not a classification - it
     buckets as "other" so it abstains from the dominance vote. Domain-derived
     types (competitor brand token, .gov, community/video - and the ugc/review/
     reference rules above) still vote when unfetched: their type came from
-    the domain, not the page body.
+    the domain, not the page body. Subpath carve-outs (_SUBPATH_SOURCE_TYPES)
+    are equally deterministic - URL structure, not page body - so they too
+    vote regardless of fetch outcome.
     """
     domain = facts.get("domain", "")
     if _UGC_SUBDOMAIN.match(domain):
         return "ugc"
+    subpath = _subpath_source_type(domain, facts.get("final_url") or facts.get("url"))
+    if subpath:
+        return subpath
+    registry_bucket = _registry_source_type(domain)
+    if registry_bucket is not None:
+        return registry_bucket
     root = _root_domain(domain)
     if root in _REVIEW_DOMAINS:
         return "review"
@@ -710,7 +959,10 @@ def source_type(facts):
     page_type = facts.get("page_type")
     if page_type == "editorial" and facts.get("status") not in ("ok", "not_fetched"):
         return "other"
-    return _PAGE_TYPE_TO_SOURCE.get(page_type, "other")
+    bucket = _PAGE_TYPE_TO_SOURCE.get(page_type, "other")
+    if bucket == "competitor" and registry_brand_type(domain) == "not_actionable":
+        return "other"   # registry veto: not a rival - abstain, don't swing
+    return bucket
 
 
 def source_votes(winner_facts):

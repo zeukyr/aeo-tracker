@@ -16,9 +16,10 @@ Branches (each losing question terminates in exactly one):
              has the wrong KIND of page - buildability-gated by topic; also
              the fallback for known-unownable winners (wikipedia/.gov ->
              "earn the slot indirectly").
-  REACH OUT  non-ownable winners (ugc/review/reference) with a real channel
-             (registry / page affordance / source-type default, §5.7), or a
-             reputation question whose ownable winners are pitchable.
+  REACH OUT  non-ownable winners (ugc/review/reference/certifying_body) with
+             a real channel (registry / page affordance / source-type default,
+             §5.7), or a reputation question whose ownable winners are
+             pitchable.
   TRIAGE     everything the router cannot action with confidence - visible,
              never a silent drop:
                fragmented_field       neither the ownable nor the non-ownable
@@ -41,6 +42,7 @@ until the Tab 3 frontend lands, so the cards stay visible in Strategic Growth.
 import os
 import re
 import json
+from urllib.parse import urlsplit
 
 from src.logger import logger
 from api.db import get_connection, _date_filter
@@ -49,6 +51,7 @@ from api.queries.page_facts import (
     get_pages_facts,
     genre_gap,
     source_type,
+    registry_brand_type,
     source_votes,
     inclusion_opportunity,
     school_for_url,
@@ -58,7 +61,11 @@ from api.queries.page_facts import (
     NON_OWNABLE_SOURCE_BUCKETS,
 )
 from api.queries.tab1_strategy import get_question_cited_urls
-from api.queries.tab2_scorecard import build_scorecard, scorecard_to_recommendation
+from api.queries.tab2_scorecard import (
+    build_scorecard,
+    scorecard_to_recommendation,
+    scorecard_triage_reason,
+)
 from api.queries.sitemap_coverage import diagnose_text_coverage
 
 # Topic gates the BUILD branch only (a reputation question can't build its way
@@ -151,6 +158,9 @@ _SOURCE_TYPE_DEFAULTS = {
                   "mechanism": "Claim or request a QC profile/listing on the platform."},
     "reference": {"channel": "align", "feasibility": "closed",
                   "mechanism": "No direct channel. Publish the authoritative source such pages cite."},
+    "certifying_body": {"channel": "accreditation", "feasibility": "gated",
+                        "mechanism": "Pursue listing / recognition / accreditation with the certifying "
+                                     "body (approved-provider or school directory status)."},
     "editorial": {"channel": "pitch", "feasibility": "unknown",
                   "mechanism": "No verified channel found on the page."},
 }
@@ -345,10 +355,44 @@ def _winner_summary(facts, limit=5):
              "citation_count": f.get("citation_count") or 0} for f in facts]
 
 
+def _abstention_reason(f):
+    if f.get("page_type") == "video":
+        return "video"
+    if registry_brand_type(f.get("domain") or "") == "not_actionable":
+        return "not_actionable brand"
+    if f.get("status") != "ok":
+        return "unfetched-unknown-domain"
+    if source_type(f) == "other":
+        return "unfetched-unknown-domain"
+    return "other"
+
+
+def _benchmarkable(f):
+    """
+    Whether a winner may appear on a card as a benchmark/evidence URL - the
+    same exclusions the dominance vote applies (source_type "other" abstains:
+    videos, unread unclassified pages), plus bare homepages: a domain root with
+    no path is a citation artifact, not a page to model content on.
+    """
+    if source_type(f) == "other":
+        return False
+    path = urlsplit(f.get("final_url") or f.get("url") or "").path
+    return bool(path.strip("/"))
+
+
+def _card_winners(route):
+    """The route's winners that are fit to show on a card (see _benchmarkable).
+    May be empty - a card then carries no benchmark list, never junk."""
+    return [f for f in route.get("winners") or [] if _benchmarkable(f)]
+
+
 def _winners_evidence(q, facts, limit=4):
     top = sorted(facts, key=lambda f: -(f.get("citation_count") or 0))[:limit]
-    cited = "; ".join(f"{f.get('domain')} ({f.get('citation_count')}x)" for f in top)
     pct = round(q["qc_share"] * 100)
+    if not top:
+        return (f"For '{q['question']}' QC is cited in {pct}% of "
+                f"{q['n_responses']} responses.")
+    cited = "; ".join(f"{f.get('domain')} ({f.get('citation_count')}x)" for f in top)
     return (f"For '{q['question']}' engines cite {cited} across {q['n_responses']} responses; "
             f"QC is cited in {pct}% of them.")
 
@@ -356,6 +400,14 @@ def _winners_evidence(q, facts, limit=4):
 def _router_detail(route, group=None):
     q = route["question"]
     bucket, share = route.get("dominant") or (None, None)
+    vote = route.get("vote") or {}
+    winners = route.get("winners") or []
+    source_questions = [{
+        "question_id": str(r["question"]["question_id"]),
+        "question": r["question"]["question"],
+        "topic": r["question"].get("topic"),
+        "school": r["question"].get("school"),
+    } for r in (group or [route])]
     detail = {
         "branch": route["branch"],
         "reason": route.get("reason"),
@@ -366,8 +418,23 @@ def _router_detail(route, group=None):
         "n_citations": q.get("n_citations"),
         "dominant_source": bucket,
         "dominant_share": share,
-        "vote": route.get("vote"),
-        "winners": _winner_summary(route.get("winners")),
+        "vote": {
+            "voters": vote.get("voters"),
+            "ownable_share": vote.get("ownable_share"),
+            "non_ownable_share": vote.get("non_ownable_share"),
+            "buckets": vote.get("buckets"),
+            "cleared_bar": (share or 0.0) >= SOURCE_TYPE_DOMINANCE if share is not None else False,
+        },
+        "winners": _winner_summary(winners),
+        "abstentions": [{
+            "url": f.get("url"),
+            "domain": f.get("domain"),
+            "page_type": f.get("page_type"),
+            "source_type": source_type(f),
+            "fetch_status": f.get("status"),
+            "reason": _abstention_reason(f),
+        } for f in winners if source_type(f) == "other"],
+        "source_questions": source_questions,
     }
     if group:
         detail["grouped_questions"] = [r["question"]["question"] for r in group]
@@ -384,15 +451,18 @@ def _build_rec(route, group):
     q = route["question"]
     gm = route.get("genre_mismatch")
     bucket = (route.get("dominant") or (None,))[0]
-    evidence = _winners_evidence(q, route.get("winners") or [])
-    benchmark = ", ".join(w["url"] for w in _winner_summary(route.get("winners"), limit=2))
+    card_winners = _card_winners(route)
+    evidence = _winners_evidence(q, card_winners)
+    benchmark = ", ".join(w["url"] for w in _winner_summary(card_winners, limit=2))
 
     if route["reason"] == "earn_indirect":
         domain = (route.get("feasibility_target") or {}).get("domain") or "the citing sources"
         problem = (f"'{q['question']}' is answered from reference sources QC cannot own or pitch "
                    f"({domain}); QC is cited in {round(q['qc_share'] * 100)}% of responses.")
         action = (f"No direct channel to {domain} - publish the authoritative, citable QC content "
-                  f"such sources reference, to earn the slot indirectly. Benchmark: {benchmark}.")
+                  f"such sources reference, to earn the slot indirectly.")
+        if benchmark:
+            action += f" Benchmark: {benchmark}."
     elif gm:
         if gm["winner_genre"] == "informational":
             action = (f"Build a standalone informational asset answering '{q['question']}' - a "
@@ -411,12 +481,23 @@ def _build_rec(route, group):
     else:
         problem = f"QC has no page answering '{q['question']}', and engines cite {bucket} pages instead."
         if bucket == "competitor":
-            action = (f"Create a QC page answering '{q['question']}' - rivals won this query with "
-                      f"their own pages. Benchmark depth and coverage against: {benchmark}.")
+            # Only assert "rivals won" over winners verified as rival provider
+            # pages - and name them. Editorial that shares the field must not
+            # be called a rival (the indeed.com / vet.purdue.edu bug).
+            rival_names = ", ".join(dict.fromkeys(
+                _root_domain(f.get("domain") or "")
+                for f in card_winners if source_type(f) == "competitor"))
+            won = (f"rival providers ({rival_names}) won this query with their own pages"
+                   if rival_names else "provider pages win this query")
+            action = f"Create a QC page answering '{q['question']}' - {won}."
+            if benchmark:
+                action += f" Benchmark depth and coverage against: {benchmark}."
         else:
             action = (f"Build educational content (a guide/hub, not a sales page) answering "
                       f"'{q['question']}' - editorial pages win this query, so a self-serving page "
-                      f"won't take the neutral slot. Model it on: {benchmark}.")
+                      f"won't take the neutral slot.")
+            if benchmark:
+                action += f" Model it on: {benchmark}."
 
     priority = "high" if len(group) >= 2 else "medium"
     school = q.get("school") or (school_for_url(route.get("qc_url")) if route.get("qc_url") else None)
@@ -453,7 +534,7 @@ def _reach_out_rec(route, group):
     action = feas["mechanism"]
     if gated:
         action += " (Requires application/approval - budget lead time.)"
-    evidence = _winners_evidence(q, route.get("winners") or []) + f" Channel: {feas['evidence']}."
+    evidence = _winners_evidence(q, _card_winners(route)) + f" Channel: {feas['evidence']}."
 
     return {
         "problem": problem,
@@ -519,7 +600,8 @@ def _inclusion_recs(routes):
                 "confidence": 0.8,   # the inclusion gate is verified page content
                 "detail": {"router": {**_router_detail(route), "branch": "inclusion_opportunity"},
                            "outreach_feasibility": feas,
-                           "opportunity": {"url": url, "lists_competitors": rivals.split(", ")}},
+                           "opportunity": {"url": url, "lists_competitors": rivals.split(", "),
+                                           "citation_count": f.get("citation_count") or 0}},
             })
     return out
 
@@ -585,6 +667,7 @@ def build_router_recommendations(days=None):
     for group in _grouped(by_branch.get("fix", []), lambda r: r["qc_url"]):
         rep = _weakest(group)
         q = rep["question"]
+        sc = None
         try:
             sc = build_scorecard(q["topic"] or q["question"], rep["qc_url"],
                                  question=q["question"], days=days,
@@ -594,8 +677,9 @@ def build_router_recommendations(days=None):
             logger.warning(f"Router fix branch failed for {rep['qc_url']}: {e}")
             rec = None
         if not rec:
-            logger.info(f"Router fix: nothing to recommend for {rep['qc_url']} "
-                        f"(question: {q['question'][:60]})")
+            reason = scorecard_triage_reason(sc) if sc else "scorecard_failed"
+            logger.info(f"Router fix: no rec for {rep['qc_url']} ({reason}; "
+                        f"question: {q['question'][:60]})")
             continue
         rec["detail"]["router"] = _router_detail(rep, group)
         recommendations.append(rec)
@@ -624,6 +708,102 @@ def build_router_recommendations(days=None):
 
     triage_list = [_triage_entry(r) for r in by_branch.get("triage", [])]
     return recommendations, triage_list
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# On-demand: one question -> one rec (dashboard question view)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def get_question_stats(question_id, days=None):
+    """
+    One question's routing inputs, same shape as a get_losing_questions row.
+    Deliberately NO losing filter: on-demand generation is an explicit human
+    request, so selection doesn't gate it - the router's own vote still does.
+    None when the question has no mention responses in the window
+    (sentiment-only questions have nothing to route).
+    """
+    date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
+    query = f"""
+        SELECT q.id, q.question, q.topic, q.school,
+               AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as qc_share,
+               COUNT(*) as n_responses,
+               COALESCE(SUM(COALESCE(array_length(m.citations, 1), 0)), 0) as n_citations
+        FROM mention_responses m
+        JOIN questions q ON q.id = m.question_id
+        WHERE q.id = %s {date_m}
+        GROUP BY q.id, q.question, q.topic, q.school;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [question_id])
+            r = cur.fetchone()
+    if r is None:
+        return None
+    return {
+        "question_id": r[0], "question": r[1], "topic": r[2], "school": r[3],
+        "qc_share": round(float(r[4]), 3), "n_responses": r[5], "n_citations": int(r[6]),
+    }
+
+
+def build_question_recommendation(question_id, days=None):
+    """
+    Route ONE question on demand and build its rec - no batch, no dedup
+    grouping (the group is the question itself). Returns (rec, triage_entry):
+    exactly one is non-None, except (None, None) when the question has no
+    mention responses to route.
+
+    The fix branch is evidence-graded with fallbacks, strongest first:
+      1. high-tier scorecard rec (verified checklist gap, sufficient winners)
+      2. verified inclusion opportunity among this question's winners
+      3. low-tier scorecard rec (thin sample / sub-threshold gaps / emergent
+         LLM pattern - clearly labelled)
+      4. triage, with a PRECISE reason (qc page unreadable / insufficient
+         winner data / true feature parity) plus the winner-coverage counts,
+         so the caller can always explain an empty result accurately.
+    """
+    q = get_question_stats(question_id, days)
+    if q is None:
+        return None, None
+    route = route_question(q, days)
+    if route["branch"] == "triage":
+        return None, _triage_entry(route)
+    if route["branch"] == "fix":
+        sc, rec = None, None
+        try:
+            sc = build_scorecard(q["topic"] or q["question"], route["qc_url"],
+                                 question=q["question"], days=days,
+                                 winner_facts=route["winners"])
+            rec = scorecard_to_recommendation(sc)
+        except Exception as e:
+            logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")
+        if rec is not None and (rec.get("detail") or {}).get("evidence_tier") == "high":
+            rec["detail"]["router"] = _router_detail(route)
+            return rec, None
+        # A verified inclusion opportunity among this question's winners (a
+        # cited directory/roundup that provably lists rivals and never QC)
+        # outranks a low-tier scorecard card - the batch path surfaces these
+        # via _inclusion_recs; on-demand must not lose them.
+        inclusion = _inclusion_recs([route])
+        if inclusion:
+            inclusion.sort(key=lambda r: -(r["detail"]["opportunity"]["citation_count"]))
+            return inclusion[0], None
+        if rec is not None:
+            rec["detail"]["router"] = _router_detail(route)
+            return rec, None
+        entry = {**_triage_entry(route),
+                 "reason": scorecard_triage_reason(sc) if sc else "fix_no_feature_gaps"}
+        if sc:
+            # Enough for the UI to say WHAT was insufficient, with names.
+            entry["scorecard"] = {
+                "qc_readable": sc.get("qc_readable"),
+                "winners_readable": sc.get("winners_total"),
+                "winners_cited_total": sc.get("winners_cited_total"),
+                "winners_unreadable": sc.get("winners_unreadable") or [],
+            }
+        return None, entry
+    if route["branch"] == "build":
+        return _build_rec(route, [route]), None
+    return _reach_out_rec(route, [route]), None
 
 
 if __name__ == "__main__":

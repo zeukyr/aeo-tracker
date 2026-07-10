@@ -19,6 +19,13 @@ lacks, beyond the fixed checklist.
 Recommend rule (geo_weight is a veto floor, not a ranker): a feature is
 recommended when it is present in MOST cited pages, QC lacks it, and its
 geo_weight is not "low".
+
+The rec is EVIDENCE-GRADED, not binary: checklist gaps that clear the bar
+over a sufficient winner sample are tier "high"; thin samples, sub-threshold
+gaps and the emergent LLM pattern are tier "low" (still surfaced, clearly
+labelled). None is reserved for the three genuinely empty states named by
+scorecard_triage_reason. Unreadable cited winners are disclosed on the card,
+never silently dropped from the denominator.
 """
 
 import os
@@ -34,7 +41,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 _FEATURES_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "geo_features.json")
 
-MIN_WINNERS = 3          # below this the comparison isn't trustworthy
+MIN_WINNERS = 3          # below this the comparison isn't trustworthy (high tier)
+MIN_READABLE_WINNERS = 2 # below this there is no comparison at all - insufficient data
 TOP_N_WINNERS = 5        # cited pages to compare against
 
 # Cited page types that carry a comparable information architecture. Community
@@ -205,7 +213,14 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
         winner_facts = get_pages_facts([c["url"] for c in cited])
         for f in winner_facts:
             f["citation_count"] = counts.get(f["url"], 0)
-    winner_facts = [f for f in winner_facts
+    all_winners = winner_facts
+    # Dropped winners are DISCLOSED, not silently removed from the denominator:
+    # prevalence over 4 readable pages means something different when 4 more
+    # couldn't be fetched, and the card must say so.
+    unreadable = [f for f in all_winners if f.get("status") != "ok"]
+    excluded = [f for f in all_winners
+                if f.get("status") == "ok" and f.get("page_type") not in _COMPARABLE_TYPES]
+    winner_facts = [f for f in all_winners
                     if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
     winner_facts.sort(key=lambda f: -(f.get("citation_count") or 0))
     winner_facts = winner_facts[:TOP_N_WINNERS]
@@ -226,6 +241,7 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
             "geo_weight": feat["geo_weight"],
             "winners_present": wp,
             "winners_total": n,
+            "winners_pct": round(100 * wp / n) if n else None,
             "prevalence": prevalence,
             "qc_has": qc_has,
             "recommend": recommend,
@@ -249,9 +265,21 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
             for f in winner_facts
         ],
         "winners_total": n,
+        "winners_cited_total": len(all_winners),
+        "winners_unreadable": [
+            {"url": f["url"], "domain": f.get("domain"), "status": f.get("status"),
+             "citation_count": f.get("citation_count") or 0}
+            for f in unreadable
+        ],
+        "winners_excluded": [
+            {"url": f["url"], "domain": f.get("domain"), "page_type": f.get("page_type"),
+             "citation_count": f.get("citation_count") or 0}
+            for f in excluded
+        ],
         "sufficient": n >= MIN_WINNERS,
         "features": rows,
         "emergent_insight": insight,
+        "emergent_edit": emergent_edit,
         "suggested_edits": suggested_edits,
     }
 
@@ -260,34 +288,132 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
 # Scorecard -> recommendation (deterministic; bypasses the generic-prose LLM)
 # ─────────────────────────────────────────────────────────────────────────────
 
+def _coverage_note(sc):
+    """One sentence disclosing how much of the cited field was actually
+    analyzed - 'most winners have X' over 4 readable pages means something
+    different when 4 more couldn't be fetched."""
+    n = sc["winners_total"]
+    total = sc.get("winners_cited_total") or n
+    if total == n:
+        return f"Analyzed all {n} cited page(s)."
+    parts = [f"Analyzed {n} of {total} cited pages"]
+    unread = sc.get("winners_unreadable") or []
+    if unread:
+        urls = ", ".join(w["url"] for w in unread)
+        parts.append(f"{len(unread)} could not be fetched: {urls}")
+    excluded = sc.get("winners_excluded") or []
+    if excluded:
+        parts.append(f"{len(excluded)} not comparable (videos/threads/etc.)")
+    capped = total - n - len(unread) - len(excluded)
+    if capped > 0:
+        parts.append(f"{capped} beyond the top-{n} most-cited compared here")
+    return "; ".join(parts) + "."
+
+
+def _frac(r):
+    """'2/4 (50%)' - raw fraction so the reader judges significance themselves."""
+    pct = f" ({r['winners_pct']}%)" if r.get("winners_pct") is not None else ""
+    return f"{r['winners_present']}/{r['winners_total']}{pct}"
+
+
+def scorecard_triage_reason(sc):
+    """
+    Why scorecard_to_recommendation returned None, as a precise triage slug -
+    these are three DIFFERENT states and the UI must not render them all as
+    "QC's page already matches the winners":
+      fix_qc_page_unreadable       QC's own page couldn't be fetched/read
+      fix_insufficient_winner_data too few readable winners to compare at all
+      fix_true_feature_parity      evidence sufficient, QC genuinely at parity
+    """
+    if not sc.get("qc_readable"):
+        return "fix_qc_page_unreadable"
+    if (sc.get("winners_total") or 0) < MIN_READABLE_WINNERS:
+        return "fix_insufficient_winner_data"
+    return "fix_true_feature_parity"
+
+
 def scorecard_to_recommendation(sc):
     """
-    Turn a scorecard into a Tab 2 (technical) recommendation, or None if there's
-    nothing to recommend / too little data. Built from the scorecard - not free
-    LLM prose - so it names the page and the missing sections concretely, and
-    carries the full scorecard in `detail` for the frontend card.
+    Turn a scorecard into a Tab 2 (technical) recommendation, graded by
+    evidence quality. Returns None only when there is nothing actionable at
+    all (QC page unreadable, too few readable winners, or true feature
+    parity with no weaker signal either) - scorecard_triage_reason(sc) says
+    which. Built from the scorecard - not free LLM prose - so it names the
+    page and the missing sections concretely, and carries the full scorecard
+    in `detail` for the frontend card.
+
+    detail.evidence_tier:
+      high - >= MIN_WINNERS readable winners AND at least one checklist
+             feature most of them share that QC lacks (the verified gap).
+      low  - a real but weaker signal: checklist gaps over a thin winner
+             sample, sub-threshold gaps (some-but-not-most readable winners
+             have a feature QC lacks), and/or the emergent LLM pattern.
+    detail.evidence_grade keeps checklist gaps, sub-threshold gaps and the
+    emergent insight structurally separate - they have different reliability
+    and the UI labels them differently.
     """
-    rec_feats = [r for r in sc["features"] if r["recommend"]]
-    if not sc.get("sufficient") or not sc.get("qc_readable") or not rec_feats:
+    if not sc.get("qc_readable") or sc["winners_total"] < MIN_READABLE_WINNERS:
         return None
 
-    labels = ", ".join(r["label"].lower() for r in rec_feats)
-    problem = (
-        f"QC has a page for '{sc['topic']}' ({sc['qc_url']}) but AI engines cite other pages "
-        f"for this topic. Across {sc['winners_total']} cited pages it is missing {len(rec_feats)} "
-        f"feature(s) they share: {labels}."
-    )
-    action = "; ".join(sc["suggested_edits"][:5]) or f"Add: {labels}"
-    evidence = "; ".join(
-        f"{r['label']} — {r['winners_present']}/{r['winners_total']} cited pages have it, QC does not"
-        for r in rec_feats
-    )
+    rec_feats = [r for r in sc["features"] if r["recommend"]]
+    # Sub-threshold gaps: QC lacks the feature and at least one readable
+    # winner has it, but prevalence never cleared the "most" bar. Quantified
+    # supplementary evidence, never asserted as a shared pattern.
+    partial = [r for r in sc["features"]
+               if not r["qc_has"] and not r["recommend"]
+               and r["winners_present"] > 0 and r["geo_weight"] != "low"]
+    emergent_insight = (sc.get("emergent_insight") or "").strip()
+    emergent_edit = (sc.get("emergent_edit") or "").strip()
+    has_emergent = bool(emergent_insight or emergent_edit)
+
+    if not rec_feats and not partial and not has_emergent:
+        return None   # true feature parity - the triage reason says exactly that
+
+    tier = "high" if (rec_feats and sc.get("sufficient")) else "low"
+    coverage = _coverage_note(sc)
+
+    if rec_feats:
+        labels = ", ".join(r["label"].lower() for r in rec_feats)
+        problem = (
+            f"QC has a page for '{sc['topic']}' ({sc['qc_url']}) but AI engines cite other pages "
+            f"for this topic. Across {sc['winners_total']} analyzed cited pages it is missing "
+            f"{len(rec_feats)} feature(s) they share: {labels}."
+        )
+        action = "; ".join(sc["suggested_edits"][:5]) or f"Add: {labels}"
+        evidence = "; ".join(
+            f"{r['label']} — {_frac(r)} cited pages have it, QC does not"
+            for r in rec_feats
+        )
+        confidence = 0.7 if tier == "high" else 0.45
+        priority = "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium"
+    else:
+        problem = (
+            f"QC has a page for '{sc['topic']}' ({sc['qc_url']}) but AI engines cite other pages "
+            f"for this topic. It matches the analyzed winners on every checklist feature most of "
+            f"them share - the remaining signals are weaker and below the evidence bar."
+        )
+        actions = []
+        if emergent_edit:
+            actions.append(f"{emergent_edit} (LLM-observed pattern, not a verified structural gap)")
+        actions.extend(
+            f"Consider adding {r['label'].lower()} - {_frac(r)} analyzed cited pages have it"
+            for r in partial[:3]
+        )
+        action = "; ".join(actions)
+        parts = [f"{r['label']} — {_frac(r)} cited pages have it, QC does not (below prevalence bar)"
+                 for r in partial]
+        if emergent_insight:
+            parts.append(f"LLM-observed pattern (lower confidence): {emergent_insight}")
+        evidence = "; ".join(parts)
+        confidence = 0.35
+        priority = "low"
+
     return {
         "problem": problem,
         "action": action,
-        "priority": "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium",
+        "priority": priority,
         "school": school_for_url(sc["qc_url"]),
-        "evidence": evidence,
+        "evidence": f"{coverage} {evidence}".strip(),
         "action_type": "technical",
         "target": sc["qc_url"],
         "segment": {"dimension": "topic", "value": sc["topic"]},
@@ -295,8 +421,29 @@ def scorecard_to_recommendation(sc):
         "expected_direction": 1,
         "expected_magnitude": None,
         "effort": "M",
-        "confidence": 0.7,
-        "detail": {"scorecard": sc},
+        "confidence": confidence,
+        "detail": {
+            "scorecard": sc,
+            "evidence_tier": tier,
+            "evidence_grade": {
+                "tier": tier,
+                "winners_readable": sc["winners_total"],
+                "winners_cited_total": sc.get("winners_cited_total") or sc["winners_total"],
+                "winners_unreadable": sc.get("winners_unreadable") or [],
+                "checklist_gaps": [
+                    {k: r[k] for k in ("id", "label", "geo_weight",
+                                       "winners_present", "winners_total", "winners_pct")}
+                    for r in rec_feats
+                ],
+                "partial_gaps": [
+                    {k: r[k] for k in ("id", "label", "geo_weight",
+                                       "winners_present", "winners_total", "winners_pct")}
+                    for r in partial
+                ],
+                "emergent": ({"insight": emergent_insight, "edit": emergent_edit}
+                             if has_emergent else None),
+            },
+        },
     }
 
 

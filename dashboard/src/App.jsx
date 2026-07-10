@@ -13,7 +13,23 @@ const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations",
 
 function App() {
   const [activeTab, setActiveTab] = useState("Overview");
+  const [focusedPromptId, setFocusedPromptId] = useState(null);
+  const [focusedRecId, setFocusedRecId] = useState(null);
   const { days, setDays, school, setSchool } = useFilter();
+
+  const openPrompt = (promptId) => {
+    setFocusedPromptId(promptId);
+    setActiveTab("Prompts");
+  };
+
+  const closePrompt = () => setFocusedPromptId(null);
+
+  const openRecommendation = (recId) => {
+    setFocusedRecId(recId);
+    setActiveTab("Recommendations");
+  };
+
+  const closeRecommendation = () => setFocusedRecId(null);
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
@@ -62,8 +78,21 @@ function App() {
       {activeTab === "Sentiment" && <Sentiment />}
       {activeTab === "Competitors" && <Competitors />}
       {activeTab === "Citations" && <Citations />}
-      {activeTab === "Prompts" && <Prompts />}
-      {activeTab === "Recommendations" && <Recommendations />}
+      {activeTab === "Prompts" && (
+        <Prompts
+          focusedPromptId={focusedPromptId}
+          onOpenPrompt={openPrompt}
+          onClosePrompt={closePrompt}
+          onOpenRecommendation={openRecommendation}
+        />
+      )}
+      {activeTab === "Recommendations" && (
+        <Recommendations
+          onOpenPrompt={openPrompt}
+          focusedRecId={focusedRecId}
+          onCloseRecommendation={closeRecommendation}
+        />
+      )}
     </div>
   );
 }

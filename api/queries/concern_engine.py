@@ -45,6 +45,7 @@ import re
 from openai import OpenAI
 
 from src.logger import logger
+from src.parsing.urls import normalize_url
 from api.db import get_connection, _date_filter
 from api.queries.page_facts import get_pages_facts, QC_DOMAIN_TOKENS, school_for_url
 from api.queries.signal_taxonomy import classify_concern, load_taxonomy
@@ -140,7 +141,7 @@ def concern_severity(days=None):
         if len(entry["examples"]) < 3 and concern not in entry["examples"]:
             entry["examples"].append(concern)
         entry["question_ids"].add(str(question_id))
-        entry["cited_urls"].update(citations or [])
+        entry["cited_urls"].update(normalize_url(u) for u in citations or [])
 
     for entry in out.values():
         entry["share_not_positive"] = round(entry["not_positive"] / entry["count"], 2)

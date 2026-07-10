@@ -31,6 +31,7 @@ Phase 6 additions:
 """
 
 from src.logger import logger
+from src.parsing.urls import normalize_url, merge_url_counts
 from api.db import get_connection, _date_filter
 from api.queries.page_facts import (
     get_page_facts,
@@ -70,6 +71,10 @@ def get_topic_cited_urls(segment, days=None, limit=_TOP_N_URLS):
     Top external (non-QC) URLs cited in this segment, ranked by citation count -
     the pages AI reaches for on this topic. QC-owned URLs are excluded here;
     the whole point of Tab 1 is what's cited *instead of* QC.
+
+    URLs are normalized (tracking params stripped etc.) and re-merged AFTER
+    the SQL group-by, so ?utm_source variants of one page count as one page -
+    hence no SQL LIMIT: the merge must see every variant.
     """
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     from api.queries.recommendation_signals import _segment_clause_params
@@ -88,15 +93,13 @@ def get_topic_cited_urls(segment, days=None, limit=_TOP_N_URLS):
         SELECT cited_url, COUNT(*) as count
         FROM expanded
         WHERE {qc_not_ilike}
-        GROUP BY cited_url
-        ORDER BY count DESC
-        LIMIT %s;
+        GROUP BY cited_url;
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query, seg_params + [limit])
+            cur.execute(query, seg_params)
             rows = cur.fetchall()
-    return [{"url": r[0], "count": r[1]} for r in rows]
+    return merge_url_counts([{"url": r[0], "count": r[1]} for r in rows])[:limit]
 
 
 def get_question_cited_urls(question_id, days=None, limit=_TOP_N_URLS):
@@ -106,6 +109,9 @@ def get_question_cited_urls(question_id, days=None, limit=_TOP_N_URLS):
     router (plan §5.3). Question grain matters: winning domains barely overlap
     between questions in the same topic (Jaccard 0.05-0.19), so a topic-level
     winner set blends unrelated pages.
+
+    Normalized + re-merged after the SQL group-by (see get_topic_cited_urls) -
+    the dominance vote must not split one page across its tracking variants.
     """
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     qc_not_ilike = " AND ".join(
@@ -120,15 +126,13 @@ def get_question_cited_urls(question_id, days=None, limit=_TOP_N_URLS):
         SELECT cited_url, COUNT(*) as count
         FROM expanded
         WHERE {qc_not_ilike}
-        GROUP BY cited_url
-        ORDER BY count DESC
-        LIMIT %s;
+        GROUP BY cited_url;
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(query, [question_id, limit])
+            cur.execute(query, [question_id])
             rows = cur.fetchall()
-    return [{"url": r[0], "count": r[1]} for r in rows]
+    return merge_url_counts([{"url": r[0], "count": r[1]} for r in rows])[:limit]
 
 
 def _qc_citation_count(segment, days=None):

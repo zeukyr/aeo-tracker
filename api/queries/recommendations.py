@@ -1,4 +1,5 @@
 from api.db import get_connection, _date_filter
+from src.parsing.urls import normalize_url
 
 def get_competitor_wins(days=None):
     filter_clause = _date_filter(days)
@@ -83,22 +84,26 @@ def get_citation_gaps(days=None):
         JOIN questions q ON q.id = mr.question_id
         WHERE mr.qc_cited = false
         {filter_clause.replace('AND created_at', 'AND mr.created_at')}
-        GROUP BY q.school, cited_url
-        HAVING COUNT(*) >= 3
-        ORDER BY q.school, citation_count DESC;
+        GROUP BY q.school, cited_url;
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(query)
             rows = cur.fetchall()
-    return [
-        {
-            "school": r[0],
-            "cited_url": r[1],
-            "citation_count": r[2]
-        }
-        for r in rows
-    ]
+    # Merge tracking-param variants of one URL BEFORE the >=3 floor - two
+    # variants cited twice each are one page cited 4x, not two pages cited 2x.
+    merged = {}
+    for school, cited_url, count in rows:
+        key = (school, normalize_url(cited_url))
+        merged[key] = merged.get(key, 0) + count
+    return sorted(
+        (
+            {"school": school, "cited_url": url, "citation_count": count}
+            for (school, url), count in merged.items()
+            if count >= 3
+        ),
+        key=lambda r: (str(r["school"]), -r["citation_count"]),
+    )
 
 
 def get_recurring_concerns(days=None):

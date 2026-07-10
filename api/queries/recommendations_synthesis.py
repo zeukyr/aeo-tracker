@@ -72,6 +72,33 @@ def _rec_rank_signals(rec):
     return "other", None, 0.5
 
 
+def _rank_reason(rank, n, family, pct, rec, loss):
+    """
+    The driver behind a rec's priority, in the reader's units - shown on the
+    card so two identical-looking builds explain their different ranks.
+    """
+    d = rec.get("detail") or {}
+    if family == "router":
+        router = d.get("router") or {}
+        vol = f"{router.get('n_citations')} citations at stake on this question"
+        grouped = router.get("grouped_questions") or []
+        if grouped:
+            vol += f" (+{len(grouped)} near-duplicate question(s) folded in)"
+        urg = f"QC is cited in {round((router.get('qc_share') or 0.0) * 100)}% of its responses"
+    elif family == "concern":
+        concern = d.get("concern") or {}
+        vol = f"the concern was raised {concern.get('count')}x"
+        urg = (f"{round((concern.get('share_not_positive') or 0.5) * 100)}% of those "
+               f"responses land not-positive")
+    else:
+        return f"Ranked {rank}/{n} in this batch (no volume signal - mid-pack by default)."
+    reason = (f"Ranked {rank}/{n} in this batch: {vol} - >= {round(pct * 100)}% of "
+              f"{family} recs on volume - and {urg}.")
+    if loss:
+        reason += " Boosted x1.25: competitors repeatedly win this topic."
+    return reason
+
+
 def _apply_priority_ranking(recommendations, days=None):
     """
     Assigns priority by evidence-strength rank within the batch: volume
@@ -79,6 +106,10 @@ def _apply_priority_ranking(recommendations, days=None):
     a score MULTIPLIER (the compounding-evidence rule) rather than a blanket
     label bump. Top quartile -> high, bottom quartile -> low, rest medium.
     Deterministic: ties break on raw volume, then target.
+
+    The rank inputs and a human-readable driver are written to
+    detail.priority_rank, so the card can SHOW why one rec outranks another
+    instead of presenting the label as a verdict from nowhere.
     """
     if not recommendations:
         return recommendations
@@ -115,19 +146,31 @@ def _apply_priority_ranking(recommendations, days=None):
             note = (f" Compounding: competitors ({', '.join(loss['competitors'][:3])}) appear on "
                     f"{loss['losses']} responses in this topic where QC is absent.")
             rec["evidence"] = (rec.get("evidence") or "") + note
-        scored.append((score, volume or 0, rec))
+        scored.append((score, volume or 0, rec, family, pct, urgency, bool(loss)))
 
     scored.sort(key=lambda t: (-t[0], -t[1], str(t[2].get("target"))))
     n = len(scored)
     n_high = max(1, round(n * _PRIORITY_TOP_QUARTILE))
     n_low = max(1, round(n * _PRIORITY_BOTTOM_QUARTILE)) if n >= 4 else 0
-    for i, (_score, _vol, rec) in enumerate(scored):
+    for i, (score, volume, rec, family, pct, urgency, loss) in enumerate(scored):
         if i < n_high:
             rec["priority"] = "high"
         elif i >= n - n_low:
             rec["priority"] = "low"
         else:
             rec["priority"] = "medium"
+        detail = rec.get("detail") or {}
+        detail["priority_rank"] = {
+            "rank": i + 1,
+            "of": n,
+            "score": round(score, 3),
+            "volume": volume,
+            "volume_percentile": round(pct, 2),
+            "urgency": round(urgency, 2),
+            "loss_multiplier": 1.25 if loss else 1.0,
+            "reason": _rank_reason(i + 1, n, family, pct, rec, loss),
+        }
+        rec["detail"] = detail
     return recommendations
 
 
@@ -154,6 +197,39 @@ def _segment_key(rec):
     for dedup against active recs, independent of exact wording."""
     segment = rec.get("segment") or {}
     return (segment.get("dimension"), segment.get("value"), rec.get("metric_impact"))
+
+
+_INSERT_REC_SQL = """
+    INSERT INTO recommendations (
+        problem, action, priority, school, evidence,
+        action_type, target, segment, metric_impact,
+        expected_direction, expected_magnitude, effort, confidence,
+        batch_id, detail
+    )
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    RETURNING id
+"""
+
+
+def _insert_rec(cur, rec, batch_id):
+    cur.execute(_INSERT_REC_SQL, (
+        rec["problem"],
+        rec["action"],
+        rec["priority"],
+        rec.get("school"),
+        rec.get("evidence"),
+        rec.get("action_type"),
+        rec.get("target"),
+        Json(rec["segment"]) if rec.get("segment") is not None else None,
+        rec.get("metric_impact"),
+        rec.get("expected_direction"),
+        rec.get("expected_magnitude"),
+        rec.get("effort"),
+        rec.get("confidence"),
+        batch_id,
+        Json(rec["detail"]) if rec.get("detail") is not None else None,
+    ))
+    return cur.fetchone()[0]
 
 
 def save_recommendations(recommendations, triage=None):
@@ -194,31 +270,7 @@ def save_recommendations(recommendations, triage=None):
                     logger.info(f"Skipping duplicate recommendation for active segment {key}: {rec.get('problem', '')[:80]}")
                     continue
 
-                cur.execute("""
-                    INSERT INTO recommendations (
-                        problem, action, priority, school, evidence,
-                        action_type, target, segment, metric_impact,
-                        expected_direction, expected_magnitude, effort, confidence,
-                        batch_id, detail
-                    )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (
-                    rec["problem"],
-                    rec["action"],
-                    rec["priority"],
-                    rec.get("school"),
-                    rec.get("evidence"),
-                    rec.get("action_type"),
-                    rec.get("target"),
-                    Json(rec["segment"]) if rec.get("segment") is not None else None,
-                    rec.get("metric_impact"),
-                    rec.get("expected_direction"),
-                    rec.get("expected_magnitude"),
-                    rec.get("effort"),
-                    rec.get("confidence"),
-                    batch_id,
-                    Json(rec["detail"]) if rec.get("detail") is not None else None,
-                ))
+                _insert_rec(cur, rec, batch_id)
                 inserted += 1
 
             for t in (triage or []):
@@ -333,51 +385,168 @@ def update_recommendation_status(rec_id, status, implemented_at=None):
         except Exception as e:
             logger.warning(f"Baseline recording failed for rec {rec_id}: {e}")
 
+_REC_SELECT = """
+    SELECT id, generated_at, problem, action, priority, school, evidence, status,
+           action_type, target, segment, metric_impact,
+           expected_direction, expected_magnitude, effort, confidence,
+           implemented_at, measurement_window_days, batch_id, detail,
+           baseline_value, baseline_sample_n, measured_at, outcome
+    FROM recommendations
+"""
+
+
+def _rec_dict(r):
+    return {
+        "id": str(r[0]),
+        "generated_at": str(r[1]),
+        "problem": r[2],
+        "action": r[3],
+        "priority": r[4],
+        "school": r[5],
+        "evidence": r[6],
+        "status": r[7],
+        "action_type": r[8],
+        "target": r[9],
+        "segment": r[10],
+        "metric_impact": r[11],
+        "expected_direction": r[12],
+        "expected_magnitude": float(r[13]) if r[13] is not None else None,
+        "effort": r[14],
+        "confidence": float(r[15]) if r[15] is not None else None,
+        "implemented_at": str(r[16]) if r[16] is not None else None,
+        "measurement_window_days": r[17],
+        "batch_id": str(r[18]) if r[18] is not None else None,
+        "detail": r[19],
+        "baseline_value": float(r[20]) if r[20] is not None else None,
+        "baseline_sample_n": r[21],
+        "measured_at": str(r[22]) if r[22] is not None else None,
+        "outcome": r[23],
+        "work_stream": _work_stream(r[8]),
+    }
+
+
 def get_saved_recommendations(include_superseded=False):
     where = "" if include_superseded else "WHERE status != 'superseded'"
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(f"""
-                SELECT id, generated_at, problem, action, priority, school, evidence, status,
-                       action_type, target, segment, metric_impact,
-                       expected_direction, expected_magnitude, effort, confidence,
-                       implemented_at, measurement_window_days, batch_id, detail,
-                       baseline_value, baseline_sample_n, measured_at, outcome
-                FROM recommendations
-                {where}
-                ORDER BY generated_at DESC, priority ASC;
-            """)
+            cur.execute(f"{_REC_SELECT} {where} ORDER BY generated_at DESC, priority ASC;")
             rows = cur.fetchall()
-    return [
-        {
-            "id": str(r[0]),
-            "generated_at": str(r[1]),
-            "problem": r[2],
-            "action": r[3],
-            "priority": r[4],
-            "school": r[5],
-            "evidence": r[6],
-            "status": r[7],
-            "action_type": r[8],
-            "target": r[9],
-            "segment": r[10],
-            "metric_impact": r[11],
-            "expected_direction": r[12],
-            "expected_magnitude": float(r[13]) if r[13] is not None else None,
-            "effort": r[14],
-            "confidence": float(r[15]) if r[15] is not None else None,
-            "implemented_at": str(r[16]) if r[16] is not None else None,
-            "measurement_window_days": r[17],
-            "batch_id": str(r[18]) if r[18] is not None else None,
-            "detail": r[19],
-            "baseline_value": float(r[20]) if r[20] is not None else None,
-            "baseline_sample_n": r[21],
-            "measured_at": str(r[22]) if r[22] is not None else None,
-            "outcome": r[23],
-            "work_stream": _work_stream(r[8]),
-        }
-        for r in rows
-    ]
+    return [_rec_dict(r) for r in rows]
+
+
+def get_recommendation(rec_id):
+    """One rec by id (any status - a focused card view may target a rec the
+    default list filters out), or None."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"{_REC_SELECT} WHERE id = %s", (rec_id,))
+            row = cur.fetchone()
+    return _rec_dict(row) if row else None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# On-demand per-question generation (dashboard question view)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _latest_live_rec_for_question(question_id):
+    """
+    The rec that currently covers this question, or None. Covers = the rec's
+    segment targets the question, OR the question was folded into the rec's
+    dedup group (detail.router.source_questions). Committed (active) recs win
+    over untouched proposed ones; ties break newest-first. Superseded recs
+    never block - they're history.
+    """
+    qid = str(question_id)
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"""
+                {_REC_SELECT}
+                WHERE status != 'superseded'
+                  AND (segment->>'question_id' = %s
+                       OR (detail->'router'->'source_questions') @> %s)
+                ORDER BY CASE WHEN status IN %s THEN 0 ELSE 1 END,
+                         generated_at DESC
+                LIMIT 1
+            """, (qid, Json([{"question_id": qid}]), ACTIVE_STATUSES))
+            row = cur.fetchone()
+    return _rec_dict(row) if row else None
+
+
+def get_question_recommendation_status(question_id, cooldown_days=GENERATION_COOLDOWN_DAYS):
+    """
+    Per-question analogue of get_generation_status: whether an on-demand rec
+    may be generated for this question, and the live rec that blocks it (so
+    the UI can navigate there instead). Blocked by: an active rec (committed
+    work never gets a duplicate), or a proposed rec younger than the same
+    30-day cooldown the batch uses.
+    """
+    rec = _latest_live_rec_for_question(question_id)
+    if rec is None:
+        return {"recommendation": None, "can_generate": True,
+                "next_available_at": None, "blocked_by": None}
+    if rec["status"] in ACTIVE_STATUSES:
+        return {"recommendation": rec, "can_generate": False,
+                "next_available_at": None, "blocked_by": "active_rec"}
+    generated_at = datetime.fromisoformat(rec["generated_at"])
+    if generated_at.tzinfo is None:
+        generated_at = generated_at.replace(tzinfo=timezone.utc)
+    next_available_at = generated_at + timedelta(days=cooldown_days)
+    can_generate = datetime.now(timezone.utc) >= next_available_at
+    return {"recommendation": rec, "can_generate": can_generate,
+            "next_available_at": next_available_at.isoformat(),
+            "blocked_by": None if can_generate else "cooldown"}
+
+
+def save_question_recommendation(rec, question_id):
+    """
+    Insert ONE on-demand rec under its own batch_id. Supersession is scoped
+    to the question: only prior untouched (proposed) recs whose segment
+    targets the same question are archived - the rest of the live batch is
+    untouched (unlike save_recommendations). No triage rows are written: the
+    batch triage queue must keep reflecting the latest full batch.
+    """
+    batch_id = str(uuid.uuid4())
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE recommendations SET status = 'superseded'
+                WHERE status = 'proposed' AND segment->>'question_id' = %s
+            """, (str(question_id),))
+            rec_id = _insert_rec(cur, rec, batch_id)
+        conn.commit()
+    return str(rec_id)
+
+
+def generate_question_recommendation(question_id, days=None):
+    """
+    On-demand generation for one question, gated per question by the same
+    30-day cooldown as the batch. Returns:
+      {"generated": True,  "recommendation": <saved rec>}          - new rec
+      {"generated": False, "recommendation": <existing live rec>}  - gated:
+          navigate to the rec that already covers the question
+      {"generated": False, "recommendation": None, "triage": {...}} - the
+          router couldn't action it; triage.reason says why
+    """
+    from api.queries.question_router import build_question_recommendation
+
+    status = get_question_recommendation_status(question_id)
+    if not status["can_generate"]:
+        return {"generated": False, "recommendation": status["recommendation"],
+                "triage": None, "blocked_by": status["blocked_by"],
+                "next_available_at": status["next_available_at"]}
+
+    rec, triage_entry = build_question_recommendation(question_id, days)
+    if rec is None:
+        if triage_entry is None:
+            triage_entry = {"question_id": str(question_id),
+                            "reason": "no_mention_responses"}
+        else:
+            triage_entry = {**triage_entry,
+                            "question_id": str(triage_entry.get("question_id"))}
+        return {"generated": False, "recommendation": None, "triage": triage_entry}
+
+    rec_id = save_question_recommendation(rec, question_id)
+    return {"generated": True, "recommendation": get_recommendation(rec_id)}
 
 
 def generate_recommendations(days=None):
@@ -407,13 +576,11 @@ def generate_recommendations(days=None):
     if cred_rec:
         recommendations.append(cred_rec)
 
-    # Priority = evidence-strength rank within the batch (competitive losses
-    # multiply the score; they are not a rec family and never blanket-bump).
-    recommendations = _apply_priority_ranking(recommendations, days)
-
     # Attach truthful citation evidence (what AI cites for the topic + QC's count)
     # to strategic recs so the Tab 1 card can show it. Tab 2 recs already carry a
-    # scorecard in `detail`; leave those untouched.
+    # scorecard in `detail`; leave those untouched. Runs BEFORE priority ranking,
+    # which writes detail.priority_rank onto every rec - "has detail" must still
+    # mean "already carries its own evidence" here.
     for rec in recommendations:
         if rec.get("detail") or rec.get("action_type") == "technical":
             continue
@@ -424,4 +591,9 @@ def generate_recommendations(days=None):
                 rec["detail"] = {"evidence": ev}
         except Exception as e:
             logger.warning(f"strategic_evidence failed for {seg}: {e}")
+
+    # Priority = evidence-strength rank within the batch (competitive losses
+    # multiply the score; they are not a rec family and never blanket-bump).
+    # Also writes the rank driver to detail.priority_rank for the card.
+    recommendations = _apply_priority_ranking(recommendations, days)
     return recommendations, triage

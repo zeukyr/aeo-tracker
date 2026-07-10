@@ -332,3 +332,124 @@ def test_every_question_routes_exactly_once_and_branches_disjoint(monkeypatch):
     # and no routed question is also triaged
     routed = set().union(*qids_by_branch.values())
     assert not (routed & triage_qids)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Benchmark/evidence URL hygiene: cards never point at junk
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_videos_and_bare_homepages_never_benchmark(monkeypatch):
+    # Vote is carried by competitor pages; a heavily-cited youtube video and a
+    # bare homepage ride along in the winner set. Neither may surface as a
+    # benchmark or in the evidence line.
+    q = question(10, "how to start a home decor business",
+                 topic="Starting a Business")
+    winners = [
+        (commercial_winner("rivalschool.com"), 5),
+        (facts("youtube.com", "video", status="not_fetched",
+               url="https://youtube.com/watch?v=abc"), 9),
+        (facts("pdga.online", "editorial", url="https://pdga.online",
+               status="fetch_failed"), 4),
+        (commercial_winner("otherschool.com"), 3),
+    ]
+    wire(monkeypatch, {10: winners})
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+
+    rec = qr._build_rec(route, [route])
+    for text in (rec["action"], rec["evidence"]):
+        assert "youtube" not in text
+        assert "pdga.online" not in text
+    assert "rivalschool.com" in rec["action"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# On-demand single-question generation
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_single_question_build_returns_rec_not_triage(monkeypatch):
+    q = question(20, "how to become a dog groomer")
+    wire(monkeypatch, {20: [(informational_winner(f"guide{i}.com"), 5) for i in range(3)]})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    rec, triage = qr.build_question_recommendation(20)
+    assert triage is None
+    assert rec["segment"] == {"dimension": "question",
+                              "value": q["question"], "question_id": "20"}
+    assert rec["detail"]["router"]["branch"] == "build"
+
+
+def test_single_question_triage_comes_back_as_entry(monkeypatch):
+    q = question(21, "obscure question nothing cites")
+    wire(monkeypatch, {21: []})
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    rec, triage = qr.build_question_recommendation(21)
+    assert rec is None
+    assert triage["reason"] == "no_cited_winners"
+    assert triage["question_id"] == 21
+
+
+def test_single_question_without_mention_responses(monkeypatch):
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: None)
+    assert qr.build_question_recommendation(22) == (None, None)
+
+
+def test_single_question_fix_attaches_router_detail(monkeypatch):
+    q = question(23, "best dog training course")
+    wire(monkeypatch, {23: [(commercial_winner(f"rival{i}.com"), 4) for i in range(3)]},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+    calls = []
+    stub_scorecard(monkeypatch, calls)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    rec, triage = qr.build_question_recommendation(23)
+    assert triage is None
+    assert len(calls) == 1
+    assert rec["action_type"] == "technical"
+    assert rec["detail"]["router"]["branch"] == "fix"
+
+
+def test_single_question_fix_with_empty_scorecard_triages(monkeypatch):
+    # An empty scorecard result triages with a PRECISE reason (true parity
+    # here), never the false-parity catch-all - and the competitor winners
+    # offer no inclusion-opportunity fallback to mask it.
+    q = question(24, "best dog training course")
+    wire(monkeypatch, {24: [(commercial_winner(f"rival{i}.com"), 4) for i in range(3)]},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+    monkeypatch.setattr(qr, "build_scorecard",
+                        lambda *a, **kw: {"qc_readable": True, "winners_total": 3,
+                                          "winners_cited_total": 3,
+                                          "winners_unreadable": []})
+    monkeypatch.setattr(qr, "scorecard_to_recommendation", lambda sc: None)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    rec, triage = qr.build_question_recommendation(24)
+    assert rec is None
+    assert triage["reason"] == "fix_true_feature_parity"
+    assert triage["scorecard"]["winners_readable"] == 3
+
+
+def test_build_card_omits_benchmark_rather_than_falling_back(monkeypatch):
+    # All winners are junk for display (video + bare homepage) but a domain-
+    # classified competitor homepage still votes -> build fires, benchmark
+    # clause is dropped entirely.
+    q = question(11, "best decor course", topic="Course Discovery")
+    winners = [
+        (facts("rivalschool.com", "competitor", url="https://rivalschool.com",
+               status="fetch_failed"), 5),
+        (facts("youtube.com", "video", status="not_fetched",
+               url="https://youtube.com/watch?v=abc"), 9),
+    ]
+    wire(monkeypatch, {11: winners})
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+
+    rec = qr._build_rec(route, [route])
+    assert "Benchmark" not in rec["action"]
+    assert "youtube" not in rec["action"]

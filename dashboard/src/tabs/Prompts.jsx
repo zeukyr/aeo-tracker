@@ -342,6 +342,295 @@ function StatNode({ label, value, color }) {
   );
 }
 
+function PromptMetricsPanel({ prompt, detail, onOpenDrawer, showDrawerButtons = true }) {
+  const { kind, timeseries, competitors, llms } = detail;
+
+  return (
+    <div className="prompt-metrics-panel">
+      <p className="prompt-metrics-panel__question">"{prompt.text}"</p>
+
+      <div className="prompt-metrics-panel__layout">
+        <div className="prompt-metrics-panel__chart">
+          <p className="text-xs font-medium text-gray-500 uppercase mb-2">
+            {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
+          </p>
+          {kind === "mention" ? (
+            <>
+              <ChartLegend items={[
+                { label: "Visibility",    color: QC_BLUE },
+                { label: "Mention rate",  color: QC_BLUE,  dashed: true },
+                { label: "Citation rate", color: "#1d9e75", dashed: true },
+              ]} />
+              <VisibilityChart data={timeseries} />
+            </>
+          ) : (
+            <>
+              <ChartLegend items={[
+                { label: "Positive", color: "#3b6d11" },
+                { label: "Neutral",  color: "#854f0b" },
+                { label: "Negative", color: "#a32d2d" },
+              ]} />
+              <SentimentChart data={timeseries} />
+            </>
+          )}
+        </div>
+
+        <div className="prompt-metrics-panel__competitors">
+          <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
+          <CompetitorRanking competitors={competitors} />
+        </div>
+      </div>
+
+      <div>
+        <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
+        <div className="space-y-2">
+          {LLM_ENGINES.map(engine => {
+            const llm   = llms?.find(l => l.engine === engine);
+            const color = LLM_COLORS[engine];
+            return (
+              <div key={engine} style={{
+                display: "flex", alignItems: "center", gap: 12,
+                background: "#fff", borderRadius: 8, padding: "8px 12px",
+                border: "1px solid #f0efec",
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
+                  {LLM_LABELS[engine]}
+                </span>
+
+                {llm ? (
+                  <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                    {llm.kind === "mention" ? (
+                      <>
+                        <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
+                        <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
+                        <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
+                        <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
+                      </>
+                    ) : (
+                      <>
+                        <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
+                        <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
+                        <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-xs text-gray-400 flex-1">No data</span>
+                )}
+
+                {showDrawerButtons && (
+                  <button
+                    onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      color: llm ? color : "#d1d5db",
+                      fontSize: 13, padding: "2px 4px", flexShrink: 0,
+                    }}
+                    title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
+                    aria-label={`Open ${LLM_LABELS[engine]} response`}
+                  >
+                    ▶
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuestionCitationsTable({ citations }) {
+  return (
+    <div className="card question-evidence">
+      <p className="panel-title">Cited URLs</p>
+      <p className="panel-subtitle">All cited URLs for this question, with cached page facts only.</p>
+      <div className="question-evidence__table-wrap">
+        <table className="question-evidence__table">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th className="num">Count</th>
+              <th>page_type</th>
+              <th>source_type</th>
+              <th>fetch status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {citations?.length ? citations.map((c) => (
+              <tr key={c.url}>
+                <td>
+                  <a href={c.url} target="_blank" rel="noreferrer" className="question-evidence__url">
+                    {c.url}
+                  </a>
+                </td>
+                <td className="num">{c.citation_count}</td>
+                <td>{c.page_type ?? "—"}</td>
+                <td>{c.source_type ?? "—"}</td>
+                <td>{c.fetch_status ?? "—"}</td>
+              </tr>
+            )) : (
+              <tr>
+                <td colSpan={5} className="state-empty">No cited URLs yet.</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// Why the router declined to produce a rec for this question, in card-ready
+// prose. Falls back to the raw reason slug for reasons added later.
+const REC_TRIAGE_MESSAGES = {
+  no_mention_responses: "This question has no mention responses yet — nothing to route.",
+  no_cited_winners: "QC loses this question but the responses cite no external pages to analyze.",
+  insufficient_voters: "Too few classifiable citations to call a verdict.",
+  fragmented_field: "No single source type dominates the cited winners — needs a human call.",
+  feasibility_unknown: "The winning sources can't be owned and no outreach channel was found.",
+  reputation_no_channel: "Reputation question with nothing to pitch.",
+  // Legacy slug — only reachable when the scorecard itself threw; the three
+  // precise reasons below replaced it for normal empty results.
+  fix_no_feature_gaps: "The scorecard comparison could not produce a recommendation for QC's page.",
+  fix_qc_page_unreadable: "QC's own page could not be fetched or read, so no feature comparison is possible — fix crawlability/access first (AI engines may not be able to read it either).",
+  fix_true_feature_parity: "QC's page genuinely matches the analyzed cited winners on every scorecard feature, and no weaker signal surfaced — the gap isn't on-page structure.",
+};
+
+// fix_insufficient_winner_data carries counts + the unreadable URLs, so the
+// message can disclose exactly what was and wasn't analyzed instead of
+// asserting parity over a sample it never had.
+function recTriageMessage(triage) {
+  const reason = triage?.reason;
+  if (reason === "fix_insufficient_winner_data") {
+    const sc = triage.scorecard || {};
+    const unreadable = sc.winners_unreadable || [];
+    const failedList = unreadable.map((w) => w.url).join(", ");
+    return `Only ${sc.winners_readable ?? 0} of ${sc.winners_cited_total ?? "?"} cited pages could be analyzed`
+      + (unreadable.length ? ` (${unreadable.length} could not be fetched: ${failedList})` : "")
+      + " — not enough data to compare QC's page against the winners.";
+  }
+  return REC_TRIAGE_MESSAGES[reason] ?? `The router couldn't action this question (${reason ?? "unknown"}).`;
+}
+
+function QuestionRecButton({ questionId, onOpenRecommendation }) {
+  const { days } = useFilter();
+  const [status, setStatus] = useState(null);      // recommendation-status payload
+  const [generating, setGenerating] = useState(false);
+  const [message, setMessage] = useState(null);    // triage / error outcome
+
+  // State resets between questions by remount - the parent keys this
+  // component on questionId - so the effect only fetches.
+  useEffect(() => {
+    if (!questionId) return undefined;
+    let cancelled = false;
+    fetch(`${API_BASE_URL}/api/questions/${questionId}/recommendation-status`)
+      .then(r => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
+      .then(s => { if (!cancelled) setStatus(s); })
+      .catch(() => { if (!cancelled) setStatus({ recommendation: null, can_generate: false }); });
+    return () => { cancelled = true; };
+  }, [questionId]);
+
+  const existingRec = status?.recommendation;
+
+  const handleClick = () => {
+    if (existingRec) {
+      onOpenRecommendation?.(existingRec.id);
+      return;
+    }
+    setGenerating(true);
+    setMessage(null);
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    fetch(`${API_BASE_URL}/api/questions/${questionId}/recommendation?${params}`, { method: "POST" })
+      .then(r => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
+      .then(res => {
+        setGenerating(false);
+        if (res.recommendation) {
+          setStatus({ recommendation: res.recommendation, can_generate: false });
+          onOpenRecommendation?.(res.recommendation.id);
+        } else {
+          setMessage(recTriageMessage(res.triage));
+        }
+      })
+      .catch(err => {
+        setGenerating(false);
+        setMessage(`Generation failed: ${err.message}`);
+      });
+  };
+
+  return (
+    <div className="question-view__rec-action">
+      <button
+        className="btn btn--primary"
+        onClick={handleClick}
+        disabled={!status || generating}
+        title={existingRec && status?.blocked_by === "cooldown"
+          ? `Regeneration available ${new Date(status.next_available_at).toLocaleDateString()}`
+          : undefined}
+      >
+        {!status ? "…"
+          : generating ? "Generating…"
+          : existingRec ? "View recommendation"
+          : "Generate recommendation"}
+      </button>
+      {message && <p className="question-view__rec-message">{message}</p>}
+    </div>
+  );
+}
+
+function QuestionDetailView({ detail, loading, error, onBack, onOpenDrawer, onOpenRecommendation }) {
+  if (loading) {
+    return <div className="card question-view"><p className="state-msg">Loading…</p></div>;
+  }
+  if (error) {
+    return <div className="card question-view"><p className="state-msg state-msg--error">Error: {error}</p></div>;
+  }
+  if (!detail) return null;
+
+  const prompt = { id: detail.question_id, text: detail.question };
+  const evidence = detail.evidence || {};
+  const matched = evidence.matched_page;
+
+  return (
+    <div className="question-view">
+      <div className="card question-view__header">
+        <div className="question-view__header-copy">
+          <button className="btn btn--ghost question-view__back" onClick={onBack}>← Back to prompt explorer</button>
+          <p className="panel-title">Question detail</p>
+          <p className="panel-subtitle">{detail.topic ?? "Uncategorized"}{detail.school ? ` · ${detail.school}` : ""}{detail.question_type ? ` · ${detail.question_type}` : ""}</p>
+        </div>
+        <QuestionRecButton
+          key={detail.question_id}
+          questionId={detail.question_id}
+          onOpenRecommendation={onOpenRecommendation}
+        />
+      </div>
+
+      <div className="question-view__stack">
+        <div className="card question-view__metrics">
+          <PromptMetricsPanel prompt={prompt} detail={detail} onOpenDrawer={onOpenDrawer} showDrawerButtons={false} />
+        </div>
+
+        <div className="card question-view__matched">
+          <p className="panel-title">QC matched page</p>
+          {matched?.url ? (
+            <div className="question-view__matched-body">
+              <a href={matched.url} target="_blank" rel="noreferrer" className="question-view__matched-url">{matched.url}</a>
+              <p className="question-view__matched-meta">page_type: {matched.page_type ?? "—"} · fetch status: {matched.fetch_status ?? "—"}</p>
+            </div>
+          ) : (
+            <p className="state-empty">No QC page matched yet.</p>
+          )}
+        </div>
+
+        <QuestionCitationsTable citations={evidence.citations || []} />
+      </div>
+    </div>
+  );
+}
+
 // ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
 function ResponseDrawer({ drawer, onClose }) {
   const { open, engine, promptText, promptId } = drawer;
@@ -512,110 +801,11 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   }
   if (!detail) return null;
 
-  const { kind, timeseries, competitors, llms } = detail;
-
   return (
     <tr>
       <td colSpan={3} className="px-4 pb-4 pt-1">
         <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
-
-          {/* prompt text */}
-          <p className="italic text-gray-600 text-sm">"{prompt.text}"</p>
-
-          {/* chart (⅔) + competitors (⅓) */}
-          <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-
-            {/* chart */}
-            <div style={{ flex: 2, minWidth: 0 }}>
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">
-                {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
-              </p>
-              {kind === "mention" ? (
-                <>
-                  <ChartLegend items={[
-                    { label: "Visibility",    color: QC_BLUE },
-                    { label: "Mention rate",  color: QC_BLUE,  dashed: true },
-                    { label: "Citation rate", color: "#1d9e75", dashed: true },
-                  ]} />
-                  <VisibilityChart data={timeseries} />
-                </>
-              ) : (
-                <>
-                  <ChartLegend items={[
-                    { label: "Positive", color: "#3b6d11" },
-                    { label: "Neutral",  color: "#854f0b" },
-                    { label: "Negative", color: "#a32d2d" },
-                  ]} />
-                  <SentimentChart data={timeseries} />
-                </>
-              )}
-            </div>
-
-            {/* competitor panel */}
-            <div style={{ flex: 1, minWidth: 140 }}>
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
-              <CompetitorRanking competitors={competitors} />
-            </div>
-          </div>
-
-          {/* per-LLM breakdown */}
-          <div>
-            <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
-            <div className="space-y-2">
-              {LLM_ENGINES.map(engine => {
-                const llm   = llms?.find(l => l.engine === engine);
-                const color = LLM_COLORS[engine];
-                return (
-                  <div key={engine} style={{
-                    display: "flex", alignItems: "center", gap: 12,
-                    background: "#fff", borderRadius: 8, padding: "8px 12px",
-                    border: "1px solid #f0efec",
-                  }}>
-                    {/* engine label */}
-                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
-                      {LLM_LABELS[engine]}
-                    </span>
-
-                    {/* stat node badges */}
-                    {llm ? (
-                      <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-                        {llm.kind === "mention" ? (
-                          <>
-                            <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
-                            <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
-                            <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
-                            <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
-                          </>
-                        ) : (
-                          <>
-                            <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
-                            <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
-                            <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
-                          </>
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-xs text-gray-400 flex-1">No data</span>
-                    )}
-
-                    {/* arrow → response drawer */}
-                    <button
-                      onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
-                      style={{
-                        background: "none", border: "none", cursor: "pointer",
-                        color: llm ? color : "#d1d5db",
-                        fontSize: 13, padding: "2px 4px", flexShrink: 0,
-                      }}
-                      title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
-                      aria-label={`Open ${LLM_LABELS[engine]} response`}
-                    >
-                      ▶
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <PromptMetricsPanel prompt={prompt} detail={detail} onOpenDrawer={onOpenDrawer} showDrawerButtons />
         </div>
       </td>
     </tr>
@@ -623,7 +813,7 @@ function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
 }
 
 // ─── prompt row ───────────────────────────────────────────────────────────────
-function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailError, onOpenDrawer }) {
+function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailError, onOpenDrawer, onOpenPrompt }) {
   return (
     <>
       <tr
@@ -636,6 +826,16 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailEr
             <span className="text-sm text-gray-700 truncate max-w-sm" title={prompt.text}>
               "{prompt.text}"
             </span>
+            <button
+              type="button"
+              className="prompt-open-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenPrompt(prompt.id);
+              }}
+            >
+              Open question view
+            </button>
           </div>
         </td>
         <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
@@ -656,7 +856,7 @@ function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailEr
 }
 
 // ─── topic header row ─────────────────────────────────────────────────────────
-function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, detailErrors, onOpenDrawer }) {
+function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, detailErrors, onOpenDrawer, onOpenPrompt }) {
   return (
     <>
       <tr
@@ -686,6 +886,7 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
           detailLoading={loadingDetails.has(prompt.id)}
           detailError={detailErrors[prompt.id]}
           onOpenDrawer={onOpenDrawer}
+          onOpenPrompt={onOpenPrompt}
         />
       ))}
     </>
@@ -693,7 +894,7 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
 }
 
 // ─── main Prompts component ───────────────────────────────────────────────────
-export default function Prompts() {
+export default function Prompts({ focusedPromptId, onOpenPrompt, onClosePrompt, onOpenRecommendation }) {
   const { days, school } = useFilter();
   const [data,           setData]           = useState([]);
   const [loading,        setLoading]        = useState(true);
@@ -790,12 +991,36 @@ export default function Prompts() {
       });
   }
 
+  useEffect(() => {
+    if (!focusedPromptId) return;
+    if (!promptDetails[focusedPromptId] && !loadingDetails.has(focusedPromptId)) {
+      fetchPromptDetail(focusedPromptId);
+    }
+  }, [focusedPromptId, days]);
+
   function openDrawer(engine, promptText, promptId) {
     setDrawer({ open: true, engine, promptText, promptId });
   }
 
   function closeDrawer() {
     setDrawer(d => ({ ...d, open: false }));
+  }
+
+  const focusedDetail = focusedPromptId ? promptDetails[focusedPromptId] : null;
+  const focusedLoading = focusedPromptId ? loadingDetails.has(focusedPromptId) : false;
+  const focusedError = focusedPromptId ? detailErrors[focusedPromptId] : null;
+
+  if (focusedPromptId) {
+    return (
+      <QuestionDetailView
+        detail={focusedDetail}
+        loading={focusedLoading && !focusedDetail}
+        error={focusedError}
+        onBack={() => onClosePrompt?.()}
+        onOpenDrawer={openDrawer}
+        onOpenRecommendation={onOpenRecommendation}
+      />
+    );
   }
 
   return (
@@ -853,6 +1078,7 @@ export default function Prompts() {
                   loadingDetails={loadingDetails}
                   detailErrors={detailErrors}
                   onOpenDrawer={openDrawer}
+                  onOpenPrompt={onOpenPrompt}
                 />
               ))}
             </tbody>

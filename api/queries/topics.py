@@ -1,6 +1,10 @@
 from api.db import get_connection, _date_filter
 from collections import defaultdict
 
+from api.queries.page_facts import get_cached_facts, source_type, school_for_url
+from api.queries.sitemap_coverage import diagnose_text_coverage
+from src.parsing.urls import merge_url_counts, normalize_url
+
 # Topic order for deterministic display
 TOPIC_ORDER = [
     "Career Exploration",
@@ -404,16 +408,18 @@ def get_prompt_detail(prompt_id: str, days=None):
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
     date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
 
-    # Determine question_type to pick the right table
+    # Determine the question context and question_type to pick the right table.
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT question_type FROM questions WHERE id = %s", (prompt_id,))
+            cur.execute("SELECT question, topic, school, question_type FROM questions WHERE id = %s", (prompt_id,))
             row = cur.fetchone()
             if not row:
                 return None
-            question_type = row[0]
+            question, topic, school, question_type = row
 
     is_mention = question_type in ("course", "general")
+    table = "mention_responses" if is_mention else "sentiment_responses"
+    date_filter = date_m if is_mention else date_s
 
     with get_connection() as conn:
         with conn.cursor() as cur:
@@ -620,11 +626,66 @@ def get_prompt_detail(prompt_id: str, days=None):
 
                 kind = "sentiment"
 
+    table_alias = "m" if is_mention else "s"
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"""
+                WITH expanded AS (
+                    SELECT unnest(citations) AS cited_url
+                    FROM {table} {table_alias}
+                    WHERE {table_alias}.question_id = %s
+                      AND {table_alias}.citations IS NOT NULL
+                      {date_filter}
+                )
+                SELECT cited_url, COUNT(*) AS count
+                FROM expanded
+                GROUP BY cited_url
+                ORDER BY count DESC, cited_url;
+            """, (prompt_id,))
+            citation_rows = cur.fetchall()
+
+    cited_urls = merge_url_counts([
+        {"url": normalize_url(r[0]), "count": r[1]} for r in citation_rows if r[0]
+    ])
+    cached_facts = get_cached_facts([r["url"] for r in cited_urls])
+
+    cited_url_rows = []
+    for row in cited_urls:
+        facts = cached_facts.get(row["url"])
+        cited_url_rows.append({
+            "url": row["url"],
+            "citation_count": row["count"],
+            "page_type": facts.get("page_type") if facts else None,
+            "source_type": source_type(facts) if facts else None,
+            "fetch_status": facts.get("status") if facts else "not_cached",
+        })
+
+    coverage = diagnose_text_coverage(question, school=school)
+    matched_page = None
+    if coverage.get("qc_url"):
+        matched_facts = get_cached_facts([coverage["qc_url"]]).get(coverage["qc_url"])
+        matched_page = {
+            "url": coverage["qc_url"],
+            "page_type": matched_facts.get("page_type") if matched_facts else None,
+            "fetch_status": matched_facts.get("status") if matched_facts else "not_cached",
+        }
+
     return {
+        "question_id": prompt_id,
+        "question": question,
+        "topic": topic,
+        "school": school,
+        "question_type": question_type,
         "kind":        kind,
         "timeseries":  timeseries,
         "competitors": competitors,
         "llms":        llms,
+        "evidence": {
+            "citations": cited_url_rows,
+            "matched_page": matched_page,
+            "coverage": coverage,
+        },
     }
 
 
