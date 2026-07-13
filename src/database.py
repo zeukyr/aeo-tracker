@@ -137,6 +137,5 @@ def get_questions():
                 SELECT id, question, question_type
                 FROM questions
                 WHERE active = true
-                LIMIT 6
             """)
             return cur.fetchall()

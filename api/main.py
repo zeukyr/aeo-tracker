@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Body
 
@@ -23,13 +23,22 @@ from api.queries import (
     get_topics_over_time,
     get_prompt_detail,
     get_prompt_responses,
+    get_health_summary,
 )
 
-from api.queries.recommendations_synthesis import (
+from api.recommendations import (
     generate_recommendations,
     save_recommendations,
     get_saved_recommendations,
+    get_recommendation,
+    get_triage,
     update_recommendation_status,
+    get_generation_status,
+)
+from api.queries.recommendations_synthesis import (
+    get_question_recommendation_status,
+    generate_question_recommendation,
+    get_question_recommendations,
 )
 
 app = FastAPI()
@@ -138,19 +147,57 @@ def recurring_concerns(days: int = None):
     return get_recurring_concerns(days)
 
 @app.get("/api/generate-recommendations")
-def trigger_recommendations(days: int = None):
-    recs = generate_recommendations(days)
-    save_recommendations(recs)
-    return {"generated": len(recs), "recommendations": recs}
+def trigger_recommendations(days: int = None, force: bool = False):
+    status = get_generation_status()
+    if not status["can_generate"] and not force:
+        raise HTTPException(status_code=429, detail={
+            "message": "Recommendations were generated recently; cooldown still active.",
+            **status,
+        })
+    recs, triage = generate_recommendations(days)
+    result = save_recommendations(recs, triage)
+    return result
+
+@app.get("/api/recommendations/triage")
+def list_triage():
+    return get_triage()
+
+@app.get("/api/recommendations/generation-status")
+def recommendations_generation_status():
+    return get_generation_status()
+
+@app.get("/api/recommendations/health-summary")
+def recommendations_health_summary(days: int = None, school: str = None):
+    return get_health_summary(days, school)
 
 @app.get("/api/recommendations")
-def list_recommendations():
-    return get_saved_recommendations()
+def list_recommendations(include_superseded: bool = False):
+    return get_saved_recommendations(include_superseded)
+
+@app.get("/api/recommendations/{rec_id}")
+def single_recommendation(rec_id: str):
+    rec = get_recommendation(rec_id)
+    if rec is None:
+        raise HTTPException(status_code=404, detail="Recommendation not found")
+    return rec
 
 @app.patch("/api/recommendations/{rec_id}")
-def patch_recommendation_status(rec_id: str, status: str = Body(..., embed=True)):
-    update_recommendation_status(rec_id, status)
+def patch_recommendation_status(rec_id: str, status: str = Body(...), implemented_at: str = Body(None)):
+    update_recommendation_status(rec_id, status, implemented_at)
     return {"updated": True}
+
+@app.get("/api/questions/{question_id}/recommendation-status")
+def question_recommendation_status(question_id: str):
+    return get_question_recommendation_status(question_id)
+
+@app.get("/api/questions/{question_id}/recommendations")
+def question_recommendations(question_id: str):
+    """The question's live action plan: every non-superseded rec covering it."""
+    return get_question_recommendations(question_id)
+
+@app.post("/api/questions/{question_id}/recommendation")
+def question_recommendation(question_id: str, days: int = None):
+    return generate_question_recommendation(question_id, days)
 
 
 @app.get("/api/topics-over-time")

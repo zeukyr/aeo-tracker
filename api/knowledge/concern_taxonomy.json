@@ -1,0 +1,102 @@
+{
+  "_comment": "Concern taxonomy (Phase 7, item 0). Types are matched IN ORDER - first pattern hit wins - so specific vocabularies (accreditation) run before broad ones (employer_recognition). 'addressable': can published content answer this objection? false = structural/factual - a GEO rec must not pretend content fixes it; 'reframe' is the honest mitigation. 'probe' drives the item-1 body search over QC's own content. Patterns are case-insensitive regex fragments OR'd together.",
+  "types": [
+    {
+      "id": "accreditation",
+      "label": "Not formally accredited / recognized",
+      "addressable": false,
+      "action_type": null,
+      "reframe": "Publish one transparent explainer of what QC certifications are and are not (proprietary vocational certificates, BBB business accreditation vs academic accreditation, association alignment) so engines quote QC's own framing instead of inferring the gap - content cannot make QC accredited and must not claim to.",
+      "probe": null,
+      "patterns": [
+        "accredit", "internation", "ministry of education", "post-secondary",
+        "government", "ceqac", "ccac", "transcripts", "provincial"
+      ]
+    },
+    {
+      "id": "cost_value",
+      "label": "Cost / value concerns",
+      "addressable": true,
+      "action_type": "content",
+      "reframe": null,
+      "probe": {
+        "question": "Does QC publish transparent content about tuition cost, payment plans, and the value/ROI of its courses?",
+        "keywords": ["tuition", "cost", "payment plan", "afford", "worth", "value", "price", "money-back"]
+      },
+      "patterns": ["cost", "\\bfee", "price", "expensive", "tuition", "budget", "tax-deduct"]
+    },
+    {
+      "id": "practical_hands_on",
+      "label": "Limited hands-on / practical learning",
+      "addressable": true,
+      "action_type": "content",
+      "reframe": null,
+      "probe": {
+        "question": "Does QC describe hands-on, practical components of its courses (practicum, working with real dogs/clients, workshops, in-person options)?",
+        "keywords": ["hands-on", "practicum", "practical", "real dogs", "in-person", "workshop", "assignments"]
+      },
+      "patterns": [
+        "hands.?on", "in-person", "own dogs", "finding dogs", "real dogs",
+        "live interaction", "difficulty finding"
+      ]
+    },
+    {
+      "id": "support_feedback",
+      "label": "Tutor feedback / support quality",
+      "addressable": false,
+      "action_type": null,
+      "reframe": "Operational: tutor response times and feedback depth are a service problem; content can only set expectations (publish the actual feedback SLA and mentorship model), not fix slow feedback.",
+      "probe": null,
+      "patterns": ["tutor", "feedback", "support", "personalized"]
+    },
+    {
+      "id": "content_quality",
+      "label": "Course content depth / freshness",
+      "addressable": false,
+      "action_type": null,
+      "reframe": "Product: dated or shallow course material is a curriculum problem for the education team, not a GEO problem - update the courses, then let updated outlines/syllabi be crawlable.",
+      "probe": null,
+      "patterns": ["dated", "superficial", "didn't learn", "didn't finish", "in-depth", "lack of depth", "not provide", "learn much"]
+    },
+    {
+      "id": "format_self_discipline",
+      "label": "Online format requires self-discipline",
+      "addressable": false,
+      "action_type": null,
+      "reframe": "Inherent to online learning; at most publish expectation-setting content (time commitment, pacing, completion tips). Low priority.",
+      "probe": null,
+      "patterns": ["self-discipline", "online format", "online-based", "timeframe", "allowed time", "transfers", "not suit"]
+    },
+    {
+      "id": "legitimacy_reviews",
+      "label": "Legitimacy doubts / self-hosted reviews",
+      "addressable": true,
+      "action_type": "citation",
+      "reframe": null,
+      "probe": {
+        "question": "Does QC surface independent third-party reviews or ratings (Trustpilot, Google Reviews, BBB reviews) rather than only self-hosted testimonials?",
+        "keywords": ["trustpilot", "google reviews", "bbb", "third-party", "independent review", "rating"]
+      },
+      "patterns": [
+        "scam", "legitim", "review", "testimonial", "self-asserted", "trust score",
+        "own site", "own website", "own materials", "independent", "vigilant", "promotional"
+      ]
+    },
+    {
+      "id": "employer_recognition",
+      "label": "Employers / industry may not value the certificate",
+      "addressable": true,
+      "action_type": "content",
+      "reframe": null,
+      "probe": {
+        "question": "Does QC publish employer outcomes, alumni success stories, hiring statistics, or employer testimonials showing its certificates are valued?",
+        "keywords": ["employer", "hired", "career outcome", "graduate", "alumni", "success stor", "salary", "job"]
+      },
+      "patterns": [
+        "employer", "hiring", "recogni", "carry the same weight", "carry more weight",
+        "association-issued", "csep", "cmp", "cmm", "experience over", "prioritize experience",
+        "industry", "certificat", "credential", "designation"
+      ]
+    }
+  ]
+}

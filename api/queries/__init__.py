@@ -29,6 +29,22 @@ from api.queries.recommendations import (
     get_citation_gaps,
     get_recurring_concerns,
 )
+from api.queries.recommendation_signals import (
+    get_momentum,
+    get_weakest_engines,
+    get_weakest_categories,
+    get_weakest_schools,
+    get_weakest_topics,
+    get_win_reasons,
+    get_qc_verdict_distribution,
+    get_top_citation_domains,
+    get_competitor_profile,
+    get_health_summary,
+)
 from api.queries.recommendations_synthesis import (
     generate_recommendations,
+    save_recommendations,
+    get_saved_recommendations,
+    update_recommendation_status,
+    get_generation_status,
 )

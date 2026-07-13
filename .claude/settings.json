@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(git -C c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker add api/queries/page_facts.py tests/test_knowledge_layers.py)",
+      "PowerShell(git -C c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker commit -F \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\b857cce6-b3de-47dd-bd89-dc055f10cf8b\\\\scratchpad\\\\commit_msg2.txt\")",
+      "PowerShell($env:PYTHONPATH = \"c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker\"; Set-Location c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker; python -c \"import api.queries.page_facts as pf; print\\('page_facts imports OK'\\); from api.db import get_connection; c=get_connection\\(\\); print\\('DB connection OK'\\); c.close\\(\\)\")",
+      "PowerShell($env:PYTHONPATH = \"c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker\"; Set-Location c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker; python \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\b857cce6-b3de-47dd-bd89-dc055f10cf8b\\\\scratchpad\\\\apply_004.py\")",
+      "PowerShell($env:PYTHONPATH = \"c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker\"; Set-Location c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker; python -m migrations.backfill_page_facts)",
+      "PowerShell($env:PYTHONPATH = \"c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker\"; Set-Location c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker; python \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\b857cce6-b3de-47dd-bd89-dc055f10cf8b\\\\scratchpad\\\\verify_table.py\")",
+      "PowerShell($env:PYTHONPATH = \"c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker\"; Set-Location c:\\\\Users\\\\AngelaLi\\\\qc-ai-tracker; python \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\b857cce6-b3de-47dd-bd89-dc055f10cf8b\\\\scratchpad\\\\route_report.py\")",
+      "Bash(python -m migrations.normalize_page_facts_urls)",
+      "Bash(PYTHONPATH=. python \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\6b39c294-1923-4986-a148-e3fcb6034bd8\\\\scratchpad\\\\vote_diff.py\")",
+      "Skill(artifact-design)",
+      "Skill(artifact-design:*)"
+    ]
+  }
+}

@@ -1,0 +1,4051 @@
+{
+ "generated_at": "2026-07-10T15:04:15.714189+00:00",
+ "source": "scripts/build_brand_registry.py",
+ "brands": [
+  {
+   "name": "Penn Foster",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 68,
+   "variants": [
+    "Dog Trainer Certification Program from Penn Foster",
+    "Penn Foster",
+    "penn foster",
+    "Penn Foster Career School",
+    "Penn Foster Online Certificate",
+    "Penn Foster Pet and Dog Grooming Certificate",
+    "Penn Foster Pet Grooming",
+    "Penn Foster Pet Grooming Certificate",
+    "Penn Foster Pet Grooming Program",
+    "Penn Foster's Pet Grooming Certificate",
+    "Penn Foster's Pet Grooming Certificate Program",
+    "pennfoster.edu"
+   ],
+   "domains": [
+    "pennfoster.edu"
+   ]
+  },
+  {
+   "name": "Animal Behavior College",
+   "type": "competitor",
+   "rule": "university-word override: vocational school",
+   "n": 33,
+   "variants": [
+    "Animal Behavior College",
+    "Animal Behaviour College",
+    "animalbehaviorcollege.com"
+   ],
+   "domains": [
+    "animalbehaviorcollege.com"
+   ]
+  },
+  {
+   "name": "NYIAD",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 33,
+   "variants": [
+    "courses offered by NYIAD",
+    "New York Institute of Art & Design (NYIAD)",
+    "New York Institute of Art and Design",
+    "New York Institute of Art and Design (NYIAD)",
+    "NYIAD",
+    "NYIAD (Event Planning Course)",
+    "NYIAD (New York Institute of Art & Design)",
+    "NYIAD Online Event Planning Course",
+    "nyiad.edu",
+    "NYIAD’s Online Event Planning Course",
+    "The New York Institute of Art & Design (NYIAD)",
+    "The New York Institute of Art and Design (NYIAD)"
+   ],
+   "domains": [
+    "nyiad.edu"
+   ]
+  },
+  {
+   "name": "Karen Pryor Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 29,
+   "variants": [
+    "Karen Pryor Academy",
+    "Karen Pryor Academy (KPA)",
+    "Karen Pryor Academy Certified Training Partner (KPA CTP)",
+    "KPA-CTP"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certification Council for Professional Dog Trainers (CCPDT)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 21,
+   "variants": [
+    "CCPDT",
+    "CCPDT®",
+    "Certification Council for Professional Dog Trainers",
+    "Certification Council for Professional Dog Trainers (CCPDT)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Coursera",
+   "type": "platform",
+   "rule": "platform list (course marketplace)",
+   "n": 21,
+   "variants": [
+    "Coursera"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Decorating Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 20,
+   "variants": [
+    "Event Decorating Academy",
+    "eventdecoratingacademy.com"
+   ],
+   "domains": [
+    "eventdecoratingacademy.com"
+   ]
+  },
+  {
+   "name": "Good Dog Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 15,
+   "variants": [
+    "Good Dog Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Udemy",
+   "type": "competitor",
+   "rule": "approved: marketplace cited via course product pages (competitor)",
+   "n": 14,
+   "variants": [
+    "Udemy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Paragon School of Pet Grooming",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 13,
+   "variants": [
+    "Paragon School of Pet Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "IAP Career College",
+   "type": "competitor",
+   "rule": "university-word override: vocational school",
+   "n": 12,
+   "variants": [
+    "IAP Career College",
+    "IAP Career College’s Event Planner Certificate Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "IWED Global",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 12,
+   "variants": [
+    "IWED Global"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American Association of Certified Wedding Planners (AACWP)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 11,
+   "variants": [
+    "AACWP",
+    "American Association of Certified Wedding Planners",
+    "American Association of Certified Wedding Planners (AACWP)",
+    "certifications from American Association of Certified Wedding Planners (AACWP)",
+    "The American Association of Certified Wedding Planners (AACWP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CATCH Canine Trainers Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 11,
+   "variants": [
+    "Catch Canine Trainers Academy",
+    "CATCH Canine Trainers Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "West Coast Grooming Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 11,
+   "variants": [
+    "West Coast Grooming",
+    "West Coast Grooming Academy",
+    "west coast grooming academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Yes! Event Decor & More",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 11,
+   "variants": [
+    "Yes! Event Decor",
+    "YES! Event Decor & More",
+    "Yes! Event Decor & More"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Association of Professional Dog Trainers (APDT)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 10,
+   "variants": [
+    "Association of Professional Dog Trainers",
+    "Association of Professional Dog Trainers (APDT)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Professional Groomers (IPG)",
+   "type": "certifying_body",
+   "rule": "known credential acronym",
+   "n": 9,
+   "variants": [
+    "International Professional Groomers",
+    "International Professional Groomers (IPG)",
+    "IPG"
+   ],
+   "domains": []
+  },
+  {
+   "name": "LinkedIn Learning",
+   "type": "platform",
+   "rule": "platform list (course marketplace)",
+   "n": 9,
+   "variants": [
+    "LinkedIn Learning"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Professional Dog Grooming Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 9,
+   "variants": [
+    "PDGA",
+    "PDGA (Professional Dog Grooming Academy)",
+    "Professional Dog Grooming Academy",
+    "Professional Dog Grooming Academy (PDGA)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of Texas at Arlington",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 9,
+   "variants": [
+    "University of Texas at Arlington"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American Grooming Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 8,
+   "variants": [
+    "American Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "edX",
+   "type": "platform",
+   "rule": "platform list (course marketplace)",
+   "n": 8,
+   "variants": [
+    "edX"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Elevify",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 8,
+   "variants": [
+    "Elevify"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Fear Free",
+   "type": "competitor",
+   "rule": "approved: sells its own certification program (competitor)",
+   "n": 8,
+   "variants": [
+    "Fear Free",
+    "Fear Free Groomer Certification",
+    "Fear Free Groomer Certification Program"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Association of Animal Behavior Consultants",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 8,
+   "variants": [
+    "International Association of Animal Behavior Consultants",
+    "International Association of Animal Behavior Consultants (IAABC)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Meeting Professionals International (MPI)",
+   "type": "certifying_body",
+   "rule": "known credential acronym",
+   "n": 8,
+   "variants": [
+    "Meeting Professionals International",
+    "Meeting Professionals International (MPI)",
+    "The Meeting Professionals International (MPI)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "National Association of Professional Pet Sitters",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 8,
+   "variants": [
+    "NAPPS",
+    "NAPPS Certification",
+    "NAPPS Certification Course",
+    "National Association of Professional Pet Sitters"
+   ],
+   "domains": []
+  },
+  {
+   "name": "National Dog Groomers Association of America (NDGAA)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 8,
+   "variants": [
+    "National Dog Groomers Association of America",
+    "National Dog Groomers Association of America (NDGAA)",
+    "NDGAA"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Shield K9 Online",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 8,
+   "variants": [
+    "SHIELD K9 Dog Training",
+    "Shield K9 Online",
+    "SHIELD K9 Online",
+    "SHIELD K9 Online Dog Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Skillshare",
+   "type": "competitor",
+   "rule": "approved: cited via its own class product pages (competitor)",
+   "n": 8,
+   "variants": [
+    "Skillshare"
+   ],
+   "domains": []
+  },
+  {
+   "name": "UNC Charlotte",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 8,
+   "variants": [
+    "UNC Charlotte"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of Houston",
+   "type": "not_actionable",
+   "rule": "university - but may sell a standalone certificate (flagged)",
+   "n": 8,
+   "variants": [
+    "University of Houston",
+    "University of Houston (Master Event Design)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wedding Planning Institute",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 8,
+   "variants": [
+    "The Wedding Planning Institute",
+    "Wedding Planning Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Whole Pet Grooming Academy",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 8,
+   "variants": [
+    "Whole Pet Grooming Academy",
+    "WPGA",
+    "WPGA (World Pet Grooming Association)",
+    "WPGA Grooming Certification",
+    "WPGA Online Grooming Certification"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Calm Canines Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 7,
+   "variants": [
+    "Calm Canines Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Association of Canine Professionals (IACP)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 7,
+   "variants": [
+    "International Association of Canine Professionals",
+    "International Association of Canine Professionals (IACP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Lovegevity",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 7,
+   "variants": [
+    "Certified Master Wedding and Event Planner by Lovegevity",
+    "Certified Wedding Planner course by Lovegevity",
+    "Lovegevity"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Academy of Pet Careers",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 7,
+   "variants": [
+    "Academy of Pet Careers",
+    "The Academy of Pet Careers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Alison",
+   "type": "competitor",
+   "rule": "approved: sells its own courses, cited as the place to take them (competitor)",
+   "n": 6,
+   "variants": [
+    "Alison",
+    "Alison Free Online Event Planning",
+    "Alison.com"
+   ],
+   "domains": [
+    "alison.com"
+   ]
+  },
+  {
+   "name": "Animal Behavior College (ABC)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 6,
+   "variants": [
+    "ABC Grooming School",
+    "Animal Behavior College (ABC)",
+    "Animal Behaviour College (ABC)",
+    "Association of Bridal Consultants",
+    "Association of Bridal Consultants (ABC)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine Correspondence Studies (CCS)",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 6,
+   "variants": [
+    "Canine Correspondence Studies",
+    "Canine Correspondence Studies (CCS)",
+    "CCS (Canine Correspondence Studies)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dogue Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 6,
+   "variants": [
+    "Dogue Academy",
+    "Dogue Academy Professional Dog Trainer School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Emory University",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 6,
+   "variants": [
+    "Emory University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Live Events Association (ILEA)",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 6,
+   "variants": [
+    "ILEA",
+    "International Live Events Association",
+    "International Live Events Association (ILEA)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MSI Certified",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 6,
+   "variants": [
+    "MSI Certified",
+    "MSI Certified Event Planning Certification",
+    "MSICertified",
+    "MSICertified’s Event Planning Certification"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Posh Events Institute",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 6,
+   "variants": [
+    "Posh Events Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Georgian College",
+   "type": "competitor",
+   "rule": "university-word override: vocational school",
+   "n": 5,
+   "variants": [
+    "Canine Training Academy at Georgian College",
+    "Georgian College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "New York University School of Professional Studies",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 5,
+   "variants": [
+    "New York University (NYU) School of Professional Studies",
+    "New York University School of Professional Studies",
+    "NYU SPS"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Social Tables",
+   "type": "not_actionable",
+   "rule": "job board / e-commerce / SaaS list",
+   "n": 5,
+   "variants": [
+    "Social Tables",
+    "socialtables.com"
+   ],
+   "domains": [
+    "socialtables.com"
+   ]
+  },
+  {
+   "name": "Victoria Stilwell Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 5,
+   "variants": [
+    "Victoria Stilwell Academy",
+    "Victoria Stilwell Academy for Dog Training & Behavior (VSA)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "ZipRecruiter",
+   "type": "not_actionable",
+   "rule": "job board / e-commerce / SaaS list",
+   "n": 5,
+   "variants": [
+    "ZipRecruiter",
+    "ziprecruiter.com"
+   ],
+   "domains": [
+    "ziprecruiter.com"
+   ]
+  },
+  {
+   "name": "American Kennel Club",
+   "type": "certifying_body",
+   "rule": "known certifying body",
+   "n": 4,
+   "variants": [
+    "American Kennel Club",
+    "American Kennel Club Canine College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "C2H Online",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 4,
+   "variants": [
+    "C2H Online"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Cali K9 Online Training",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Cali K9 Online Training",
+    "Cali K9®",
+    "Cali K9® Online Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CAPDT",
+   "type": "certifying_body",
+   "rule": "association/council/institute-of pattern",
+   "n": 4,
+   "variants": [
+    "Canadian Association of Professional Dog Trainers",
+    "CAPDT",
+    "CAPDT (Developing)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Meeting Professional (CMP)",
+   "type": "certifying_body",
+   "rule": "credential name (Certified ...)",
+   "n": 4,
+   "variants": [
+    "Certified Meeting Professional (CMP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Clip Shoppe School of Dog Grooming",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Clip Shoppe School of Dog Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Cvent",
+   "type": "competitor",
+   "rule": "approved: vendor's own pages hold ownable slots (competitor)",
+   "n": 4,
+   "variants": [
+    "Cvent",
+    "cvent.com"
+   ],
+   "domains": [
+    "cvent.com"
+   ]
+  },
+  {
+   "name": "DogStars Training Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "DogStars Training Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Edmonds College",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 4,
+   "variants": [
+    "Edmonds College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "George Washington University",
+   "type": "not_actionable",
+   "rule": "university - but may sell a standalone certificate (flagged)",
+   "n": 4,
+   "variants": [
+    "Event Planning Certificate from the George Washington University",
+    "George Washington University",
+    "George Washington University (GWU)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Dog Trainer School",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "International Dog Trainer School",
+    "internationaldogtrainerschool.com"
+   ],
+   "domains": [
+    "internationaldogtrainerschool.com"
+   ]
+  },
+  {
+   "name": "New Skills Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "New Skills Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Northern California Grooming Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Northern California Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Paragon Pet School",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Paragon Pet School",
+    "Paragon Petschool"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pretty Paws Grooming Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Pretty Paws Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "South Texas College",
+   "type": "competitor",
+   "rule": "university-word override: vocational school",
+   "n": 4,
+   "variants": [
+    "South Texas College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Wedding Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "The Wedding Academy",
+    "Wedding Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Unity",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 4,
+   "variants": [
+    "Unity",
+    "Unity College",
+    "unity.edu",
+    "Unity.edu"
+   ],
+   "domains": [
+    "unity.edu"
+   ]
+  },
+  {
+   "name": "Wedding Academy Global",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Wedding Academy Global"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Yes! Event Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 4,
+   "variants": [
+    "Yes! Event Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Berry College",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 3,
+   "variants": [
+    "Berry College",
+    "berry.edu"
+   ],
+   "domains": [
+    "berry.edu"
+   ]
+  },
+  {
+   "name": "Canine Club Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Canine Club Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Career Village",
+   "type": "not_actionable",
+   "rule": "job board / e-commerce / SaaS list",
+   "n": 3,
+   "variants": [
+    "Career Village",
+    "careervillage.org"
+   ],
+   "domains": [
+    "careervillage.org"
+   ]
+  },
+  {
+   "name": "Certified Wedding Planner Society",
+   "type": "certifying_body",
+   "rule": "known certifying body",
+   "n": 3,
+   "variants": [
+    "Certified Wedding Planner Society",
+    "Certified Wedding Planner Society (CWP Society)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "e-Training for Dogs",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "e-Training for Dogs"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Ethology Institute",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Ethology Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "EventPlanning.com",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 3,
+   "variants": [
+    "Event Planning Schools",
+    "EventPlanning.com"
+   ],
+   "domains": [
+    "eventplanning.com"
+   ]
+  },
+  {
+   "name": "Flawless Pet Grooming",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Flawless Pet Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Groom Curriculum",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 3,
+   "variants": [
+    "Groom Curriculum"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Groomer to Groomer",
+   "type": "not_actionable",
+   "rule": "generic noun - no proper noun",
+   "n": 3,
+   "variants": [
+    "Groomer to Groomer"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Instinct Dog Training",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Instinct Dog Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Canine Training Institute (ICTI)",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "International Canine Training Institute (ICTI)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Institute of Event Management",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "International Institute of Event Management",
+    "The International Institute of Event Management"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Jodi Murphy’s Distance Learning Program",
+   "type": "competitor",
+   "rule": "default (no rule matched)",
+   "n": 3,
+   "variants": [
+    "Jodi Murphy",
+    "Jodi Murphy’s Distance Learning Program"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Just Four Paws Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Just Four Paws Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Lehman College",
+   "type": "not_actionable",
+   "rule": "university - but may sell a standalone certificate (flagged)",
+   "n": 3,
+   "variants": [
+    "Lehman College",
+    "Lehman College's Wedding and Event Planner Classes"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Lovegevity’s LWPI",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Lovegevity Wedding Planning Institute (LWPI)",
+    "Lovegevity’s LWPI",
+    "Lovegevity’s Wedding Planning Institute (CWP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MidMo Dog Training",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "MidMo Dog Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Mindfulness4dogs Online Dog School",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Mindfulness4dogs Online Dog School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "New York Institute of Pet Grooming",
+   "type": "certifying_body",
+   "rule": "bare acronym - UNVERIFIED",
+   "n": 3,
+   "variants": [
+    "New York Institute of Pet Grooming",
+    "New York Institute of Pet Grooming (NYIPG)",
+    "NYIPG"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Oxford Home Study",
+   "type": "competitor",
+   "rule": "university-word override: vocational school",
+   "n": 3,
+   "variants": [
+    "Oxford Home Study",
+    "Oxford Home Study College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PACCC",
+   "type": "certifying_body",
+   "rule": "known credential acronym",
+   "n": 3,
+   "variants": [
+    "PACCC"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Paw Parent Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Paw Parent Academy",
+    "Paw Parent Academy's Dog Grooming Courses"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Sitters International",
+   "type": "certifying_body",
+   "rule": "known certifying body",
+   "n": 3,
+   "variants": [
+    "Pet Sitters International"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Posheventscourse",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Posh Events Course",
+    "Poshevents Course",
+    "Posheventscourse"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Prestige Dog Grooming School",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Prestige Dog Grooming School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Printify",
+   "type": "not_actionable",
+   "rule": "job board / e-commerce / SaaS list",
+   "n": 3,
+   "variants": [
+    "Printify"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Unleashed Potential K9 Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "Unleashed Potential K9 Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "V Wedding Academy",
+   "type": "competitor",
+   "rule": "named school/program word",
+   "n": 3,
+   "variants": [
+    "V Wedding Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Webber International University",
+   "type": "not_actionable",
+   "rule": "university / college",
+   "n": 3,
+   "variants": [
+    "Webber International University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American Academy of Wedding Professionals (AAWP)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "American Academy of Wedding Professionals (AAWP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American School of Dog Grooming",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "American School of Dog Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Animal Behavior Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Animal Behavior Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "animalcoursesdirect.co.uk",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "animalcoursesdirect.co.uk"
+   ],
+   "domains": [
+    "animalcoursesdirect.co.uk"
+   ]
+  },
+  {
+   "name": "Building Bonds Online Courses",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Building Bonds Online Courses"
+   ],
+   "domains": []
+  },
+  {
+   "name": "California State University Long Beach",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "California State University Long Beach",
+    "CSULB"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Canine Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Special Events Professional (CSEP)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 2,
+   "variants": [
+    "Certified Special Events Professional (CSEP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CWP Society",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: known certifying body",
+   "n": 2,
+   "variants": [
+    "CWP Society"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CynoDo",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "CynoDo",
+    "CynoDo®"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Diamond Cut Dog Grooming School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Diamond Cut Dog Grooming School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dog Grooming School of Pennsylvania",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Dog Grooming School of Pennsylvania"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dogma Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Dogma Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Easy Busy Pets",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 2,
+   "variants": [
+    "Easy Busy Pets"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eventbrite",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 2,
+   "variants": [
+    "Eventbrite"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Fenzi Dog Sports Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Fenzi Dog Sports Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Flawless Pet Grooming School & Salon",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Flawless Pet Grooming School & Salon"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Groomarts",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Groom Arts",
+    "Groomarts"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Julius K9",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Julius K9"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Let's Groom Virtual Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Let's Groom Virtual Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MasterClass",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said platform: platform list (course marketplace)",
+   "n": 2,
+   "variants": [
+    "MasterClass"
+   ],
+   "domains": []
+  },
+  {
+   "name": "McNeese State University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "McNeese State University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Merryfield",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Merryfield"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Moego",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 2,
+   "variants": [
+    "Moego"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MSU Denver",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "MSU Denver"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Nassau BOCES",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "Nassau BOCES",
+    "nassau boces"
+   ],
+   "domains": []
+  },
+  {
+   "name": "NJ Dog Grooming School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "NJ Dog Grooming School",
+    "nj dog grooming school"
+   ],
+   "domains": []
+  },
+  {
+   "name": "OKC Unleashed",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "OKC Unleashed"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Online Grooming School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 2,
+   "variants": [
+    "Online Grooming School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Paragon",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Paragon"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PCMA Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "PCMA Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pennsylvania Dog Grooming School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Pennsylvania Dog Grooming School",
+    "pennsylvania dog grooming school"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Professional",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 2,
+   "variants": [
+    "Pet Professional"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Portland Community College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "PCC",
+    "Portland Community College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Shear Excellence Dog Grooming Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "Shear Excellence Dog Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "SpiritDog Training",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "SpiritDog Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Bridal Society",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: known certifying body",
+   "n": 2,
+   "variants": [
+    "The Bridal Society",
+    "The Bridal Society (TBS)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The International School for Canine Psychology and Behaviour",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "The International School for Canine Psychology and Behaviour",
+    "The International School for Canine Psychology and Behaviour (ISCP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Sheffield School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 2,
+   "variants": [
+    "The Sheffield School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Top Universities",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 2,
+   "variants": [
+    "Top Universities",
+    "topuniversities.com"
+   ],
+   "domains": [
+    "topuniversities.com"
+   ]
+  },
+  {
+   "name": "Tuma Event Ambience Creators (TEAC)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Tuma Event Ambience Creators (TEAC)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "UC Davis",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "UC Davis",
+    "ucdavis.edu"
+   ],
+   "domains": [
+    "ucdavis.edu"
+   ]
+  },
+  {
+   "name": "Vocational School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 2,
+   "variants": [
+    "Vocational School",
+    "Vocational School Programs"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wagner College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 2,
+   "variants": [
+    "Wagner College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wear Wag Repeat",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Wear Wag Repeat"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Weddings Beautiful Worldwide",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 2,
+   "variants": [
+    "Weddings Beautiful Worldwide"
+   ],
+   "domains": []
+  },
+  {
+   "name": "2handsart",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "2handsart"
+   ],
+   "domains": []
+  },
+  {
+   "name": "ABC Wedding Education",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "ABC Wedding Education"
+   ],
+   "domains": []
+  },
+  {
+   "name": "ABS",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED",
+   "n": 1,
+   "variants": [
+    "ABS"
+   ],
+   "domains": []
+  },
+  {
+   "name": "academic animal behaviorist",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "academic animal behaviorist"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Academy for Dog Trainers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Academy for Dog Trainers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Academy of Animal Arts",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Academy of Animal Arts"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Academy of Wedding and Event Planning",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Academy of Wedding and Event Planning"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Accelerated programs",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Accelerated programs"
+   ],
+   "domains": []
+  },
+  {
+   "name": "AKC® S.A.F.E. Program",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "AKC® S.A.F.E. Program"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Alibaba",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Alibaba"
+   ],
+   "domains": []
+  },
+  {
+   "name": "All Breed Pet Salon",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "All Breed Pet Salon"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Allied Health Career Training",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Allied Health Career Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American Red Cross",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "American Red Cross"
+   ],
+   "domains": []
+  },
+  {
+   "name": "American Society of Association Executives (ASAE)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "American Society of Association Executives (ASAE)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Andrea Eppolito",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Andrea Eppolito"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Animal Behaviorist",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Animal Behaviorist"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Animal Education",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Animal Education"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Ankorstore",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Ankorstore"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Apprenticeships",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Apprenticeships"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Apprenticeships or mentorships",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Apprenticeships or mentorships"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Apprenticeships/Mentorships",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Apprenticeships/Mentorships"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Art Studios",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Art Studios"
+   ],
+   "domains": []
+  },
+  {
+   "name": "ASPCA Learning Lab",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "ASPCA Learning Lab"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Become An Event Planner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Become An Event Planner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Best (Paragon Pet School)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Best (Paragon Pet School)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Bingo Institute of Grooming",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Bingo Institute of Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Boujee Pet Grooming School and Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Boujee Pet Grooming School and Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Brentwood Open Learning Center",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Brentwood Open Learning Center"
+   ],
+   "domains": []
+  },
+  {
+   "name": "British College of Canine Studies",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: university-word override: vocational school",
+   "n": 1,
+   "variants": [
+    "British College of Canine Studies"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Bryant University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Bryant University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Bunker Hill Community College Event Management",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "Bunker Hill Community College Event Management"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Cake Hoopla",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Cake Hoopla"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CalCareers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "CalCareers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Candice Coppola",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Candice Coppola"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine Behavior Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Canine Behavior Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Canine College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine Foundations",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Canine Foundations"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Canine Physical Therapist",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Canine Physical Therapist"
+   ],
+   "domains": []
+  },
+  {
+   "name": "caninecrews.com",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "caninecrews.com"
+   ],
+   "domains": [
+    "caninecrews.com"
+   ]
+  },
+  {
+   "name": "Careershifters",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Careershifters"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Carroll Community College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Carroll Community College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "caterers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "caterers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "ccny.cuny.edu",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "ccny.cuny.edu"
+   ],
+   "domains": [
+    "ccny.cuny.edu"
+   ]
+  },
+  {
+   "name": "Central Virginia Career Training",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Central Virginia Career Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certification",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Certification"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Canine Groomer (CCG)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 1,
+   "variants": [
+    "Certified Canine Groomer (CCG)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Master Groomer (CMG)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 1,
+   "variants": [
+    "Certified Master Groomer (CMG)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Master Wedding and Event Planner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Certified Master Wedding and Event Planner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Professional Pet Groomer (CPPG)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 1,
+   "variants": [
+    "Certified Professional Pet Groomer (CPPG)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Special Event Professional (CSEP)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 1,
+   "variants": [
+    "Certified Special Event Professional (CSEP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Wedding & Event Planning (CWEP) program",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...)",
+   "n": 1,
+   "variants": [
+    "Certified Wedding & Event Planning (CWEP) program"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Certified Wedding Planners Society",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Certified Wedding Planners Society"
+   ],
+   "domains": []
+  },
+  {
+   "name": "chambers of commerce",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "chambers of commerce"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Chef Schonberg’s Sweets",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Chef Schonberg’s Sweets"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Chicago State University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Chicago State University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "City College of New York",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "City College of New York"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Cochrane and Area Humane Society",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Cochrane and Area Humane Society"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Cochrane and Area Humane Society's PACE Program",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Cochrane and Area Humane Society's PACE Program"
+   ],
+   "domains": []
+  },
+  {
+   "name": "College of International Education",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "College of International Education"
+   ],
+   "domains": []
+  },
+  {
+   "name": "College Raptor",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "College Raptor"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Collin College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Collin College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Comprehensive/Professional Programs (In-Person)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Comprehensive/Professional Programs (In-Person)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Corporate training or bather-to-stylist paths",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Corporate training or bather-to-stylist paths"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CourseHorse",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said platform: platform list (course marketplace)",
+   "n": 1,
+   "variants": [
+    "CourseHorse"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CPL Event Decorating School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "CPL Event Decorating School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CPPS-Certified Professional Pet Sitter®",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "CPPS-Certified Professional Pet Sitter®"
+   ],
+   "domains": []
+  },
+  {
+   "name": "CPS-DW",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "CPS-DW"
+   ],
+   "domains": []
+  },
+  {
+   "name": "cvlinens.com",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "cvlinens.com"
+   ],
+   "domains": [
+    "cvlinens.com"
+   ]
+  },
+  {
+   "name": "CynoDo Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "CynoDo Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dallas College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Dallas College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Davron",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Davron"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Decor Arabia",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Decor Arabia"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Decorating Den",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Decorating Den"
+   ],
+   "domains": []
+  },
+  {
+   "name": "DesignFiles",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "DesignFiles"
+   ],
+   "domains": []
+  },
+  {
+   "name": "DIGMODA Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "DIGMODA Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "DIYK9",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED",
+   "n": 1,
+   "variants": [
+    "DIYK9"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dog Grooming Academy of Indianapolis",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Dog Grooming Academy of Indianapolis"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dog Walking Business Owner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Dog Walking Business Owner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Doggone Rite Dog Grooming Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Doggone Rite Dog Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Dreamy Dogs Grooming Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Dreamy Dogs Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eastern Kentucky University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Eastern Kentucky University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eastside Academy of Dog Grooming",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Eastside Academy of Dog Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Elevify's Pet Bather & Groomer Course",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Elevify's Pet Bather & Groomer Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eloise Market and Cakery",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Eloise Market and Cakery"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Emory University’s Event Planning & Management Certificate",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "Emory University’s Event Planning & Management Certificate"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Etsy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Etsy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Event Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Decor Technology on Udemy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Event Decor Technology on Udemy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Decorating Academy (EDA)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Event Decorating Academy (EDA)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Industry Council",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: known certifying body",
+   "n": 1,
+   "variants": [
+    "Event Industry Council"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Event Leadership Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Event Leadership Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eventbrite and Event Planning Certification",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Eventbrite and Event Planning Certification"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eventective",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Eventective"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Eventive",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Eventive"
+   ],
+   "domains": []
+  },
+  {
+   "name": "FGCU / FIU (Florida)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "FGCU / FIU (Florida)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Florida Dog Groomer School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Florida Dog Groomer School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Florida International University (FIU)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Florida International University (FIU)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Free YouTube Tutorials",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Free YouTube Tutorials"
+   ],
+   "domains": []
+  },
+  {
+   "name": "FutureLearn",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said platform: platform list (course marketplace)",
+   "n": 1,
+   "variants": [
+    "FutureLearn"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Garver Grooming",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Garver Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "GateWay Community College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "GateWay Community College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "George Mason University’s Online Event Management and Design",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "George Mason University’s Online Event Management and Design"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Glassdoor",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Glassdoor"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Groomadog Course Online",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Groomadog Course Online"
+   ],
+   "domains": []
+  },
+  {
+   "name": "GroomHaus",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "GroomHaus"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Grooming School of Indiana",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Grooming School of Indiana"
+   ],
+   "domains": []
+  },
+  {
+   "name": "GW School of Business",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "GW School of Business"
+   ],
+   "domains": []
+  },
+  {
+   "name": "GWSB International",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "GWSB International"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Hivelife",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Hivelife"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Hound Therapy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Hound Therapy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Husson University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Husson University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "HVCC (Herkimer County Community College)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "HVCC (Herkimer County Community College)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "IACP CDT",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "IACP CDT"
+   ],
+   "domains": []
+  },
+  {
+   "name": "imexevents.com",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "imexevents.com"
+   ],
+   "domains": [
+    "imexevents.com"
+   ]
+  },
+  {
+   "name": "In The Details Weddings",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "In The Details Weddings"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Institute of Event Management",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Institute of Event Management"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Institute of Modern Dog Trainers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Institute of Modern Dog Trainers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Institute of Wedding and Event Planning",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Institute of Wedding and Event Planning"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "International Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "International Special Events Society (ISES)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "International Special Events Society (ISES)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Jean Donaldson's Academy for Dog Trainers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Jean Donaldson's Academy for Dog Trainers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Jess Rona",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Jess Rona"
+   ],
+   "domains": []
+  },
+  {
+   "name": "JKL Grooming Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "JKL Grooming Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Lab productora",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Lab productora"
+   ],
+   "domains": []
+  },
+  {
+   "name": "learn2groomdogs.com",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "learn2groomdogs.com"
+   ],
+   "domains": [
+    "learn2groomdogs.com"
+   ]
+  },
+  {
+   "name": "Les Roches",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Les Roches"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Little Design Corner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Little Design Corner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Local Community Colleges",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Local Community Colleges"
+   ],
+   "domains": []
+  },
+  {
+   "name": "local community colleges or vocational schools",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "local community colleges or vocational schools"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Louisiana Culinary Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Louisiana Culinary Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "LSIB",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED",
+   "n": 1,
+   "variants": [
+    "LSIB"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Madison College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Madison College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Maker’s Row",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Maker’s Row"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Management & Strategy Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Management & Strategy Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MCI Certified",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "MCI Certified"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Merryfield Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Merryfield Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Montgomery College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Montgomery College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "MUNBYN",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "MUNBYN"
+   ],
+   "domains": []
+  },
+  {
+   "name": "National Cat Groomers Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "National Cat Groomers Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "National Dog Groomers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "National Dog Groomers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "National Dog Groomers Association",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "National Dog Groomers Association"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Nevada State University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Nevada State University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "New York (Wagner) Wedding and Event Planning",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "New York (Wagner) Wedding and Event Planning"
+   ],
+   "domains": []
+  },
+  {
+   "name": "New York Academy of Pet Styling",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "New York Academy of Pet Styling"
+   ],
+   "domains": []
+  },
+  {
+   "name": "North Carolina Central University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "North Carolina Central University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "North Carolina State University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "North Carolina State University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "North Seattle College Corporate Event Planner (CEP)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "North Seattle College Corporate Event Planner (CEP)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "OCSO Careers",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "OCSO Careers"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Olesia Cake Studio",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Olesia Cake Studio"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Online Courses",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Online Courses"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Online programs",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Online programs"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Online/Self-Study Programs",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Online/Self-Study Programs"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Palm Beach State College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Palm Beach State College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Paragon online certificate courses",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Paragon online certificate courses"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Perfect Venue",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Perfect Venue"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Care Ins",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Pet Care Ins"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Industry Federation (PIF)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: known certifying body",
+   "n": 1,
+   "variants": [
+    "Pet Industry Federation (PIF)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Photographer",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Pet Photographer"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Professional Guild (PPG) / Pet Professional Accreditation Board (PPAB)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "Pet Professional Guild (PPG) / Pet Professional Accreditation Board (PPAB)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pet Sitter/Boarder",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Pet Sitter/Boarder"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Petco",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Petco"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Petco Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Petco Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Peticademy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Peticademy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pets Playground Pet Grooming School",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Pets Playground Pet Grooming School"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PetSmart",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "PetSmart"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PetSmart Groomer Class",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "PetSmart Groomer Class"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pettable Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Pettable Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PetTech",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "PetTech"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Pippy's Puppy Parlor LLC",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Pippy's Puppy Parlor LLC"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Poshe Event Course",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Poshe Event Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Poshevents Online",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Poshevents Online"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Private Grooming Academies",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Private Grooming Academies"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Professional grooming school",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Professional grooming school"
+   ],
+   "domains": []
+  },
+  {
+   "name": "PSI CPPS",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "PSI CPPS"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Purdue",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Purdue"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Purdue’s Canine Care Certified",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Purdue’s Canine Care Certified"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Red Cross",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Red Cross"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Revelation Pets",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Revelation Pets"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Rover",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Rover"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Royal Dog Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Royal Dog Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Santa Monica College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Santa Monica College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Senior Dog Vets",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Senior Dog Vets"
+   ],
+   "domains": []
+  },
+  {
+   "name": "SHMS",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED",
+   "n": 1,
+   "variants": [
+    "SHMS"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Shopify",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Shopify"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Short-Term/Basic Certification Programs (In-Person)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Short-Term/Basic Certification Programs (In-Person)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Stacey’s Canine Design",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Stacey’s Canine Design"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Stautzenberger College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Stautzenberger College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Super Styling Sessions",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Super Styling Sessions"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Team Dog",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Team Dog"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Tellington TTouch Canada",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Tellington TTouch Canada"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Tellington TTouch® Online Learning Platform",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Tellington TTouch® Online Learning Platform"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Tellington TTouch® Practitioner Training",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Tellington TTouch® Practitioner Training"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Temple University Event Leadership",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "Temple University Event Leadership"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Canine University",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "The Canine University"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The CWP Society - Sheree Amour Weddings & Event Planning",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern",
+   "n": 1,
+   "variants": [
+    "The CWP Society - Sheree Amour Weddings & Event Planning"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Event Management Course",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "The Event Management Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Event School London",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "The Event School London"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Pooch Parlor Groomer Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "The Pooch Parlor Groomer Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "The Wedding Planner School (US)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "The Wedding Planner School (US)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Therapy Dog Training Certification Course",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Therapy Dog Training Certification Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Thimble",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Thimble"
+   ],
+   "domains": []
+  },
+  {
+   "name": "TimetoPet",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "TimetoPet"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Tipsy Cake OKC",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Tipsy Cake OKC"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Trade school / hands-on grooming schools",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Trade school / hands-on grooming schools"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Triple Crown Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Triple Crown Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "UCLA Extension",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "UCLA Extension"
+   ],
+   "domains": []
+  },
+  {
+   "name": "UCLA Extension’s Event Planning and Management Specialization",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "UCLA Extension’s Event Planning and Management Specialization"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Udacity",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said platform: platform list (course marketplace)",
+   "n": 1,
+   "variants": [
+    "Udacity"
+   ],
+   "domains": []
+  },
+  {
+   "name": "UGA",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "UGA"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of Florida",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "University of Florida"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of Houston’s Master Event Design",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "University of Houston’s Master Event Design"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of New Orleans (UNO)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "University of New Orleans (UNO)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of North Carolina at Charlotte",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "University of North Carolina at Charlotte"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University of Texas at San Antonio's Certified Master Wedding and Event Planner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged)",
+   "n": 1,
+   "variants": [
+    "University of Texas at San Antonio's Certified Master Wedding and Event Planner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "University/College Hospitality Programs with Event Concentrations",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "University/College Hospitality Programs with Event Concentrations"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Urban Pawsibilities",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Urban Pawsibilities"
+   ],
+   "domains": []
+  },
+  {
+   "name": "US Career Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "US Career Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "US News",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "US News"
+   ],
+   "domains": []
+  },
+  {
+   "name": "veterinary behavior",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "veterinary behavior"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Veterinary Technician",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Veterinary Technician"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Virginia School of Pet Grooming",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Virginia School of Pet Grooming"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Virginia Schools",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Virginia Schools"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Vocational Schools/Community Colleges",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun",
+   "n": 1,
+   "variants": [
+    "Vocational Schools/Community Colleges"
+   ],
+   "domains": []
+  },
+  {
+   "name": "WA Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "WA Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wagbar",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "Wagbar"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wagner",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Wagner"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wake Tech",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Wake Tech"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wake Technical Community College",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: university / college",
+   "n": 1,
+   "variants": [
+    "Wake Technical Community College"
+   ],
+   "domains": []
+  },
+  {
+   "name": "webber.edu",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "webber.edu"
+   ],
+   "domains": [
+    "webber.edu"
+   ]
+  },
+  {
+   "name": "Wedding Planner Institute",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Wedding Planner Institute"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Wedding Planning Institute (WPI)",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Wedding Planning Institute (WPI)"
+   ],
+   "domains": []
+  },
+  {
+   "name": "WeddingMart",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "WeddingMart"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Weddings Beautiful Online",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "Weddings Beautiful Online"
+   ],
+   "domains": []
+  },
+  {
+   "name": "WeddingWire",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "WeddingWire"
+   ],
+   "domains": []
+  },
+  {
+   "name": "WedTech Academy - Lovegevity",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "WedTech Academy - Lovegevity"
+   ],
+   "domains": []
+  },
+  {
+   "name": "West Coast Hybrid Course",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "West Coast Hybrid Course"
+   ],
+   "domains": []
+  },
+  {
+   "name": "WooCommerce",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list",
+   "n": 1,
+   "variants": [
+    "WooCommerce"
+   ],
+   "domains": []
+  },
+  {
+   "name": "Xtra Dog Academy",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "n": 1,
+   "variants": [
+    "Xtra Dog Academy"
+   ],
+   "domains": []
+  },
+  {
+   "name": "YWED Global",
+   "type": "not_actionable",
+   "rule": "low volume (n<=2) - abstains; rule said competitor: default (no rule matched)",
+   "n": 1,
+   "variants": [
+    "YWED Global"
+   ],
+   "domains": []
+  }
+ ]
+}

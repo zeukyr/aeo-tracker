@@ -1,18 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LineChart, Line,
-  AreaChart, Area,
   XAxis, YAxis, Tooltip,
   ResponsiveContainer,
 } from "recharts";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
-
-// ─── constants ────────────────────────────────────────────────────────────────
-const LLM_ENGINES = ["chatgpt", "gemini", "perplexity"];
-const LLM_LABELS  = { chatgpt: "ChatGPT", gemini: "Gemini", perplexity: "Perplexity" };
-const LLM_COLORS  = { chatgpt: "#378add", gemini: "#ba7517", perplexity: "#1d9e75" };
-const QC_BLUE     = "#378add";
+import { ChartTooltip } from "../components/PromptMetricsPanel";
 
 // One colour per topic — 6 distinct, none clash with each other or LLM colours
 const TOPIC_COLORS = {
@@ -92,28 +87,6 @@ function SovBadge({ value }) {
   );
 }
 
-// ─── shared chart tooltip ─────────────────────────────────────────────────────
-function ChartTooltip({ active, payload, label }) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div style={{
-      background: "#fff",
-      border: "0.5px solid rgba(0,0,0,0.10)",
-      borderRadius: 8,
-      padding: "8px 12px",
-      fontSize: 13,
-      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-    }}>
-      <p style={{ color: "#6b6b6b", marginBottom: 6, fontSize: 12 }}>{label}</p>
-      {payload.map(p => (
-        <p key={p.name} style={{ color: p.color || p.stroke, fontWeight: 500, margin: "2px 0" }}>
-          {p.name}: {p.value}%
-        </p>
-      ))}
-    </div>
-  );
-}
-
 // ─── top-level topics-over-time chart ─────────────────────────────────────────
 function TopicsOverTimeChart({ chartData }) {
   if (!chartData) return null;
@@ -185,485 +158,31 @@ function TopicsOverTimeChart({ chartData }) {
   );
 }
 
-// ─── chart legend helper ───────────────────────────────────────────────────────
-function ChartLegend({ items }) {
+// ─── prompt row ───────────────────────────────────────────────────────────────
+// The inline expanded card is gone — every prompt now has its own question
+// page at /prompts/:promptId (metrics, matched page, citations, responses).
+function PromptRow({ prompt, onOpenPrompt }) {
   return (
-    <div style={{ display: "flex", gap: 14, marginBottom: 10, flexWrap: "wrap" }}>
-      {items.map(({ label, color, dashed }) => (
-        <span key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
-          <span style={{
-            width: dashed ? 14 : 8,
-            height: dashed ? 0 : 8,
-            borderRadius: dashed ? 0 : "50%",
-            background: dashed ? "none" : color,
-            borderTop: dashed ? `2px dashed ${color}` : "none",
-            flexShrink: 0,
-            opacity: dashed ? 0.5 : 1,
-          }} />
-          {label}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-// ─── visibility trend line chart (mention-type prompts) ───────────────────────
-function VisibilityChart({ data }) {
-  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
-  return (
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis
-          tickFormatter={v => `${v}%`}
-          tick={{ fontSize: 11, fill: "#888780" }}
-          axisLine={false} tickLine={false}
-          width={36} domain={[0, 100]}
-        />
-        <Tooltip content={<ChartTooltip />} />
-        <Line type="monotone" dataKey="mentionRate"  name="Mention rate"  stroke={QC_BLUE}   strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        <Line type="monotone" dataKey="citationRate" name="Citation rate" stroke="#1d9e75"  strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        <Line type="monotone" dataKey="visibility"   name="Visibility"    stroke={QC_BLUE}   strokeWidth={2.5} dot={false} />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-}
-
-// ─── sentiment area chart (sentiment-type prompts) ────────────────────────────
-function SentimentChart({ data }) {
-  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
-  return (
-    <ResponsiveContainer width="100%" height={200}>
-      <AreaChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-        <defs>
-          <linearGradient id="tGradPos" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#3b6d11" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#3b6d11" stopOpacity={0.02} />
-          </linearGradient>
-          <linearGradient id="tGradNeu" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#854f0b" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#854f0b" stopOpacity={0.02} />
-          </linearGradient>
-          <linearGradient id="tGradNeg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#a32d2d" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#a32d2d" stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} width={36} />
-        <Tooltip content={<ChartTooltip />} />
-        <Area type="monotone" dataKey="positive" name="Positive" stroke="#3b6d11" strokeWidth={2} fill="url(#tGradPos)" dot={false} />
-        <Area type="monotone" dataKey="neutral"  name="Neutral"  stroke="#854f0b" strokeWidth={2} fill="url(#tGradNeu)" dot={false} />
-        <Area type="monotone" dataKey="negative" name="Negative" stroke="#a32d2d" strokeWidth={2} fill="url(#tGradNeg)" dot={false} />
-      </AreaChart>
-    </ResponsiveContainer>
-  );
-}
-
-// ─── competitor ranking panel (right ⅓) ──────────────────────────────────────
-// Branching behaviour:
-//   • visibility != null  → ranked bar rows by mention-rate %
-//   • visibility == null  → plain name pills (sentiment prompts, no mention data)
-function CompetitorRanking({ competitors }) {
-  if (!competitors?.length) {
-    return <p className="text-xs text-gray-400 italic">No competitor data.</p>;
-  }
-
-  const hasVisibility = competitors.some(c => c.visibility != null);
-
-  if (!hasVisibility) {
-    // Plain pill list for sentiment prompts
-    return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {competitors.map(c => (
-          <span key={c.name} style={{
-            fontSize: 11, padding: "3px 10px", borderRadius: 99,
-            background: c.isQC ? "#dbeafe" : "#f0efec",
-            color:      c.isQC ? QC_BLUE   : "#4b5563",
-            fontWeight: c.isQC ? 600 : 400,
-          }}>
-            {c.name}{c.isQC ? " (YOU)" : ""}
+    <tr
+      className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
+      onClick={() => onOpenPrompt(prompt.id)}
+    >
+      <td className="px-4 py-2.5 pl-10">
+        <div className="flex items-center gap-2">
+          <span className="text-gray-400 text-xs">→</span>
+          <span className="text-sm text-gray-700 truncate max-w-sm" title={prompt.text}>
+            "{prompt.text}"
           </span>
-        ))}
-      </div>
-    );
-  }
-
-  // Ranked bars by visibility (mention rate %)
-  const maxVis = Math.max(...competitors.map(c => c.visibility || 0), 1);
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      {competitors.slice(0, 8).map((comp, i) => {
-        const barPct   = Math.round(((comp.visibility || 0) / maxVis) * 100);
-        const barColor = comp.isQC ? QC_BLUE : "#7c3aed";
-        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * ((comp.visibility || 0) / maxVis));
-        return (
-          <div key={comp.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ width: 18, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
-              {i + 1}
-            </span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                <span style={{ fontSize: 12, color: comp.isQC ? QC_BLUE : "#111", fontWeight: comp.isQC ? 600 : i === 0 ? 500 : 400 }}>
-                  {comp.name}
-                  {comp.isQC && (
-                    <span className="badge badge--you" style={{ marginLeft: 6, fontSize: 10 }}>YOU</span>
-                  )}
-                </span>
-                <span style={{ fontSize: 11, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>
-                  {comp.visibility}%
-                </span>
-              </div>
-              <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
-                <div style={{
-                  height: "100%", width: `${barPct}%`,
-                  background: barColor, opacity,
-                  borderRadius: 99, transition: "width 0.4s ease",
-                }} />
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ─── LLM stat node badge ──────────────────────────────────────────────────────
-function StatNode({ label, value, color }) {
-  if (value == null) return null;
-  return (
-    <div style={{
-      display: "flex", flexDirection: "column", alignItems: "center",
-      background: "#f4f4f2", borderRadius: 8,
-      padding: "4px 10px", minWidth: 52,
-    }}>
-      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>
-        {label}
-      </span>
-      <span style={{ fontSize: 13, fontWeight: 600, color: color || "#374151", lineHeight: 1.3 }}>
-        {value}%
-      </span>
-    </div>
-  );
-}
-
-// ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
-function ResponseDrawer({ drawer, onClose }) {
-  const { open, engine, promptText, promptId } = drawer;
-  const { days } = useFilter();
-  const [history, setHistory] = useState([]);
-  const [index, setIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  // Fetch the full response history for this (prompt, engine) pair whenever the drawer opens
-  useEffect(() => {
-    if (!open || !promptId || !engine) return;
-    setLoading(true);
-    setIndex(0);
-    const params = new URLSearchParams({ engine });
-    if (days) params.append("days", days);
-
-    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/responses?${params}`)
-      .then(r => r.json())
-      .then(rows => {
-        setHistory(Array.isArray(rows) ? rows : []);
-        setLoading(false);
-      })
-      .catch(() => {
-        setHistory([]);
-        setLoading(false);
-      });
-  }, [open, promptId, engine, days]);
-
-  const total = history.length;
-  const goPrevious = () => setIndex(i => Math.min(i + 1, total - 1));
-  const goNext = () => setIndex(i => Math.max(i - 1, 0));
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = e => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setIndex(i => Math.min(i + 1, total - 1));
-      if (e.key === "ArrowRight") setIndex(i => Math.max(i - 1, 0));
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose, total]);
-
-  if (!open) return null;
-  const color = LLM_COLORS[engine] || "#888";
-  const current = history[index];
-
-  return (
-    <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
-      <div style={{
-        position: "fixed", top: 0, right: 0, bottom: 0,
-        width: "min(520px, 90vw)",
-        background: "#fff",
-        borderLeft: "1px solid #e5e7eb",
-        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
-        zIndex: 50,
-        display: "flex", flexDirection: "column",
-        overflow: "hidden",
-      }}>
-        {/* header */}
-        <div style={{
-          padding: "16px 20px",
-          borderBottom: "1px solid #e5e7eb",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexShrink: 0,
-        }}>
-          <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
-              {LLM_LABELS[engine] || engine}
-            </p>
-            <p style={{ fontSize: 11, color: "#9b9b9b" }}>
-              {loading
-                ? "Loading…"
-                : total > 0
-                  ? `Response ${index + 1} of ${total} · ${current?.date ?? ""}`
-                  : "No responses"}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* prompt context */}
-        {promptText && (
-          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
-            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{promptText}"</p>
-          </div>
-        )}
-
-        {/* prev / next navigation */}
-        {total > 1 && (
-          <div style={{
-            padding: "8px 20px",
-            borderBottom: "1px solid #f0efec",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            flexShrink: 0,
-          }}>
-            <button
-              onClick={goPrevious}
-              disabled={index >= total - 1}
-              style={{
-                background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
-                fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
-                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
-              }}
-              aria-label="Previous response"
-            >
-              ← Previous
-            </button>
-            <button
-              onClick={goNext}
-              disabled={index <= 0}
-              style={{
-                background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
-                fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
-                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
-              }}
-              aria-label="Next response"
-            >
-              Next →
-            </button>
-          </div>
-        )}
-
-        {/* response body */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
-          {loading
-            ? <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
-            : current?.response
-              ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{current.response}</p>
-              : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
-          }
-        </div>
-      </div>
-    </>
-  );
-}
-
-// ─── expanded prompt detail panel ─────────────────────────────────────────────
-function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
-  if (loading) {
-    return (
-      <tr>
-        <td colSpan={3} className="px-4 pb-4 pt-1">
-          <div className="ml-8 bg-gray-50 rounded-lg p-4">
-            <p className="text-xs text-gray-400 italic">Loading…</p>
-          </div>
-        </td>
-      </tr>
-    );
-  }
-  if (error) {
-    return (
-      <tr>
-        <td colSpan={3} className="px-4 pb-4 pt-1">
-          <div className="ml-8 bg-gray-50 rounded-lg p-4">
-            <p className="text-xs text-red-500">Failed to load detail ({error}). Restart the backend server and reload.</p>
-          </div>
-        </td>
-      </tr>
-    );
-  }
-  if (!detail) return null;
-
-  const { kind, timeseries, competitors, llms } = detail;
-
-  return (
-    <tr>
-      <td colSpan={3} className="px-4 pb-4 pt-1">
-        <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
-
-          {/* prompt text */}
-          <p className="italic text-gray-600 text-sm">"{prompt.text}"</p>
-
-          {/* chart (⅔) + competitors (⅓) */}
-          <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-
-            {/* chart */}
-            <div style={{ flex: 2, minWidth: 0 }}>
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">
-                {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
-              </p>
-              {kind === "mention" ? (
-                <>
-                  <ChartLegend items={[
-                    { label: "Visibility",    color: QC_BLUE },
-                    { label: "Mention rate",  color: QC_BLUE,  dashed: true },
-                    { label: "Citation rate", color: "#1d9e75", dashed: true },
-                  ]} />
-                  <VisibilityChart data={timeseries} />
-                </>
-              ) : (
-                <>
-                  <ChartLegend items={[
-                    { label: "Positive", color: "#3b6d11" },
-                    { label: "Neutral",  color: "#854f0b" },
-                    { label: "Negative", color: "#a32d2d" },
-                  ]} />
-                  <SentimentChart data={timeseries} />
-                </>
-              )}
-            </div>
-
-            {/* competitor panel */}
-            <div style={{ flex: 1, minWidth: 140 }}>
-              <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
-              <CompetitorRanking competitors={competitors} />
-            </div>
-          </div>
-
-          {/* per-LLM breakdown */}
-          <div>
-            <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
-            <div className="space-y-2">
-              {LLM_ENGINES.map(engine => {
-                const llm   = llms?.find(l => l.engine === engine);
-                const color = LLM_COLORS[engine];
-                return (
-                  <div key={engine} style={{
-                    display: "flex", alignItems: "center", gap: 12,
-                    background: "#fff", borderRadius: 8, padding: "8px 12px",
-                    border: "1px solid #f0efec",
-                  }}>
-                    {/* engine label */}
-                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
-                      {LLM_LABELS[engine]}
-                    </span>
-
-                    {/* stat node badges */}
-                    {llm ? (
-                      <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-                        {llm.kind === "mention" ? (
-                          <>
-                            <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
-                            <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
-                            <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
-                            <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
-                          </>
-                        ) : (
-                          <>
-                            <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
-                            <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
-                            <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
-                          </>
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-xs text-gray-400 flex-1">No data</span>
-                    )}
-
-                    {/* arrow → response drawer */}
-                    <button
-                      onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
-                      style={{
-                        background: "none", border: "none", cursor: "pointer",
-                        color: llm ? color : "#d1d5db",
-                        fontSize: 13, padding: "2px 4px", flexShrink: 0,
-                      }}
-                      title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
-                      aria-label={`Open ${LLM_LABELS[engine]} response`}
-                    >
-                      ▶
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       </td>
+      <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
+      <td className="px-3 py-2.5"><SovBadge value={prompt.sov} /></td>
     </tr>
   );
 }
 
-// ─── prompt row ───────────────────────────────────────────────────────────────
-function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailError, onOpenDrawer }) {
-  return (
-    <>
-      <tr
-        id={`prompt-${prompt.id}`}
-        className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
-        onClick={onToggle}
-      >
-        <td className="px-4 py-2.5 pl-10">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">{expanded ? "▼" : "▶"}</span>
-            <span className="text-sm text-gray-700 truncate max-w-sm" title={prompt.text}>
-              "{prompt.text}"
-            </span>
-          </div>
-        </td>
-        <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
-        <td className="px-3 py-2.5"><SovBadge value={prompt.sov} /></td>
-      </tr>
-
-      {expanded && (
-        <PromptDetail
-          prompt={prompt}
-          detail={detail}
-          loading={detailLoading}
-          error={detailError}
-          onOpenDrawer={onOpenDrawer}
-        />
-      )}
-    </>
-  );
-}
-
 // ─── topic header row ─────────────────────────────────────────────────────────
-function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, detailErrors, onOpenDrawer }) {
+function TopicRow({ topic, expanded, onToggle, onOpenPrompt }) {
   return (
     <>
       <tr
@@ -684,16 +203,7 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
       </tr>
 
       {expanded && topic.prompts.map(prompt => (
-        <PromptRow
-          key={prompt.id}
-          prompt={prompt}
-          expanded={expandedPrompts.has(prompt.id)}
-          onToggle={e => { e.stopPropagation(); onTogglePrompt(prompt.id, prompt.kind); }}
-          detail={promptDetails[prompt.id]}
-          detailLoading={loadingDetails.has(prompt.id)}
-          detailError={detailErrors[prompt.id]}
-          onOpenDrawer={onOpenDrawer}
-        />
+        <PromptRow key={prompt.id} prompt={prompt} onOpenPrompt={onOpenPrompt} />
       ))}
     </>
   );
@@ -829,17 +339,13 @@ function PromptSearch({ data, onSelect }) {
 
 // ─── main Prompts component ───────────────────────────────────────────────────
 export default function Prompts() {
+  const navigate = useNavigate();
   const { days, school } = useFilter();
-  const [data,           setData]           = useState([]);
-  const [loading,        setLoading]        = useState(true);
-  const [error,          setError]          = useState(null);
-  const [chartData,      setChartData]      = useState(null);
-  const [expandedTopics,  setExpandedTopics]  = useState(new Set());
-  const [expandedPrompts, setExpandedPrompts] = useState(new Set());
-  const [promptDetails,   setPromptDetails]   = useState({});
-  const [loadingDetails,  setLoadingDetails]  = useState(new Set());
-  const [detailErrors,    setDetailErrors]    = useState({});
-  const [drawer, setDrawer] = useState({ open: false, engine: null, promptText: null, promptId: null });
+  const [data,      setData]      = useState([]);
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [expandedTopics, setExpandedTopics] = useState(new Set());
   const [filters, setFilters] = useState({
     engine: "All",
     question_type: "All",
@@ -850,6 +356,8 @@ export default function Prompts() {
   const [sortBranded,   setSortBranded]   = useState({ field: null, dir: "desc" });
 
   const setFilter = (key, value) => setFilters(f => ({ ...f, [key]: value }));
+
+  const openPrompt = (promptId) => navigate(`/prompts/${promptId}`);
 
   function toggleSortUnbranded(field) {
     setSortUnbranded(prev => ({ field, dir: prev.field === field && prev.dir === "desc" ? "asc" : "desc" }));
@@ -872,9 +380,6 @@ export default function Prompts() {
     setLoading(true);
     setError(null);
     setExpandedTopics(new Set());
-    setExpandedPrompts(new Set());
-    setPromptDetails({});
-    setDetailErrors({});
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
@@ -908,59 +413,8 @@ export default function Prompts() {
     });
   }
 
-  function togglePrompt(id) {
-    setExpandedPrompts(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-        if (!promptDetails[id] && !loadingDetails.has(id)) {
-          fetchPromptDetail(id);
-        }
-      }
-      return next;
-    });
-  }
-
-  function fetchPromptDetail(id) {
-    setLoadingDetails(prev => new Set([...prev, id]));
-    const params = new URLSearchParams();
-    if (days) params.append("days", days);
-
-    fetch(`${API_BASE_URL}/api/topic-prompt/${id}?${params}`)
-      .then(r => {
-        if (!r.ok) throw new Error(`Server error ${r.status}`);
-        return r.json();
-      })
-      .then(detail => {
-        setPromptDetails(prev => ({ ...prev, [id]: detail }));
-        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
-      })
-      .catch(err => {
-        setDetailErrors(prev => ({ ...prev, [id]: err.message }));
-        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
-      });
-  }
-
-  function openDrawer(engine, promptText, promptId) {
-    setDrawer({ open: true, engine, promptText, promptId });
-  }
-
-  function closeDrawer() {
-    setDrawer(d => ({ ...d, open: false }));
-  }
-
-  function selectSearchResult(result) {
-    setExpandedTopics(prev => { const next = new Set(prev); next.add(result.topicName); return next; });
-    setExpandedPrompts(prev => { const next = new Set(prev); next.add(result.id); return next; });
-    if (!promptDetails[result.id] && !loadingDetails.has(result.id)) {
-      fetchPromptDetail(result.id);
-    }
-    setTimeout(() => {
-      document.getElementById(`prompt-${result.id}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 120);
-  }
+  // Search results jump straight to the prompt's question page
+  const selectSearchResult = (result) => openPrompt(result.id);
 
   return (
     <>
@@ -1021,12 +475,7 @@ export default function Prompts() {
                       topic={topic}
                       expanded={expandedTopics.has(topic.name)}
                       onToggle={() => toggleTopic(topic.name)}
-                      expandedPrompts={expandedPrompts}
-                      onTogglePrompt={togglePrompt}
-                      promptDetails={promptDetails}
-                      loadingDetails={loadingDetails}
-                      detailErrors={detailErrors}
-                      onOpenDrawer={openDrawer}
+                      onOpenPrompt={openPrompt}
                     />
                   ))}
                 </tbody>
@@ -1062,12 +511,7 @@ export default function Prompts() {
                       topic={topic}
                       expanded={expandedTopics.has(topic.name)}
                       onToggle={() => toggleTopic(topic.name)}
-                      expandedPrompts={expandedPrompts}
-                      onTogglePrompt={togglePrompt}
-                      promptDetails={promptDetails}
-                      loadingDetails={loadingDetails}
-                      detailErrors={detailErrors}
-                      onOpenDrawer={openDrawer}
+                      onOpenPrompt={openPrompt}
                     />
                   ))}
                 </tbody>
@@ -1077,8 +521,6 @@ export default function Prompts() {
 
         </div>
       )}
-
-      <ResponseDrawer drawer={drawer} onClose={closeDrawer} />
     </>
   );
 }

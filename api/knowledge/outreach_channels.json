@@ -1,0 +1,85 @@
+{
+  "_comment": "Curated outreach-channel registry (question-router plan §5.7). Static knowledge artifact, refreshed ~monthly like geo_playbook.md / qc_sitemaps.json. feasibility: open (self-serve channel exists) | gated (application/approval required) | closed (no direct channel - earn the slot indirectly).",
+  "domains": {
+    "reddit.com": {
+      "channel": "participate",
+      "feasibility": "open",
+      "mechanism": "Post authentic expert answers / host an AMA as a named QC account."
+    },
+    "quora.com": {
+      "channel": "participate",
+      "feasibility": "open",
+      "mechanism": "Answer relevant questions from a verified QC expert profile."
+    },
+    "facebook.com": {
+      "channel": "participate",
+      "feasibility": "open",
+      "mechanism": "Participate in relevant groups as a named QC presence; no anonymous posts."
+    },
+    "coursera.org": {
+      "channel": "partner",
+      "feasibility": "gated",
+      "mechanism": "Apply to Coursera's partner/content program (approval required)."
+    },
+    "udemy.com": {
+      "channel": "publish",
+      "feasibility": "open",
+      "mechanism": "Publish QC-branded introductory courses on the platform."
+    },
+    "classcentral.com": {
+      "channel": "submit",
+      "feasibility": "open",
+      "mechanism": "Submit QC courses to the Class Central catalog."
+    },
+    "coursereport.com": {
+      "channel": "claim",
+      "feasibility": "open",
+      "mechanism": "Claim/create the QC school profile; solicit alumni reviews."
+    },
+    "careerkarma.com": {
+      "channel": "claim",
+      "feasibility": "gated",
+      "mechanism": "Request a school listing/partnership (editorial approval required)."
+    },
+    "switchup.org": {
+      "channel": "claim",
+      "feasibility": "open",
+      "mechanism": "Claim the QC school listing; solicit verified reviews."
+    },
+    "g2.com": {
+      "channel": "claim",
+      "feasibility": "open",
+      "mechanism": "Claim/create the QC vendor profile; solicit reviews."
+    },
+    "capterra.com": {
+      "channel": "claim",
+      "feasibility": "open",
+      "mechanism": "Claim/create the QC vendor profile; solicit reviews."
+    },
+    "trustpilot.com": {
+      "channel": "claim",
+      "feasibility": "open",
+      "mechanism": "Claim the QC business profile; invite reviews."
+    },
+    "wikipedia.org": {
+      "channel": "align",
+      "feasibility": "closed",
+      "mechanism": "No direct edits (COI). Earn a citation by publishing a source editors can reference."
+    },
+    "wikidata.org": {
+      "channel": "align",
+      "feasibility": "closed",
+      "mechanism": "No promotional edits. Ensure QC's structured facts exist in citable primary sources."
+    },
+    "britannica.com": {
+      "channel": "none",
+      "feasibility": "closed",
+      "mechanism": "Not reachable. Benchmark the authority; align QC content."
+    }
+  },
+  "gov_tld": {
+    "channel": "none",
+    "feasibility": "closed",
+    "mechanism": "Not reachable. Benchmark the authority; align QC content."
+  }
+}

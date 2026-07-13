@@ -1,0 +1,35 @@
+{
+  "_comment": "Win-reason taxonomy (Phase 7, item 0). Why competitors beat QC head-to-head, normalized from free-text win_reasons. Matched in order, first hit wins.",
+  "types": [
+    {
+      "id": "mention_position",
+      "label": "Mentioned first / earlier in the answer",
+      "patterns": ["first mention", "first school", "first organization", "mentioned first"]
+    },
+    {
+      "id": "reviews_ratings",
+      "label": "Stronger ratings / more reviews",
+      "patterns": ["rating", "review"]
+    },
+    {
+      "id": "credential_accreditation",
+      "label": "Accredited / industry-credentialed",
+      "patterns": ["accredit", "capdt", "iacp", "certified", "certificate program", "recognized in", "professional standards", "behavior consultant"]
+    },
+    {
+      "id": "curriculum_depth",
+      "label": "Deeper / clearer curriculum",
+      "patterns": ["curriculum", "comprehensive", "covers", "requirements", "structure", "topics"]
+    },
+    {
+      "id": "flexibility",
+      "label": "Flexible format",
+      "patterns": ["flexib"]
+    },
+    {
+      "id": "reputation",
+      "label": "Established reputation / brand familiarity",
+      "patterns": ["reputation", "well-known", "established", "credible", "platform", "real-world"]
+    }
+  ]
+}
