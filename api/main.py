@@ -26,7 +26,7 @@ from api.queries import (
     get_health_summary,
 )
 
-from api.queries.recommendations_synthesis import (
+from api.recommendations import (
     generate_recommendations,
     save_recommendations,
     get_saved_recommendations,
@@ -34,8 +34,11 @@ from api.queries.recommendations_synthesis import (
     get_triage,
     update_recommendation_status,
     get_generation_status,
+)
+from api.queries.recommendations_synthesis import (
     get_question_recommendation_status,
     generate_question_recommendation,
+    get_question_recommendations,
 )
 
 app = FastAPI()
@@ -186,6 +189,11 @@ def patch_recommendation_status(rec_id: str, status: str = Body(...), implemente
 @app.get("/api/questions/{question_id}/recommendation-status")
 def question_recommendation_status(question_id: str):
     return get_question_recommendation_status(question_id)
+
+@app.get("/api/questions/{question_id}/recommendations")
+def question_recommendations(question_id: str):
+    """The question's live action plan: every non-superseded rec covering it."""
+    return get_question_recommendations(question_id)
 
 @app.post("/api/questions/{question_id}/recommendation")
 def question_recommendation(question_id: str, days: int = None):

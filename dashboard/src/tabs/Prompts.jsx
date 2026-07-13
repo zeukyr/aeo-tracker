@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LineChart, Line,
-  AreaChart, Area,
   XAxis, YAxis, Tooltip,
   ResponsiveContainer,
 } from "recharts";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
-
-// ─── constants ────────────────────────────────────────────────────────────────
-const LLM_ENGINES = ["chatgpt", "gemini", "perplexity"];
-const LLM_LABELS  = { chatgpt: "ChatGPT", gemini: "Gemini", perplexity: "Perplexity" };
-const LLM_COLORS  = { chatgpt: "#378add", gemini: "#ba7517", perplexity: "#1d9e75" };
-const QC_BLUE     = "#378add";
+import { ChartTooltip } from "../components/PromptMetricsPanel";
 
 // One colour per topic — 6 distinct, none clash with each other or LLM colours
 const TOPIC_COLORS = {
@@ -92,28 +87,6 @@ function SovBadge({ value }) {
   );
 }
 
-// ─── shared chart tooltip ─────────────────────────────────────────────────────
-function ChartTooltip({ active, payload, label }) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div style={{
-      background: "#fff",
-      border: "0.5px solid rgba(0,0,0,0.10)",
-      borderRadius: 8,
-      padding: "8px 12px",
-      fontSize: 13,
-      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-    }}>
-      <p style={{ color: "#6b6b6b", marginBottom: 6, fontSize: 12 }}>{label}</p>
-      {payload.map(p => (
-        <p key={p.name} style={{ color: p.color || p.stroke, fontWeight: 500, margin: "2px 0" }}>
-          {p.name}: {p.value}%
-        </p>
-      ))}
-    </div>
-  );
-}
-
 // ─── top-level topics-over-time chart ─────────────────────────────────────────
 function TopicsOverTimeChart({ chartData }) {
   if (!chartData) return null;
@@ -179,684 +152,31 @@ function TopicsOverTimeChart({ chartData }) {
   );
 }
 
-// ─── chart legend helper ───────────────────────────────────────────────────────
-function ChartLegend({ items }) {
+// ─── prompt row ───────────────────────────────────────────────────────────────
+// The inline expanded card is gone — every prompt now has its own question
+// page at /prompts/:promptId (metrics, matched page, citations, responses).
+function PromptRow({ prompt, onOpenPrompt }) {
   return (
-    <div style={{ display: "flex", gap: 14, marginBottom: 10, flexWrap: "wrap" }}>
-      {items.map(({ label, color, dashed }) => (
-        <span key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
-          <span style={{
-            width: dashed ? 14 : 8,
-            height: dashed ? 0 : 8,
-            borderRadius: dashed ? 0 : "50%",
-            background: dashed ? "none" : color,
-            borderTop: dashed ? `2px dashed ${color}` : "none",
-            flexShrink: 0,
-            opacity: dashed ? 0.5 : 1,
-          }} />
-          {label}
-        </span>
-      ))}
-    </div>
-  );
-}
-
-// ─── visibility trend line chart (mention-type prompts) ───────────────────────
-function VisibilityChart({ data }) {
-  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
-  return (
-    <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis
-          tickFormatter={v => `${v}%`}
-          tick={{ fontSize: 11, fill: "#888780" }}
-          axisLine={false} tickLine={false}
-          width={36} domain={[0, 100]}
-        />
-        <Tooltip content={<ChartTooltip />} />
-        <Line type="monotone" dataKey="mentionRate"  name="Mention rate"  stroke={QC_BLUE}   strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        <Line type="monotone" dataKey="citationRate" name="Citation rate" stroke="#1d9e75"  strokeWidth={1} strokeOpacity={0.35} dot={false} />
-        <Line type="monotone" dataKey="visibility"   name="Visibility"    stroke={QC_BLUE}   strokeWidth={2.5} dot={false} />
-      </LineChart>
-    </ResponsiveContainer>
-  );
-}
-
-// ─── sentiment area chart (sentiment-type prompts) ────────────────────────────
-function SentimentChart({ data }) {
-  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
-  return (
-    <ResponsiveContainer width="100%" height={200}>
-      <AreaChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
-        <defs>
-          <linearGradient id="tGradPos" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#3b6d11" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#3b6d11" stopOpacity={0.02} />
-          </linearGradient>
-          <linearGradient id="tGradNeu" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#854f0b" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#854f0b" stopOpacity={0.02} />
-          </linearGradient>
-          <linearGradient id="tGradNeg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%"  stopColor="#a32d2d" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#a32d2d" stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
-        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
-        <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} width={36} />
-        <Tooltip content={<ChartTooltip />} />
-        <Area type="monotone" dataKey="positive" name="Positive" stroke="#3b6d11" strokeWidth={2} fill="url(#tGradPos)" dot={false} />
-        <Area type="monotone" dataKey="neutral"  name="Neutral"  stroke="#854f0b" strokeWidth={2} fill="url(#tGradNeu)" dot={false} />
-        <Area type="monotone" dataKey="negative" name="Negative" stroke="#a32d2d" strokeWidth={2} fill="url(#tGradNeg)" dot={false} />
-      </AreaChart>
-    </ResponsiveContainer>
-  );
-}
-
-// ─── competitor ranking panel (right ⅓) ──────────────────────────────────────
-// Branching behaviour:
-//   • visibility != null  → ranked bar rows by mention-rate %
-//   • visibility == null  → plain name pills (sentiment prompts, no mention data)
-function CompetitorRanking({ competitors }) {
-  if (!competitors?.length) {
-    return <p className="text-xs text-gray-400 italic">No competitor data.</p>;
-  }
-
-  const hasVisibility = competitors.some(c => c.visibility != null);
-
-  if (!hasVisibility) {
-    // Plain pill list for sentiment prompts
-    return (
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        {competitors.map(c => (
-          <span key={c.name} style={{
-            fontSize: 11, padding: "3px 10px", borderRadius: 99,
-            background: c.isQC ? "#dbeafe" : "#f0efec",
-            color:      c.isQC ? QC_BLUE   : "#4b5563",
-            fontWeight: c.isQC ? 600 : 400,
-          }}>
-            {c.name}{c.isQC ? " (YOU)" : ""}
+    <tr
+      className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
+      onClick={() => onOpenPrompt(prompt.id)}
+    >
+      <td className="px-4 py-2.5 pl-10">
+        <div className="flex items-center gap-2">
+          <span className="text-gray-400 text-xs">→</span>
+          <span className="text-sm text-gray-700 truncate max-w-sm" title={prompt.text}>
+            "{prompt.text}"
           </span>
-        ))}
-      </div>
-    );
-  }
-
-  // Ranked bars by visibility (mention rate %)
-  const maxVis = Math.max(...competitors.map(c => c.visibility || 0), 1);
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      {competitors.slice(0, 8).map((comp, i) => {
-        const barPct   = Math.round(((comp.visibility || 0) / maxVis) * 100);
-        const barColor = comp.isQC ? QC_BLUE : "#7c3aed";
-        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * ((comp.visibility || 0) / maxVis));
-        return (
-          <div key={comp.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ width: 18, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
-              {i + 1}
-            </span>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                <span style={{ fontSize: 12, color: comp.isQC ? QC_BLUE : "#111", fontWeight: comp.isQC ? 600 : i === 0 ? 500 : 400 }}>
-                  {comp.name}
-                  {comp.isQC && (
-                    <span className="badge badge--you" style={{ marginLeft: 6, fontSize: 10 }}>YOU</span>
-                  )}
-                </span>
-                <span style={{ fontSize: 11, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>
-                  {comp.visibility}%
-                </span>
-              </div>
-              <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
-                <div style={{
-                  height: "100%", width: `${barPct}%`,
-                  background: barColor, opacity,
-                  borderRadius: 99, transition: "width 0.4s ease",
-                }} />
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ─── LLM stat node badge ──────────────────────────────────────────────────────
-function StatNode({ label, value, color }) {
-  if (value == null) return null;
-  return (
-    <div style={{
-      display: "flex", flexDirection: "column", alignItems: "center",
-      background: "#f4f4f2", borderRadius: 8,
-      padding: "4px 10px", minWidth: 52,
-    }}>
-      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>
-        {label}
-      </span>
-      <span style={{ fontSize: 13, fontWeight: 600, color: color || "#374151", lineHeight: 1.3 }}>
-        {value}%
-      </span>
-    </div>
-  );
-}
-
-function PromptMetricsPanel({ prompt, detail, onOpenDrawer, showDrawerButtons = true }) {
-  const { kind, timeseries, competitors, llms } = detail;
-
-  return (
-    <div className="prompt-metrics-panel">
-      <p className="prompt-metrics-panel__question">"{prompt.text}"</p>
-
-      <div className="prompt-metrics-panel__layout">
-        <div className="prompt-metrics-panel__chart">
-          <p className="text-xs font-medium text-gray-500 uppercase mb-2">
-            {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
-          </p>
-          {kind === "mention" ? (
-            <>
-              <ChartLegend items={[
-                { label: "Visibility",    color: QC_BLUE },
-                { label: "Mention rate",  color: QC_BLUE,  dashed: true },
-                { label: "Citation rate", color: "#1d9e75", dashed: true },
-              ]} />
-              <VisibilityChart data={timeseries} />
-            </>
-          ) : (
-            <>
-              <ChartLegend items={[
-                { label: "Positive", color: "#3b6d11" },
-                { label: "Neutral",  color: "#854f0b" },
-                { label: "Negative", color: "#a32d2d" },
-              ]} />
-              <SentimentChart data={timeseries} />
-            </>
-          )}
-        </div>
-
-        <div className="prompt-metrics-panel__competitors">
-          <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
-          <CompetitorRanking competitors={competitors} />
-        </div>
-      </div>
-
-      <div>
-        <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
-        <div className="space-y-2">
-          {LLM_ENGINES.map(engine => {
-            const llm   = llms?.find(l => l.engine === engine);
-            const color = LLM_COLORS[engine];
-            return (
-              <div key={engine} style={{
-                display: "flex", alignItems: "center", gap: 12,
-                background: "#fff", borderRadius: 8, padding: "8px 12px",
-                border: "1px solid #f0efec",
-              }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
-                  {LLM_LABELS[engine]}
-                </span>
-
-                {llm ? (
-                  <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
-                    {llm.kind === "mention" ? (
-                      <>
-                        <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
-                        <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
-                        <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
-                        <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
-                      </>
-                    ) : (
-                      <>
-                        <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
-                        <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
-                        <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <span className="text-xs text-gray-400 flex-1">No data</span>
-                )}
-
-                {showDrawerButtons && (
-                  <button
-                    onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
-                    style={{
-                      background: "none", border: "none", cursor: "pointer",
-                      color: llm ? color : "#d1d5db",
-                      fontSize: 13, padding: "2px 4px", flexShrink: 0,
-                    }}
-                    title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
-                    aria-label={`Open ${LLM_LABELS[engine]} response`}
-                  >
-                    ▶
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function QuestionCitationsTable({ citations }) {
-  return (
-    <div className="card question-evidence">
-      <p className="panel-title">Cited URLs</p>
-      <p className="panel-subtitle">All cited URLs for this question, with cached page facts only.</p>
-      <div className="question-evidence__table-wrap">
-        <table className="question-evidence__table">
-          <thead>
-            <tr>
-              <th>URL</th>
-              <th className="num">Count</th>
-              <th>page_type</th>
-              <th>source_type</th>
-              <th>fetch status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {citations?.length ? citations.map((c) => (
-              <tr key={c.url}>
-                <td>
-                  <a href={c.url} target="_blank" rel="noreferrer" className="question-evidence__url">
-                    {c.url}
-                  </a>
-                </td>
-                <td className="num">{c.citation_count}</td>
-                <td>{c.page_type ?? "—"}</td>
-                <td>{c.source_type ?? "—"}</td>
-                <td>{c.fetch_status ?? "—"}</td>
-              </tr>
-            )) : (
-              <tr>
-                <td colSpan={5} className="state-empty">No cited URLs yet.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-// Why the router declined to produce a rec for this question, in card-ready
-// prose. Falls back to the raw reason slug for reasons added later.
-const REC_TRIAGE_MESSAGES = {
-  no_mention_responses: "This question has no mention responses yet — nothing to route.",
-  no_cited_winners: "QC loses this question but the responses cite no external pages to analyze.",
-  insufficient_voters: "Too few classifiable citations to call a verdict.",
-  fragmented_field: "No single source type dominates the cited winners — needs a human call.",
-  feasibility_unknown: "The winning sources can't be owned and no outreach channel was found.",
-  reputation_no_channel: "Reputation question with nothing to pitch.",
-  // Legacy slug — only reachable when the scorecard itself threw; the three
-  // precise reasons below replaced it for normal empty results.
-  fix_no_feature_gaps: "The scorecard comparison could not produce a recommendation for QC's page.",
-  fix_qc_page_unreadable: "QC's own page could not be fetched or read, so no feature comparison is possible — fix crawlability/access first (AI engines may not be able to read it either).",
-  fix_true_feature_parity: "QC's page genuinely matches the analyzed cited winners on every scorecard feature, and no weaker signal surfaced — the gap isn't on-page structure.",
-};
-
-// fix_insufficient_winner_data carries counts + the unreadable URLs, so the
-// message can disclose exactly what was and wasn't analyzed instead of
-// asserting parity over a sample it never had.
-function recTriageMessage(triage) {
-  const reason = triage?.reason;
-  if (reason === "fix_insufficient_winner_data") {
-    const sc = triage.scorecard || {};
-    const unreadable = sc.winners_unreadable || [];
-    const failedList = unreadable.map((w) => w.url).join(", ");
-    return `Only ${sc.winners_readable ?? 0} of ${sc.winners_cited_total ?? "?"} cited pages could be analyzed`
-      + (unreadable.length ? ` (${unreadable.length} could not be fetched: ${failedList})` : "")
-      + " — not enough data to compare QC's page against the winners.";
-  }
-  return REC_TRIAGE_MESSAGES[reason] ?? `The router couldn't action this question (${reason ?? "unknown"}).`;
-}
-
-function QuestionRecButton({ questionId, onOpenRecommendation }) {
-  const { days } = useFilter();
-  const [status, setStatus] = useState(null);      // recommendation-status payload
-  const [generating, setGenerating] = useState(false);
-  const [message, setMessage] = useState(null);    // triage / error outcome
-
-  // State resets between questions by remount - the parent keys this
-  // component on questionId - so the effect only fetches.
-  useEffect(() => {
-    if (!questionId) return undefined;
-    let cancelled = false;
-    fetch(`${API_BASE_URL}/api/questions/${questionId}/recommendation-status`)
-      .then(r => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
-      .then(s => { if (!cancelled) setStatus(s); })
-      .catch(() => { if (!cancelled) setStatus({ recommendation: null, can_generate: false }); });
-    return () => { cancelled = true; };
-  }, [questionId]);
-
-  const existingRec = status?.recommendation;
-
-  const handleClick = () => {
-    if (existingRec) {
-      onOpenRecommendation?.(existingRec.id);
-      return;
-    }
-    setGenerating(true);
-    setMessage(null);
-    const params = new URLSearchParams();
-    if (days) params.append("days", days);
-    fetch(`${API_BASE_URL}/api/questions/${questionId}/recommendation?${params}`, { method: "POST" })
-      .then(r => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
-      .then(res => {
-        setGenerating(false);
-        if (res.recommendation) {
-          setStatus({ recommendation: res.recommendation, can_generate: false });
-          onOpenRecommendation?.(res.recommendation.id);
-        } else {
-          setMessage(recTriageMessage(res.triage));
-        }
-      })
-      .catch(err => {
-        setGenerating(false);
-        setMessage(`Generation failed: ${err.message}`);
-      });
-  };
-
-  return (
-    <div className="question-view__rec-action">
-      <button
-        className="btn btn--primary"
-        onClick={handleClick}
-        disabled={!status || generating}
-        title={existingRec && status?.blocked_by === "cooldown"
-          ? `Regeneration available ${new Date(status.next_available_at).toLocaleDateString()}`
-          : undefined}
-      >
-        {!status ? "…"
-          : generating ? "Generating…"
-          : existingRec ? "View recommendation"
-          : "Generate recommendation"}
-      </button>
-      {message && <p className="question-view__rec-message">{message}</p>}
-    </div>
-  );
-}
-
-function QuestionDetailView({ detail, loading, error, onBack, onOpenDrawer, onOpenRecommendation }) {
-  if (loading) {
-    return <div className="card question-view"><p className="state-msg">Loading…</p></div>;
-  }
-  if (error) {
-    return <div className="card question-view"><p className="state-msg state-msg--error">Error: {error}</p></div>;
-  }
-  if (!detail) return null;
-
-  const prompt = { id: detail.question_id, text: detail.question };
-  const evidence = detail.evidence || {};
-  const matched = evidence.matched_page;
-
-  return (
-    <div className="question-view">
-      <div className="card question-view__header">
-        <div className="question-view__header-copy">
-          <button className="btn btn--ghost question-view__back" onClick={onBack}>← Back to prompt explorer</button>
-          <p className="panel-title">Question detail</p>
-          <p className="panel-subtitle">{detail.topic ?? "Uncategorized"}{detail.school ? ` · ${detail.school}` : ""}{detail.question_type ? ` · ${detail.question_type}` : ""}</p>
-        </div>
-        <QuestionRecButton
-          key={detail.question_id}
-          questionId={detail.question_id}
-          onOpenRecommendation={onOpenRecommendation}
-        />
-      </div>
-
-      <div className="question-view__stack">
-        <div className="card question-view__metrics">
-          <PromptMetricsPanel prompt={prompt} detail={detail} onOpenDrawer={onOpenDrawer} showDrawerButtons={false} />
-        </div>
-
-        <div className="card question-view__matched">
-          <p className="panel-title">QC matched page</p>
-          {matched?.url ? (
-            <div className="question-view__matched-body">
-              <a href={matched.url} target="_blank" rel="noreferrer" className="question-view__matched-url">{matched.url}</a>
-              <p className="question-view__matched-meta">page_type: {matched.page_type ?? "—"} · fetch status: {matched.fetch_status ?? "—"}</p>
-            </div>
-          ) : (
-            <p className="state-empty">No QC page matched yet.</p>
-          )}
-        </div>
-
-        <QuestionCitationsTable citations={evidence.citations || []} />
-      </div>
-    </div>
-  );
-}
-
-// ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
-function ResponseDrawer({ drawer, onClose }) {
-  const { open, engine, promptText, promptId } = drawer;
-  const { days } = useFilter();
-  const [history, setHistory] = useState([]);
-  const [index, setIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  // Fetch the full response history for this (prompt, engine) pair whenever the drawer opens
-  useEffect(() => {
-    if (!open || !promptId || !engine) return;
-    setLoading(true);
-    setIndex(0);
-    const params = new URLSearchParams({ engine });
-    if (days) params.append("days", days);
-
-    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/responses?${params}`)
-      .then(r => r.json())
-      .then(rows => {
-        setHistory(Array.isArray(rows) ? rows : []);
-        setLoading(false);
-      })
-      .catch(() => {
-        setHistory([]);
-        setLoading(false);
-      });
-  }, [open, promptId, engine, days]);
-
-  const total = history.length;
-  const goPrevious = () => setIndex(i => Math.min(i + 1, total - 1));
-  const goNext = () => setIndex(i => Math.max(i - 1, 0));
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = e => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowLeft") setIndex(i => Math.min(i + 1, total - 1));
-      if (e.key === "ArrowRight") setIndex(i => Math.max(i - 1, 0));
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [open, onClose, total]);
-
-  if (!open) return null;
-  const color = LLM_COLORS[engine] || "#888";
-  const current = history[index];
-
-  return (
-    <>
-      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
-      <div style={{
-        position: "fixed", top: 0, right: 0, bottom: 0,
-        width: "min(520px, 90vw)",
-        background: "#fff",
-        borderLeft: "1px solid #e5e7eb",
-        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
-        zIndex: 50,
-        display: "flex", flexDirection: "column",
-        overflow: "hidden",
-      }}>
-        {/* header */}
-        <div style={{
-          padding: "16px 20px",
-          borderBottom: "1px solid #e5e7eb",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexShrink: 0,
-        }}>
-          <div>
-            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
-              {LLM_LABELS[engine] || engine}
-            </p>
-            <p style={{ fontSize: 11, color: "#9b9b9b" }}>
-              {loading
-                ? "Loading…"
-                : total > 0
-                  ? `Response ${index + 1} of ${total} · ${current?.date ?? ""}`
-                  : "No responses"}
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
-            aria-label="Close"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* prompt context */}
-        {promptText && (
-          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
-            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{promptText}"</p>
-          </div>
-        )}
-
-        {/* prev / next navigation */}
-        {total > 1 && (
-          <div style={{
-            padding: "8px 20px",
-            borderBottom: "1px solid #f0efec",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            flexShrink: 0,
-          }}>
-            <button
-              onClick={goPrevious}
-              disabled={index >= total - 1}
-              style={{
-                background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
-                fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
-                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
-              }}
-              aria-label="Previous response"
-            >
-              ← Previous
-            </button>
-            <button
-              onClick={goNext}
-              disabled={index <= 0}
-              style={{
-                background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
-                fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
-                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
-              }}
-              aria-label="Next response"
-            >
-              Next →
-            </button>
-          </div>
-        )}
-
-        {/* response body */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
-          {loading
-            ? <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
-            : current?.response
-              ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{current.response}</p>
-              : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
-          }
-        </div>
-      </div>
-    </>
-  );
-}
-
-// ─── expanded prompt detail panel ─────────────────────────────────────────────
-function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
-  if (loading) {
-    return (
-      <tr>
-        <td colSpan={3} className="px-4 pb-4 pt-1">
-          <div className="ml-8 bg-gray-50 rounded-lg p-4">
-            <p className="text-xs text-gray-400 italic">Loading…</p>
-          </div>
-        </td>
-      </tr>
-    );
-  }
-  if (error) {
-    return (
-      <tr>
-        <td colSpan={3} className="px-4 pb-4 pt-1">
-          <div className="ml-8 bg-gray-50 rounded-lg p-4">
-            <p className="text-xs text-red-500">Failed to load detail ({error}). Restart the backend server and reload.</p>
-          </div>
-        </td>
-      </tr>
-    );
-  }
-  if (!detail) return null;
-
-  return (
-    <tr>
-      <td colSpan={3} className="px-4 pb-4 pt-1">
-        <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
-          <PromptMetricsPanel prompt={prompt} detail={detail} onOpenDrawer={onOpenDrawer} showDrawerButtons />
         </div>
       </td>
+      <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
+      <td className="px-3 py-2.5"><SovBadge value={prompt.sov} /></td>
     </tr>
   );
 }
 
-// ─── prompt row ───────────────────────────────────────────────────────────────
-function PromptRow({ prompt, expanded, onToggle, detail, detailLoading, detailError, onOpenDrawer, onOpenPrompt }) {
-  return (
-    <>
-      <tr
-        className="border-t border-gray-100 hover:bg-gray-50 cursor-pointer"
-        onClick={onToggle}
-      >
-        <td className="px-4 py-2.5 pl-10">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-400 text-xs">{expanded ? "▼" : "▶"}</span>
-            <span className="text-sm text-gray-700 truncate max-w-sm" title={prompt.text}>
-              "{prompt.text}"
-            </span>
-            <button
-              type="button"
-              className="prompt-open-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onOpenPrompt(prompt.id);
-              }}
-            >
-              Open question view
-            </button>
-          </div>
-        </td>
-        <td className="px-3 py-2.5"><MetricBadge topic={prompt} /></td>
-        <td className="px-3 py-2.5"><SovBadge value={prompt.sov} /></td>
-      </tr>
-
-      {expanded && (
-        <PromptDetail
-          prompt={prompt}
-          detail={detail}
-          loading={detailLoading}
-          error={detailError}
-          onOpenDrawer={onOpenDrawer}
-        />
-      )}
-    </>
-  );
-}
-
 // ─── topic header row ─────────────────────────────────────────────────────────
-function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, promptDetails, loadingDetails, detailErrors, onOpenDrawer, onOpenPrompt }) {
+function TopicRow({ topic, expanded, onToggle, onOpenPrompt }) {
   return (
     <>
       <tr
@@ -877,35 +197,21 @@ function TopicRow({ topic, expanded, onToggle, expandedPrompts, onTogglePrompt, 
       </tr>
 
       {expanded && topic.prompts.map(prompt => (
-        <PromptRow
-          key={prompt.id}
-          prompt={prompt}
-          expanded={expandedPrompts.has(prompt.id)}
-          onToggle={e => { e.stopPropagation(); onTogglePrompt(prompt.id, prompt.kind); }}
-          detail={promptDetails[prompt.id]}
-          detailLoading={loadingDetails.has(prompt.id)}
-          detailError={detailErrors[prompt.id]}
-          onOpenDrawer={onOpenDrawer}
-          onOpenPrompt={onOpenPrompt}
-        />
+        <PromptRow key={prompt.id} prompt={prompt} onOpenPrompt={onOpenPrompt} />
       ))}
     </>
   );
 }
 
 // ─── main Prompts component ───────────────────────────────────────────────────
-export default function Prompts({ focusedPromptId, onOpenPrompt, onClosePrompt, onOpenRecommendation }) {
+export default function Prompts() {
+  const navigate = useNavigate();
   const { days, school } = useFilter();
-  const [data,           setData]           = useState([]);
-  const [loading,        setLoading]        = useState(true);
-  const [error,          setError]          = useState(null);
-  const [chartData,      setChartData]      = useState(null);
-  const [expandedTopics,  setExpandedTopics]  = useState(new Set());
-  const [expandedPrompts, setExpandedPrompts] = useState(new Set());
-  const [promptDetails,   setPromptDetails]   = useState({});
-  const [loadingDetails,  setLoadingDetails]  = useState(new Set());
-  const [detailErrors,    setDetailErrors]    = useState({});
-  const [drawer, setDrawer] = useState({ open: false, engine: null, promptText: null, promptId: null });
+  const [data,      setData]      = useState([]);
+  const [loading,   setLoading]   = useState(true);
+  const [error,     setError]     = useState(null);
+  const [chartData, setChartData] = useState(null);
+  const [expandedTopics, setExpandedTopics] = useState(new Set());
   const [filters, setFilters] = useState({
     engine: "All",
     question_type: "All",
@@ -915,14 +221,13 @@ export default function Prompts({ focusedPromptId, onOpenPrompt, onClosePrompt, 
 
   const setFilter = (key, value) => setFilters(f => ({ ...f, [key]: value }));
 
+  const openPrompt = (promptId) => navigate(`/prompts/${promptId}`);
+
   // Fetch the accordion list + the top chart in parallel
   useEffect(() => {
     setLoading(true);
     setError(null);
     setExpandedTopics(new Set());
-    setExpandedPrompts(new Set());
-    setPromptDetails({});
-    setDetailErrors({});
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
@@ -954,73 +259,6 @@ export default function Prompts({ focusedPromptId, onOpenPrompt, onClosePrompt, 
       next.has(name) ? next.delete(name) : next.add(name);
       return next;
     });
-  }
-
-  function togglePrompt(id) {
-    setExpandedPrompts(prev => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-        if (!promptDetails[id] && !loadingDetails.has(id)) {
-          fetchPromptDetail(id);
-        }
-      }
-      return next;
-    });
-  }
-
-  function fetchPromptDetail(id) {
-    setLoadingDetails(prev => new Set([...prev, id]));
-    const params = new URLSearchParams();
-    if (days) params.append("days", days);
-
-    fetch(`${API_BASE_URL}/api/topic-prompt/${id}?${params}`)
-      .then(r => {
-        if (!r.ok) throw new Error(`Server error ${r.status}`);
-        return r.json();
-      })
-      .then(detail => {
-        setPromptDetails(prev => ({ ...prev, [id]: detail }));
-        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
-      })
-      .catch(err => {
-        setDetailErrors(prev => ({ ...prev, [id]: err.message }));
-        setLoadingDetails(prev => { const next = new Set(prev); next.delete(id); return next; });
-      });
-  }
-
-  useEffect(() => {
-    if (!focusedPromptId) return;
-    if (!promptDetails[focusedPromptId] && !loadingDetails.has(focusedPromptId)) {
-      fetchPromptDetail(focusedPromptId);
-    }
-  }, [focusedPromptId, days]);
-
-  function openDrawer(engine, promptText, promptId) {
-    setDrawer({ open: true, engine, promptText, promptId });
-  }
-
-  function closeDrawer() {
-    setDrawer(d => ({ ...d, open: false }));
-  }
-
-  const focusedDetail = focusedPromptId ? promptDetails[focusedPromptId] : null;
-  const focusedLoading = focusedPromptId ? loadingDetails.has(focusedPromptId) : false;
-  const focusedError = focusedPromptId ? detailErrors[focusedPromptId] : null;
-
-  if (focusedPromptId) {
-    return (
-      <QuestionDetailView
-        detail={focusedDetail}
-        loading={focusedLoading && !focusedDetail}
-        error={focusedError}
-        onBack={() => onClosePrompt?.()}
-        onOpenDrawer={openDrawer}
-        onOpenRecommendation={onOpenRecommendation}
-      />
-    );
   }
 
   return (
@@ -1072,21 +310,13 @@ export default function Prompts({ focusedPromptId, onOpenPrompt, onClosePrompt, 
                   topic={topic}
                   expanded={expandedTopics.has(topic.name)}
                   onToggle={() => toggleTopic(topic.name)}
-                  expandedPrompts={expandedPrompts}
-                  onTogglePrompt={togglePrompt}
-                  promptDetails={promptDetails}
-                  loadingDetails={loadingDetails}
-                  detailErrors={detailErrors}
-                  onOpenDrawer={openDrawer}
-                  onOpenPrompt={onOpenPrompt}
+                  onOpenPrompt={openPrompt}
                 />
               ))}
             </tbody>
           </table>
         </div>
       )}
-
-      <ResponseDrawer drawer={drawer} onClose={closeDrawer} />
     </>
   );
 }

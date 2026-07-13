@@ -448,13 +448,13 @@ def get_recommendation(rec_id):
 # On-demand per-question generation (dashboard question view)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _latest_live_rec_for_question(question_id):
+def _live_recs_for_question(question_id):
     """
-    The rec that currently covers this question, or None. Covers = the rec's
-    segment targets the question, OR the question was folded into the rec's
-    dedup group (detail.router.source_questions). Committed (active) recs win
-    over untouched proposed ones; ties break newest-first. Superseded recs
-    never block - they're history.
+    Every rec that currently covers this question - the question's action
+    plan. Covers = the rec's segment targets the question, OR the question
+    was folded into the rec's dedup group (detail.router.source_questions).
+    Committed (active) recs sort first, then the plan's primary before its
+    companions, then newest-first. Superseded recs never appear - history.
     """
     qid = str(question_id)
     with get_connection() as conn:
@@ -465,11 +465,23 @@ def _latest_live_rec_for_question(question_id):
                   AND (segment->>'question_id' = %s
                        OR (detail->'router'->'source_questions') @> %s)
                 ORDER BY CASE WHEN status IN %s THEN 0 ELSE 1 END,
+                         CASE WHEN detail->'question_plan'->>'role' = 'primary' THEN 0 ELSE 1 END,
                          generated_at DESC
-                LIMIT 1
             """, (qid, Json([{"question_id": qid}]), ACTIVE_STATUSES))
-            row = cur.fetchone()
-    return _rec_dict(row) if row else None
+            rows = cur.fetchall()
+    return [_rec_dict(r) for r in rows]
+
+
+def _latest_live_rec_for_question(question_id):
+    """The single rec that best covers this question, or None (see
+    _live_recs_for_question for the ordering that defines 'best')."""
+    recs = _live_recs_for_question(question_id)
+    return recs[0] if recs else None
+
+
+def get_question_recommendations(question_id):
+    """Public read for the question's live action plan (API surface)."""
+    return _live_recs_for_question(question_id)
 
 
 def get_question_recommendation_status(question_id, cooldown_days=GENERATION_COOLDOWN_DAYS):
@@ -480,73 +492,88 @@ def get_question_recommendation_status(question_id, cooldown_days=GENERATION_COO
     work never gets a duplicate), or a proposed rec younger than the same
     30-day cooldown the batch uses.
     """
-    rec = _latest_live_rec_for_question(question_id)
-    if rec is None:
-        return {"recommendation": None, "can_generate": True,
-                "next_available_at": None, "blocked_by": None}
-    if rec["status"] in ACTIVE_STATUSES:
-        return {"recommendation": rec, "can_generate": False,
+    recs = _live_recs_for_question(question_id)
+    if not recs:
+        return {"recommendation": None, "recommendations": [], "count": 0,
+                "can_generate": True, "next_available_at": None, "blocked_by": None}
+    base = {"recommendation": recs[0], "recommendations": recs, "count": len(recs)}
+    if any(r["status"] in ACTIVE_STATUSES for r in recs):
+        return {**base, "can_generate": False,
                 "next_available_at": None, "blocked_by": "active_rec"}
-    generated_at = datetime.fromisoformat(rec["generated_at"])
+    newest = max(r["generated_at"] for r in recs)
+    generated_at = datetime.fromisoformat(newest)
     if generated_at.tzinfo is None:
         generated_at = generated_at.replace(tzinfo=timezone.utc)
     next_available_at = generated_at + timedelta(days=cooldown_days)
     can_generate = datetime.now(timezone.utc) >= next_available_at
-    return {"recommendation": rec, "can_generate": can_generate,
+    return {**base, "can_generate": can_generate,
             "next_available_at": next_available_at.isoformat(),
             "blocked_by": None if can_generate else "cooldown"}
 
 
-def save_question_recommendation(rec, question_id):
+def save_question_recommendations(recs, question_id):
     """
-    Insert ONE on-demand rec under its own batch_id. Supersession is scoped
-    to the question: only prior untouched (proposed) recs whose segment
-    targets the same question are archived - the rest of the live batch is
-    untouched (unlike save_recommendations). No triage rows are written: the
-    batch triage queue must keep reflecting the latest full batch.
+    Insert one question's on-demand plan under ONE shared batch_id.
+    Supersession is scoped to the question: prior untouched (proposed) recs
+    covering the same question are archived - matched by segment OR by
+    source_questions containment, the same predicate _live_recs_for_question
+    reads with (segment alone missed on-demand fix recs, whose segment is
+    topic-grained). The rest of the live batch is untouched (unlike
+    save_recommendations). No triage rows are written: the batch triage
+    queue must keep reflecting the latest full batch.
     """
+    qid = str(question_id)
     batch_id = str(uuid.uuid4())
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
                 UPDATE recommendations SET status = 'superseded'
-                WHERE status = 'proposed' AND segment->>'question_id' = %s
-            """, (str(question_id),))
-            rec_id = _insert_rec(cur, rec, batch_id)
+                WHERE status = 'proposed'
+                  AND (segment->>'question_id' = %s
+                       OR (detail->'router'->'source_questions') @> %s)
+            """, (qid, Json([{"question_id": qid}])))
+            rec_ids = [_insert_rec(cur, rec, batch_id) for rec in recs]
         conn.commit()
-    return str(rec_id)
+    return [str(r) for r in rec_ids]
 
 
 def generate_question_recommendation(question_id, days=None):
     """
     On-demand generation for one question, gated per question by the same
-    30-day cooldown as the batch. Returns:
-      {"generated": True,  "recommendation": <saved rec>}          - new rec
-      {"generated": False, "recommendation": <existing live rec>}  - gated:
-          navigate to the rec that already covers the question
-      {"generated": False, "recommendation": None, "triage": {...}} - the
+    30-day cooldown as the batch. Builds the question's full action plan
+    (primary branch rec + inclusion opportunities + community fan-out).
+    Returns:
+      {"generated": True,  "recommendations": [<saved recs>]}       - new plan
+      {"generated": False, "recommendations": [<existing live>]}    - gated:
+          navigate to the plan that already covers the question
+      {"generated": False, "recommendations": [], "triage": {...}}  - the
           router couldn't action it; triage.reason says why
+    "recommendation" (singular, the plan's first rec) is kept for callers of
+    the one-rec era.
     """
-    from api.queries.question_router import build_question_recommendation
+    from api.queries.question_router import build_question_recommendations
 
     status = get_question_recommendation_status(question_id)
     if not status["can_generate"]:
         return {"generated": False, "recommendation": status["recommendation"],
+                "recommendations": status["recommendations"],
                 "triage": None, "blocked_by": status["blocked_by"],
                 "next_available_at": status["next_available_at"]}
 
-    rec, triage_entry = build_question_recommendation(question_id, days)
-    if rec is None:
+    recs, triage_entry = build_question_recommendations(question_id, days)
+    if not recs:
         if triage_entry is None:
             triage_entry = {"question_id": str(question_id),
                             "reason": "no_mention_responses"}
         else:
             triage_entry = {**triage_entry,
                             "question_id": str(triage_entry.get("question_id"))}
-        return {"generated": False, "recommendation": None, "triage": triage_entry}
+        return {"generated": False, "recommendation": None,
+                "recommendations": [], "triage": triage_entry}
 
-    rec_id = save_question_recommendation(rec, question_id)
-    return {"generated": True, "recommendation": get_recommendation(rec_id)}
+    rec_ids = save_question_recommendations(recs, question_id)
+    saved = [get_recommendation(rid) for rid in rec_ids]
+    return {"generated": True, "recommendation": saved[0], "recommendations": saved}
 
 
 def generate_recommendations(days=None):

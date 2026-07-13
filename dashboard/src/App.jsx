@@ -1,35 +1,32 @@
-import { useState } from "react";
+import { Navigate, NavLink, Route, Routes } from "react-router-dom";
 import Overview from "./tabs/Overview";
 import Visibility from "./tabs/Visibility";
 import Sentiment from "./tabs/Sentiment";
 import Competitors from "./tabs/Competitors";
 import Citations from "./tabs/Citations";
-import { useFilter } from "./context/useFilter";
-import { PERIOD_OPTIONS, SCHOOL_OPTIONS } from "./context/FilterContextConstants";
 import Prompts from "./tabs/Prompts";
 import Recommendations from "./tabs/Recommendations";
+import QuestionDetail from "./pages/QuestionDetail";
+import QuestionPlan from "./pages/QuestionPlan";
+import RecommendationDetail from "./pages/RecommendationDetail";
+import { useFilter } from "./context/useFilter";
+import { PERIOD_OPTIONS, SCHOOL_OPTIONS } from "./context/FilterContextConstants";
 
-const TABS = ["Overview", "Visibility", "Sentiment", "Competitors", "Citations", "Prompts", "Recommendations"];
+// Each tab is a real route; detail pages get their own URLs underneath
+// (/prompts/:promptId, /recommendations/:recId) so they can be shared,
+// bookmarked, and navigated with the browser's back button.
+const TABS = [
+  { label: "Overview", path: "/overview" },
+  { label: "Visibility", path: "/visibility" },
+  { label: "Sentiment", path: "/sentiment" },
+  { label: "Competitors", path: "/competitors" },
+  { label: "Citations", path: "/citations" },
+  { label: "Prompts", path: "/prompts" },
+  { label: "Recommendations", path: "/recommendations" },
+];
 
 function App() {
-  const [activeTab, setActiveTab] = useState("Overview");
-  const [focusedPromptId, setFocusedPromptId] = useState(null);
-  const [focusedRecId, setFocusedRecId] = useState(null);
   const { days, setDays, school, setSchool } = useFilter();
-
-  const openPrompt = (promptId) => {
-    setFocusedPromptId(promptId);
-    setActiveTab("Prompts");
-  };
-
-  const closePrompt = () => setFocusedPromptId(null);
-
-  const openRecommendation = (recId) => {
-    setFocusedRecId(recId);
-    setActiveTab("Recommendations");
-  };
-
-  const closeRecommendation = () => setFocusedRecId(null);
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
@@ -59,40 +56,36 @@ function App() {
 
       <div className="flex gap-1 border-b border-gray-200 mb-6 overflow-x-auto">
         {TABS.map(tab => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 text-sm whitespace-nowrap ${
-              activeTab === tab
-                ? "text-blue-600 border-b-2 border-blue-600 font-medium"
-                : "text-gray-500"
-            }`}
+          <NavLink
+            key={tab.path}
+            to={tab.path}
+            className={({ isActive }) =>
+              `px-4 py-2 text-sm whitespace-nowrap ${
+                isActive
+                  ? "text-blue-600 border-b-2 border-blue-600 font-medium"
+                  : "text-gray-500"
+              }`
+            }
           >
-            {tab}
-          </button>
+            {tab.label}
+          </NavLink>
         ))}
       </div>
 
-      {activeTab === "Overview" && <Overview />}
-      {activeTab === "Visibility" && <Visibility />}
-      {activeTab === "Sentiment" && <Sentiment />}
-      {activeTab === "Competitors" && <Competitors />}
-      {activeTab === "Citations" && <Citations />}
-      {activeTab === "Prompts" && (
-        <Prompts
-          focusedPromptId={focusedPromptId}
-          onOpenPrompt={openPrompt}
-          onClosePrompt={closePrompt}
-          onOpenRecommendation={openRecommendation}
-        />
-      )}
-      {activeTab === "Recommendations" && (
-        <Recommendations
-          onOpenPrompt={openPrompt}
-          focusedRecId={focusedRecId}
-          onCloseRecommendation={closeRecommendation}
-        />
-      )}
+      <Routes>
+        <Route path="/" element={<Navigate to="/overview" replace />} />
+        <Route path="/overview" element={<Overview />} />
+        <Route path="/visibility" element={<Visibility />} />
+        <Route path="/sentiment" element={<Sentiment />} />
+        <Route path="/competitors" element={<Competitors />} />
+        <Route path="/citations" element={<Citations />} />
+        <Route path="/prompts" element={<Prompts />} />
+        <Route path="/prompts/:promptId" element={<QuestionDetail />} />
+        <Route path="/prompts/:promptId/plan" element={<QuestionPlan />} />
+        <Route path="/recommendations" element={<Recommendations />} />
+        <Route path="/recommendations/:recId" element={<RecommendationDetail />} />
+        <Route path="*" element={<Navigate to="/overview" replace />} />
+      </Routes>
     </div>
   );
 }

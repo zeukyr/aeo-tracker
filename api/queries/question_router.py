@@ -745,53 +745,177 @@ def get_question_stats(question_id, days=None):
     }
 
 
-def build_question_recommendation(question_id, days=None):
-    """
-    Route ONE question on demand and build its rec - no batch, no dedup
-    grouping (the group is the question itself). Returns (rec, triage_entry):
-    exactly one is non-None, except (None, None) when the question has no
-    mention responses to route.
+# One rec per COMMUNITY, not per thread: reddit URLs key on the subreddit.
+# "[./]" admits both www.reddit.com and the bare https://reddit.com form.
+_REDDIT_SUB = re.compile(r"(?:^|[./])reddit\.com/r/([^/?#]+)", re.I)
 
-    The fix branch is evidence-graded with fallbacks, strongest first:
-      1. high-tier scorecard rec (verified checklist gap, sufficient winners)
-      2. verified inclusion opportunity among this question's winners
-      3. low-tier scorecard rec (thin sample / sub-threshold gaps / emergent
-         LLM pattern - clearly labelled)
-      4. triage, with a PRECISE reason (qc page unreadable / insufficient
-         winner data / true feature parity) plus the winner-coverage counts,
-         so the caller can always explain an empty result accurately.
+
+def _community_key(f):
+    """Dedup key for one pitchable winner: r/<subreddit> for reddit URLs,
+    the root domain otherwise. Empty string when there's nothing to key on."""
+    if not f:
+        return ""
+    url = f.get("final_url") or f.get("url") or ""
+    m = _REDDIT_SUB.search(url)
+    if m:
+        return f"r/{m.group(1).lower()}"
+    return _root_domain(f.get("domain") or "")
+
+
+def _fanout_rec(route, f, feas, key, key_citations):
+    """One companion reach-out rec for a single pitchable winner. Reddit
+    communities get participation framing (the cited thread is the entry
+    point); other targets carry the channel's own mechanism."""
+    q = route["question"]
+    bucket = source_type(f)
+    n = f.get("citation_count") or 0
+    gated = feas["feasibility"] == "gated"
+    is_reddit = key.startswith("r/")
+
+    if is_reddit:
+        thread_note = (f"the cited thread ({n}x) is the entry point"
+                       if key_citations == n else
+                       f"{key_citations} citations across its threads; the top one ({n}x) is the entry point")
+        problem = (f"AI engines cite {key} when answering '{q['question']}' - "
+                   f"QC has no presence in that community.")
+        action = (f"Participate in {key} - answer '{q['question']}' as a named QC educator "
+                  f"(disclosed affiliation); {thread_note}.")
+    else:
+        problem = (f"{f.get('domain') or key} is cited {n}x for '{q['question']}' - "
+                   f"a {bucket} source QC can't own but can show up on.")
+        action = feas["mechanism"]
+    if gated:
+        action += " (Requires application/approval - budget lead time.)"
+
+    return {
+        "problem": problem,
+        "action": action,
+        "priority": "medium" if (key_citations >= 3 and not gated) else "low",
+        "school": q.get("school"),
+        "evidence": (f"{f.get('url')} cited {n}x for '{q['question']}' "
+                     f"({key}: {key_citations} citations total). Channel: {feas['evidence']}."),
+        "action_type": "community" if bucket == "ugc" else "outreach",
+        "target": f.get("url"),
+        "segment": _segment_for(q),
+        "metric_impact": "visibility_score" if bucket == "ugc" else "citation_rate",
+        "expected_direction": 1,
+        "expected_magnitude": None,
+        "effort": "M" if gated else "S",
+        "confidence": 0.5 if gated else 0.6,
+        "detail": {"router": {**_router_detail(route), "branch": "reach_out_fanout"},
+                   "outreach_feasibility": feas},
+    }
+
+
+def _reach_out_fanout(route, taken_keys, limit=3):
+    """
+    Companion reach-out recs beyond the primary target: one per distinct
+    pitchable community/site among the winners, most-cited first. This is
+    what keeps cited reddit communities visible even when the question's
+    dominant bucket isn't ugc - a winner outside the dominant bucket
+    qualifies with >= 2 citations; dominant-bucket winners on the reach_out
+    branch qualify unconditionally. Feasibility-gated per target (closed /
+    unknown channels are skipped, never forced).
+    """
+    dominant = (route.get("dominant") or (None,))[0]
+    on_reach_branch = route.get("branch") == "reach_out"
+
+    groups = {}   # key -> {"facts": most-cited entry point, "citations": key total}
+    winners = sorted(route.get("winners") or [],
+                     key=lambda f: -(f.get("citation_count") or 0))
+    for f in winners:
+        st = source_type(f)
+        if st not in NON_OWNABLE_SOURCE_BUCKETS:
+            continue
+        if not (on_reach_branch and st == dominant) and (f.get("citation_count") or 0) < 2:
+            continue
+        key = _community_key(f)
+        if not key or key in taken_keys:
+            continue
+        group = groups.setdefault(key, {"facts": f, "citations": 0})
+        group["citations"] += f.get("citation_count") or 0
+
+    out = []
+    for key, group in sorted(groups.items(), key=lambda kv: -kv[1]["citations"]):
+        if len(out) >= limit:
+            break
+        feas = outreach_feasibility(group["facts"])
+        if feas["feasibility"] not in ("open", "gated"):
+            continue
+        out.append(_fanout_rec(route, group["facts"], feas, key, group["citations"]))
+        taken_keys.add(key)
+    return out
+
+
+def build_question_recommendations(question_id, days=None):
+    """
+    Route ONE question on demand and build its full action plan - multiple
+    recommendations that coexist, each from an independent signal:
+      primary    the routed branch's own rec (fix scorecard / build / reach-out)
+      inclusion  EVERY verified inclusion opportunity among the winners
+      community  reach-out fan-out: one rec per distinct pitchable
+                 community/site (reddit communities keyed r/<subreddit>)
+    Returns (recs, triage_entry). recs is [] with a PRECISE triage reason when
+    nothing was actionable (unchanged semantics from the single-rec era:
+    qc page unreadable / insufficient winner data / true feature parity, plus
+    winner-coverage counts), and ([], None) when the question has no mention
+    responses to route. Each rec carries detail.question_plan so the plan
+    page can group and label them.
     """
     q = get_question_stats(question_id, days)
     if q is None:
-        return None, None
+        return [], None
     route = route_question(q, days)
     if route["branch"] == "triage":
-        return None, _triage_entry(route)
+        return [], _triage_entry(route)
+
+    taken_keys = set()
+    primary, sc = None, None
+
     if route["branch"] == "fix":
-        sc, rec = None, None
         try:
             sc = build_scorecard(q["topic"] or q["question"], route["qc_url"],
                                  question=q["question"], days=days,
                                  winner_facts=route["winners"])
-            rec = scorecard_to_recommendation(sc)
+            primary = scorecard_to_recommendation(sc)
         except Exception as e:
             logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")
-        if rec is not None and (rec.get("detail") or {}).get("evidence_tier") == "high":
-            rec["detail"]["router"] = _router_detail(route)
-            return rec, None
-        # A verified inclusion opportunity among this question's winners (a
-        # cited directory/roundup that provably lists rivals and never QC)
-        # outranks a low-tier scorecard card - the batch path surfaces these
-        # via _inclusion_recs; on-demand must not lose them.
-        inclusion = _inclusion_recs([route])
-        if inclusion:
-            inclusion.sort(key=lambda r: -(r["detail"]["opportunity"]["citation_count"]))
-            return inclusion[0], None
-        if rec is not None:
-            rec["detail"]["router"] = _router_detail(route)
-            return rec, None
-        entry = {**_triage_entry(route),
-                 "reason": scorecard_triage_reason(sc) if sc else "fix_no_feature_gaps"}
+        if primary is not None:
+            primary["detail"]["router"] = _router_detail(route)
+    elif route["branch"] == "build":
+        primary = _build_rec(route, [route])
+    else:
+        primary = _reach_out_rec(route, [route])
+        taken_keys.add(_community_key(route.get("feasibility_target")))
+
+    inclusion = _inclusion_recs([route])
+    inclusion.sort(key=lambda r: -(r["detail"]["opportunity"]["citation_count"]))
+    for rec in inclusion:
+        host = urlsplit(rec.get("target") or "").hostname or ""
+        if host:
+            taken_keys.add(_root_domain(host))
+
+    companions = inclusion + _reach_out_fanout(route, taken_keys)
+    companions.sort(key=lambda r: -(r.get("confidence") or 0))
+
+    # The plan's first rec is its lead ("primary") even when the branch rec
+    # itself came back empty and a companion carries the plan alone.
+    recs = ([primary] if primary else []) + companions
+    qid = str(q["question_id"])
+    for i, rec in enumerate(recs):
+        emitter = ((rec.get("detail") or {}).get("router") or {}).get("branch", route["branch"])
+        rec.setdefault("detail", {})["question_plan"] = {
+            "question_id": qid,
+            "role": "primary" if i == 0 else "companion",
+            "emitter": emitter,
+        }
+    if recs:
+        return recs, None
+
+    # Nothing actionable: keep the precise fix-branch triage reasons.
+    entry = _triage_entry(route)
+    if route["branch"] == "fix":
+        entry["reason"] = scorecard_triage_reason(sc) if sc else "fix_no_feature_gaps"
         if sc:
             # Enough for the UI to say WHAT was insufficient, with names.
             entry["scorecard"] = {
@@ -800,10 +924,7 @@ def build_question_recommendation(question_id, days=None):
                 "winners_cited_total": sc.get("winners_cited_total"),
                 "winners_unreadable": sc.get("winners_unreadable") or [],
             }
-        return None, entry
-    if route["branch"] == "build":
-        return _build_rec(route, [route]), None
-    return _reach_out_rec(route, [route]), None
+    return [], entry
 
 
 if __name__ == "__main__":

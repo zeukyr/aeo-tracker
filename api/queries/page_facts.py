@@ -698,11 +698,15 @@ def inclusion_opportunity(facts):
     """
     The "seek inclusion" gate (plan: Tab 1 engine). True only when the page
     was actually read and provably lists at least one competitor while never
-    mentioning QC - and is the kind of page that lists providers at all.
+    mentioning QC - and is the kind of non-ownable page that lists providers
+    at all. Competitor-owned pages stay on the fix/build side of the pipeline
+    even if they look directory-like.
     """
+    source = source_type(facts)
     return (
         facts.get("status") == "ok"
         and facts.get("page_type") in ("roundup", "directory")
+        and source in ("ugc", "review", "reference", "certifying_body")
         and bool(facts.get("brand_mentions"))
         and not facts.get("qc_mentioned")
     )

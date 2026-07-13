@@ -1,9 +1,10 @@
 """
-On-demand fix-branch fallback order (build_question_recommendation):
-  high-tier scorecard rec > verified inclusion opportunity > low-tier
-  scorecard rec > triage with a precise reason + winner-coverage counts.
-Routing, scorecard and inclusion builders are stubbed - this tests the
-dispatch, not the engines.
+On-demand fix-branch plan assembly (build_question_recommendations):
+the scorecard rec (high OR low tier) leads the plan, verified inclusion
+opportunities COEXIST as companions (strongest-cited first), and an empty
+plan triages with a precise reason + winner-coverage counts. Routing,
+scorecard and inclusion builders are stubbed - this tests the dispatch,
+not the engines.
 """
 
 import pytest
@@ -34,6 +35,7 @@ def _sc(**over):
 
 def _inclusion_rec(citations):
     return {"problem": f"inclusion {citations}", "action": "pitch", "priority": "high",
+            "target": f"https://dir.example/{citations}",
             "detail": {"router": {"branch": "inclusion_opportunity"},
                        "opportunity": {"url": f"https://dir.example/{citations}",
                                        "citation_count": citations}}}
@@ -56,36 +58,44 @@ def wire(monkeypatch):
     return set
 
 
-def test_high_tier_scorecard_rec_wins_over_inclusion(wire):
+def test_scorecard_rec_leads_and_inclusion_coexists(wire):
     high = {"problem": "gap", "detail": {"evidence_tier": "high"}}
     wire(scorecard=_sc(), rec=high, inclusion=[_inclusion_rec(5)])
-    rec, triage = qr.build_question_recommendation("q1")
+    recs, triage = qr.build_question_recommendations("q1")
     assert triage is None
-    assert rec["problem"] == "gap"
-    assert rec["detail"]["router"]["branch"] == "fix"
+    assert len(recs) == 2
+    assert recs[0]["problem"] == "gap"
+    assert recs[0]["detail"]["router"]["branch"] == "fix"
+    assert recs[0]["detail"]["question_plan"]["role"] == "primary"
+    assert recs[1]["detail"]["question_plan"] == {
+        "question_id": "q1", "role": "companion", "emitter": "inclusion_opportunity"}
 
 
-def test_inclusion_outranks_low_tier_scorecard_rec(wire):
+def test_low_tier_rec_still_leads_over_inclusions(wire):
+    # Coexistence, not fallback: a low-tier scorecard rec is the plan's lead
+    # AND every inclusion opportunity ships alongside, strongest-cited first.
     low = {"problem": "weak signal", "detail": {"evidence_tier": "low"}}
     wire(scorecard=_sc(), rec=low, inclusion=[_inclusion_rec(1), _inclusion_rec(3)])
-    rec, triage = qr.build_question_recommendation("q1")
+    recs, triage = qr.build_question_recommendations("q1")
     assert triage is None
-    assert rec["detail"]["opportunity"]["citation_count"] == 3  # strongest first
+    assert [r["problem"] for r in recs] == ["weak signal", "inclusion 3", "inclusion 1"]
+    assert recs[1]["detail"]["opportunity"]["citation_count"] == 3  # strongest first
 
 
 def test_low_tier_rec_survives_when_no_inclusion(wire):
     low = {"problem": "weak signal", "detail": {"evidence_tier": "low"}}
     wire(scorecard=_sc(), rec=low, inclusion=[])
-    rec, triage = qr.build_question_recommendation("q1")
+    recs, triage = qr.build_question_recommendations("q1")
     assert triage is None
-    assert rec["problem"] == "weak signal"
-    assert rec["detail"]["router"]["branch"] == "fix"
+    assert len(recs) == 1
+    assert recs[0]["problem"] == "weak signal"
+    assert recs[0]["detail"]["router"]["branch"] == "fix"
 
 
 def test_empty_result_triages_with_precise_reason_and_coverage(wire):
     wire(scorecard=_sc(), rec=None, inclusion=[])
-    rec, triage = qr.build_question_recommendation("q1")
-    assert rec is None
+    recs, triage = qr.build_question_recommendations("q1")
+    assert recs == []
     assert triage["reason"] == "fix_true_feature_parity"
     assert triage["scorecard"]["winners_readable"] == 4
     assert triage["scorecard"]["winners_cited_total"] == 8
@@ -94,18 +104,20 @@ def test_empty_result_triages_with_precise_reason_and_coverage(wire):
 
 def test_insufficient_winner_data_reason_flows_through(wire):
     wire(scorecard=_sc(winners_total=1), rec=None, inclusion=[])
-    rec, triage = qr.build_question_recommendation("q1")
-    assert rec is None
+    recs, triage = qr.build_question_recommendations("q1")
+    assert recs == []
     assert triage["reason"] == "fix_insufficient_winner_data"
 
 
-def test_scorecard_failure_falls_back_to_inclusion_then_legacy_reason(wire):
+def test_scorecard_failure_leaves_inclusion_leading_the_plan(wire):
     wire(raise_scorecard=True, inclusion=[_inclusion_rec(2)])
-    rec, triage = qr.build_question_recommendation("q1")
-    assert rec["detail"]["opportunity"]["citation_count"] == 2
+    recs, triage = qr.build_question_recommendations("q1")
+    assert triage is None
+    assert recs[0]["detail"]["opportunity"]["citation_count"] == 2
+    assert recs[0]["detail"]["question_plan"]["role"] == "primary"
 
     wire(raise_scorecard=True, inclusion=[])
-    rec, triage = qr.build_question_recommendation("q1")
-    assert rec is None
+    recs, triage = qr.build_question_recommendations("q1")
+    assert recs == []
     assert triage["reason"] == "fix_no_feature_gaps"
     assert "scorecard" not in triage

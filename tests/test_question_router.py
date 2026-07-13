@@ -373,11 +373,14 @@ def test_single_question_build_returns_rec_not_triage(monkeypatch):
     forbid_scorecard(monkeypatch)
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
 
-    rec, triage = qr.build_question_recommendation(20)
+    recs, triage = qr.build_question_recommendations(20)
     assert triage is None
+    rec = recs[0]
     assert rec["segment"] == {"dimension": "question",
                               "value": q["question"], "question_id": "20"}
     assert rec["detail"]["router"]["branch"] == "build"
+    assert rec["detail"]["question_plan"] == {
+        "question_id": "20", "role": "primary", "emitter": "build"}
 
 
 def test_single_question_triage_comes_back_as_entry(monkeypatch):
@@ -385,15 +388,15 @@ def test_single_question_triage_comes_back_as_entry(monkeypatch):
     wire(monkeypatch, {21: []})
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
 
-    rec, triage = qr.build_question_recommendation(21)
-    assert rec is None
+    recs, triage = qr.build_question_recommendations(21)
+    assert recs == []
     assert triage["reason"] == "no_cited_winners"
     assert triage["question_id"] == 21
 
 
 def test_single_question_without_mention_responses(monkeypatch):
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: None)
-    assert qr.build_question_recommendation(22) == (None, None)
+    assert qr.build_question_recommendations(22) == ([], None)
 
 
 def test_single_question_fix_attaches_router_detail(monkeypatch):
@@ -406,11 +409,11 @@ def test_single_question_fix_attaches_router_detail(monkeypatch):
     stub_scorecard(monkeypatch, calls)
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
 
-    rec, triage = qr.build_question_recommendation(23)
+    recs, triage = qr.build_question_recommendations(23)
     assert triage is None
     assert len(calls) == 1
-    assert rec["action_type"] == "technical"
-    assert rec["detail"]["router"]["branch"] == "fix"
+    assert recs[0]["action_type"] == "technical"
+    assert recs[0]["detail"]["router"]["branch"] == "fix"
 
 
 def test_single_question_fix_with_empty_scorecard_triages(monkeypatch):
@@ -429,8 +432,8 @@ def test_single_question_fix_with_empty_scorecard_triages(monkeypatch):
     monkeypatch.setattr(qr, "scorecard_to_recommendation", lambda sc: None)
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
 
-    rec, triage = qr.build_question_recommendation(24)
-    assert rec is None
+    recs, triage = qr.build_question_recommendations(24)
+    assert recs == []
     assert triage["reason"] == "fix_true_feature_parity"
     assert triage["scorecard"]["winners_readable"] == 3
 

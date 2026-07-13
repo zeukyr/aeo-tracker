@@ -7,7 +7,8 @@ matcher's junk-page exclusion, and the page-facts failure-retry window.
 from datetime import datetime, timedelta, timezone
 
 from api.queries.page_facts import (
-    source_type, _is_stale_failure, _token_matches_domain, _classify_by_domain,
+    source_type, inclusion_opportunity, _is_stale_failure, _token_matches_domain,
+    _classify_by_domain,
 )
 from scripts.registry_pipeline_diff import _expected_override
 from api.queries.question_router import outreach_feasibility
@@ -95,6 +96,19 @@ def test_domain_classified_pages_vote_even_unfetched():
                         "status": "not_fetched"}) == "ugc"
     assert source_type({"domain": "trustpilot.com", "page_type": "editorial",
                         "status": "fetch_failed"}) == "review"  # allowlist beats fallback
+
+
+def test_competitor_directory_pages_do_not_trigger_inclusion():
+    facts = {
+        "domain": "alison.com",
+        "url": "https://alison.com/tag/event-planning",
+        "status": "ok",
+        "page_type": "directory",
+        "brand_mentions": {"Alison": 3},
+        "qc_mentioned": False,
+    }
+    assert source_type(facts) == "competitor"
+    assert inclusion_opportunity(facts) is False
 
 
 # ─────────────────────────────────────────────────────────────────────────────
