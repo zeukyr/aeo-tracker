@@ -18,7 +18,10 @@ results/
 
 # OS
 .DS_Store
-Thumbs.dblogs/
+Thumbs.db
+
+# Logs (written by the running app, don't need in git)
+logs/
 
 node_modules/
 dashboard/dist/
