@@ -15,7 +15,8 @@ def query_chatgpt(question):
             max_retries=1)
         response = client.responses.create(
             model="gpt-4o-mini",
-            tools=[{"type": "web_search_preview"}],
+            tools=[{"type": "web_search"}],
+            tool_choice={"type": "web_search"},
             input=question
         )
 
@@ -24,8 +25,9 @@ def query_chatgpt(question):
         fanout_queries = []
         for item in response.output:
             if hasattr(item, "type") and item.type == "web_search_call":
-                if hasattr(item, "query") and item.query:
-                    fanout_queries.append(item.query)
+                action = getattr(item, "action", None)
+                if action and hasattr(action, "queries") and action.queries:
+                    fanout_queries.extend(q for q in action.queries if q)
             if hasattr(item, "content"):
                 for block in item.content:
                     if hasattr(block, "annotations"):
