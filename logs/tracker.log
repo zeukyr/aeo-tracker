@@ -7726,3 +7726,168 @@
 2026-07-14 04:27:07,551 [INFO] Classifying competitor citations...
 2026-07-14 04:27:08,279 [INFO] [classify] No eligible responses for run d0af36fd-9142-4d7c-9834-e1e1c03ad055
 2026-07-14 04:27:08,280 [INFO] Citation classification complete
+2026-07-14 10:12:18,081 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:06:32,877 [INFO] Starting run...
+2026-07-14 14:06:34,453 [INFO] Loaded 6 questions
+2026-07-14 14:06:34,453 [INFO] Querying: how to become a certified dog trainer online
+2026-07-14 14:06:40,847 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:06:40,911 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:06:48,706 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:06:49,456 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become a certified dog trainer online'
+2026-07-14 14:06:55,035 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:06:55,046 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "FACT Academy", "text_as_written": "FACT Academy Dog Trainer Certification Course"},
+        {"name": "Academy of Pet Careers", "text_as_written": "The Academy of Pet Careers Online Dog Training Program"},
+        {"name": "Dog Trainer College", "text_as_written": "Dog Trainer College Online Programs"},
+        {"name": "Royal Dog Academy", "text_as_written": "Royal Dog Academy Online Dog Trainer Course"},
+        {"name": "Creek Life Canine Academy", "text_as_written": "Creek Life Canine Academy Online Programs"}
+    ],
+    "links": [
+        {"url": "https://www.pact-dogs.com/learning?utm_source=openai", "is_inline": false},
+        {"url": "https://facttrainingacademy.teachable.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.offleashk9online.com/raising-the-perfect-dog-puppy-training-video-course?utm_source=openai", "is_inline": true},
+        {"url": "https://www.theacademyofpetcareers.com/become-a-dog-trainer/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.dogtrainercollegeonline.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.themilliondollardogtrainer.com/signup?utm_source=openai", "is_inline": true},
+        {"url": "https://www.masterdog-training.com/online-school/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.heathersheroes.com/products/reading-dog-emotions?utm_source=openai", "is_inline": true},
+        {"url": "https://creeklifecanine.com/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-14 14:06:57,024 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-07-14 14:06:57,840 [INFO] [gemini] Saved 2 fanout queries for 'how to become a certified dog trainer online'
+2026-07-14 14:06:59,844 [INFO] Querying: is dog grooming a good career
+2026-07-14 14:07:06,172 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:07:06,205 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:07:18,334 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:07:19,076 [INFO] [chatgpt] Saved 1 fanout queries for 'is dog grooming a good career'
+2026-07-14 14:07:21,376 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:07:21,377 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.salary.com/research/salary/alternate/dog-groomer-salary?utm_source=openai", "is_inline": false},
+        {"url": "https://groomboard.com/blog/dog-groomer-salary-guide-2026?utm_source=openai", "is_inline": true},
+        {"url": "https://tryteddy.com/blog/how-much-do-dog-groomers-make-salary-guide-2026?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-14 14:07:22,435 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-07-14 14:07:23,596 [INFO] [gemini] Saved 6 fanout queries for 'is dog grooming a good career'
+2026-07-14 14:07:25,597 [INFO] Querying: careers working with dogs
+2026-07-14 14:07:36,019 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:07:36,052 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:07:47,796 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:07:48,645 [INFO] [chatgpt] Saved 1 fanout queries for 'careers working with dogs'
+2026-07-14 14:07:52,762 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:07:52,763 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "American Kennel Club", "text_as_written": "akc.org"},
+        {"name": "Tarheel Canine", "text_as_written": "tarheelcanine.com"},
+        {"name": "Canine", "text_as_written": "canine.org"},
+        {"name": "The Dog Stop", "text_as_written": "thedogstop.com"},
+        {"name": "Complete K9 Training", "text_as_written": "completek9.training"}
+    ],
+    "links": [
+        {"url": "https://ca.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs?utm_source=openai", "is_inline": false},
+        {"url": "https://www.akc.org/expert-advice/lifestyle/jobs-working-with-animals/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.tarheelcanine.com/careers/?utm_source=openai", "is_inline": true},
+        {"url": "https://canine.org/about/careers/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs?utm_source=openai", "is_inline": false},
+        {"url": "https://www.akc.org/public-education/resources/dog-related-career-skills/?utm_source=openai", "is_inline": false},
+        {"url": "https://thedogstop.com/about/work-with-us/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.completek9.training/careers?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-14 14:07:56,023 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-07-14 14:07:57,141 [INFO] [gemini] Saved 6 fanout queries for 'careers working with dogs'
+2026-07-14 14:07:59,146 [INFO] Querying: pet business ideas from home
+2026-07-14 14:08:07,046 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:08:07,078 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:08:13,872 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:08:14,620 [INFO] [chatgpt] Saved 1 fanout queries for 'pet business ideas from home'
+2026-07-14 14:08:17,912 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:08:17,914 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.powerhomebiz.com/business-ideas/5-home-based-pet-business-ideas.htm?utm_source=openai", "is_inline": false},
+        {"url": "https://doodycallsfranchising.com/2025/07/28/pet-business-ideas-your-ultimate-guide-to-starting-a-pet-focused-business/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.mycompanyworks.com/pet-business-ideas/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.gopetai.com/blog/10-best-pet-business-ideas-that-are-profitable-in-2025?utm_source=openai", "is_inline": false},
+        {"url": "https://www.livingetc.com/features/pet-friendly-interior-design-project?utm_source=openai", "is_inline": false},
+        {"url": "https://www.youtube.com/watch?v=pAFFZOnfnS4&utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-14 14:08:19,530 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-07-14 14:08:20,256 [INFO] [gemini] Saved 1 fanout queries for 'pet business ideas from home'
+2026-07-14 14:08:22,259 [INFO] Querying: jobs with dogs that pay well
+2026-07-14 14:08:27,938 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:08:27,969 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:08:35,740 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:08:36,494 [INFO] [chatgpt] Saved 1 fanout queries for 'jobs with dogs that pay well'
+2026-07-14 14:08:41,964 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:08:41,966 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Athens Technical College",
+            "text_as_written": "Veterinary Technology – Athens Technical College"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.ivethospital.com/en/content/10828/dr-jakaphan-wannawong-dvm-cert-in-dermatology?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://ca.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.athenstech.edu/programs/veterinary-technology/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.olx.ro/d/oferta/dresaj-canin-in-vaslui-cainii-lui-stefan-IDcBThL.html?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://media.gettyimages.com/id/1364364919/photo/female-worker-in-pet-grooming-saloon-using-scissors-to-cut-little-malteses-hair.jpg?b=1&c=KOeTP1uvhu05OvYjlKQSKTwXvbN4t0m4a5DxjVhWCdc%3D&k=20&s=612x612&w=0&utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://behindthebadge.com/westminster-animal-control-officer-earns-third-college-degree-aspires-to-become-police-officer/?utm_source=openai",
+            "is_inline": true
+        }
+    ]
+}
+2026-07-14 14:08:43,612 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-07-14 14:08:44,495 [INFO] [gemini] Saved 3 fanout queries for 'jobs with dogs that pay well'
+2026-07-14 14:08:46,500 [INFO] Querying: high paying careers working with animals
+2026-07-14 14:08:48,213 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:08:48,280 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:08:55,699 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:09:41,153 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-14 14:09:41,183 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-14 14:09:47,502 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-14 14:09:48,259 [INFO] [chatgpt] Saved 1 fanout queries for 'high paying careers working with animals'
+2026-07-14 14:09:53,134 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:09:53,136 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.ivethospital.com/en/content/10828/dr-jakaphan-wannawong-dvm-cert-in-dermatology?utm_source=openai", "is_inline": true},
+        {"url": "https://wageatlas.us/careers/animal-care/?utm_source=openai", "is_inline": true},
+        {"url": "https://ineducationonline.org/2024/08/30/seven-high-paying-animal-careers/?utm_source=openai", "is_inline": true},
+        {"url": "https://pixnio.com/tr/bilim/biyoloji/yaban-hayati-biyologlar-saha-calismasi?utm_source=openai", "is_inline": true},
+        {"url": "https://www.becomeopedia.com/high-paying-jobs-working-with-animals/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.theinit.com/2015/10/biologia-marina-en-nuestro-dia-a-dia/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.careerexplorer.com/careers/collections/highest-paying-jobs-with-animals/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.agrajo.com/blog/studium/tierwissenschaften-studieren?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-14 14:09:54,641 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-07-14 14:09:55,475 [INFO] [gemini] Saved 2 fanout queries for 'high paying careers working with animals'
+2026-07-14 14:09:58,223 [INFO] Run complete
+2026-07-14 14:09:58,223 [INFO] Classifying competitor citations...
+2026-07-14 14:10:02,793 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:10:06,138 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-14 14:10:09,076 [INFO] [classify] Stored 28 competitor-citation rows for run b4166adc-d865-4e99-be7b-e77c2f9f29f8
+2026-07-14 14:10:09,076 [INFO] Citation classification complete
