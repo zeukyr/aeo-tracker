@@ -9183,3 +9183,1713 @@
 2026-07-14 15:38:28,934 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 31.078407213s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '31s'}]}}
 2026-07-14 15:38:29,824 [INFO] [chatgpt] Saved 3 fanout queries for 'is QC Pet School accredited in Canada'
 2026-07-14 15:38:30,606 [ERROR] Run failed: 'credibility'
+2026-07-21 03:17:15,973 [INFO] Starting run...
+2026-07-21 03:17:17,397 [INFO] Loaded 58 questions
+2026-07-21 03:17:17,397 [INFO] Querying: how to become a certified dog trainer online
+2026-07-21 03:17:36,188 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:17:36,246 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:17:42,535 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:17:43,588 [INFO] [chatgpt] Saved 4 fanout queries for 'how to become a certified dog trainer online'
+2026-07-21 03:17:48,325 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:17:48,340 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Karen Pryor Academy", "text_as_written": "Karen Pryor Academy (KPA)"},
+        {"name": "CATCH Canine Trainers Academy", "text_as_written": "CATCH Canine Trainers Academy"},
+        {"name": "CCPDT", "text_as_written": "CCPDT"}
+    ],
+    "links": [
+        {"url": "https://www.ccpdt.org/certification/dog-trainer-certification/?utm_source=openai", "is_inline": false},
+        {"url": "https://karenpryoracademy.com/courses/dog-trainer-professional/?utm_source=openai", "is_inline": true},
+        {"url": "https://catchdogtrainers.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ccpdt.org/certification/become-a-dog-trainer/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.ccpdt.org/certification/dog-trainer-certification/?utm_source=openai", "is_inline": false},
+        {"url": "https://catchdogtrainers.com/our-program/courses-tuition/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.ccpdt.org/wp-content/uploads/2024/03/CPDT-KA-Candidate-Handbook-2024-FINAL.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://www.ccpdt.org/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:17:50,576 [INFO] [chatgpt] Saved general response for 'how to become a certified dog trainer online'
+2026-07-21 03:17:51,416 [INFO] [gemini] Saved 2 fanout queries for 'how to become a certified dog trainer online'
+2026-07-21 03:17:53,421 [INFO] Querying: is dog grooming a good career
+2026-07-21 03:18:06,795 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:18:06,815 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:18:16,739 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:18:17,548 [INFO] [chatgpt] Saved 2 fanout queries for 'is dog grooming a good career'
+2026-07-21 03:18:23,024 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:18:23,026 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.qcpetstudies.com/blog/2026/01/dog-grooming-career-outlook-what-demand-looks-like-in-2026?utm_source=openai", "is_inline": true},
+        {"url": "https://www.reddit.com/r/grooming/comments/1uc7lhl/pros_and_cons_of_dog_grooming/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/ors/factsheet/pdf/animal-caretakers.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://fraser.stlouisfed.org/title/occupational-outlook-handbook-3964/occupational-outlook-handbook-2004-05-edition-583139/content/fulltext/bls_2570_2004_pt2?utm_source=openai", "is_inline": false},
+        {"url": "https://www.indeed.com/career/pet-groomer/salaries?salaryType=YEARLY&utm_source=openai", "is_inline": false},
+        {"url": "https://www.reddit.com/r/grooming/comments/1soe15p/corporate_job_to_dog_groomer_hot_takes/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:18:24,384 [INFO] [chatgpt] Saved general response for 'is dog grooming a good career'
+2026-07-21 03:18:25,536 [INFO] [gemini] Saved 6 fanout queries for 'is dog grooming a good career'
+2026-07-21 03:18:27,541 [INFO] Querying: careers working with dogs
+2026-07-21 03:18:41,115 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:18:41,174 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:18:51,825 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:18:52,515 [INFO] [chatgpt] Saved 1 fanout queries for 'careers working with dogs'
+2026-07-21 03:19:02,957 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:19:02,959 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Bureau of Labor Statistics", "text_as_written": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai"},
+        {"name": "American Kennel Club", "text_as_written": "https://www.akc.org/public-education/resources/dog-related-career-skills/?utm_source=openai"},
+        {"name": "American Animal Hospital Association", "text_as_written": "https://www.aaha.org/resources/2021-aaha-working-assistance-and-therapy-dog-guidelines/working-dogs-detection/?utm_source=openai"},
+        {"name": "ADA", "text_as_written": "https://www.ada.gov/resources/service-animals-faqs/?utm_source=openai"},
+        {"name": "United States Department of Agriculture", "text_as_written": "https://www.aphis.usda.gov/plant-protection-quarantine/detector-dogs?utm_source=openai"},
+        {"name": "Indeed", "text_as_written": "https://www.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs?utm_source=openai"},
+        {"name": "Scouting", "text_as_written": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Pamphlets/Dog%20Care.pdf?utm_source=openai"}
+    ],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://filestore.scouting.org/filestore/Merit_Badge_ReqandRes/Pamphlets/Dog%20Care.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://www.akc.org/public-education/resources/dog-related-career-skills/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.indeed.com/career-advice/finding-a-job/jobs-working-with-dogs?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ada.gov/resources/service-animals-faqs/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.aphis.usda.gov/plant-protection-quarantine/detector-dogs?utm_source=openai", "is_inline": true},
+        {"url": "https://www.aaha.org/resources/2021-aaha-working-assistance-and-therapy-dog-guidelines/working-dogs-detection/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.aaha.org/wp-content/uploads/globalassets/02-guidelines/working-assistance-and-therapy-dog/resourcepdfs/aaha-ebook-working-dog.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://www.akc.org/sports/conformation/careers-in-dogs/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:19:05,377 [INFO] [chatgpt] Saved general response for 'careers working with dogs'
+2026-07-21 03:19:06,386 [INFO] [gemini] Saved 5 fanout queries for 'careers working with dogs'
+2026-07-21 03:19:08,392 [INFO] Querying: pet business ideas from home
+2026-07-21 03:19:19,938 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:19:19,959 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:19:27,685 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:19:28,409 [INFO] [chatgpt] Saved 1 fanout queries for 'pet business ideas from home'
+2026-07-21 03:19:33,025 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:19:33,026 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "U.S. Chamber of Commerce", "text_as_written": "uschamber.com"},
+        {"name": "Power Home Biz", "text_as_written": "powerhomebiz.com"},
+        {"name": "99 Business Ideas", "text_as_written": "99businessideas.com"},
+        {"name": "Shopify", "text_as_written": "shopify.com"},
+        {"name": "Reddit", "text_as_written": "reddit.com"}
+    ],
+    "links": [
+        {"url": "https://www.uschamber.com/co/start/business-ideas/work-from-home-business-ideas?utm_source=openai", "is_inline": true},
+        {"url": "https://www.powerhomebiz.com/business-ideas/5-home-based-pet-business-ideas.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.99businessideas.com/pet-business-ideas/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.shopify.com/uk/blog/pet-business?utm_source=openai", "is_inline": true},
+        {"url": "https://www.reddit.com/r/SideHustleGold/comments/1v1lehh/making_homemade_dog_treats_is_a_ridiculously_easy/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:19:34,822 [INFO] [chatgpt] Saved general response for 'pet business ideas from home'
+2026-07-21 03:19:35,680 [INFO] [gemini] Saved 3 fanout queries for 'pet business ideas from home'
+2026-07-21 03:19:37,685 [INFO] Querying: jobs with dogs that pay well
+2026-07-21 03:20:14,805 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:20:14,827 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:20:21,063 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:20:22,000 [INFO] [chatgpt] Saved 4 fanout queries for 'jobs with dogs that pay well'
+2026-07-21 03:20:26,992 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:20:26,992 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://wageatlas.us/careers/animal-care/?utm_source=openai", "is_inline": false},
+        {"url": "https://ebusiness.avma.org/files/productdownloads/002_AVMA_SotPReport25_NoPasswordPRO.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://www.auburn.edu/administration/human_resources/compensation/ccp/jd/ic14c.pdf?time=20240927135702&utm_source=openai", "is_inline": false},
+        {"url": "https://www.indeed.com/career/canine-handler/salaries?utm_source=openai", "is_inline": false},
+        {"url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai", "is_inline": false},
+        {"url": "https://www.indeed.com/cmp/Rover.com/salaries/Dog-Walker?period=yearly&utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:20:28,375 [INFO] [chatgpt] Saved general response for 'jobs with dogs that pay well'
+2026-07-21 03:20:29,136 [INFO] [gemini] Saved 2 fanout queries for 'jobs with dogs that pay well'
+2026-07-21 03:20:31,141 [INFO] Querying: high paying careers working with animals
+2026-07-21 03:20:51,015 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:20:51,047 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:20:59,689 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:21:00,521 [INFO] [chatgpt] Saved 2 fanout queries for 'high paying careers working with animals'
+2026-07-21 03:21:04,368 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:21:04,368 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://wageatlas.us/careers/animal-care/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.indeed.com/career-advice/finding-a-job/highest-paid-veterinarians?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/careeroutlook/2015/article/pdf/working-with-animals.pdf?utm_source=openai", "is_inline": true},
+        {"url": "https://labordatahub.com/occupations/zoologists-and-wildlife-biologists?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/oes/2023/may/oes292056.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.indeed.com/career-advice/pay-salary/zoo-veterinarians-salary?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:21:05,987 [INFO] [chatgpt] Saved general response for 'high paying careers working with animals'
+2026-07-21 03:21:06,995 [INFO] [gemini] Saved 5 fanout queries for 'high paying careers working with animals'
+2026-07-21 03:21:08,997 [INFO] Querying: what is a good career for someone without a degree
+2026-07-21 03:21:29,165 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:21:29,188 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:21:36,314 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:21:36,993 [INFO] [chatgpt] Saved 1 fanout queries for 'what is a good career for someone without a degree'
+2026-07-21 03:33:36,049 [INFO] Resuming run de318024-57b5-4e3d-ba68-dec236aec598...
+2026-07-21 03:33:37,597 [INFO] Skipping 6 already-processed questions, 52 remaining
+2026-07-21 03:33:37,597 [INFO] Loaded 52 questions
+2026-07-21 03:33:37,597 [INFO] Querying: what is a good career for someone without a degree
+2026-07-21 03:33:50,313 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:33:50,376 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:34:00,029 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:34:00,797 [INFO] [chatgpt] Saved 2 fanout queries for 'what is a good career for someone without a degree'
+2026-07-21 03:34:03,957 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:34:03,964 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/about/glossary.htm?utm_source=openai", "is_inline": false},
+        {"url": "https://www.bls.gov/careeroutlook/2023/data-on-display/fast-growth-good-pay-without-a-bachelors-degree.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/careeroutlook/2022/article/occupations-that-dont-require-a-degree.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/careeroutlook/2026/article/healthcare-science-and-engineering-careers.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/ooh/occupation-finder.htm?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:34:05,137 [INFO] [chatgpt] Saved general response for 'what is a good career for someone without a degree'
+2026-07-21 03:34:06,081 [INFO] [gemini] Saved 3 fanout queries for 'what is a good career for someone without a degree'
+2026-07-21 03:34:08,086 [INFO] Querying: I want a career change what should I learn
+2026-07-21 03:34:23,310 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:34:23,333 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:34:31,195 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:34:32,038 [INFO] [chatgpt] Saved 3 fanout queries for 'I want a career change what should I learn'
+2026-07-21 03:34:35,379 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:34:35,382 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.bls.gov/opub/ted/2026/artificial-intelligence-information-technology-and-employment-2024-34.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/opub/mlr/2026/article/industry-and-occupational-employment-projections-overview.htm?utm_source=openai", "is_inline": false},
+        {"url": "https://www.indeed.com/news/releases/meet-indeeds-skills-map-a-new-way-to-decode-in-demand-skills?co=US&utm_source=openai", "is_inline": true},
+        {"url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/in-full/3-skills-outlook/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.bls.gov/emp/tables/fastest-growing-occupations.htm?src_trk=em65ff1905e2bb74.644535162085697362&utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:34:36,752 [INFO] [chatgpt] Saved general response for 'I want a career change what should I learn'
+2026-07-21 03:34:37,788 [INFO] [gemini] Saved 4 fanout queries for 'I want a career change what should I learn'
+2026-07-21 03:34:39,793 [INFO] Querying: how to become a certified dog groomer
+2026-07-21 03:34:52,065 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:34:52,097 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:34:58,229 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:34:59,185 [INFO] [chatgpt] Saved 4 fanout queries for 'how to become a certified dog groomer'
+2026-07-21 03:35:04,475 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:35:04,476 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "NDGAA", "text_as_written": "NDGAA certifications, including the National Certified Master Groomer track"},
+        {"name": "AKC", "text_as_written": "AKC grooming credentials, including AKC S.A.F.E. and the Professional Grooming Credential (PGC)"},
+        {"name": "ICMG", "text_as_written": "ICMGUK"}
+    ],
+    "links": [
+        {"url": "https://nationaldoggroomers.com/pgc?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/groomer-hub/education-standards/?utm_source=openai", "is_inline": true},
+        {"url": "https://nationaldoggroomers.com/s/__2023_WORK_guidelines.pdf?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/products-services/akc-safe-grooming-program/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.icmguk.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/press-releases/american-kennel-club-announces-expansion-akc-s-f-e-grooming-program/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:35:06,240 [INFO] [chatgpt] Saved general response for 'how to become a certified dog groomer'
+2026-07-21 03:35:07,015 [INFO] [gemini] Saved 2 fanout queries for 'how to become a certified dog groomer'
+2026-07-21 03:35:09,017 [INFO] Querying: how to become a professional dog trainer
+2026-07-21 03:35:21,269 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:35:21,289 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:35:28,452 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:35:29,218 [INFO] [chatgpt] Saved 2 fanout queries for 'how to become a professional dog trainer'
+2026-07-21 03:35:32,723 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:35:32,723 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "CCPDT",
+            "text_as_written": "CCPDT"
+        },
+        {
+            "name": "Karen Pryor Academy",
+            "text_as_written": "Karen Pryor Academy’s Dog Trainer Professional program"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "akc.org"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.ccpdt.org/certification/dog-trainer-certification/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.akc.org/expert-advice/training/how-to-become-a-dog-trainer/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://karenpryoracademy.com/courses/dog-trainer-professional/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ccpdt.org/about-us/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://training.apdt.com/?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:35:34,331 [INFO] [chatgpt] Saved general response for 'how to become a professional dog trainer'
+2026-07-21 03:35:35,313 [INFO] [gemini] Saved 5 fanout queries for 'how to become a professional dog trainer'
+2026-07-21 03:35:37,314 [INFO] Querying: how to become a dog behavior specialist
+2026-07-21 03:35:46,606 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:35:46,627 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:35:54,140 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:35:54,817 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become a dog behavior specialist'
+2026-07-21 03:35:56,736 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:35:56,740 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "IAABC", "text_as_written": "IAABC"},
+        {"name": "CCPDT", "text_as_written": "CCPDT"}
+    ],
+    "links": [
+        {"url": "https://iaabc.org/en/credentials?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ccpdt.org/certification/dog-behavior-consultant/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:35:57,939 [INFO] [chatgpt] Saved general response for 'how to become a dog behavior specialist'
+2026-07-21 03:35:58,737 [INFO] [gemini] Saved 2 fanout queries for 'how to become a dog behavior specialist'
+2026-07-21 03:36:00,741 [INFO] Querying: how to become a pet care professional
+2026-07-21 03:36:36,945 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:36:36,967 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:36:53,524 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:36:54,456 [INFO] [chatgpt] Saved 3 fanout queries for 'how to become a pet care professional'
+2026-07-21 03:37:02,520 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:37:02,521 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Pet Sitters International",
+            "text_as_written": "CPPS (Certified Professional Pet Sitter) from Pet Sitters International"
+        },
+        {
+            "name": "National Association of Professional Pet Sitters",
+            "text_as_written": "NAPPS Certification from the National Association of Professional Pet Sitters"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.petsit.com/certification/?trk=profile_certification_title&utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://petsitters.org/page/CertificationLanding?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.redcross.org/take-a-class/resources/articles/pet-certifications-for-dog-walkers-pet-sitters?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.mspca.org/how-to-find-a-dog-walker/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.aphis.usda.gov/awa/apply?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:37:03,988 [INFO] [chatgpt] Saved general response for 'how to become a pet care professional'
+2026-07-21 03:37:05,599 [INFO] [gemini] Saved 13 fanout queries for 'how to become a pet care professional'
+2026-07-21 03:37:07,604 [INFO] Querying: how to become a canine care expert
+2026-07-21 03:37:37,213 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:37:37,234 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:37:49,587 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:37:50,256 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become a canine care expert'
+2026-07-21 03:37:56,257 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:37:56,257 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "CCPDT",
+            "text_as_written": "CCPDT for dog trainers and behavior consultants"
+        },
+        {
+            "name": "IAABC",
+            "text_as_written": "IAABC for behavior credentials"
+        },
+        {
+            "name": "American College of Veterinary Behaviorists",
+            "text_as_written": "American College of Veterinary Behaviorists for veterinary specialists"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "AKC training resources"
+        },
+        {
+            "name": "AVSAB",
+            "text_as_written": "science-based behavior organizations such as AVSAB"
+        },
+        {
+            "name": "CCPDT",
+            "text_as_written": "CCPDT is one of the best-known independent certification bodies"
+        },
+        {
+            "name": "IAABC",
+            "text_as_written": "IAABC and CCPDT’s advanced behavior credential are common options"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.ccpdt.org/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.akc.org/products-services/training-programs/canine-good-citizen/training-resources/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.akc.org/expert-advice/training/how-to-become-a-dog-trainer/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.akc.org/expert-advice/lifestyle/what-is-an-animal-behaviorist/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.ccpdt.org/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ccpdt.org/certification/dog-behavior-consultant/?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:37:57,985 [INFO] [chatgpt] Saved general response for 'how to become a canine care expert'
+2026-07-21 03:37:59,106 [INFO] [gemini] Saved 7 fanout queries for 'how to become a canine care expert'
+2026-07-21 03:38:01,111 [INFO] Querying: how long does it take to become a dog groomer
+2026-07-21 03:38:15,997 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:38:16,035 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:38:22,395 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:38:23,106 [INFO] [chatgpt] Saved 1 fanout queries for 'how long does it take to become a dog groomer'
+2026-07-21 03:38:25,655 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:38:25,655 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "grooming schools", "text_as_written": "grooming schools"},
+        {"name": "Harford Community College", "text_as_written": "harford.edu"},
+        {"name": "Animal Behavior College", "text_as_written": "animalbehaviorcollege.com"}
+    ],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/careeroutlook/2006/winter/art01.pdf?utm_source=openai", "is_inline": false},
+        {"url": "https://www.harford.edu/academics/workforce-career-programs/programs/dog-grooming.php?utm_source=openai", "is_inline": true},
+        {"url": "https://www.animalbehaviorcollege.com/grooming/dog-grooming-school-faq/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:38:26,923 [INFO] [chatgpt] Saved general response for 'how long does it take to become a dog groomer'
+2026-07-21 03:38:27,686 [INFO] [gemini] Saved 2 fanout queries for 'how long does it take to become a dog groomer'
+2026-07-21 03:38:29,692 [INFO] Querying: how old do you have to be to be a dog groomer
+2026-07-21 03:38:38,719 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:38:38,742 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:38:43,820 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:38:44,504 [INFO] [chatgpt] Saved 1 fanout queries for 'how old do you have to be to be a dog groomer'
+2026-07-21 03:38:46,380 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:38:46,380 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/personal-care-and-service/animal-care-and-service-workers.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.dol.gov/general/topic/hiring/workersunder18?lang=en&utm_source=openai", "is_inline": true},
+        {"url": "https://malegislature.gov/Bills/193/H310.pdf?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:38:47,514 [INFO] [chatgpt] Saved general response for 'how old do you have to be to be a dog groomer'
+2026-07-21 03:38:48,345 [INFO] [gemini] Saved 3 fanout queries for 'how old do you have to be to be a dog groomer'
+2026-07-21 03:38:50,350 [INFO] Querying: how to become an event planner
+2026-07-21 03:39:02,620 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:39:02,644 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:39:08,191 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:39:08,892 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become an event planner'
+2026-07-21 03:39:11,545 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:39:11,546 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Zoho", "text_as_written": "zoho.com"},
+        {"name": "Indeed", "text_as_written": "indeed.com"}
+    ],
+    "links": [
+        {"url": "https://www.bls.gov/ooh/business-and-financial/meeting-convention-and-event-planners.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/ors/factsheet/meeting-convention-and-event-planners.htm?utm_source=openai", "is_inline": true},
+        {"url": "https://www.zoho.com/backstage/how-to-become-an-event-organizer.html?utm_source=openai", "is_inline": true},
+        {"url": "https://www.indeed.com/career-advice/career-development/how-to-become-event-planner?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:39:13,020 [INFO] [chatgpt] Saved general response for 'how to become an event planner'
+2026-07-21 03:39:13,759 [INFO] [gemini] Saved 2 fanout queries for 'how to become an event planner'
+2026-07-21 03:39:15,764 [INFO] Querying: how to become a wedding planner
+2026-07-21 03:39:28,365 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:39:28,386 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:39:35,744 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:39:36,426 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become a wedding planner'
+2026-07-21 03:39:43,315 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:39:43,315 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "American Association of Certified Wedding Planners",
+            "text_as_written": "American Association of Certified Wedding Planners"
+        },
+        {
+            "name": "Association of Bridal Consultants",
+            "text_as_written": "the Association of Bridal Consultants"
+        },
+        {
+            "name": "Lovegevity’s Wedding Planning Institute",
+            "text_as_written": "Lovegevity’s Wedding Planning Institute"
+        },
+        {
+            "name": "weddingplanninginstitute.com",
+            "text_as_written": "weddingplanninginstitute.com"
+        },
+        {
+            "name": "abcweddingplanners.com",
+            "text_as_written": "abcweddingplanners.com"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.indeed.com/career-advice/career-development/how-to-become-a-wedding-planner?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.indeed.com/career-advice/careers/what-does-a-wedding-planner-do?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.geteducated.com/career-center/certificate-awards/wedding-planner/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.weddingplanninginstitute.com/blog/how-to-become-certified-wedding-planner-2026?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.weddingplanninginstitute.com/blog/start-wedding-planning-business-checklist?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.abcweddingplanners.com/overview-of-education-pathways?utm_source=openai",
+            "is_inline": true
+        }
+    ]
+}
+2026-07-21 03:39:45,050 [INFO] [chatgpt] Saved general response for 'how to become a wedding planner'
+2026-07-21 03:39:45,994 [INFO] [gemini] Saved 4 fanout queries for 'how to become a wedding planner'
+2026-07-21 03:39:47,999 [INFO] Querying: how to become an event decorator
+2026-07-21 03:39:57,449 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:39:57,472 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:40:11,466 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:40:12,141 [INFO] [chatgpt] Saved 1 fanout queries for 'how to become an event decorator'
+2026-07-21 03:40:14,966 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:40:14,969 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.ziprecruiter.com/career/Event-Decorator/What-Is-How-to-Become?utm_source=openai", "is_inline": true},
+        {"url": "https://www.qceventplanning.com/blog/2022/03/how-to-become-an-event-decorator-the-ultimate-guide?utm_source=openai", "is_inline": true},
+        {"url": "https://careercenter.ies.org/career/event-decorator?utm_source=openai", "is_inline": true},
+        {"url": "https://uk.indeed.com/career-advice/finding-a-job/how-to-become-event-decorator?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bls.gov/ooh/business-and-financial/meeting-convention-and-event-planners.htm?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:40:16,319 [INFO] [chatgpt] Saved general response for 'how to become an event decorator'
+2026-07-21 03:40:17,672 [INFO] [gemini] Saved 10 fanout queries for 'how to become an event decorator'
+2026-07-21 03:40:19,677 [INFO] Querying: How do I become an event designer?
+2026-07-21 03:40:34,799 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:40:34,819 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:40:43,323 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:40:44,178 [INFO] [chatgpt] Saved 3 fanout queries for 'How do I become an event designer?'
+2026-07-21 03:40:49,397 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:40:49,401 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "MPI",
+            "text_as_written": "MPI"
+        },
+        {
+            "name": "PCMA",
+            "text_as_written": "PCMA"
+        },
+        {
+            "name": "WIPA",
+            "text_as_written": "WIPA"
+        },
+        {
+            "name": "EDPA",
+            "text_as_written": "EDPA"
+        },
+        {
+            "name": "BLS",
+            "text_as_written": "BLS"
+        },
+        {
+            "name": "ESPA",
+            "text_as_written": "ESPA"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.mpi.org/education/mpi-academy?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.bls.gov/ooh/arts-and-design/set-and-exhibit-designers.htm?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.ziprecruiter.com/career/Event-Designer/What-Is-How-to-Become?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.wipa.org/?utm_source=openai",
+            "is_inline": true
+        }
+    ]
+}
+2026-07-21 03:40:51,124 [INFO] [chatgpt] Saved general response for 'How do I become an event designer?'
+2026-07-21 03:40:52,175 [INFO] [gemini] Saved 6 fanout queries for 'How do I become an event designer?'
+2026-07-21 03:40:54,180 [INFO] Querying: how to start a grooming business from home
+2026-07-21 03:41:13,381 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:41:13,402 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:41:29,506 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:41:30,301 [INFO] [chatgpt] Saved 2 fanout queries for 'how to start a grooming business from home'
+2026-07-21 03:41:32,372 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:41:32,373 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide/launch-your-business/pick-your-business-location?utm_source=openai", "is_inline": true},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/checklist-for-starting-a-business?utm_source=openai", "is_inline": true},
+        {"url": "https://www.sba.gov/business-guide/launch-your-business?trk=public_post_reshare-text&utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/starting-a-business?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:41:33,576 [INFO] [chatgpt] Saved general response for 'how to start a grooming business from home'
+2026-07-21 03:41:34,967 [INFO] [gemini] Saved 10 fanout queries for 'how to start a grooming business from home'
+2026-07-21 03:41:36,972 [INFO] Querying: how do i start my own pet business from scratch
+2026-07-21 03:42:08,110 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:42:08,132 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:42:23,778 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:42:24,648 [INFO] [chatgpt] Saved 3 fanout queries for 'how do i start my own pet business from scratch'
+2026-07-21 03:42:28,284 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:42:28,285 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide?utm_source=openai", "is_inline": true},
+        {"url": "https://www.sba.gov/business-guide/launch-your-business/pick-your-business-location?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/starting-a-business?utm_source=openai", "is_inline": false},
+        {"url": "https://www.aphis.usda.gov/awa/apply?utm_source=openai", "is_inline": false},
+        {"url": "https://www.aphis.usda.gov/animal_welfare/downloads/graybook.pdf?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:42:29,883 [INFO] [chatgpt] Saved general response for 'how do i start my own pet business from scratch'
+2026-07-21 03:42:31,185 [INFO] [gemini] Saved 9 fanout queries for 'how do i start my own pet business from scratch'
+2026-07-21 03:42:33,190 [INFO] Querying: how to start an event planning business
+2026-07-21 03:42:57,878 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:42:57,898 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:42:58,096 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:42:58,097 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 1.887484925s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '1s'}]}}
+2026-07-21 03:42:59,005 [INFO] [chatgpt] Saved 3 fanout queries for 'how to start an event planning business'
+2026-07-21 03:43:01,460 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:43:01,461 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/event/83062?utm_source=openai", "is_inline": true},
+        {"url": "https://www.irs.gov/businesses/employer-identification-number?cc=US&hl=en&utm_source=openai", "is_inline": true},
+        {"url": "https://www.irs.gov/newsroom/what-people-need-to-know-when-starting-a-business?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/employer-identification-number?cc=US&hl=en&utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/starting-a-business?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:43:02,532 [INFO] [chatgpt] Saved general response for 'how to start an event planning business'
+2026-07-21 03:43:04,535 [INFO] Querying: How do I start a wedding décor business?
+2026-07-21 03:43:43,756 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:43:43,778 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:43:53,179 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:43:54,082 [INFO] [chatgpt] Saved 3 fanout queries for 'How do I start a wedding décor business?'
+2026-07-21 03:44:01,435 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:44:01,436 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide/launch-your-business?trk=public_post_reshare-text&utm_source=openai", "is_inline": true},
+        {"url": "https://www.startcap.org/industries/wedding-planning-business-startup-loans?utm_source=openai", "is_inline": true},
+        {"url": "https://wedding.alibaba.com/buyingguides/wedding-decorations-business?utm_source=openai", "is_inline": true},
+        {"url": "https://www.reddit.com/r/florists/comments/1bubauj?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure?f_link_type=f_linkinlinenote&flow_sdk_version=10070040&need_sec_link=1&region=US&sec_link_scene=im&use-olympus-account=1&utm_source=openai", "is_inline": true},
+        {"url": "https://startpermit.com/blog/how-to-start-a-wedding-planning-business/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.weddingplanninginstitute.com/blog/start-wedding-planning-business-checklist?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:44:02,931 [INFO] [chatgpt] Saved general response for 'How do I start a wedding décor business?'
+2026-07-21 03:44:04,054 [INFO] [gemini] Saved 6 fanout queries for 'How do I start a wedding décor business?'
+2026-07-21 03:44:06,059 [INFO] Querying: How do I start a decoration business?
+2026-07-21 03:44:42,431 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:44:42,461 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:44:49,803 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:44:50,652 [INFO] [chatgpt] Saved 3 fanout queries for 'How do I start a decoration business?'
+2026-07-21 03:44:53,416 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:44:53,417 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide?utm_source=openai", "is_inline": true},
+        {"url": "https://www.irs.gov/newsroom/important-steps-for-future-business-owners?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/starting-a-business?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/blog/5-key-financial-tips-when-starting-business-home?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:44:54,603 [INFO] [chatgpt] Saved general response for 'How do I start a decoration business?'
+2026-07-21 03:44:55,435 [INFO] [gemini] Saved 3 fanout queries for 'How do I start a decoration business?'
+2026-07-21 03:44:57,440 [INFO] Querying: How do I start a home décor business?
+2026-07-21 03:46:00,745 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:46:00,768 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:46:01,000 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:46:01,000 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 58.960610891s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '58s'}]}}
+2026-07-21 03:46:01,867 [INFO] [chatgpt] Saved 3 fanout queries for 'How do I start a home décor business?'
+2026-07-21 03:46:04,432 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:46:04,434 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide/plan-your-business?utm_source=openai", "is_inline": true},
+        {"url": "https://www.irs.gov/newsroom/what-people-need-to-know-when-starting-a-business?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/single-member-limited-liability-companies?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/businesses/small-businesses-self-employed/starting-a-business?utm_source=openai", "is_inline": false},
+        {"url": "https://www.irs.gov/taxtopics/tc407?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:46:05,732 [INFO] [chatgpt] Saved general response for 'How do I start a home décor business?'
+2026-07-21 03:46:07,735 [INFO] Querying: How do I get clients for an event planning business?
+2026-07-21 03:46:28,089 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:46:28,113 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:46:28,317 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:46:28,318 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 31.643251105s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '31s'}]}}
+2026-07-21 03:46:29,056 [INFO] [chatgpt] Saved 1 fanout queries for 'How do I get clients for an event planning business?'
+2026-07-21 03:46:32,487 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:46:32,488 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "SBA", "text_as_written": "SBA"},
+        {"name": "SCORE", "text_as_written": "SCORE"}
+    ],
+    "links": [
+        {"url": "https://www.sba.gov/event/85537?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/event/85784?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/event/85285?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/event/84478?utm_source=openai", "is_inline": false},
+        {"url": "https://www.sba.gov/event/85693?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:46:33,694 [INFO] [chatgpt] Saved general response for 'How do I get clients for an event planning business?'
+2026-07-21 03:46:35,699 [INFO] Querying: What does it cost to start an event planning business?
+2026-07-21 03:46:52,660 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:46:52,681 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:46:52,882 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:46:52,883 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 7.077946443s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '7s'}]}}
+2026-07-21 03:46:53,714 [INFO] [chatgpt] Saved 3 fanout queries for 'What does it cost to start an event planning business?'
+2026-07-21 03:46:58,422 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:46:58,426 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "SBA", "text_as_written": "the SBA notes that startup costs for service businesses commonly include licenses, insurance, marketing, professional fees, equipment, communications, and a website."},
+        {"name": "The Hartford", "text_as_written": "according to The Hartford, though your actual premium may vary by coverage, revenue, and risk."}
+    ],
+    "links": [
+        {"url": "https://www.sba.gov/business-guide/plan-your-business/calculate-your-startup-costs?promo=BAPCHBP300V33&utm_source=openai", "is_inline": true},
+        {"url": "https://www.sba.gov/business-guide/launch-your-business/register-your-business?limit=15&utm_source=openai", "is_inline": true},
+        {"url": "https://www.sba.gov/business-guide/launch-your-business/get-federal-state-tax-id-numbers?utm_source=openai", "is_inline": true},
+        {"url": "https://www.thehartford.com/business-insurance/event-planner?utm_source=openai", "is_inline": true},
+        {"url": "https://www.sba.gov/blog/how-estimate-starting-costs?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:46:59,927 [INFO] [chatgpt] Saved general response for 'What does it cost to start an event planning business?'
+2026-07-21 03:47:01,933 [INFO] Querying: how much does dog grooming school cost
+2026-07-21 03:47:09,761 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:47:09,782 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:47:09,987 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:47:09,988 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 49.972868664s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '49s'}]}}
+2026-07-21 03:47:10,854 [INFO] [chatgpt] Saved 3 fanout queries for 'how much does dog grooming school cost'
+2026-07-21 03:47:15,198 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:47:15,200 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Butler Community College", "text_as_written": "$3,399 at Butler Community College"},
+        {"name": "Carroll Community College", "text_as_written": "$4,850 at Carroll Community College"},
+        {"name": "PLH School", "text_as_written": "about $10,126 at PLH School in Texas"},
+        {"name": "California school", "text_as_written": "a California school filing lists a Professional Dog Groomer"},
+        {"name": "Penn Foster", "text_as_written": "Penn Foster and Animal Behavior College both publish tuition pages"},
+        {"name": "Animal Behavior College", "text_as_written": "Penn Foster and Animal Behavior College both publish tuition pages"}
+    ],
+    "links": [
+        {"url": "https://www.butlercc.edu/dog-grooming?utm_source=openai", "is_inline": true},
+        {"url": "https://www.bppe.ca.gov/webapplications/annualReports/2024/document/05bf8c6c-e749-44d7-998d-1f89f60049b8?utm_source=openai", "is_inline": false},
+        {"url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate/tuition?utm_source=openai", "is_inline": true},
+        {"url": "https://www.carrollcc.edu/programs/professional-skills-job-training/professional-pet-grooming-certificate/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:47:16,767 [INFO] [chatgpt] Saved general response for 'how much does dog grooming school cost'
+2026-07-21 03:47:18,772 [INFO] Querying: dog groomer certification cost
+2026-07-21 03:47:27,476 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:47:27,496 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:47:34,030 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:47:34,947 [INFO] [chatgpt] Saved 4 fanout queries for 'dog groomer certification cost'
+2026-07-21 03:47:41,302 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:47:41,303 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "NDGAA",
+            "text_as_written": "NDGAA workshop/certification materials"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "AKC lists its Professional Grooming Credential exam"
+        },
+        {
+            "name": "Animal Behavior College",
+            "text_as_written": "Animal Behavior College shows a total program cost of $5,095"
+        },
+        {
+            "name": "Paragon",
+            "text_as_written": "Paragon has a dedicated tuition page for its professional grooming certification program"
+        },
+        {
+            "name": "AKC Canine College",
+            "text_as_written": "AKC Canine College shows some virtual practical exams"
+        },
+        {
+            "name": "Paragon Pet School",
+            "text_as_written": "based on the mix of standalone exam fees versus full-school tuition options shown by grooming organizations and schools"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://nationaldoggroomers.com/s/__2023_WORK_guidelines.pdf?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://d3ciwvs59ifrt8.cloudfront.net/9cb7c20e-f986-45b5-8737-d380eb66aba8/67384150-e3eb-41aa-bcde-0b978afe8aed.pdf?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.caninecollege.akc.org/visitor_class_catalog/category/91290I?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://paragonpetschool.com/tuition/?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:47:42,934 [INFO] [chatgpt] Saved general response for 'dog groomer certification cost'
+2026-07-21 03:47:43,694 [INFO] [gemini] Saved 2 fanout queries for 'dog groomer certification cost'
+2026-07-21 03:47:45,699 [INFO] Querying: best dog grooming certification online
+2026-07-21 03:48:04,955 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:48:04,977 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:48:11,508 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-07-21 03:48:12,434 [INFO] [chatgpt] Saved 4 fanout queries for 'best dog grooming certification online'
+2026-07-21 03:48:19,191 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:48:19,191 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "AKC",
+            "text_as_written": "AKC Professional Grooming Credential (PGC)"
+        },
+        {
+            "name": "Penn Foster",
+            "text_as_written": "Penn Foster Pet and Dog Grooming Certificate"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "AKC S.A.F.E."
+        },
+        {
+            "name": "NDGAA",
+            "text_as_written": "NDGAA"
+        },
+        {
+            "name": "IPG",
+            "text_as_written": "IPG"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "AKC PGC"
+        },
+        {
+            "name": "AKC",
+            "text_as_written": "AKC S.A.F.E."
+        },
+        {
+            "name": "NDGAA",
+            "text_as_written": "NDGAA"
+        },
+        {
+            "name": "IPG",
+            "text_as_written": "IPG"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.akc.org/groomer-hub/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://groomerjob.com/blog/dog-grooming-certifications-compared?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://legalclarity.org/what-states-require-a-dog-grooming-license/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://onlinewfd.hacc.edu/product?catalog=CRN_70485_202790&utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.dmacc.edu/careertraining/dog-grooming.html?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.qcpetstudies.com/certification-courses/dog-grooming/course-outline?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:48:21,501 [INFO] [chatgpt] Saved course response for 'best dog grooming certification online'
+2026-07-21 03:48:22,269 [INFO] [gemini] Saved 2 fanout queries for 'best dog grooming certification online'
+2026-07-21 03:48:24,275 [INFO] Querying: dog training certification canada
+2026-07-21 03:48:32,673 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:48:32,705 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:48:32,910 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:48:32,911 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 27.068724139s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '27s'}]}}
+2026-07-21 03:48:33,729 [INFO] [chatgpt] Saved 3 fanout queries for 'dog training certification canada'
+2026-07-21 03:48:37,518 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:48:37,519 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Canadian Association of Professional Dog Trainers", "text_as_written": "Canadian Association of Professional Dog Trainers"},
+        {"name": "CCPDT", "text_as_written": "CCPDT"},
+        {"name": "IAABC", "text_as_written": "IAABC"},
+        {"name": "Karen Pryor Academy", "text_as_written": "Karen Pryor Academy"},
+        {"name": "CAPDT", "text_as_written": "CAPDT"}
+    ],
+    "links": [
+        {"url": "https://capdt.ca/dog-owners-new-puppy/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ccpdt.org/certification/?utm_source=openai", "is_inline": true},
+        {"url": "https://iaabc.org/en/credentials?utm_source=openai", "is_inline": true},
+        {"url": "https://spca.bc.ca/wp-content/uploads/AnimalKind-Dog-Training-Standards.pdf?utm_source=openai", "is_inline": true},
+        {"url": "https://capdt.ca/?utm_source=openai", "is_inline": true},
+        {"url": "https://capdt.ca/becoming-a-dog-trainer/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:48:39,120 [INFO] [chatgpt] Saved course response for 'dog training certification canada'
+2026-07-21 03:48:41,125 [INFO] Querying: best distance learning pet grooming courses
+2026-07-21 03:48:51,855 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:48:51,874 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:48:52,052 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:48:52,053 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 7.911308898s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '7s'}]}}
+2026-07-21 03:48:52,971 [INFO] [chatgpt] Saved 4 fanout queries for 'best distance learning pet grooming courses'
+2026-07-21 03:48:58,510 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:48:58,510 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Paragon School of Pet Grooming", "text_as_written": "Paragon School of Pet Grooming"},
+        {"name": "Penn Foster Pet and Dog Grooming Certificate", "text_as_written": "Penn Foster Pet and Dog Grooming Certificate"},
+        {"name": "AKC Canine College / AKC Groomer Education", "text_as_written": "AKC Canine College / AKC Groomer Education"},
+        {"name": "PLH School", "text_as_written": "PLH School"},
+        {"name": "West Coast Grooming Academy", "text_as_written": "West Coast Grooming Academy"}
+    ],
+    "links": [
+        {"url": "https://paragonpetschool.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.pennfoster.edu/programs/veterinary/pet-grooming-certificate?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/products-services/akc-safe-grooming-program/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.plhschool.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.westcoastgroomingacademy.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/groomer-hub/education-standards/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.akc.org/groomer-hub/akc-professional-grooming-credential/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:49:00,176 [INFO] [chatgpt] Saved course response for 'best distance learning pet grooming courses'
+2026-07-21 03:49:02,181 [INFO] Querying: dog training certification online canada
+2026-07-21 03:49:13,170 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:49:13,193 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:49:13,390 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:49:13,391 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 46.56951279s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '46s'}]}}
+2026-07-21 03:49:14,224 [INFO] [chatgpt] Saved 3 fanout queries for 'dog training certification online canada'
+2026-07-21 03:49:18,341 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:49:18,347 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Victoria Stilwell Academy",
+            "text_as_written": "Victoria Stilwell Academy (VSA)"
+        },
+        {
+            "name": "CATCH Canine Trainers Academy",
+            "text_as_written": "CATCH Canine Trainers Academy"
+        },
+        {
+            "name": "Cochrane & Area Humane Society PACE Instructor Certificate",
+            "text_as_written": "Cochrane & Area Humane Society PACE Instructor Certificate"
+        },
+        {
+            "name": "CCPDT",
+            "text_as_written": "CCPDT"
+        },
+        {
+            "name": "IAABC",
+            "text_as_written": "IAABC"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.ccpdt.org/certification/dog-trainer-certification/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.vsdogtrainingacademy.com/courses/learn-to-be-a-dog-trainer/dog-trainer-course/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://catchdogtrainers.com/our-program/courses-tuition/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.cochranehumane.ca/programs/pace-instructor-certificate?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://iaabc.org/en/credentials?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:49:20,227 [INFO] [chatgpt] Saved course response for 'dog training certification online canada'
+2026-07-21 03:49:22,232 [INFO] Querying: best distance learning dog training course
+2026-07-21 03:49:32,631 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:49:32,653 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:49:32,838 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:49:32,839 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 27.121457172s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '27s'}]}}
+2026-07-21 03:49:33,732 [INFO] [chatgpt] Saved 3 fanout queries for 'best distance learning dog training course'
+2026-07-21 03:49:39,778 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:49:39,779 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Karen Pryor Academy",
+            "text_as_written": "Karen Pryor Academy (KPA)"
+        },
+        {
+            "name": "Victoria Stilwell Academy",
+            "text_as_written": "Victoria Stilwell Academy (VSA)"
+        },
+        {
+            "name": "CATCH Canine Trainers Academy",
+            "text_as_written": "CATCH Canine Trainers Academy"
+        },
+        {
+            "name": "Academy for Dog Trainers",
+            "text_as_written": "Academy for Dog Trainers"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://karenpryoracademy.com/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.vsdogtrainingacademy.com/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://karenpryoracademy.com/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.vsdogtrainingacademy.com/about/faq/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://dogbizsuccess.com/wp-content/uploads/Downloads/dogbiz_ebook.pdf?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://www.reddit.com/r/Dogtraining/comments/1t5rv58/training_certification_programs_catch_adt_or/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com/courses/dog-trainer-professional/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.vsdogtrainingacademy.com/about/faq/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://karenpryoracademy.com/courses/dog-trainer-foundations/?utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://dogbizsuccess.com/wp-content/uploads/Downloads/dogbiz_ebook.pdf?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:49:41,609 [INFO] [chatgpt] Saved course response for 'best distance learning dog training course'
+2026-07-21 03:49:43,614 [INFO] Querying: online canine behaviour courses
+2026-07-21 03:49:53,603 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:49:53,630 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:49:53,819 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:49:53,820 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 6.140158327s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '6s'}]}}
+2026-07-21 03:49:54,572 [INFO] [chatgpt] Saved 2 fanout queries for 'online canine behaviour courses'
+2026-07-21 03:49:58,099 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:49:58,101 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "University of Washington", "text_as_written": "UW Certificate in Applied Animal Behavior"},
+        {"name": "CCPDT", "text_as_written": "CCPDT-related education path"},
+        {"name": "edX", "text_as_written": "edX dog behavior courses"},
+        {"name": "Coursera", "text_as_written": "Coursera animal behavior / dog cognition options"},
+        {"name": "CCPDT", "text_as_written": "CCPDT Approved CEU Events"}
+    ],
+    "links": [
+        {"url": "https://www.pce.uw.edu/certificates/applied-animal-behavior?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ccpdt.org/about-us/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.edx.org/learn/dog-behavior?utm_source=openai", "is_inline": true},
+        {"url": "https://www.coursera.org/learn/animal-welfare?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ccpdt.org/certification/continuing-education/events/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:49:59,707 [INFO] [chatgpt] Saved course response for 'online canine behaviour courses'
+2026-07-21 03:50:01,712 [INFO] Querying: where can i take dog grooming classes
+2026-07-21 03:50:08,956 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:50:08,978 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:50:09,173 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:50:09,174 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 50.786204992s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '50s'}]}}
+2026-07-21 03:50:10,069 [INFO] [chatgpt] Saved 4 fanout queries for 'where can i take dog grooming classes'
+2026-07-21 03:50:12,551 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:50:12,557 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Paragon School of Pet Grooming", "text_as_written": "Paragon School of Pet Grooming"},
+        {"name": "Petco", "text_as_written": "Petco"},
+        {"name": "Pet Supplies Plus", "text_as_written": "Pet Supplies Plus"},
+        {"name": "AKC S.A.F.E. Dog Grooming Program", "text_as_written": "AKC S.A.F.E. Dog Grooming Program"}
+    ],
+    "links": [
+        {"url": "https://paragonpetschool.com/distance-learning-enrollment/?utm_source=openai", "is_inline": true},
+        {"url": "https://careers.petco.com/grooming-faqs?utm_source=openai", "is_inline": true},
+        {"url": "https://www.becomeapspgroomer.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.akc.org/products-services/akc-safe-grooming-program/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:50:13,819 [INFO] [chatgpt] Saved course response for 'where can i take dog grooming classes'
+2026-07-21 03:50:15,824 [INFO] Querying: best corporate event planning courses
+2026-07-21 03:50:30,299 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:50:30,344 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:50:30,503 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:50:30,503 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 29.456323942s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}
+2026-07-21 03:50:31,400 [INFO] [chatgpt] Saved 4 fanout queries for 'best corporate event planning courses'
+2026-07-21 03:50:35,971 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:50:35,990 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "PCMA", "text_as_written": "PCMA Business Event Bootcamp"},
+        {"name": "Events Industry Council", "text_as_written": "Certified Meeting Professional (CMP) from the Events Industry Council"},
+        {"name": "MPI Academy", "text_as_written": "MPI Academy / CMP Prep"},
+        {"name": "Events Industry Council Live Learning Center", "text_as_written": "Events Industry Council Live Learning Center"},
+        {"name": "CSULB", "text_as_written": "CSULB Meeting and Event Planning"},
+        {"name": "UNC Charlotte", "text_as_written": "UNC Charlotte Meeting and Event Planning Certificate"},
+        {"name": "University of Georgia", "text_as_written": "University of Georgia Event Planning and Meeting Management Certificate"}
+    ],
+    "links": [
+        {"url": "https://www.pcma.org/products/business-event-bootcamp/?utm_source=openai", "is_inline": true},
+        {"url": "https://eventscouncil.org/CMP/About-CMP/CMPProgram?utm_source=openai", "is_inline": true},
+        {"url": "https://www.mpi.org/education/mpi-academy?utm_source=openai", "is_inline": false},
+        {"url": "https://ciccon.sclivelearningcenter.com/MVSite/default.aspx?utm_source=openai", "is_inline": false},
+        {"url": "https://www.cpace.csulb.edu/courses/meeting-and-event-planning?utm_source=openai", "is_inline": true},
+        {"url": "https://academics.charlotte.edu/program/meeting-and-event-planning-professional-certificate-online/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.georgiacenter.uga.edu/professional-programs/event-planning-and-meeting-management-certificate/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:50:38,468 [INFO] [chatgpt] Saved course response for 'best corporate event planning courses'
+2026-07-21 03:50:40,473 [INFO] Querying: best event planning course
+2026-07-21 03:50:48,964 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:50:48,984 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:50:49,158 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:50:49,159 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 10.802368458s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}
+2026-07-21 03:50:49,985 [INFO] [chatgpt] Saved 3 fanout queries for 'best event planning course'
+2026-07-21 03:50:53,507 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:50:53,507 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Cvent Academy",
+            "text_as_written": "Cvent Academy / Cvent Certification"
+        },
+        {
+            "name": "MPI Academy",
+            "text_as_written": "MPI Academy"
+        },
+        {
+            "name": "PCMA Business Event Bootcamp",
+            "text_as_written": "PCMA Business Event Bootcamp"
+        },
+        {
+            "name": "Temple’s Event & Entertainment Management Certificate",
+            "text_as_written": "Temple’s Event & Entertainment Management Certificate"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.cvent.com/en/academy?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.mpi.org/education/meeting-certificate-programs?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.pcma.org/products/business-event-bootcamp/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://bulletin.temple.edu/undergraduate/tourism-hospitality-management/event-entertainment-management-certificate/event-entertainment-management-certificate.pdf?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:50:54,887 [INFO] [chatgpt] Saved course response for 'best event planning course'
+2026-07-21 03:50:56,892 [INFO] Querying: event planning online course
+2026-07-21 03:51:02,979 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:51:03,001 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:51:03,183 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:51:03,183 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 56.777488743s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '56s'}]}}
+2026-07-21 03:51:04,113 [INFO] [chatgpt] Saved 3 fanout queries for 'event planning online course'
+2026-07-21 03:51:08,355 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:51:08,366 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "UCLA Extension", "text_as_written": "UCLA Extension – Event Planning and Management"},
+        {"name": "University of Iowa", "text_as_written": "University of Iowa – Certificate in Event Management"},
+        {"name": "University of Florida", "text_as_written": "University of Florida – Event Management and Design"},
+        {"name": "Kent State", "text_as_written": "Kent State – Event Management Certificate"},
+        {"name": "UCF Online", "text_as_written": "UCF Online – Event Management Graduate Certificate"}
+    ],
+    "links": [
+        {"url": "https://www.uclaextension.edu/business-management/hospitality-management/specialization/event-planning-and-management?utm_source=openai", "is_inline": true},
+        {"url": "https://basbls.uc.uiowa.edu/degree-requirements/online-certificates/certificate-event-management?utm_source=openai", "is_inline": true},
+        {"url": "https://careertraining.aa.ufl.edu/training-programs/event-management-certificate-program/?utm_source=openai", "is_inline": true},
+        {"url": "https://onlinedegrees.kent.edu/degrees/certificate-event-management?utm_source=openai", "is_inline": true},
+        {"url": "https://www.ucf.edu/degree/event-management-certificate/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:51:10,063 [INFO] [chatgpt] Saved course response for 'event planning online course'
+2026-07-21 03:51:12,073 [INFO] Querying: event decorating classes near me
+2026-07-21 03:51:19,308 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:51:19,332 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:51:19,561 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:51:19,562 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 40.401727322s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '40s'}]}}
+2026-07-21 03:51:20,301 [INFO] [chatgpt] Saved 2 fanout queries for 'event decorating classes near me'
+2026-07-21 03:51:21,917 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:51:21,919 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Posh Events Institute",
+            "text_as_written": "posheventsinstitute.com"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.posheventsinstitute.com/event-decorating-classes?utm_source=openai",
+            "is_inline": true
+        }
+    ]
+}
+2026-07-21 03:51:22,761 [INFO] [chatgpt] Saved course response for 'event decorating classes near me'
+2026-07-21 03:51:24,767 [INFO] Querying: event decoration courses online
+2026-07-21 03:51:34,326 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:51:34,347 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:51:34,574 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:51:34,574 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 25.383721224s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}
+2026-07-21 03:51:35,404 [INFO] [chatgpt] Saved 3 fanout queries for 'event decoration courses online'
+2026-07-21 03:51:39,281 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:51:39,282 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Udemy", "text_as_written": "Udemy – Balloon Decoration / Balloon Garland courses"},
+        {"name": "Domestika", "text_as_written": "Domestika – Event styling / balloon garlands / table styling"},
+        {"name": "Coursera", "text_as_written": "Coursera – Event planning / event management programs"}
+    ],
+    "links": [
+        {"url": "https://www.qcdesignschool.com/online-courses/event-decor?utm_source=openai", "is_inline": false},
+        {"url": "https://www.udemy.com/topic/balloon-decoration/?utm_source=openai", "is_inline": true},
+        {"url": "https://assets.domestika.org/en/courses/area/27-events?utm_source=openai", "is_inline": true},
+        {"url": "https://www.coursera.org/learn/event-marketing-management-fundamentals?utm_source=openai", "is_inline": true},
+        {"url": "https://www.coursera.org/specializations/event-planning-marketing-execution?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:51:40,891 [INFO] [chatgpt] Saved course response for 'event decoration courses online'
+2026-07-21 03:51:42,893 [INFO] Querying: event decoration classes
+2026-07-21 03:51:47,882 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:51:47,904 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:51:48,098 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:51:48,098 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 11.86220049s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '11s'}]}}
+2026-07-21 03:51:48,781 [INFO] [chatgpt] Saved 1 fanout queries for 'event decoration classes'
+2026-07-21 03:51:51,466 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:51:51,477 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "floral wedding/event design classes",
+            "text_as_written": "specialized floral wedding/event design classes offered by institutes in the U.S."
+        },
+        {
+            "name": "cake and event-style decorating classes",
+            "text_as_written": "cake and event-style decorating classes such as hands-on workshops in Lawrenceville, Georgia."
+        }
+    ],
+    "links": [
+        {
+            "url": "https://docs.google.com/forms/d/1urw1zxTOFw_MM4IOHldtKnsWVky48RhiyiqR7lDYwMM/preview?edit_requested=true&utm_source=openai",
+            "is_inline": false
+        },
+        {
+            "url": "https://sites.google.com/aromadesserts.com/aromadesserts/classes?utm_source=openai",
+            "is_inline": false
+        }
+    ]
+}
+2026-07-21 03:51:52,458 [INFO] [chatgpt] Saved course response for 'event decoration classes'
+2026-07-21 03:51:54,459 [INFO] Querying: event decorator certification
+2026-07-21 03:52:04,266 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:52:04,288 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:52:04,510 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:52:04,510 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 55.453101753s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '55s'}]}}
+2026-07-21 03:52:05,349 [INFO] [chatgpt] Saved 3 fanout queries for 'event decorator certification'
+2026-07-21 03:52:09,364 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:52:09,366 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "MPI Event Design Certificate", "text_as_written": "MPI’s **Certified Event Designer (CED)** pathway"},
+        {"name": "CEWPI Event Designer Certification", "text_as_written": "CEWPI Event Designer Certification"},
+        {"name": "Event Decorating Academy", "text_as_written": "Event Decorating Academy"},
+        {"name": "SUNY Event Decorating microcredential", "text_as_written": "SUNY Event Decorating microcredential"}
+    ],
+    "links": [
+        {"url": "https://www.qceventplanning.com/online-event-courses/event-decor?utm_source=openai", "is_inline": false},
+        {"url": "https://www.mpi.org/education/certificate-programs/event-design-certificate?utm_source=openai", "is_inline": true},
+        {"url": "https://cewpi.com/event_design_certification.html?utm_source=openai", "is_inline": false},
+        {"url": "https://eventdecoratingacademy.com/?utm_source=openai", "is_inline": false},
+        {"url": "https://www.suny.edu/microcredentials/programs/1000001062/?utm_source=openai", "is_inline": false}
+    ]
+}
+2026-07-21 03:52:11,100 [INFO] [chatgpt] Saved course response for 'event decorator certification'
+2026-07-21 03:52:13,105 [INFO] Querying: event planning classes
+2026-07-21 03:52:20,552 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:52:20,574 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:52:20,740 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:52:20,740 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 39.219509153s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '39s'}]}}
+2026-07-21 03:52:21,525 [INFO] [chatgpt] Saved 2 fanout queries for 'event planning classes'
+2026-07-21 03:52:26,078 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:52:26,078 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Coursera", "text_as_written": "Coursera – Event Planning, Marketing and Execution Specialization"},
+        {"name": "Coursera", "text_as_written": "Coursera – Event Management Strategies & Planning"},
+        {"name": "PCMA", "text_as_written": "PCMA Business Event Bootcamp"},
+        {"name": "PCMA", "text_as_written": "PCMA Digital Event Strategist (DES)"},
+        {"name": "edX", "text_as_written": "edX – University of Cape Town: Events Management"}
+    ],
+    "links": [
+        {"url": "https://www.coursera.org/specializations/event-planning-marketing-execution?utm_source=openai", "is_inline": true},
+        {"url": "https://www.coursera.org/learn/event-management-strategies-planning?utm_source=openai", "is_inline": true},
+        {"url": "https://www.pcma.org/products/business-event-bootcamp/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.pcma.org/products/des/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.edx.org/executive-education/university-of-cape-town-events-management?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:52:27,336 [INFO] [chatgpt] Saved course response for 'event planning classes'
+2026-07-21 03:52:29,341 [INFO] Querying: best wedding planner school
+2026-07-21 03:52:38,052 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:52:38,074 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:52:38,239 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:52:38,239 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 21.719446314s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '21s'}]}}
+2026-07-21 03:52:38,999 [INFO] [chatgpt] Saved 2 fanout queries for 'best wedding planner school'
+2026-07-21 03:52:41,028 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:52:41,028 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "The Wedding Academy", "text_as_written": "The Wedding Academy"},
+        {"name": "Wedding MBA Certification", "text_as_written": "Wedding MBA Certification"}
+    ],
+    "links": [
+        {"url": "https://weddingacademyglobal.com/?utm_source=openai", "is_inline": true},
+        {"url": "https://weddingmba.com/product/certification/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:52:42,201 [INFO] [chatgpt] Saved course response for 'best wedding planner school'
+2026-07-21 03:52:44,204 [INFO] Querying: wedding planner certification course
+2026-07-21 03:52:52,909 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:52:52,931 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:52:53,100 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:52:53,101 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 6.859142906s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '6s'}]}}
+2026-07-21 03:52:53,856 [INFO] [chatgpt] Saved 2 fanout queries for 'wedding planner certification course'
+2026-07-21 03:52:58,641 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:52:58,641 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {
+            "name": "Lovegevity / Wedding Planning Institute",
+            "text_as_written": "Lovegevity’s **Certified Wedding & Event Planning** program"
+        },
+        {
+            "name": "AACWP Training",
+            "text_as_written": "**AACWP Training**"
+        },
+        {
+            "name": "UGA / ed2go Certified Wedding Planner",
+            "text_as_written": "**UGA / ed2go Certified Wedding Planner**"
+        },
+        {
+            "name": "UNO Certified Wedding Planner",
+            "text_as_written": "**UNO Certified Wedding Planner**"
+        },
+        {
+            "name": "AAWP Certification",
+            "text_as_written": "**AAWP Certification**"
+        }
+    ],
+    "links": [
+        {
+            "url": "https://www.weddingplanninginstitute.com/courses/certified-wedding-and-event-planning?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://aacwp.org/training/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://www.georgiacenter.uga.edu/professional-programs/certified-wedding-planner/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://pace.uno.edu/program/certified-wedding-planner/?utm_source=openai",
+            "is_inline": true
+        },
+        {
+            "url": "https://beaweddingplanner.com/?utm_source=openai",
+            "is_inline": true
+        }
+    ]
+}
+2026-07-21 03:53:00,565 [INFO] [chatgpt] Saved course response for 'wedding planner certification course'
+2026-07-21 03:53:02,566 [INFO] Querying: online event planning courses with certificates
+2026-07-21 03:53:14,718 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:53:14,740 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:53:14,967 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:53:14,968 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 44.996634934s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '44s'}]}}
+2026-07-21 03:53:15,887 [INFO] [chatgpt] Saved 4 fanout queries for 'online event planning courses with certificates'
+2026-07-21 03:53:22,136 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:53:22,150 [INFO] RAW OPENAI OUTPUT: {
+    "competitors": [
+        {"name": "Coursera", "text_as_written": "Coursera – Introduction to Events Management"},
+        {"name": "Coursera", "text_as_written": "Coursera – Event Planning, Marketing and Execution Specialization"},
+        {"name": "edX", "text_as_written": "edX / University of Cape Town – Events Management"},
+        {"name": "FutureLearn", "text_as_written": "FutureLearn – Event Management Course"},
+        {"name": "PCMA", "text_as_written": "PCMA – Business Event Bootcamp"},
+        {"name": "PCMA", "text_as_written": "PCMA – Digital Event Strategist (DES)"},
+        {"name": "Event Leadership Institute", "text_as_written": "Event Leadership Institute – Certificate Courses"},
+        {"name": "Udemy", "text_as_written": "Udemy – Certification in Event Management 2026"}
+    ],
+    "links": [
+        {"url": "https://www.coursera.org/learn/introduction-to-events-management?utm_source=openai", "is_inline": true},
+        {"url": "https://www.coursera.org/specializations/event-planning-marketing-execution?utm_source=openai", "is_inline": true},
+        {"url": "https://www.edx.org/executive-education/university-of-cape-town-events-management?utm_source=openai", "is_inline": true},
+        {"url": "https://www.futurelearn.com/courses/event-management-sc?utm_source=openai", "is_inline": true},
+        {"url": "https://www.pcma.org/products/business-event-bootcamp/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.pcma.org/products/des/?utm_source=openai", "is_inline": true},
+        {"url": "https://eventleadershipinstitute.com/certificate-courses/?utm_source=openai", "is_inline": true},
+        {"url": "https://www.udemy.com/course/certification-in-event-management/?utm_source=openai", "is_inline": true}
+    ]
+}
+2026-07-21 03:53:24,251 [INFO] [chatgpt] Saved course response for 'online event planning courses with certificates'
+2026-07-21 03:53:26,255 [INFO] Querying: is QC Pet School accredited in Canada
+2026-07-21 03:53:34,278 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:53:34,310 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:53:34,479 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:53:34,479 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 25.482202645s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '25s'}]}}
+2026-07-21 03:53:35,328 [INFO] [chatgpt] Saved 3 fanout queries for 'is QC Pet School accredited in Canada'
+2026-07-21 03:53:37,554 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:53:37,556 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "QC Pet Studies is not accredited in the usual Canadian academic sense and only has business accreditation.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Not accredited by a Canadian government-recognized accreditor.",
+        "Lack of recognition as a publicly recognized Canadian postsecondary institution.",
+        "Non-accredited certificates may not carry the same recognition."
+    ],
+    "positives_raised": [
+        "QC Career School is BBB accredited.",
+        "Some industry recognition exists from Canadian Pet Care Professionals."
+    ]
+}
+2026-07-21 03:53:38,246 [INFO] [chatgpt] Saved credibility response for 'is QC Pet School accredited in Canada'
+2026-07-21 03:53:40,251 [INFO] Querying: is QC Pet School internationally recognized
+2026-07-21 03:53:47,691 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:53:47,712 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:53:47,911 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:53:47,912 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 12.046217113s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '12s'}]}}
+2026-07-21 03:53:48,793 [INFO] [chatgpt] Saved 3 fanout queries for 'is QC Pet School internationally recognized'
+2026-07-21 03:53:52,516 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:53:52,516 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "QC Pet School's certifications are marketed as international but lack formal recognition from independent accrediting bodies.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Lacks formal international accreditation from recognized academic bodies",
+        "BBB accreditation is not related to academic or professional educational standards",
+        "Recognition by one specific industry organization does not equal universal recognition"
+    ],
+    "positives_raised": [
+        "Marketed as an international school",
+        "Better Business Bureau accreditation/A+ rating",
+        "Some certificates listed as 'approved accreditations' by Canadian Pet Care Professionals"
+    ]
+}
+2026-07-21 03:53:53,199 [INFO] [chatgpt] Saved credibility response for 'is QC Pet School internationally recognized'
+2026-07-21 03:53:55,201 [INFO] Querying: do employers respect QC Pet Studies certificates
+2026-07-21 03:54:03,199 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:54:03,221 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:54:03,406 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:54:03,407 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 56.551718536s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '56s'}]}}
+2026-07-21 03:54:04,111 [INFO] [chatgpt] Saved 1 fanout queries for 'do employers respect QC Pet Studies certificates'
+2026-07-21 03:54:06,488 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:54:06,488 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "Employers may respect the QC Pet Studies certificate as a useful entry-level training credential, but it is not equivalent to more recognized certifications or extensive hands-on experience.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "QC Pet Studies is not broadly academically accredited.",
+        "Employers value hands-on skill and experience more than the certificate itself."
+    ],
+    "positives_raised": [
+        "Some pet-care employers view the QC Pet Studies certificate positively as it demonstrates formal training.",
+        "QC's certificates are meant to showcase skills to clients and employers."
+    ]
+}
+2026-07-21 03:54:07,160 [INFO] [chatgpt] Saved credibility response for 'do employers respect QC Pet Studies certificates'
+2026-07-21 03:54:09,161 [INFO] Querying: Is QC Pet Studies legit
+2026-07-21 03:54:17,695 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:54:17,717 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:54:17,882 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:54:17,882 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 42.077802763s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '42s'}]}}
+2026-07-21 03:54:18,778 [INFO] [chatgpt] Saved 4 fanout queries for 'Is QC Pet Studies legit'
+2026-07-21 03:54:20,893 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:54:20,893 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Pet Studies appears to be a legitimate business, but lacks accreditation recognized by the U.S. Department of Education.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": ["No clear evidence of accreditation by a U.S. Department of Education-recognized accreditor.", "Limited recognition of the certificate depending on employer or licensing context."],
+    "positives_raised": ["Part of QC Career School with an active BBB business profile.", "Public website, published enrollment agreement, refund terms, and course policies." ]
+}
+2026-07-21 03:54:21,568 [INFO] [chatgpt] Saved credibility response for 'Is QC Pet Studies legit'
+2026-07-21 03:54:23,573 [INFO] Querying: QC Pet Studies reviews
+2026-07-21 03:54:33,332 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:54:33,353 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:54:33,536 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:54:33,537 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 26.423539619s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '26s'}]}}
+2026-07-21 03:54:34,376 [INFO] [chatgpt] Saved 3 fanout queries for 'QC Pet Studies reviews'
+2026-07-21 03:54:36,537 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:54:36,545 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies has mixed reviews with a reliance on self-published content and limited independent feedback.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Most reviews are self-published or affiliated.",
+        "Limited volume of independent reviews found."
+    ],
+    "positives_raised": [
+        "Established website",
+        "Detailed course materials",
+        "Visible student-facing support/tutor model",
+        "Some real-user discussion online",
+        "Claims of A+ BBB ranking, pending verification"
+    ]
+}
+2026-07-21 03:54:37,223 [INFO] [chatgpt] Saved credibility response for 'QC Pet Studies reviews'
+2026-07-21 03:54:39,228 [INFO] Querying: is QC Event School accredited in Canada
+2026-07-21 03:54:46,776 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:54:46,807 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:54:46,991 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:54:46,992 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 12.966656973s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '12s'}]}}
+2026-07-21 03:54:47,808 [INFO] [chatgpt] Saved 3 fanout queries for 'is QC Event School accredited in Canada'
+2026-07-21 03:54:50,668 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:54:50,668 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "The AI concluded that QC Event School is likely not academically accredited in Canada in the sense most people understand accreditation.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "QC Event School is not recognized as a provincially accredited degree-granting institution in Canada.",
+        "Its accreditation with the Better Business Bureau does not equate to academic accreditation.",
+        "Oversight of private career colleges in Canada is done by the government, not by BBB-style accreditation."
+    ],
+    "positives_raised": [
+        "QC Event School appears to be a legitimate business offering training.",
+        "It issues its own career certificates/certifications."
+    ]
+}
+2026-07-21 03:54:51,340 [INFO] [chatgpt] Saved credibility response for 'is QC Event School accredited in Canada'
+2026-07-21 03:54:53,341 [INFO] Querying: is QC Event School internationally recognized
+2026-07-21 03:55:01,579 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:55:01,599 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:55:01,773 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:55:01,773 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 58.189206546s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '58s'}]}}
+2026-07-21 03:55:02,595 [INFO] [chatgpt] Saved 3 fanout queries for 'is QC Event School internationally recognized'
+2026-07-21 03:55:04,902 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:55:04,902 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "negative",
+    "qc_verdict": "QC Event School is marketed as internationally recognized but lacks formal academic accreditation.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Not government-recognized academic accreditation",
+        "Lack of evidence that QC Event School is a university or has programs with traditional accreditation",
+        "Questionable employer acceptance depending on the country"
+    ],
+    "positives_raised": [
+        "Marketed as internationally recognized",
+        "Approved by the International Live Events Association (ILEA)",
+        "Has a Better Business Bureau A+ rating"
+    ]
+}
+2026-07-21 03:55:05,592 [INFO] [chatgpt] Saved credibility response for 'is QC Event School internationally recognized'
+2026-07-21 03:55:07,597 [INFO] Querying: do employers respect QC Event School certificates
+2026-07-21 03:55:17,906 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:55:17,927 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:55:18,153 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:55:18,153 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 41.803905194s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '41s'}]}}
+2026-07-21 03:55:18,984 [INFO] [chatgpt] Saved 3 fanout queries for 'do employers respect QC Event School certificates'
+2026-07-21 03:55:21,454 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:55:21,458 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School is a legitimate online school with an A+ BBB accreditation, but its certificate may not be universally respected by employers.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Employers may not respect the certificate the way they do a university degree or top industry designation.",
+        "Most employers care more about practical experience than the school name."
+    ],
+    "positives_raised": [
+        "QC Event School is BBB-accredited with an A+ rating.",
+        "It offers structured training in event planning.",
+        "There are student reviews describing employment outcomes after graduation."
+    ]
+}
+2026-07-21 03:55:22,157 [INFO] [chatgpt] Saved credibility response for 'do employers respect QC Event School certificates'
+2026-07-21 03:55:24,162 [INFO] Querying: QC Event School reviews
+2026-07-21 03:55:31,307 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:55:31,342 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:55:31,522 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:55:31,522 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 28.437994542s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '28s'}]}}
+2026-07-21 03:55:32,347 [INFO] [chatgpt] Saved 3 fanout queries for 'QC Event School reviews'
+2026-07-21 03:55:34,803 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:55:34,803 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "positive",
+    "qc_verdict": "QC Event School has mostly positive reviews, although many sources are not independent.",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [
+        "Many positive reviews are on QC's own site/blog or partner/course-listing pages, suggesting they may not be fully independent.",
+        "Limited presence on major independent review platforms like Trustpilot."
+    ],
+    "positives_raised": [
+        "Positive testimonials on its own website and blog.",
+        "Favorable student feedback on CourseCompare.",
+        "Positive mentions in BBB customer reviews related to QC Career School."
+    ]
+}
+2026-07-21 03:55:35,489 [INFO] [chatgpt] Saved credibility response for 'QC Event School reviews'
+2026-07-21 03:55:37,494 [INFO] Querying: is QC Pet School worth the money
+2026-07-21 03:55:53,889 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:55:53,911 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:55:54,101 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:55:54,101 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 5.857973373s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '5s'}]}}
+2026-07-21 03:55:55,030 [INFO] [chatgpt] Saved 4 fanout queries for 'is QC Pet School worth the money'
+2026-07-21 03:55:57,229 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:55:57,238 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Pet Studies may serve as a basic entry-level option but lacks elite recognition and strong hands-on training.",
+    "competitor_mentioned": "Karen Pryor Academy",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "not a top-tier professional credential",
+        "not commonly recommended in trainer communities",
+        "lacks strong hands-on training"
+    ],
+    "positives_raised": [
+        "self-paced online introduction",
+        "structured curriculum",
+        "recognized by some pet-care bodies",
+        "offers student support and payment plans"
+    ]
+}
+2026-07-21 03:55:57,919 [INFO] [chatgpt] Saved competition response for 'is QC Pet School worth the money'
+2026-07-21 03:55:59,924 [INFO] Querying: is QC Event School worth the money
+2026-07-21 03:56:12,589 [INFO] HTTP Request: POST https://api.openai.com/v1/responses "HTTP/1.1 200 OK"
+2026-07-21 03:56:12,610 [INFO] AFC is enabled with max remote calls: 10.
+2026-07-21 03:56:12,802 [INFO] HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-07-21 03:56:12,803 [ERROR] Gemini fanout failed: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 47.155336206s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '47s'}]}}
+2026-07-21 03:56:13,683 [INFO] [chatgpt] Saved 4 fanout queries for 'is QC Event School worth the money'
+2026-07-21 03:56:16,454 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:16,457 [INFO] RAW OPENAI OUTPUT: {
+    "qc_sentiment": "neutral",
+    "qc_verdict": "QC Event School can be worth the money, particularly for beginners seeking structured and flexible online learning.",
+    "competitor_mentioned": "event planning courses",
+    "competitor_won": "no_clear_winner",
+    "win_reasons": [],
+    "concerns_raised": [
+        "may not provide a credential that guarantees a job",
+        "not as valuable for those with strong hands-on event experience",
+        "expectations versus actual career opportunities",
+        "may be more beneficial to invest in experiences rather than certifications"
+    ],
+    "positives_raised": [
+        "structured beginner-friendly path",
+        "flexibility and self-paced study",
+        "builds confidence and basic business/planning skills",
+        "provides a certificate for credibility and marketing"
+    ]
+}
+2026-07-21 03:56:17,157 [INFO] [chatgpt] Saved competition response for 'is QC Event School worth the money'
+2026-07-21 03:56:19,860 [INFO] Run complete
+2026-07-21 03:56:19,860 [INFO] Classifying competitor citations...
+2026-07-21 03:56:24,672 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:27,130 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:30,918 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:32,458 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:35,014 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:36,039 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:37,883 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:39,520 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:41,603 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:46,077 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:48,736 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:51,808 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:55,190 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:56:57,082 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:00,857 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:02,560 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:07,478 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:10,445 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:12,596 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:14,748 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:17,653 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:18,793 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:20,583 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:23,036 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:26,795 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:31,334 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:33,890 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:36,557 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:41,575 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:43,170 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:47,464 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:51,285 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:57:57,653 [INFO] HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2026-07-21 03:58:14,065 [INFO] [classify] Stored 211 competitor-citation rows for run de318024-57b5-4e3d-ba68-dec236aec598
+2026-07-21 03:58:14,067 [INFO] Citation classification complete
