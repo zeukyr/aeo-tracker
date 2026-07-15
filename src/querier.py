@@ -14,7 +14,7 @@ def query_chatgpt(question):
             api_key=os.getenv("OPENAI_API_KEY"),
             max_retries=1)
         response = client.responses.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4",
             tools=[{"type": "web_search"}],
             tool_choice={"type": "web_search"},
             input=question
