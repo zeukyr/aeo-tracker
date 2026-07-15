@@ -146,6 +146,17 @@ def save_fanout_queries(run_id, question_id, engine, queries):
         conn.commit()
 
 
+def get_processed_question_ids(run_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT DISTINCT question_id FROM mention_responses WHERE run_id = %s
+                UNION
+                SELECT DISTINCT question_id FROM sentiment_responses WHERE run_id = %s
+            """, (run_id, run_id))
+            return {row[0] for row in cur.fetchall()}
+
+
 def get_questions():
     with get_connection() as conn:
         with conn.cursor() as cur:
