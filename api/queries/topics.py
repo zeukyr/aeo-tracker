@@ -114,8 +114,8 @@ def get_topics(days=None, engine=None, question_type=None, school=None, qc_menti
                         SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float      AS qc_mentions,
                         -- SOV denominator: QC mentions + total distinct competitor slots
                         SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float
-                          + COUNT(DISTINCT b.brand_name)::float                       AS total_brand_slots,
-                        array_remove(array_agg(DISTINCT b.brand_name), NULL)         AS competitors
+                          + COUNT(DISTINCT COALESCE(b.canonical_name, b.brand_name))::float AS total_brand_slots,
+                        array_remove(array_agg(DISTINCT COALESCE(b.canonical_name, b.brand_name)), NULL) AS competitors
                     FROM mention_responses m
                     JOIN questions q ON q.id = m.question_id
                     LEFT JOIN mention_response_brands b
@@ -463,13 +463,14 @@ def get_prompt_detail(prompt_id: str, days=None):
                 # ── competitors ranked by mention rate % ───────────────────
                 # cnt = number of responses (rows) that mention this competitor
                 cur.execute(f"""
-                    SELECT b.brand_name, COUNT(*) AS cnt
+                    SELECT COALESCE(b.canonical_name, b.brand_name) AS brand,
+                           COUNT(DISTINCT m.id) AS cnt
                     FROM mention_responses m
                     JOIN mention_response_brands b
                         ON b.mention_response_id = m.id AND b.brand_type = 'competitor'
                     WHERE m.question_id = %s
                       {date_m}
-                    GROUP BY b.brand_name
+                    GROUP BY brand
                     ORDER BY cnt DESC;
                 """, (prompt_id,))
                 comp_rows = cur.fetchall()
@@ -499,7 +500,7 @@ def get_prompt_detail(prompt_id: str, days=None):
                         AVG(CASE WHEN m.qc_mentioned THEN 1.0 ELSE 0.0 END) * 100 AS mention_rate,
                         AVG(CASE WHEN m.qc_cited    THEN 1.0 ELSE 0.0 END) * 100  AS citation_rate,
                         SUM(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END)::float     AS qc_mentions,
-                        COUNT(DISTINCT b.brand_name)::float                         AS comp_count
+                        COUNT(DISTINCT COALESCE(b.canonical_name, b.brand_name))::float AS comp_count
                     FROM mention_responses m
                     LEFT JOIN mention_response_brands b
                         ON b.mention_response_id = m.id AND b.brand_type = 'competitor'

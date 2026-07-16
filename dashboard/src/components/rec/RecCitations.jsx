@@ -1,4 +1,5 @@
 import { bucketColor, bucketLabel, pctLabel, urlLabel } from "../../lib/recview";
+import InfoTip from "../InfoTip";
 
 // Ranked "what AI cites" panel from the router's winner summary: domain
 // (linked), source-type chip, citation-count bar. Abstaining pages
@@ -10,7 +11,10 @@ export default function RecCitations({ router, title }) {
   const max = Math.max(...winners.map((w) => w.citation_count || 0), 1);
   return (
     <div>
-      <p className="rc-pane__title">{title ?? "What AI cites for this question"}</p>
+      <p className="rc-pane__title">
+        {title ?? "What AI cites for this question"}
+        <InfoTip id="citations_panel" />
+      </p>
       <div className="rc-cites">
         {winners.map((w) => {
           const abstained = w.source_type === "other";
@@ -37,6 +41,7 @@ export default function RecCitations({ router, title }) {
       {router.qc_share != null && (
         <p className="rc-cites__qcnote">
           QC is cited in {pctLabel(router.qc_share)} of responses for this question.
+          <InfoTip id="losing_question" />
         </p>
       )}
     </div>

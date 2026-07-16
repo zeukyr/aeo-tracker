@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { formatDate } from "../lib/format";
-import { cardVariant, urlLabel } from "../lib/recview";
+import { cardVariant, domainOf, urlLabel } from "../lib/recview";
+import InfoTip from "./InfoTip";
 import RecTrail from "./rec/RecTrail";
 import RecCitations from "./rec/RecCitations";
 import FixDiffModule from "./rec/FixDiffModule";
@@ -86,6 +87,18 @@ function verdictLine(rec, variant) {
     );
   }
   if (variant === "reach") {
+    // Fan-out companions supplement an ownable-field primary (fix/build) —
+    // "QC can't own" belongs only to the true reach_out branch.
+    if (router?.branch === "reach_out_fanout") {
+      const sub = /reddit\.com\/r\/([^/?#]+)/i.exec(rec.target || "");
+      const source = sub ? `r/${sub[1]}` : domainOf(rec.target) || "a source";
+      return (
+        <>
+          <b>Engines also draw on {source} for this query</b> — earn presence there alongside the
+          primary play.
+        </>
+      );
+    }
     return (
       <>
         <b>Engines answer from {router?.dominant_source ?? "third-party"} sources QC can't own</b> —
@@ -99,6 +112,7 @@ function verdictLine(rec, variant) {
       <>
         <b>{urlLabel(opp?.url ?? rec.target)}</b> is cited {opp?.citation_count ?? "?"}× and lists{" "}
         {opp?.lists_competitors?.length ?? "several"} rivals — never QC.
+        <InfoTip id="inclusion_gate" />
       </>
     );
   }
@@ -182,21 +196,22 @@ function TrackBar({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover
           ● Implemented {implementedDate}
           {rec.metric_impact && ` · measuring ${rec.metric_impact}`}
           {resultDate && ` · result ~${resultDate}`}
+          <InfoTip id="measurement" dir="up" />
         </span>
       </div>
     );
   }
 
   if (rec.status === "validated") {
-    return <div className="rc-track rc-track--good">✓ Worked{formatOutcome(rec)}</div>;
+    return <div className="rc-track rc-track--good">✓ Worked{formatOutcome(rec)}<InfoTip id="measurement" dir="up" /></div>;
   }
 
   if (rec.status === "failed") {
-    return <div className="rc-track rc-track--warn">✗ No lift{formatOutcome(rec)}</div>;
+    return <div className="rc-track rc-track--warn">✗ No lift{formatOutcome(rec)}<InfoTip id="measurement" dir="up" /></div>;
   }
 
   if (rec.status === "inconclusive") {
-    return <div className="rc-track">— Inconclusive · not enough data yet</div>;
+    return <div className="rc-track">— Inconclusive · not enough data yet<InfoTip id="measurement" dir="up" /></div>;
   }
 
   return null;
@@ -209,6 +224,7 @@ function StrategicEvidence({ ev }) {
     <div className="tab1ev">
       <span className="tab1ev__eyebrow">
         What AI cites{ev.scope_label ? ` for “${ev.scope_label}”` : " for this topic"}
+        <InfoTip id="citations_panel" />
       </span>
       <div className="tab1ev__rows">
         {ev.cited.map((c, i) => (
@@ -239,14 +255,14 @@ function VerdictBand({ rec, variant, onOpenDetail }) {
       <p className="rc-verdict__line">{verdictLine(rec, variant)}</p>
       <div className="rc-meta">
         <div className="rc-meta__item">
-          <span className="rc-meta__label">Priority</span>
+          <span className="rc-meta__label">Priority<InfoTip id="priority" /></span>
           <span className={`priority-pill priority-pill--${rec.priority}`} title={rank?.reason}>
             {rec.priority}{rank ? ` · #${rank.rank}/${rank.of}` : ""}
           </span>
         </div>
         {rec.effort && (
           <div className="rc-meta__item">
-            <span className="rc-meta__label">Effort</span>
+            <span className="rc-meta__label">Effort<InfoTip id="effort" /></span>
             <span className="rc-effort" title={EFFORT_LABELS[rec.effort]}>
               {[1, 2, 3].map((i) => (
                 <i key={i} className={i <= (EFFORT_DOTS[rec.effort] ?? 0) ? "on" : ""} />
@@ -256,7 +272,7 @@ function VerdictBand({ rec, variant, onOpenDetail }) {
         )}
         {variant === "fix" && tier && (
           <div className="rc-meta__item">
-            <span className="rc-meta__label">Evidence</span>
+            <span className="rc-meta__label">Evidence<InfoTip id="evidence_tier" /></span>
             <span
               className={`chip ${tier === "high" ? "chip--open" : "chip--gated"}`}
               title={tier === "high"
@@ -269,7 +285,7 @@ function VerdictBand({ rec, variant, onOpenDetail }) {
         )}
         {(variant === "reach" || variant === "inclusion") && feas?.feasibility && (
           <div className="rc-meta__item">
-            <span className="rc-meta__label">Channel</span>
+            <span className="rc-meta__label">Channel<InfoTip id="channel" /></span>
             <span
               className={`chip ${feas.feasibility === "gated" ? "chip--gated" : "chip--open"}`}
               title={feas.mechanism || feas.evidence}
@@ -280,7 +296,7 @@ function VerdictBand({ rec, variant, onOpenDetail }) {
         )}
         {rec.confidence != null && (
           <div className="rc-meta__item">
-            <span className="rc-meta__label">Confidence</span>
+            <span className="rc-meta__label">Confidence<InfoTip id="confidence" align="right" /></span>
             <span className="rc-conf">
               <i style={{ "--w": `${Math.round(rec.confidence * 100)}%` }} />
               {Math.round(rec.confidence * 100)}%
@@ -304,9 +320,11 @@ function BodyChips({ rec, variant }) {
       {rec.segment?.value && (
         <span className="chip chip--segment">{rec.segment.dimension}: {rec.segment.value}</span>
       )}
-      {metricLabel && <span className="chip chip--metric">{metricLabel}</span>}
+      {metricLabel && (
+        <span className="chip chip--metric">{metricLabel}<InfoTip id="metric_target" /></span>
+      )}
       {variant === "build" && grouped > 1 && (
-        <span className="chip">{grouped} questions converge here</span>
+        <span className="chip">{grouped} questions converge here<InfoTip id="grouped_questions" /></span>
       )}
       {rec.outcome?.lift != null && (
         <span
@@ -314,16 +332,25 @@ function BodyChips({ rec, variant }) {
           title={`${rec.metric_impact}: ${Math.round((rec.outcome.baseline_value ?? 0) * 100)}% before → ${Math.round((rec.outcome.post_value ?? 0) * 100)}% after (${rec.outcome.verdict})`}
         >
           lift {rec.outcome.lift >= 0 ? "+" : ""}{Math.round(rec.outcome.lift * 100)}pts · {rec.outcome.verdict}
+          <InfoTip id="measurement" />
         </span>
       )}
     </div>
   );
 }
 
-// Source-question links shared by all routed variants.
-function SourceQuestions({ router, onOpenPrompt }) {
-  const questions = router?.source_questions || [];
-  if (!questions.length) return null;
+// Source-question links back to the Prompts tab, shared by every card shape:
+// router-provided when routed, else the rec's question segment (R6) so even
+// compact and fallback cards can jump to their prompt page.
+function SourceQuestions({ rec, onOpenPrompt }) {
+  const routed = rec.detail?.router?.source_questions || [];
+  const seg = rec.segment;
+  const questions = routed.length
+    ? routed
+    : seg?.dimension === "question" && seg.question_id
+      ? [{ question_id: seg.question_id, question: seg.value }]
+      : [];
+  if (!questions.length || !onOpenPrompt) return null;
   return (
     <div className="rc-module">
       <p className="rc-pane__title">Source questions</p>
@@ -333,7 +360,7 @@ function SourceQuestions({ router, onOpenPrompt }) {
             type="button"
             key={q.question_id}
             className="rc-demand__q"
-            onClick={() => onOpenPrompt?.(q.question_id)}
+            onClick={() => onOpenPrompt(q.question_id)}
           >
             <span className="rc-demand__text">{q.question}</span>
           </button>
@@ -403,6 +430,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
             QC verifiably absent. That's why this card carries high confidence.
           </p>
           <BodyChips rec={rec} variant={variant} />
+          <SourceQuestions rec={rec} onOpenPrompt={onOpenPrompt} />
         </div>
         {trackBar}
       </div>
@@ -462,13 +490,14 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
                 <BenchmarkModule router={router} />
               </>
             )}
-            <SourceQuestions router={router} onOpenPrompt={onOpenPrompt} />
+            <SourceQuestions rec={rec} onOpenPrompt={onOpenPrompt} />
           </div>
         </div>
       ) : (
         <div className="rc-body">
           {rec.target && <p className="rec-card__target">Target: {rec.target}</p>}
           {rec.detail?.evidence && <StrategicEvidence ev={rec.detail.evidence} />}
+          <SourceQuestions rec={rec} onOpenPrompt={onOpenPrompt} />
         </div>
       )}
 

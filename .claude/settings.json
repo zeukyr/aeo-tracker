@@ -11,7 +11,8 @@
       "Bash(python -m migrations.normalize_page_facts_urls)",
       "Bash(PYTHONPATH=. python \"C:\\\\Users\\\\AngelaLi\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-AngelaLi-qc-ai-tracker\\\\6b39c294-1923-4986-a148-e3fcb6034bd8\\\\scratchpad\\\\vote_diff.py\")",
       "Skill(artifact-design)",
-      "Skill(artifact-design:*)"
+      "Skill(artifact-design:*)",
+      "Bash(python -c ' *)"
     ]
   }
 }

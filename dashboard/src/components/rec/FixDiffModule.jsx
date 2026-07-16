@@ -1,8 +1,11 @@
 import { useState } from "react";
+import InfoTip from "../InfoTip";
 
 // Feature-diff matrix for fix cards: rows from detail.scorecard.features,
 // gap rows (recommend=true) first and flagged. Prevalence renders as a dot
 // strip — n of N analyzed winners — so "most" is countable at a glance.
+// Collapsing must never hide a gap: every row where QC lacks a feature some
+// winner has stays visible; only parity rows sit behind the toggle.
 
 const MAX_DOTS = 10;
 const COLLAPSED_ROWS = 6;
@@ -22,12 +25,20 @@ function PrevDots({ present, total }) {
 export default function FixDiffModule({ sc }) {
   const [expanded, setExpanded] = useState(false);
   const features = sc.features || [];
-  const ordered = [...features.filter((f) => f.recommend), ...features.filter((f) => !f.recommend)];
-  const rows = expanded ? ordered : ordered.slice(0, COLLAPSED_ROWS);
+  // verified gaps first, then below-bar gaps, then parity rows
+  const rank = (f) => (f.recommend ? 0 : !f.qc_has && f.winners_present > 0 ? 1 : 2);
+  const ordered = [...features].sort((a, b) => rank(a) - rank(b));
+  const gapRows = ordered.filter((f) => rank(f) < 2).length;
+  const visibleRows = Math.max(gapRows, COLLAPSED_ROWS);
+  const rows = expanded ? ordered : ordered.slice(0, visibleRows);
+  const hidden = ordered.length - visibleRows;
 
   return (
     <div>
-      <p className="rc-pane__title">Feature diff — QC page vs cited field</p>
+      <p className="rc-pane__title">
+        Feature diff — QC page vs cited field
+        <InfoTip id="feature_diff_table" />
+      </p>
       <div className="rc-diff-scroll">
         <table className="rc-diff">
           <thead>
@@ -61,9 +72,11 @@ export default function FixDiffModule({ sc }) {
           </tbody>
         </table>
       </div>
-      {ordered.length > COLLAPSED_ROWS && (
+      {hidden > 0 && (
         <button className="rc-more" type="button" onClick={() => setExpanded(!expanded)}>
-          {expanded ? "Show fewer features ▴" : `Show all ${ordered.length} features ▾`}
+          {expanded
+            ? "Hide parity features ▴"
+            : `Show ${hidden} more feature${hidden === 1 ? "" : "s"} where QC is at parity ▾`}
         </button>
       )}
 

@@ -342,7 +342,13 @@ def _best_page_content(intent_text, pages, df, n_slugs):
         return slug_url, slug_cov, slug_prec
 
     from api.queries.page_facts import get_pages_facts, page_genre
-    facts_by = {f["url"]: f for f in get_pages_facts([u for _c, _p, u in candidates])}
+    candidate_urls = [u for _c, _p, u in candidates]
+    # get_pages_facts normalizes each URL internally (strips "www."), so its
+    # returned facts carry the normalized url, not the sitemap's - keying off
+    # the RETURNED url silently dropped every match (sitemap urls are all
+    # www.), disabling this rerank entirely. Zip against the input instead,
+    # which get_pages_facts preserves the order of.
+    facts_by = dict(zip(candidate_urls, get_pages_facts(candidate_urls)))
     intent_tokens = _content_tokens(intent_text)
 
     ranked = []

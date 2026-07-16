@@ -2,6 +2,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from src.logger import logger
+from src.parsing.brands import canonicalize
 
 load_dotenv()
 
@@ -74,13 +75,15 @@ def save_mention_response(run_id, question_id, engine, raw_response, citations, 
 
                 cur.execute("""
                     INSERT INTO mention_response_brands (
-                        mention_response_id, brand_name, brand_type, rank_position
-                    ) VALUES (%s, %s, %s, %s)
+                        mention_response_id, brand_name, brand_type, rank_position,
+                        canonical_name
+                    ) VALUES (%s, %s, %s, %s, %s)
                 """, (
                     mention_response_id,
                     name,
                     brand_type,
-                    rank_position
+                    rank_position,
+                    canonicalize(name)
                 ))
 
             # 3. Insert link rows into mention_response_links

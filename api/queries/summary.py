@@ -15,10 +15,15 @@ def fetch_avg_rank(cur, filter_clause, school=None):
 
 def fetch_sov(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
+    # Count distinct (response, canonical brand) pairs — the LLM can store
+    # several spelling variants of one brand in a single response, which
+    # plain row counts would double-count.
     cur.execute(f"""
         SELECT
-            SUM(CASE WHEN b.brand_type = 'qc' THEN 1 ELSE 0 END) AS qc_mentions,
-            SUM(CASE WHEN b.brand_type = 'competitor' THEN 1 ELSE 0 END) AS competitor_mentions
+            COUNT(DISTINCT (b.mention_response_id, COALESCE(b.canonical_name, b.brand_name)))
+                FILTER (WHERE b.brand_type = 'qc') AS qc_mentions,
+            COUNT(DISTINCT (b.mention_response_id, COALESCE(b.canonical_name, b.brand_name)))
+                FILTER (WHERE b.brand_type = 'competitor') AS competitor_mentions
         FROM mention_response_brands b
         JOIN mention_responses m
             ON b.mention_response_id = m.id
@@ -76,12 +81,13 @@ def fetch_visibility_score(cur, filter_clause, school=None):
 def fetch_competitor_mention_counts(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
     cur.execute(f"""
-        SELECT b.brand_name, COUNT(DISTINCT b.mention_response_id) as mentions
+        SELECT COALESCE(b.canonical_name, b.brand_name) AS brand,
+               COUNT(DISTINCT b.mention_response_id) as mentions
         FROM mention_response_brands b
         JOIN mention_responses m ON m.id = b.mention_response_id
         LEFT JOIN questions q ON q.id = m.question_id
         WHERE b.brand_type = 'competitor' {filter_clause.replace("created_at", "m.created_at")} {school_clause}
-        GROUP BY b.brand_name;
+        GROUP BY brand;
     """, params)
     return {row[0]: row[1] for row in cur.fetchall()}
 
@@ -170,12 +176,13 @@ def get_summary(days=None, school=None):
             visibility_prev = fetch_visibility_score(cur, filter_prev, school)
 
             cur.execute(f"""
-                SELECT b.brand_name, COUNT(*) as count
+                SELECT COALESCE(b.canonical_name, b.brand_name) AS brand,
+                       COUNT(DISTINCT b.mention_response_id) as count
                 FROM mention_response_brands b
                 JOIN mention_responses m ON m.id = b.mention_response_id
                 LEFT JOIN questions q ON q.id = m.question_id
                 WHERE b.brand_type = 'competitor' {filter_curr.replace("created_at", "m.created_at")} {school_clause}
-                GROUP BY b.brand_name
+                GROUP BY brand
                 ORDER BY count DESC
                 LIMIT 1;
             """, school_params)

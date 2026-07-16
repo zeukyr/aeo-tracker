@@ -1,6 +1,7 @@
 """
-Tab 2 "Improve Existing Pages" scorecard (Phase 4 of
-docs/ai/recommendation-two-tab-plan.md).
+"Improve Existing Pages" scorecard - the question router's FIX-branch leaf
+(originally Phase 4 of docs/ai/recommendation-two-tab-plan.md, as
+tab2_scorecard.py).
 
 For a topic where QC HAS a page but engines skip it, this compares QC's page
 against the top pages AI actually cites for the topic and produces the
@@ -34,8 +35,8 @@ import json
 from openai import OpenAI
 
 from src.logger import logger
-from api.queries.tab1_strategy import get_topic_cited_urls, genre_check
-from api.queries.page_facts import get_pages_facts, get_page_facts, school_for_url
+from api.queries.cited_urls import get_topic_cited_urls
+from api.queries.page_facts import get_pages_facts, get_page_facts, page_genre, school_for_url
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -48,6 +49,11 @@ TOP_N_WINNERS = 5        # cited pages to compare against
 # Cited page types that carry a comparable information architecture. Community
 # threads, videos and pages we couldn't read can't be scored.
 _COMPARABLE_TYPES = {"competitor", "roundup", "directory", "association", "government", "guide", "editorial"}
+
+# Features that don't apply to a commercial/course sales page - a course
+# listing has no "author" to byline, so never recommend it there even when
+# most cited winners (editorial guides) happen to have one.
+_INAPPLICABLE_ON_COMMERCIAL = {"author_expertise"}
 
 
 def _load_features():
@@ -104,7 +110,7 @@ Return JSON: {{ {", ".join(f'"{s["id"]}": true|false' for s in semantic_specs)} 
     try:
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
-            max_tokens=300,
+            max_tokens=400,
             messages=[
                 {"role": "system", "content": "You inspect web-page content. Respond with valid JSON only."},
                 {"role": "user", "content": prompt},
@@ -228,9 +234,12 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
 
     qc_present = _page_features(qc_facts, question, features) if qc_facts.get("status") == "ok" else {}
     winner_present = [_page_features(f, question, features) for f in winner_facts]
+    qc_genre = page_genre(qc_facts) if qc_facts.get("status") == "ok" else None
 
     rows = []
     for feat in features:
+        if feat["id"] in _INAPPLICABLE_ON_COMMERCIAL and qc_genre == "commercial":
+            continue
         wp = sum(1 for w in winner_present if w.get(feat["id"]))
         qc_has = bool(qc_present.get(feat["id"]))
         prevalence = _prevalence_label(wp, n)
@@ -375,8 +384,8 @@ def scorecard_to_recommendation(sc):
     if rec_feats:
         labels = ", ".join(r["label"].lower() for r in rec_feats)
         problem = (
-            f"QC has a page for '{sc['topic']}' ({sc['qc_url']}) but AI engines cite other pages "
-            f"for this topic. Across {sc['winners_total']} analyzed cited pages it is missing "
+            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
+            f"for this question. Across {sc['winners_total']} analyzed cited pages it is missing "
             f"{len(rec_feats)} feature(s) they share: {labels}."
         )
         action = "; ".join(sc["suggested_edits"][:5]) or f"Add: {labels}"
@@ -388,8 +397,8 @@ def scorecard_to_recommendation(sc):
         priority = "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium"
     else:
         problem = (
-            f"QC has a page for '{sc['topic']}' ({sc['qc_url']}) but AI engines cite other pages "
-            f"for this topic. It matches the analyzed winners on every checklist feature most of "
+            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
+            f"for this question. It matches the analyzed winners on every checklist feature most of "
             f"them share - the remaining signals are weaker and below the evidence bar."
         )
         actions = []
@@ -445,59 +454,6 @@ def scorecard_to_recommendation(sc):
             },
         },
     }
-
-
-def build_tab2_recommendations(days=None, max_topics=2):
-    """
-    RETIRED as a top-level entry point (question-router plan §6): the router
-    (question_router.build_router_recommendations) now owns the fix branch at
-    question grain, dispatching to build_scorecard/scorecard_to_recommendation
-    directly. Kept for standalone topic-level dry runs only.
-
-    Deterministic Tab 2 recs for the weakest topics where QC has a page engines
-    skip: for each, score QC's covered page against the cited winners and emit a
-    scorecard-backed rec. Bounded to keep fetch/LLM cost small.
-    """
-    from api.queries.recommendation_signals import get_weakest_topics
-    from api.queries.sitemap_coverage import diagnose_coverage
-
-    out = []
-    topics = [t for t in get_weakest_topics(days, limit=20)
-              if t.get("kind") == "mention" and (t.get("sample_n") or 0) >= 5]
-    for t in topics:
-        if len(out) >= max_topics:
-            break
-        seg = {"dimension": "topic", "value": t["topic"]}
-        coverage = diagnose_coverage(seg)
-        if not coverage.get("covered"):
-            continue
-        top = coverage["covered"][0]
-        # Genre gate: when engines reward a different KIND of page than QC's
-        # (how-to guides winning over QC's course page), feature-tuning the
-        # existing page is the wrong action - Tab 1's genre-gap build rec owns
-        # that topic. Skip before any scorecard LLM pass runs. Deterministic,
-        # all cached inputs; ambiguity returns None and never suppresses.
-        try:
-            gm = genre_check(seg, top["qc_url"], days)
-        except Exception as e:
-            logger.warning(f"Tab 2 genre check failed for {t['topic']}: {e}")
-            gm = None
-        if gm:
-            logger.info(
-                f"Tab 2 skipping '{t['topic']}': winners are {gm['winner_genre']} "
-                f"({gm['winners_with_genre']}/{gm['winners_classified']}) but QC's page "
-                f"is {gm['qc_genre']} - genre-gap build rec owns this topic"
-            )
-            continue
-        try:
-            sc = build_scorecard(t["topic"], top["qc_url"], question=top["intent"], days=days)
-            rec = scorecard_to_recommendation(sc)
-        except Exception as e:
-            logger.warning(f"Tab 2 scorecard failed for {t['topic']}: {e}")
-            rec = None
-        if rec:
-            out.append(rec)
-    return out
 
 
 if __name__ == "__main__":

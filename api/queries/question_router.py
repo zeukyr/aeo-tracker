@@ -60,8 +60,8 @@ from api.queries.page_facts import (
     OWNABLE_SOURCE_BUCKETS,
     NON_OWNABLE_SOURCE_BUCKETS,
 )
-from api.queries.tab1_strategy import get_question_cited_urls
-from api.queries.tab2_scorecard import (
+from api.queries.cited_urls import get_question_cited_urls
+from api.queries.scorecard import (
     build_scorecard,
     scorecard_to_recommendation,
     scorecard_triage_reason,
@@ -632,84 +632,6 @@ def _triage_entry(route):
     }
 
 
-def _weakest(group):
-    """Representative route: lowest QC share, then highest citation volume."""
-    return min(group, key=lambda r: (r["question"]["qc_share"],
-                                     -r["question"]["n_citations"]))
-
-
-def _grouped(routes, key_fn):
-    groups = {}
-    for r in routes:
-        groups.setdefault(key_fn(r), []).append(r)
-    return groups.values()
-
-
-def build_router_recommendations(days=None):
-    """
-    Route every losing question; returns (recommendations, triage).
-    Dedup per §5.6 - near-duplicate questions converge on the same target:
-      fix       one scorecard per unique QC page (bounds the LLM passes)
-      build     one rec per (school, topic, page-kind, qc_url) group;
-                group size boosts priority, singletons still fire
-      reach_out one rec per (bucket, target root domain)
-    Inclusion opportunities are surfaced across all routed winners, deduped
-    by URL. The triage list is ranked weakest-first by construction.
-    """
-    routes = [route_question(q, days) for q in get_losing_questions(days)]
-    by_branch = {}
-    for r in routes:
-        by_branch.setdefault(r["branch"], []).append(r)
-
-    recommendations = []
-
-    # fix: one scorecard per unique QC page
-    for group in _grouped(by_branch.get("fix", []), lambda r: r["qc_url"]):
-        rep = _weakest(group)
-        q = rep["question"]
-        sc = None
-        try:
-            sc = build_scorecard(q["topic"] or q["question"], rep["qc_url"],
-                                 question=q["question"], days=days,
-                                 winner_facts=rep["winners"])
-            rec = scorecard_to_recommendation(sc)
-        except Exception as e:
-            logger.warning(f"Router fix branch failed for {rep['qc_url']}: {e}")
-            rec = None
-        if not rec:
-            reason = scorecard_triage_reason(sc) if sc else "scorecard_failed"
-            logger.info(f"Router fix: no rec for {rep['qc_url']} ({reason}; "
-                        f"question: {q['question'][:60]})")
-            continue
-        rec["detail"]["router"] = _router_detail(rep, group)
-        recommendations.append(rec)
-
-    # build: group by (school, topic, kind of page to build, existing qc page)
-    def _build_key(r):
-        gm = r.get("genre_mismatch")
-        kind = gm["winner_genre"] if gm else (
-            "commercial" if (r.get("dominant") or (None,))[0] == "competitor" else "informational")
-        return (r["question"].get("school"), r["question"].get("topic"), kind, r.get("qc_url"))
-
-    for group in _grouped(by_branch.get("build", []), _build_key):
-        recommendations.append(_build_rec(_weakest(group), group))
-
-    # reach out: group by (bucket, root domain of the channel target)
-    def _reach_key(r):
-        target = r.get("feasibility_target") or {}
-        return ((r.get("dominant") or (None,))[0],
-                _root_domain(target.get("domain") or ""))
-
-    for group in _grouped(by_branch.get("reach_out", []), _reach_key):
-        recommendations.append(_reach_out_rec(_weakest(group), group))
-
-    # verified inclusion opportunities across every route's winners
-    recommendations.extend(_inclusion_recs(routes))
-
-    triage_list = [_triage_entry(r) for r in by_branch.get("triage", [])]
-    return recommendations, triage_list
-
-
 # ─────────────────────────────────────────────────────────────────────────────
 # On-demand: one question -> one rec (dashboard question view)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -925,18 +847,3 @@ def build_question_recommendations(question_id, days=None):
                 "winners_unreadable": sc.get("winners_unreadable") or [],
             }
     return [], entry
-
-
-if __name__ == "__main__":
-    import io, sys
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-    recs, tri = build_router_recommendations()
-    print(f"=== recommendations ({len(recs)}) ===")
-    for r in recs:
-        branch = (r.get("detail", {}).get("router") or {}).get("branch", "?")
-        print(f"  [{branch}/{r['action_type']}] {r['target']}")
-        print(f"      {r['action'][:150]}")
-    print(f"\n=== triage ({len(tri)}) ===")
-    for t in tri:
-        print(f"  [{t['reason']:<24}] share={t['qc_share']:.2f} "
-              f"dominant={t['dominant_source']} {t['question'][:70]}")

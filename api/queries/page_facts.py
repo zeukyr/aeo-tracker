@@ -848,7 +848,7 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
 # ─────────────────────────────────────────────────────────────────────────────
 #
 # A router-level layer over page_type - no new page_type values (so
-# _COMPARABLE_TYPES, PAGE_TYPE_ACTIONS and the genre maps are untouched).
+# _COMPARABLE_TYPES and the genre maps are untouched).
 # Domain rules run first because a review platform like coursera.org would
 # otherwise read as "competitor" via brand-token match; then the existing
 # page_type maps onto ownability buckets:
@@ -985,25 +985,7 @@ def source_votes(winner_facts):
     return votes
 
 
-def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
-    """
-    Citation-weighted dominant bucket over a question's cited winners, or
-    (None, share) when nothing clears `threshold`. Single-stage flat vote -
-    kept for reports/diagnostics; the router uses the two-stage vote over
-    source_votes() (ownable vs non-ownable first, §5.2).
-    """
-    votes = source_votes(winner_facts)
-    total = sum(votes.values())
-    if not total:
-        return None, 0.0
-    bucket, weight = max(votes.items(), key=lambda kv: kv[1])
-    share = round(weight / total, 2)
-    if share < threshold:
-        return None, share
-    return bucket, share
-
-
-# Which QC school a QC-owned URL belongs to (shared by tab1/tab2 rec builders).
+# Which QC school a QC-owned URL belongs to (shared by the rec builders).
 SCHOOL_BY_DOMAIN_TOKEN = {
     "qcpetstudies":    "QC Pet Studies",
     "qceventplanning": "QC Event Planning",

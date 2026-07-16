@@ -21,30 +21,19 @@ from api.queries.citations import (
     get_citations_by_school,
     get_sentiment_citations,
 )
+from api.queries.cited_urls import get_reddit_targets
 from api.queries.summary import get_summary
 from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses
-from api.queries.recommendations import (
-    get_competitor_wins,
-    get_qc_buried_positions,
-    get_citation_gaps,
-    get_recurring_concerns,
-)
+from api.queries.question_router import get_losing_questions
 from api.queries.recommendation_signals import (
     get_momentum,
     get_weakest_engines,
     get_weakest_categories,
     get_weakest_schools,
-    get_weakest_topics,
+    get_losing_question_summary,
     get_win_reasons,
     get_qc_verdict_distribution,
     get_top_citation_domains,
     get_competitor_profile,
     get_health_summary,
-)
-from api.queries.recommendations_synthesis import (
-    generate_recommendations,
-    save_recommendations,
-    get_saved_recommendations,
-    update_recommendation_status,
-    get_generation_status,
 )

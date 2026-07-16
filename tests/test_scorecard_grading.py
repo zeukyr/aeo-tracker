@@ -8,7 +8,7 @@ silently dropped from the denominator. All inputs are constructed scorecards -
 no DB, no LLM.
 """
 
-import api.queries.tab2_scorecard as ts
+import api.queries.scorecard as ts
 
 
 def _feat(fid, qc_has, wp, n, weight="medium"):

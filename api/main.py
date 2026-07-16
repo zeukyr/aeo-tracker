@@ -24,6 +24,8 @@ from api.queries import (
     get_prompt_detail,
     get_prompt_responses,
     get_health_summary,
+    get_reddit_targets,
+    get_losing_questions,
 )
 
 from api.recommendations import (
@@ -31,11 +33,8 @@ from api.recommendations import (
     save_recommendations,
     get_saved_recommendations,
     get_recommendation,
-    get_triage,
     update_recommendation_status,
     get_generation_status,
-)
-from api.queries.recommendations_synthesis import (
     get_question_recommendation_status,
     generate_question_recommendation,
     get_question_recommendations,
@@ -130,37 +129,23 @@ def topics(
 ):
     return get_topics(days, engine, question_type, school, qc_mentioned, sentiment)
 
-@app.get("/api/competitor-wins")
-def competitor_wins(days: int = None):
-    return get_competitor_wins(days)
-
-@app.get("/api/qc-buried-positions")
-def qc_buried_positions(days: int = None):
-    return get_qc_buried_positions(days)
-
-@app.get("/api/citation-gaps")
-def citation_gaps(days: int = None):
-    return get_citation_gaps(days)
-
-@app.get("/api/recurring-concerns")
-def recurring_concerns(days: int = None):
-    return get_recurring_concerns(days)
-
-@app.get("/api/generate-recommendations")
-def trigger_recommendations(days: int = None, force: bool = False):
+@app.get("/api/recommendations/refresh-signals")
+def refresh_signal_recommendations(days: int = None, force: bool = False):
+    """Refresh the concern + credibility recs (no per-question selection)."""
     status = get_generation_status()
     if not status["can_generate"] and not force:
         raise HTTPException(status_code=429, detail={
             "message": "Recommendations were generated recently; cooldown still active.",
             **status,
         })
-    recs, triage = generate_recommendations(days)
-    result = save_recommendations(recs, triage)
+    recs = generate_recommendations(days)
+    result = save_recommendations(recs)
     return result
 
-@app.get("/api/recommendations/triage")
-def list_triage():
-    return get_triage()
+@app.get("/api/recommendations/candidates")
+def recommendation_candidates(days: int = None):
+    """Live, weakest-first list of losing questions for the question picker."""
+    return get_losing_questions(days)
 
 @app.get("/api/recommendations/generation-status")
 def recommendations_generation_status():
@@ -169,6 +154,10 @@ def recommendations_generation_status():
 @app.get("/api/recommendations/health-summary")
 def recommendations_health_summary(days: int = None, school: str = None):
     return get_health_summary(days, school)
+
+@app.get("/api/recommendations/reddit-targets")
+def recommendations_reddit_targets(days: int = None, school: str = None):
+    return get_reddit_targets(days, school)
 
 @app.get("/api/recommendations")
 def list_recommendations(include_superseded: bool = False):

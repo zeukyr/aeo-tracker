@@ -82,6 +82,48 @@
       "description": "References professional associations, government statistics, or original data rather than only self-referential claims."
     },
     {
+      "id": "evidence_density",
+      "label": "Evidence density (stats, quotes, sources)",
+      "detection": "semantic",
+      "geo_weight": "high",
+      "description": "Concrete evidence woven through the text: statistics with numbers, quotations, or named sources - not just unsupported claims. Strongest citation booster in the original GEO paper."
+    },
+    {
+      "id": "neutral_tone",
+      "label": "Neutral, third-person tone",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "Reads like reference material: no first-person blog voice, no hard sell. Marketing tone reduces the odds an engine quotes the page as an authority."
+    },
+    {
+      "id": "comprehensiveness",
+      "label": "Comprehensive topic coverage",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "Fully answers the topic's question end-to-end (requirements, process, costs, outcomes) rather than covering one slice. Judged against the topic's representative question."
+    },
+    {
+      "id": "justification_assets",
+      "label": "Extractable value propositions",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "Short, quotable justification claims an engine can lift when shortlisting ('A+ BBB rating', '21-day money-back guarantee') - stated plainly, not buried in prose."
+    },
+    {
+      "id": "pros_cons",
+      "label": "Pros / cons section",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "An explicit pros-and-cons or advantages/drawbacks breakdown of the options discussed."
+    },
+    {
+      "id": "comparison_structure",
+      "label": "Comparison framing (X vs Y)",
+      "detection": "semantic",
+      "geo_weight": "medium",
+      "description": "Side-by-side comparison of alternatives in the body text ('X vs Y', option-by-option contrasts) - beyond just having an HTML table, which comparison_table already detects."
+    },
+    {
       "id": "org_schema",
       "label": "Organization/Course schema",
       "detection": "deterministic",
