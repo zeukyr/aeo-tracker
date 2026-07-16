@@ -706,6 +706,171 @@ function QCCitationsSection({ promptId, days }) {
   );
 }
 
+// ─── top fanouts section ──────────────────────────────────────────────────────
+function BoolChip({ label, value }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em" }}>{label}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: value ? "#16a34a" : "#9b9b9b" }}>
+        {value ? "✓ Yes" : "✗ No"}
+      </span>
+    </div>
+  );
+}
+
+function TopFanoutsSection({ days }) {
+  const [fanouts, setFanouts] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(new Set());
+  const [runResults, setRunResults] = useState({});
+  const [runErrors, setRunErrors] = useState({});
+
+  useEffect(() => {
+    setFanouts(null);
+    setLoading(true);
+    setExpanded(new Set());
+    setRunResults({});
+    setRunErrors({});
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    params.append("min_count", "2");
+    fetch(`${API_BASE_URL}/api/top-fanout-queries?${params}`)
+      .then(r => r.json())
+      .then(data => { setFanouts(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(() => { setFanouts([]); setLoading(false); });
+  }, [days]);
+
+  function toggleExpand(key) {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  }
+
+  function runQuery(key, engine, query) {
+    setRunResults(prev => ({ ...prev, [key]: "loading" }));
+    setRunErrors(prev => { const n = { ...prev }; delete n[key]; return n; });
+    fetch(`${API_BASE_URL}/api/fanout-query/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ engine, query }),
+    })
+      .then(r => r.json())
+      .then(data => setRunResults(prev => ({ ...prev, [key]: data })))
+      .catch(() => setRunErrors(prev => ({ ...prev, [key]: "Request failed" })));
+  }
+
+  if (loading) return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb" }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Top Fanout Queries</span>
+      </div>
+      <p style={{ padding: "12px 16px", fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>Loading…</p>
+    </div>
+  );
+
+  if (!fanouts || fanouts.length === 0) return null;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb", display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Top Fanout Queries</span>
+        <span style={{ fontSize: 11, color: "#9b9b9b" }}>queries issued across 5+ prompts</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {fanouts.map((fq, i) => {
+          const key = `${fq.engine}|${fq.query}`;
+          const color = LLM_COLORS[fq.engine] || "#9b9b9b";
+          const isExpanded = expanded.has(key);
+          const runResult = runResults[key];
+          const canRun = fq.engine === "chatgpt";
+
+          return (
+            <div key={key} style={{ borderBottom: i < fanouts.length - 1 ? "1px solid #f0efec" : "none" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px" }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[fq.engine] || fq.engine}
+                </span>
+                <span style={{ fontSize: 13, color: "#374151", flex: 1, minWidth: 0 }}>
+                  {fq.query}
+                </span>
+                <span style={{ fontSize: 11, color: "#6b7280", flexShrink: 0, background: "#f3f4f6", borderRadius: 4, padding: "2px 7px" }}>
+                  {fq.count} prompts
+                </span>
+                <button
+                  onClick={() => toggleExpand(key)}
+                  style={{ background: "none", border: "1px solid #e5e7eb", borderRadius: 4, cursor: "pointer", padding: "3px 8px", fontSize: 11, color: "#6b7280", flexShrink: 0 }}
+                >
+                  {isExpanded ? "▲ Hide" : "▼ Prompts"}
+                </button>
+                <button
+                  onClick={() => canRun && runResult !== "loading" && runQuery(key, fq.engine, fq.query)}
+                  disabled={!canRun || runResult === "loading"}
+                  title={!canRun ? "Live queries only supported for ChatGPT" : "Query ChatGPT with this fanout query"}
+                  style={{
+                    background: canRun ? "#378add" : "#e5e7eb",
+                    color: canRun ? "#fff" : "#9b9b9b",
+                    border: "none", borderRadius: 4,
+                    cursor: canRun && runResult !== "loading" ? "pointer" : "not-allowed",
+                    padding: "4px 12px", fontSize: 11, fontWeight: 600, flexShrink: 0,
+                  }}
+                >
+                  {runResult === "loading" ? "Running…" : "▶ Run"}
+                </button>
+              </div>
+
+              {isExpanded && (
+                <div style={{ padding: "0 16px 10px 84px", display: "flex", flexDirection: "column", gap: 3 }}>
+                  {fq.prompts.map(p => (
+                    <div key={p.id} style={{ fontSize: 12, color: "#6b7280", display: "flex", alignItems: "flex-start", gap: 6 }}>
+                      <span style={{ color: "#d1d5db", flexShrink: 0, marginTop: 1 }}>•</span>
+                      <span>{p.question}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {runResult && runResult !== "loading" && (
+                <div style={{ margin: "0 16px 12px", background: "#f8f7f5", border: "1px solid #e5e7eb", borderRadius: 8, padding: "12px 14px" }}>
+                  {runResult.error ? (
+                    <p style={{ fontSize: 12, color: "#dc2626", margin: 0 }}>{runResult.error}</p>
+                  ) : (
+                    <>
+                      <div style={{ display: "flex", gap: 20, marginBottom: 10 }}>
+                        <BoolChip label="QC Mentioned" value={runResult.qc_mentioned} />
+                        <BoolChip label="QC Cited" value={runResult.qc_cited} />
+                        {runResult.qc_rank !== null && runResult.qc_rank !== undefined && (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em" }}>First Mention</span>
+                            <span style={{ fontSize: 12, fontWeight: 600, color: "#374151" }}>{runResult.qc_rank}% into response</span>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{
+                        fontSize: 12, color: "#374151", lineHeight: 1.6,
+                        maxHeight: 220, overflowY: "auto",
+                        background: "#fff", border: "1px solid #e5e7eb", borderRadius: 6,
+                        padding: "8px 10px", whiteSpace: "pre-wrap",
+                      }}>
+                        {runResult.text}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {runErrors[key] && (
+                <p style={{ margin: "0 16px 12px", fontSize: 12, color: "#dc2626" }}>{runErrors[key]}</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── expanded prompt detail panel ─────────────────────────────────────────────
 function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
   const { days } = useFilter();
@@ -1219,6 +1384,9 @@ export default function Prompts() {
               </table>
             </div>
           )}
+
+          {/* ── Top Fanout Queries ─────────────────────────────────────── */}
+          <TopFanoutsSection days={days} />
 
         </div>
       )}

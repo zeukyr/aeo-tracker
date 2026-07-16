@@ -737,6 +737,49 @@ def get_prompt_qc_citations(prompt_id: str, days=None):
     ]
 
 
+def get_top_fanout_queries(days=None, min_count=5):
+    """
+    Returns fanout queries that appear across >= min_count distinct prompts for a given engine.
+    Each row: { engine, query, count, prompts: [{id, question}] }
+    """
+    date_r = _date_filter(days).replace("AND created_at", "AND r.started_at")
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(f"""
+                SELECT fq.engine, fq.query,
+                       array_agg(DISTINCT fq.question_id::text) AS question_ids,
+                       COUNT(DISTINCT fq.question_id) AS prompt_count
+                FROM fanout_queries fq
+                JOIN runs r ON r.id = fq.run_id
+                WHERE 1=1 {date_r}
+                GROUP BY fq.engine, fq.query
+                HAVING COUNT(DISTINCT fq.question_id) >= %s
+                ORDER BY prompt_count DESC, fq.engine, fq.query
+                LIMIT 50
+            """, (min_count,))
+            fanout_rows = cur.fetchall()
+
+            if not fanout_rows:
+                return []
+
+            all_qids = list({qid for _, _, qids, _ in fanout_rows for qid in qids})
+            cur.execute(
+                "SELECT id::text, question FROM questions WHERE id::text = ANY(%s)",
+                (all_qids,)
+            )
+            question_map = {r[0]: r[1] for r in cur.fetchall()}
+
+    return [
+        {
+            "engine": r[0],
+            "query": r[1],
+            "count": int(r[3]),
+            "prompts": [{"id": qid, "question": question_map.get(qid, "")} for qid in r[2]],
+        }
+        for r in fanout_rows
+    ]
+
+
 def get_prompt_responses(prompt_id: str, engine: str, days=None):
     """
     Full response history for one (prompt, engine) pair, newest first.
