@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 import RecommendationCard from "../components/RecommendationCard";
-import RedditSpotlight from "../components/rec/RedditSpotlight";
 import InfoTip from "../components/InfoTip";
 import { formatDate } from "../lib/format";
 import { recTriageMessage } from "../lib/recTriage";
@@ -389,8 +388,6 @@ function Recommendations() {
         ))}
       </div>
       <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
-
-      {stream === "outreach" && <RedditSpotlight />}
 
       {activeRecs.length > 0 && (
         <section>

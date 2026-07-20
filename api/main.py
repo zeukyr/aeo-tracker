@@ -25,6 +25,7 @@ from api.queries import (
     get_prompt_responses,
     get_health_summary,
     get_reddit_targets,
+    set_reddit_thread_status,
     get_losing_questions,
 )
 
@@ -158,6 +159,19 @@ def recommendations_health_summary(days: int = None, school: str = None):
 @app.get("/api/recommendations/reddit-targets")
 def recommendations_reddit_targets(days: int = None, school: str = None):
     return get_reddit_targets(days, school)
+
+@app.put("/api/recommendations/reddit-targets/{post_id}/status")
+def put_reddit_thread_status(
+    post_id: str,
+    url: str = Body(...),
+    subreddit: str = Body(None),
+    status: str = Body(...),
+    reason: str = Body(None),
+):
+    if status not in ("dead", "open"):
+        raise HTTPException(status_code=400, detail="status must be 'dead' or 'open'")
+    set_reddit_thread_status(post_id, url, subreddit, status, reason)
+    return {"updated": True}
 
 @app.get("/api/recommendations")
 def list_recommendations(include_superseded: bool = False):

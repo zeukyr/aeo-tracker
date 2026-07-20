@@ -4,9 +4,24 @@
     {
       "id": "accreditation",
       "label": "Not formally accredited / recognized",
+      "as_question": "Is a QC certificate accredited?",
       "addressable": false,
       "action_type": null,
       "reframe": "Publish one transparent explainer of what QC certifications are and are not (proprietary vocational certificates, BBB business accreditation vs academic accreditation, association alignment) so engines quote QC's own framing instead of inferring the gap - content cannot make QC accredited and must not claim to.",
+      "page_outline": [
+        {"title": "What QC certifications are - and aren't",
+         "detail": "State plainly, in the first sentence, that QC issues proprietary vocational certificates, not a government- or academic-accredited credential.",
+         "confirm_with_qc": false},
+        {"title": "BBB accreditation vs. academic accreditation",
+         "detail": "These are commonly conflated - explain that BBB accreditation is a business/customer-service standard, not an educational one.",
+         "confirm_with_qc": false},
+        {"title": "Which professional associations QC certificates align with",
+         "detail": "Name the specific associations.",
+         "confirm_with_qc": true},
+        {"title": "Why QC doesn't hold government/academic accreditation",
+         "detail": "State the actual structural reason.",
+         "confirm_with_qc": true}
+      ],
       "probe": null,
       "patterns": [
         "accredit", "internation", "ministry of education", "post-secondary",
@@ -16,6 +31,7 @@
     {
       "id": "cost_value",
       "label": "Cost / value concerns",
+      "as_question": "Is a QC course worth the cost?",
       "addressable": true,
       "action_type": "content",
       "reframe": null,
@@ -28,6 +44,7 @@
     {
       "id": "practical_hands_on",
       "label": "Limited hands-on / practical learning",
+      "as_question": "Does a QC course include hands-on, practical training?",
       "addressable": true,
       "action_type": "content",
       "reframe": null,
@@ -43,9 +60,18 @@
     {
       "id": "support_feedback",
       "label": "Tutor feedback / support quality",
+      "as_question": "How fast does QC tutor feedback come back?",
       "addressable": false,
       "action_type": null,
       "reframe": "Operational: tutor response times and feedback depth are a service problem; content can only set expectations (publish the actual feedback SLA and mentorship model), not fix slow feedback.",
+      "page_outline": [
+        {"title": "What to expect from tutor feedback",
+         "detail": "State the actual feedback turnaround SLA in the first sentence.",
+         "confirm_with_qc": true},
+        {"title": "How the mentorship/tutor model works",
+         "detail": "Describe the actual structure (named tutor vs. pool, channels used, review cadence).",
+         "confirm_with_qc": false}
+      ],
       "probe": null,
       "patterns": ["tutor", "feedback", "support", "personalized"]
     },
@@ -61,9 +87,18 @@
     {
       "id": "format_self_discipline",
       "label": "Online format requires self-discipline",
+      "as_question": "How much time commitment does an online QC course take?",
       "addressable": false,
       "action_type": null,
       "reframe": "Inherent to online learning; at most publish expectation-setting content (time commitment, pacing, completion tips). Low priority.",
+      "page_outline": [
+        {"title": "What to expect: time commitment & pacing",
+         "detail": "State a realistic weekly time commitment in the first sentence.",
+         "confirm_with_qc": true},
+        {"title": "Tips for completing an online, self-paced course",
+         "detail": "Practical pacing/completion tips (not generic study advice).",
+         "confirm_with_qc": false}
+      ],
       "probe": null,
       "patterns": ["self-discipline", "online format", "online-based", "timeframe", "allowed time", "transfers", "not suit"]
     },
@@ -85,6 +120,7 @@
     {
       "id": "employer_recognition",
       "label": "Employers / industry may not value the certificate",
+      "as_question": "Do employers recognize a QC certificate?",
       "addressable": true,
       "action_type": "content",
       "reframe": null,

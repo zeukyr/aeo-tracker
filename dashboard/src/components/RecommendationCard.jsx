@@ -6,6 +6,7 @@ import RecTrail from "./rec/RecTrail";
 import RecCitations from "./rec/RecCitations";
 import FixDiffModule from "./rec/FixDiffModule";
 import TargetDossier from "./rec/TargetDossier";
+import ContentBrief from "./rec/ContentBrief";
 
 const EFFORT_DOTS = { S: 1, M: 2, L: 3 };
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
@@ -119,9 +120,18 @@ function verdictLine(rec, variant) {
   if (variant === "build") {
     if (router?.genre_mismatch)
       return <><b>QC's page is the wrong kind for this query</b> — engines reward a different genre here.</>;
+    const grouped = router?.grouped_questions?.length ?? 0;
+    if (router?.branch === "competitive_pattern") {
+      return (
+        <>
+          <b>QC has no page covering this</b> — competitors keep winning on{" "}
+          {router.reason_label?.toLowerCase()} across {grouped} question{grouped === 1 ? "" : "s"}.
+        </>
+      );
+    }
     return (
       <>
-        <b>QC has no page for this query</b> —{" "}
+        <b>QC has no page {grouped > 1 ? "on this topic" : "for this query"}</b> —{" "}
         {router?.dominant_source === "competitor" ? "rival providers won it with theirs." : `${router?.dominant_source ?? "other"} pages won it.`}
       </>
     );
@@ -395,6 +405,12 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
   const variant = cardVariant(rec);
   const router = rec.detail?.router;
   const sc = rec.detail?.scorecard;
+  // When a Content Brief module renders below, it already carries the
+  // outline + format spec structured out of `rec.action` - showing the full
+  // concatenated string here too would just reproduce the wall of text the
+  // brief exists to replace, so lead with its short core action instead.
+  const contentBrief = router?.content_brief ?? rec.detail?.concern?.content_brief;
+  const actionLine = contentBrief?.action ?? rec.action;
 
   const trackBar = (
     <TrackBar
@@ -445,7 +461,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
         <p className="rc-body__problem">{rec.problem}</p>
         <p className="rc-body__action">
           <span className="rc-body__arrow">→</span>
-          <span>{rec.action}</span>
+          <span>{actionLine}</span>
         </p>
         {rec.detail?.priority_rank?.reason && (
           <p className="rc-body__note">{rec.detail.priority_rank.reason}</p>
@@ -486,7 +502,16 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
             )}
             {variant === "build" && (
               <>
-                <RecCitations router={router} />
+                {router.content_brief ? (
+                  <>
+                    <ContentBrief brief={router.content_brief} />
+                    <div className="rc-module">
+                      <RecCitations router={router} />
+                    </div>
+                  </>
+                ) : (
+                  <RecCitations router={router} />
+                )}
                 <BenchmarkModule router={router} />
               </>
             )}
@@ -496,6 +521,9 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
       ) : (
         <div className="rc-body">
           {rec.target && <p className="rec-card__target">Target: {rec.target}</p>}
+          {rec.detail?.concern?.content_brief && (
+            <ContentBrief brief={rec.detail.concern.content_brief} />
+          )}
           {rec.detail?.evidence && <StrategicEvidence ev={rec.detail.evidence} />}
           <SourceQuestions rec={rec} onOpenPrompt={onOpenPrompt} />
         </div>

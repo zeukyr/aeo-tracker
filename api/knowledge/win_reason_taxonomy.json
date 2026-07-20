@@ -1,34 +1,67 @@
 {
-  "_comment": "Win-reason taxonomy (Phase 7, item 0). Why competitors beat QC head-to-head, normalized from free-text win_reasons. Matched in order, first hit wins.",
+  "_comment": "Win-reason taxonomy (Phase 7, item 0; extended for the competitive-content engine). Why competitors beat QC head-to-head, normalized from free-text win_reasons. Matched in order, first hit wins. 'addressable': can published content close this gap? false = structural (content can't manufacture reputation or a first-mention slot). 'action_type': content = a page QC could publish; citation = the fix is earning third-party proof, not writing a page (out of scope for the BUILD-shaped competitive-content engine, which only acts on action_type 'content'). 'probe' drives the content-index search the same way concern_taxonomy.json's probe does.",
   "types": [
     {
       "id": "mention_position",
       "label": "Mentioned first / earlier in the answer",
+      "addressable": false,
+      "action_type": null,
+      "probe": null,
       "patterns": ["first mention", "first school", "first organization", "mentioned first"]
     },
     {
       "id": "reviews_ratings",
       "label": "Stronger ratings / more reviews",
+      "addressable": true,
+      "action_type": "citation",
+      "probe": {
+        "question": "Does QC surface independent third-party reviews or ratings (Trustpilot, Google Reviews, BBB) rather than only self-hosted testimonials?",
+        "keywords": ["trustpilot", "google reviews", "bbb", "third-party", "independent review", "rating"]
+      },
       "patterns": ["rating", "review"]
     },
     {
       "id": "credential_accreditation",
       "label": "Accredited / industry-credentialed",
+      "as_question": "What credentials does QC's program carry?",
+      "addressable": true,
+      "action_type": "content",
+      "probe": {
+        "question": "Does QC publish a transparent explainer of its certifications, industry recognition, or association alignment?",
+        "keywords": ["accredit", "certif", "recognized", "association", "professional standards", "credential"]
+      },
       "patterns": ["accredit", "capdt", "iacp", "certified", "certificate program", "recognized in", "professional standards", "behavior consultant"]
     },
     {
       "id": "curriculum_depth",
       "label": "Deeper / clearer curriculum",
+      "as_question": "What does the QC curriculum actually cover?",
+      "addressable": true,
+      "action_type": "content",
+      "probe": {
+        "question": "Does QC publish detailed curriculum or course-structure content (modules, topics covered, syllabus)?",
+        "keywords": ["curriculum", "syllabus", "course structure", "modules", "topics covered", "comprehensive"]
+      },
       "patterns": ["curriculum", "comprehensive", "covers", "requirements", "structure", "topics"]
     },
     {
       "id": "flexibility",
       "label": "Flexible format",
+      "as_question": "How flexible is a QC course's schedule?",
+      "addressable": true,
+      "action_type": "content",
+      "probe": {
+        "question": "Does QC describe the flexibility of its course format (self-paced, part-time, scheduling)?",
+        "keywords": ["flexible", "self-paced", "self paced", "part-time", "schedule", "pace", "at your own pace"]
+      },
       "patterns": ["flexib"]
     },
     {
       "id": "reputation",
       "label": "Established reputation / brand familiarity",
+      "addressable": false,
+      "action_type": null,
+      "probe": null,
       "patterns": ["reputation", "well-known", "established", "credible", "platform", "real-world"]
     }
   ]

@@ -11,6 +11,9 @@ def _rec_rank_signals(rec):
     """Return ``(family, volume, urgency)`` in comparable ranking units."""
     detail = rec.get("detail") or {}
     router = detail.get("router") or {}
+    if router.get("branch") == "competitive_pattern":
+        volume = (router.get("pattern_count") or 0) + 3 * len(router.get("grouped_questions") or [])
+        return "pattern", volume, 0.6
     if router.get("n_citations") is not None:
         volume = router["n_citations"] + 3 * len(router.get("grouped_questions") or [])
         return "router", volume, 1.0 - (router.get("qc_share") or 0.0)
@@ -34,6 +37,13 @@ def _rank_reason(rank, total, family, percentile, rec, has_competitive_loss):
         volume = f"the concern was raised {concern.get('count')}x"
         urgency = (f"{round((concern.get('share_not_positive') or 0.5) * 100)}% of those "
                    "responses land not-positive")
+    elif family == "pattern":
+        router = detail.get("router") or {}
+        grouped = router.get("grouped_questions") or []
+        volume = f"{router.get('pattern_count')} head-to-head judgments cite this reason"
+        if grouped:
+            volume += f" across {len(grouped)} questions"
+        urgency = "a recurring cross-question pattern, not a one-off"
     else:
         return f"Ranked {rank}/{total} in this batch (no volume signal - mid-pack by default)."
     reason = (f"Ranked {rank}/{total} in this batch: {volume} - >= {round(percentile * 100)}% of "

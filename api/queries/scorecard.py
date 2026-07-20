@@ -36,7 +36,9 @@ from openai import OpenAI
 
 from src.logger import logger
 from api.queries.cited_urls import get_topic_cited_urls
-from api.queries.page_facts import get_pages_facts, get_page_facts, page_genre, school_for_url
+from api.queries.page_facts import (
+    get_pages_facts, get_page_facts, page_genre, school_for_url, query_term_coverage,
+)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -49,6 +51,28 @@ TOP_N_WINNERS = 5        # cited pages to compare against
 # Cited page types that carry a comparable information architecture. Community
 # threads, videos and pages we couldn't read can't be scored.
 _COMPARABLE_TYPES = {"competitor", "roundup", "directory", "association", "government", "guide", "editorial"}
+
+# Priority order for LEADING a recommendation's narrative when several ratio
+# ("metric") features are out of range at once - not a gate (the target-range
+# check already decides in/out), just which one gets named as THE generic GEO
+# fix so the card stays decisive instead of listing every failing metric.
+# Deliberately NOT competitor-cross-compared (these are template/CMS-level
+# properties measured against a small, often partly-unfetchable winner sample -
+# noisy and not what the underlying research measured); ranked by how directly
+# research-backed the metric is: query_term_coverage first (a page that never
+# uses the query's own words can't be found regardless of structure), then
+# macro-structure (44.9% of the structural-optimization effect in the source
+# study), meso-structure (39.7%), then micro-structure (15.4%, the smallest and
+# lowest-confidence slice).
+_METRIC_PRIORITY = {
+    "query_term_coverage": 0,
+    "internal_linking_density": 1,
+    "heading_hierarchy_depth": 2,
+    "structured_content_ratio": 3,
+    "paragraph_length_conformance": 4,
+    "emphasis_density": 5,
+}
+
 
 # Features that don't apply to a commercial/course sales page - a course
 # listing has no "author" to byline, so never recommend it there even when
@@ -128,16 +152,30 @@ Return JSON: {{ {", ".join(f'"{s["id"]}": true|false' for s in semantic_specs)} 
 
 
 def _page_features(facts, question, features):
-    """All feature ids -> present bool for one page (deterministic + semantic)."""
+    """All boolean feature ids -> present bool for one page (deterministic +
+    semantic only; 'ratio' features are scored separately by _ratio_value,
+    against a fixed target range rather than a per-page bool)."""
     semantic_specs = [f for f in features if f["detection"] == "semantic"]
     semantic = _semantic_features(facts, question, semantic_specs)
     present = {}
     for feat in features:
         if feat["detection"] == "semantic":
             present[feat["id"]] = semantic.get(feat["id"], False)
-        else:
+        elif feat["detection"] == "deterministic":
             present[feat["id"]] = _deterministic_present(feat["id"], facts)
     return present
+
+
+def _ratio_value(feature_id, facts, question):
+    """Numeric value for a 'ratio'-detection feature (geo_features.json), or
+    None when not measurable. query_term_coverage is question-specific so it's
+    computed here rather than cached on page_facts; the rest come straight off
+    the page_facts.py-computed structural metrics."""
+    if facts.get("status") != "ok":
+        return None
+    if feature_id == "query_term_coverage":
+        return query_term_coverage(question, facts.get("content_excerpt") or "")
+    return (facts.get("features") or {}).get(feature_id)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -237,8 +275,28 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     qc_genre = page_genre(qc_facts) if qc_facts.get("status") == "ok" else None
 
     rows = []
+    metric_rows = []
     for feat in features:
         if feat["id"] in _INAPPLICABLE_ON_COMMERCIAL and qc_genre == "commercial":
+            continue
+        if feat["detection"] == "ratio":
+            # Absolute literature target, not winner-relative (confirmed scoring
+            # model) - QC's own measured value is scored against target_min/max
+            # regardless of what the specific cited winners happen to measure.
+            qc_value = _ratio_value(feat["id"], qc_facts, question)
+            in_range = qc_value is not None and feat["target_min"] <= qc_value <= feat["target_max"]
+            metric_rows.append({
+                "id": feat["id"],
+                "label": feat["label"],
+                "geo_weight": feat["geo_weight"],
+                "confidence": feat.get("confidence"),
+                "unit": feat["unit"],
+                "target_min": feat["target_min"],
+                "target_max": feat["target_max"],
+                "qc_value": qc_value,
+                "in_range": in_range,
+                "recommend": bool(qc_facts.get("status") == "ok" and qc_value is not None and not in_range),
+            })
             continue
         wp = sum(1 for w in winner_present if w.get(feat["id"]))
         qc_has = bool(qc_present.get(feat["id"]))
@@ -287,6 +345,7 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
         ],
         "sufficient": n >= MIN_WINNERS,
         "features": rows,
+        "metric_rows": metric_rows,
         "emergent_insight": insight,
         "emergent_edit": emergent_edit,
         "suggested_edits": suggested_edits,
@@ -361,68 +420,145 @@ def scorecard_to_recommendation(sc):
     emergent insight structurally separate - they have different reliability
     and the UI labels them differently.
     """
-    if not sc.get("qc_readable") or sc["winners_total"] < MIN_READABLE_WINNERS:
+    if not sc.get("qc_readable"):
         return None
 
-    rec_feats = [r for r in sc["features"] if r["recommend"]]
+    # Metric gaps (ratio features) are scored against a fixed literature target,
+    # independent of winner data, so - unlike the checklist below - they can
+    # still be actionable even when too few winners were readable to compare.
+    # Sorted by _METRIC_PRIORITY up front so every downstream use (narrative,
+    # evidence, detail.evidence_grade) agrees on which gap leads.
+    metric_gaps = sorted((r for r in sc.get("metric_rows", []) if r["recommend"]),
+                          key=lambda r: _METRIC_PRIORITY.get(r["id"], 99))
+    sufficient_winners = sc["winners_total"] >= MIN_READABLE_WINNERS
+
+    rec_feats = [r for r in sc["features"] if r["recommend"]] if sufficient_winners else []
     # Sub-threshold gaps: QC lacks the feature and at least one readable
     # winner has it, but prevalence never cleared the "most" bar. Quantified
     # supplementary evidence, never asserted as a shared pattern.
-    partial = [r for r in sc["features"]
-               if not r["qc_has"] and not r["recommend"]
-               and r["winners_present"] > 0 and r["geo_weight"] != "low"]
-    emergent_insight = (sc.get("emergent_insight") or "").strip()
-    emergent_edit = (sc.get("emergent_edit") or "").strip()
+    partial = ([r for r in sc["features"]
+                if not r["qc_has"] and not r["recommend"]
+                and r["winners_present"] > 0 and r["geo_weight"] != "low"]
+               if sufficient_winners else [])
+    emergent_insight = (sc.get("emergent_insight") or "").strip() if sufficient_winners else ""
+    emergent_edit = (sc.get("emergent_edit") or "").strip() if sufficient_winners else ""
     has_emergent = bool(emergent_insight or emergent_edit)
 
-    if not rec_feats and not partial and not has_emergent:
-        return None   # true feature parity - the triage reason says exactly that
+    if not rec_feats and not partial and not has_emergent and not metric_gaps:
+        return None   # true feature parity / insufficient winners - scorecard_triage_reason says which
 
     tier = "high" if (rec_feats and sc.get("sufficient")) else "low"
     coverage = _coverage_note(sc)
 
+    problem_parts, action_parts, evidence_parts = [], [], []
+    confidence = 0.35
+    priority = "low"
+
     if rec_feats:
         labels = ", ".join(r["label"].lower() for r in rec_feats)
-        problem = (
+        problem_parts.append(
             f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
             f"for this question. Across {sc['winners_total']} analyzed cited pages it is missing "
             f"{len(rec_feats)} feature(s) they share: {labels}."
         )
-        action = "; ".join(sc["suggested_edits"][:5]) or f"Add: {labels}"
-        evidence = "; ".join(
+        action_parts.extend(sc["suggested_edits"][:5] or [f"Add: {labels}"])
+        evidence_parts.extend(
             f"{r['label']} — {_frac(r)} cited pages have it, QC does not"
             for r in rec_feats
         )
         confidence = 0.7 if tier == "high" else 0.45
         priority = "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium"
-    else:
-        problem = (
+    elif sufficient_winners:
+        problem_parts.append(
             f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
             f"for this question. It matches the analyzed winners on every checklist feature most of "
             f"them share - the remaining signals are weaker and below the evidence bar."
         )
-        actions = []
         if emergent_edit:
-            actions.append(f"{emergent_edit} (LLM-observed pattern, not a verified structural gap)")
-        actions.extend(
+            action_parts.append(f"{emergent_edit} (LLM-observed pattern, not a verified structural gap)")
+        action_parts.extend(
             f"Consider adding {r['label'].lower()} - {_frac(r)} analyzed cited pages have it"
             for r in partial[:3]
         )
-        action = "; ".join(actions)
-        parts = [f"{r['label']} — {_frac(r)} cited pages have it, QC does not (below prevalence bar)"
-                 for r in partial]
+        evidence_parts.extend(
+            f"{r['label']} — {_frac(r)} cited pages have it, QC does not (below prevalence bar)"
+            for r in partial
+        )
         if emergent_insight:
-            parts.append(f"LLM-observed pattern (lower confidence): {emergent_insight}")
-        evidence = "; ".join(parts)
-        confidence = 0.35
-        priority = "low"
+            evidence_parts.append(f"LLM-observed pattern (lower confidence): {emergent_insight}")
+    else:
+        problem_parts.append(
+            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but too few cited pages were "
+            f"readable ({sc['winners_total']}) to run the winner-comparison checklist."
+        )
+
+    # Metric-gap evidence is built and joined SEPARATELY from the checklist
+    # evidence above, never folded into `evidence_parts`/`coverage` - these are
+    # generic, template-level properties (paragraph length, link density...)
+    # scored against a fixed literature target, not verified against this
+    # topic's cited winners the way a competitor-prevalence gap is. Mixing them
+    # into the same sentence/evidence string would imply a technical gap has
+    # the same topic-specific evidentiary weight as a competitor-verified one,
+    # and would wrongly inherit `coverage`'s "N of M winners readable" caveat,
+    # which describes the winner sample these metrics were never compared to.
+    metric_evidence_parts = []
+    if metric_gaps:
+        def _fmt(r, key):
+            return f"{r[key]}%" if r["unit"] == "pct" else f"{r[key]} levels"
+
+        # Lead the narrative with exactly ONE metric - the most research-backed
+        # one out of range - so the card stays decisive instead of dumping every
+        # failing metric into one sentence; the rest stay fully available in
+        # `metric_evidence_parts`/detail.evidence_grade.metric_gaps (and the
+        # frontend's structural-metrics table) as supporting data, not competing
+        # for the reader's attention as if all were equally worth acting on.
+        lead, rest = metric_gaps[0], metric_gaps[1:]
+
+        problem_parts.append(
+            f"Separately, independent of the winner comparison above, QC's {lead['label'].lower()} "
+            f"is {_fmt(lead, 'qc_value')} against a published target of {lead['target_min']}-"
+            f"{lead['target_max']}{'%' if lead['unit'] == 'pct' else ' levels'} - the highest-priority "
+            f"structural metric out of range" +
+            (f" ({len(rest)} more also measured out of range - see structural metrics)."
+             if rest else ".")
+        )
+        action_parts.append(
+            f"Bring {lead['label'].lower()} into the {lead['target_min']}-{lead['target_max']}"
+            f"{'%' if lead['unit'] == 'pct' else ' levels'} target range (QC: {_fmt(lead, 'qc_value')})" +
+            (f"; {len(rest)} more metric(s) also out of range - see structural metrics table"
+             if rest else "")
+        )
+        metric_evidence_parts.extend(
+            f"{r['label']} — QC measures {_fmt(r, 'qc_value')}, literature target is "
+            f"{r['target_min']}-{r['target_max']}{'%' if r['unit'] == 'pct' else ' levels'} "
+            f"({r.get('confidence', 'medium')}-confidence research)"
+            for r in metric_gaps
+        )
+        # Capped at 0.5, never maxed against checklist confidence/priority: a
+        # metric gap is backed by literature, not by this topic's competitors,
+        # so it can nudge an otherwise-unremarkable card up but never outrank
+        # (or masquerade as) a genuine competitor-verified finding on its own.
+        conf_score = {"high": 0.5, "medium": 0.45, "low": 0.35}
+        metric_confidence = max(conf_score.get(r.get("confidence"), 0.4) for r in metric_gaps)
+        confidence = max(confidence, metric_confidence)
+        if priority == "low":
+            priority = "medium"
+
+    # coverage (winner-sample completeness) only qualifies the checklist half
+    # of the evidence - it says nothing about the metric half, which was never
+    # compared against the winner sample in the first place.
+    has_checklist_evidence = bool(rec_feats or partial or has_emergent or not sufficient_winners)
+    evidence = (f"{coverage} " + "; ".join(evidence_parts)).strip() if has_checklist_evidence else ""
+    if metric_evidence_parts:
+        metric_evidence = "Structural metrics (independent of the winner comparison): " + "; ".join(metric_evidence_parts)
+        evidence = f"{evidence} | {metric_evidence}" if evidence else metric_evidence
 
     return {
-        "problem": problem,
-        "action": action,
+        "problem": " ".join(problem_parts),
+        "action": "; ".join(action_parts),
         "priority": priority,
         "school": school_for_url(sc["qc_url"]),
-        "evidence": f"{coverage} {evidence}".strip(),
+        "evidence": evidence,
         "action_type": "technical",
         "target": sc["qc_url"],
         "segment": {"dimension": "topic", "value": sc["topic"]},
@@ -448,6 +584,11 @@ def scorecard_to_recommendation(sc):
                     {k: r[k] for k in ("id", "label", "geo_weight",
                                        "winners_present", "winners_total", "winners_pct")}
                     for r in partial
+                ],
+                "metric_gaps": [
+                    {k: r[k] for k in ("id", "label", "geo_weight", "confidence", "unit",
+                                       "qc_value", "target_min", "target_max")}
+                    for r in metric_gaps
                 ],
                 "emergent": ({"insight": emergent_insight, "edit": emergent_edit}
                              if has_emergent else None),

@@ -15,11 +15,12 @@ function DiffBadge({ diff }) {
   );
 }
 
-function MetricCard({ label, value, diff, highlight }) {
+function MetricCard({ label, value, diff, detail, highlight }) {
   return (
     <div className={`metric-card ${highlight ? "metric-card--highlight" : ""}`}>
       <p className="metric-label">{label}</p>
       <p className="metric-value">{value}</p>
+      {detail && <p className="metric-detail">{detail}</p>}
       <DiffBadge diff={diff} />
     </div>
   );
@@ -185,9 +186,21 @@ function Overview() {
   return (
     <div>
       <div className="metric-grid">
-        <MetricCard label="Mention rate"       value={`${summary.mention_rate}%`}                          diff={summary.mention_rate_diff} />
+        <MetricCard
+          label="Mention rate"
+          value={`${summary.mention_rate}%`}
+          detail={summary.mention_total ? `${summary.mention_count}/${summary.mention_total} responses` : null}
+          diff={summary.mention_rate_diff}
+        />
         <MetricCard label="Visibility score"   value={summary.visibility_score ?? "--"}                    diff={summary.visibility_score_diff} />
-        <MetricCard label="Positive sentiment" value={`${summary.positive_sentiment_rate}%`}               diff={summary.positive_sentiment_diff} />
+        <MetricCard
+          label="Positive sentiment"
+          value={`${summary.positive_sentiment_rate}%`}
+          detail={summary.sentiment_total
+            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative`
+            : null}
+          diff={summary.positive_sentiment_diff}
+        />
         <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
         <MetricCard label="Share of voice"     value={summary.sov ? `${summary.sov}%` : "--"} diff={summary.sov_diff} />
         <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} />

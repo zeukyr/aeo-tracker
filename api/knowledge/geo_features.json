@@ -4,11 +4,24 @@
     "(docs/ai/recommendation-two-tab-plan.md). Each feature is scored",
     "identically against the QC page and the top cited pages for a topic.",
     "detection: 'deterministic' = parsed from HTML by page_facts.py;",
-    "'semantic' = judged by the scorecard's LLM pass over the extracted text.",
+    "'semantic' = judged by the scorecard's LLM pass over the extracted text;",
+    "'ratio' = a numeric value computed by page_facts.py (or scorecard.py for",
+    "query_term_coverage) and scored against a fixed target_min/target_max",
+    "(unit: 'pct' or 'levels') from published GEO structural-citation research -",
+    "an ABSOLUTE literature target, not a winner-relative comparison. Ratio",
+    "features skip the winners_present/prevalence machinery entirely and surface",
+    "on the scorecard as `metric_rows`, not `features`.",
     "geo_weight is a VETO FLOOR, not a ranker: prevalence among cited pages",
     "ranks, weight only stops recommending high-prevalence-but-worthless",
     "features. Features with weight 'low' are never auto-recommended.",
-    "Recommend rule: prevalence high AND QC missing AND geo_weight > low."
+    "confidence reflects how replicated/consistent the underlying research is",
+    "('high' = consistent across multiple independent studies, 'medium' = strong",
+    "but narrower/less-replicated findings, 'low' = single-study or contested) -",
+    "independent of geo_weight, so recommendation prose can be honest about",
+    "how much to trust a given signal.",
+    "Recommend rule (deterministic/semantic): prevalence high AND QC missing AND",
+    "geo_weight > low. Recommend rule (ratio): QC's measured value falls outside",
+    "[target_min, target_max]."
   ],
   "features": [
     {
@@ -16,6 +29,7 @@
       "label": "Direct answer near top",
       "detection": "semantic",
       "geo_weight": "high",
+      "confidence": "high",
       "description": "Answers the topic's core question within the first ~150 words, before any product pitch. Judged against the topic's representative question."
     },
     {
@@ -23,6 +37,7 @@
       "label": "Certification / pathway section",
       "detection": "semantic",
       "geo_weight": "high",
+      "confidence": "medium",
       "description": "Explains certification requirements, professional bodies, and the path into the career - not just the course being sold."
     },
     {
@@ -30,6 +45,7 @@
       "label": "Career outcomes / salary",
       "detection": "semantic",
       "geo_weight": "high",
+      "confidence": "medium",
       "description": "Concrete outcomes: salary ranges, job titles, employment prospects, alumni results."
     },
     {
@@ -37,20 +53,23 @@
       "label": "FAQ section",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "medium",
       "description": "A visible Q&A section answering common questions in plain language."
     },
     {
       "id": "faq_schema",
       "label": "FAQPage structured data",
       "detection": "deterministic",
-      "geo_weight": "medium",
-      "description": "FAQPage JSON-LD present in the page source."
+      "geo_weight": "low",
+      "confidence": "low",
+      "description": "FAQPage JSON-LD present in the page source. Schema markup measures as near-zero independent effect once other structural/content factors are controlled for - treat as hygiene, not a primary lever."
     },
     {
       "id": "question_headings",
       "label": "Question-style headings",
       "detection": "deterministic",
       "geo_weight": "medium",
+      "confidence": "high",
       "description": "H2/H3s phrased as the questions people ask (how/what/can/should... or ending in '?'). Counted; >=2 counts as present."
     },
     {
@@ -58,6 +77,7 @@
       "label": "Tuition / cost breakdown",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "medium",
       "description": "Actual costs stated - tuition, fees, payment plans - not 'contact us for pricing'. Deterministic pricing_signals flag is a hint, the semantic pass confirms."
     },
     {
@@ -65,6 +85,7 @@
       "label": "Comparison table",
       "detection": "deterministic",
       "geo_weight": "medium",
+      "confidence": "high",
       "description": "At least one HTML table comparing options/features/costs."
     },
     {
@@ -72,6 +93,7 @@
       "label": "Named author / expert byline",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "medium",
       "description": "A named author with stated credentials or first-hand experience (E-E-A-T signal)."
     },
     {
@@ -79,6 +101,7 @@
       "label": "Cites primary sources / professional bodies",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "high",
       "description": "References professional associations, government statistics, or original data rather than only self-referential claims."
     },
     {
@@ -86,20 +109,23 @@
       "label": "Evidence density (stats, quotes, sources)",
       "detection": "semantic",
       "geo_weight": "high",
-      "description": "Concrete evidence woven through the text: statistics with numbers, quotations, or named sources - not just unsupported claims. Strongest citation booster in the original GEO paper."
+      "confidence": "medium",
+      "description": "Concrete evidence woven through the text: statistics with numbers, quotations, or named sources - not just unsupported claims. A strong citation booster in most studies, but use judiciously: at least one benchmark (C-SEO Bench) found added statistics hurt citation ranking in 19/24 settings, so don't over-rely on stat-stuffing alone."
     },
     {
       "id": "neutral_tone",
       "label": "Neutral, third-person tone",
       "detection": "semantic",
-      "geo_weight": "medium",
-      "description": "Reads like reference material: no first-person blog voice, no hard sell. Marketing tone reduces the odds an engine quotes the page as an authority."
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Reads like reference material: no first-person blog voice, no hard sell. First-person/blog tone is the single strongest NEGATIVE predictor of citation across studies - marketing tone reduces the odds an engine quotes the page as an authority."
     },
     {
       "id": "comprehensiveness",
       "label": "Comprehensive topic coverage",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "high",
       "description": "Fully answers the topic's question end-to-end (requirements, process, costs, outcomes) rather than covering one slice. Judged against the topic's representative question."
     },
     {
@@ -107,6 +133,7 @@
       "label": "Extractable value propositions",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "medium",
       "description": "Short, quotable justification claims an engine can lift when shortlisting ('A+ BBB rating', '21-day money-back guarantee') - stated plainly, not buried in prose."
     },
     {
@@ -114,28 +141,98 @@
       "label": "Pros / cons section",
       "detection": "semantic",
       "geo_weight": "medium",
+      "confidence": "medium",
       "description": "An explicit pros-and-cons or advantages/drawbacks breakdown of the options discussed."
     },
     {
       "id": "comparison_structure",
       "label": "Comparison framing (X vs Y)",
       "detection": "semantic",
-      "geo_weight": "medium",
-      "description": "Side-by-side comparison of alternatives in the body text ('X vs Y', option-by-option contrasts) - beyond just having an HTML table, which comparison_table already detects."
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Side-by-side comparison of alternatives in the body text ('X vs Y', option-by-option contrasts) - beyond just having an HTML table, which comparison_table already detects. The strongest page-level citation predictor found, and it works across all query-intent types."
     },
     {
       "id": "org_schema",
       "label": "Organization/Course schema",
       "detection": "deterministic",
       "geo_weight": "low",
-      "description": "Organization or Course JSON-LD present. Low weight: rarely distinguishes cited pages."
+      "confidence": "low",
+      "description": "Organization or Course JSON-LD present. Low weight: rarely distinguishes cited pages, and schema markup generally shows near-zero independent effect on citation."
     },
     {
       "id": "video_embed",
       "label": "Embedded video",
       "detection": "deterministic",
       "geo_weight": "low",
+      "confidence": "low",
       "description": "Embedded YouTube/Vimeo/native video. Low weight: engagement signal, weak citation signal."
+    },
+    {
+      "id": "internal_linking_density",
+      "label": "Internal linking density",
+      "detection": "ratio",
+      "unit": "pct",
+      "target_min": 15,
+      "target_max": 20,
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Internal links as a share of all links in the main content (internal_links / total_links). Part of macro-structure, the largest single contributor (44.9%) to structural-optimization citation gains in the underlying study."
+    },
+    {
+      "id": "heading_hierarchy_depth",
+      "label": "Heading hierarchy depth",
+      "detection": "ratio",
+      "unit": "levels",
+      "target_min": 3,
+      "target_max": 5,
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Number of distinct heading levels (h1-h5) actually used in the main content. Macro-structure signal - deep, well-nested hierarchy mirrors how engines decompose a page into citable facts."
+    },
+    {
+      "id": "structured_content_ratio",
+      "label": "Structured content share",
+      "detection": "ratio",
+      "unit": "pct",
+      "target_min": 25,
+      "target_max": 35,
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Share of main-content word count sitting inside lists, tables, or blockquote/comparison blocks. Meso-structure, the second-largest contributor (39.7%) to structural-optimization citation gains - distinct from comparison_table, which only checks whether at least one table exists at all."
+    },
+    {
+      "id": "paragraph_length_conformance",
+      "label": "Paragraph length conformance",
+      "detection": "ratio",
+      "unit": "pct",
+      "target_min": 60,
+      "target_max": 100,
+      "geo_weight": "medium",
+      "confidence": "high",
+      "description": "Share of paragraphs in the main content whose length falls in the 150-300 word sweet spot. Meso-structure signal - too-short paragraphs read as thin, too-long paragraphs bury the answer."
+    },
+    {
+      "id": "emphasis_density",
+      "label": "Bold/italic emphasis density",
+      "detection": "ratio",
+      "unit": "pct",
+      "target_min": 5,
+      "target_max": 10,
+      "geo_weight": "low",
+      "confidence": "medium",
+      "description": "Share of main-content word count wrapped in bold/italic emphasis. Micro-structure - the smallest contributor (15.4%) to structural-optimization citation gains, so treat as a minor supporting signal, not a primary lever. (Emphasis weighted toward sentence beginnings is a further nuance this deterministic check does not model.)"
+    },
+    {
+      "id": "query_term_coverage",
+      "label": "Query-term coverage",
+      "detection": "ratio",
+      "unit": "pct",
+      "target_min": 70,
+      "target_max": 100,
+      "geo_weight": "high",
+      "confidence": "high",
+      "description": "Share of the tracked question's significant (non-stopword) terms that appear verbatim in the page text. The page must contain the words people actually search - a page can be well-structured and still never surface if it doesn't use the query's own vocabulary. The 70% threshold is a working default, not a number from the underlying research."
     }
   ]
 }

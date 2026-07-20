@@ -32,6 +32,7 @@ from urllib.parse import urlparse
 
 import requests
 import trafilatura
+from lxml import etree
 from lxml import html as lxml_html
 from psycopg2.extras import Json
 
@@ -404,6 +405,132 @@ def _deterministic_features(structure, text):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Structural ratio metrics (geo_features.json: detection="ratio")
+#
+# Computed from a SECOND, structure-preserving trafilatura pass
+# (include_formatting/include_tables/include_links, output_format="xml") over
+# the same raw HTML, rather than from the raw lxml tree `_extract_structure`
+# uses - the raw tree still contains nav/sidebar/footer chrome, which would
+# inflate link density and emphasis density with boilerplate that isn't part
+# of the actual article. trafilatura's XML schema (v2.1): <head rend="h1..">
+# for headings, <list rend="ul|ol"><item> for lists, <table><row><cell>,
+# <quote> for blockquotes, <hi rend="#b|#i"> for bold/italic, <ref target=...>
+# for links (already resolved to absolute URLs when `url=` is passed).
+# ─────────────────────────────────────────────────────────────────────────────
+
+_HEADING_LEVEL = re.compile(r"^h[1-6]$")
+
+_EMPTY_STRUCTURE_METRICS = {
+    "internal_linking_density": None,
+    "heading_hierarchy_depth": 0,
+    "structured_content_ratio": None,
+    "paragraph_length_conformance": None,
+    "emphasis_density": None,
+}
+
+
+def _el_word_count(el):
+    return len(" ".join(el.itertext()).split())
+
+
+def _structure_metrics(raw_html, final_url):
+    """Ratio-based GEO metrics (geo_features.json ids: internal_linking_density,
+    heading_hierarchy_depth, structured_content_ratio, paragraph_length_conformance,
+    emphasis_density). Returns _EMPTY_STRUCTURE_METRICS (all None/0) when the page
+    has no extractable main content - callers must treat None as "not measurable",
+    never as zero."""
+    try:
+        xml = trafilatura.extract(
+            raw_html, url=final_url, include_formatting=True,
+            include_tables=True, include_links=True, output_format="xml",
+        )
+    except Exception:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    if not xml:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    return _metrics_from_xml(xml, final_url)
+
+
+def _metrics_from_xml(xml, final_url):
+    """The arithmetic half of _structure_metrics, over an already-extracted
+    trafilatura XML string - split out so it can be unit-tested against a
+    hand-built XML fixture, independent of trafilatura's own content-quality/
+    boilerplate heuristics (which are a third-party concern, not this repo's)."""
+    try:
+        main = etree.fromstring(xml.encode("utf-8")).find(".//main")
+    except Exception:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    if main is None:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+
+    total_words = _el_word_count(main)
+    if total_words == 0:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+
+    heading_levels = {h.get("rend") for h in main.iter("head")
+                       if h.get("rend") and _HEADING_LEVEL.match(h.get("rend"))}
+
+    structured_words = sum(_el_word_count(el) for tag in ("list", "table", "quote")
+                            for el in main.iter(tag))
+    emphasis_words = sum(_el_word_count(el) for el in main.iter("hi"))
+
+    para_lengths = [n for n in (_el_word_count(p) for p in main.iter("p")) if n > 0]
+    paragraph_conformance = (
+        round(100 * sum(1 for n in para_lengths if 150 <= n <= 300) / len(para_lengths))
+        if para_lengths else None
+    )
+
+    page_domain = _root_domain(_domain_of(final_url))
+    internal, external = 0, 0
+    for ref in main.iter("ref"):
+        target = ref.get("target") or ""
+        if not target or target.startswith(("mailto:", "tel:", "javascript:")):
+            continue
+        link_domain = _root_domain(_domain_of(target))
+        if not link_domain:
+            continue
+        internal += 1 if link_domain == page_domain else 0
+        external += 0 if link_domain == page_domain else 1
+    total_links = internal + external
+
+    return {
+        "internal_linking_density": round(100 * internal / total_links) if total_links else None,
+        "heading_hierarchy_depth": len(heading_levels),
+        "structured_content_ratio": round(100 * structured_words / total_words),
+        "paragraph_length_conformance": paragraph_conformance,
+        "emphasis_density": round(100 * emphasis_words / total_words),
+    }
+
+
+_QUERY_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "can", "do", "does",
+    "for", "from", "how", "if", "in", "into", "is", "it", "of", "on", "or",
+    "that", "the", "this", "to", "was", "what", "when", "where", "which",
+    "who", "why", "will", "with", "you", "your", "i", "my", "me", "we",
+    "our", "should", "would", "could", "did", "have", "has", "had",
+}
+
+
+def query_term_coverage(question, text):
+    """Share of the tracked question's significant (non-stopword) terms that
+    appear verbatim (word-boundary, case-insensitive) in `text`
+    (geo_features.json id: query_term_coverage). Question-specific, so - unlike
+    the other ratio metrics - this is computed at scorecard time from cached
+    content, not baked into the per-URL page_facts cache row (one page can
+    serve many questions). None when there's no question/text or no
+    significant terms to check."""
+    if not question or not text:
+        return None
+    terms = {t for t in re.findall(r"[a-z0-9]+", question.lower())
+             if t not in _QUERY_STOPWORDS and len(t) > 2}
+    if not terms:
+        return None
+    text_lower = text.lower()
+    present = sum(1 for t in terms if re.search(r"\b" + re.escape(t) + r"\b", text_lower))
+    return round(100 * present / len(terms))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Page classification (plan taxonomy)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -563,6 +690,25 @@ def _is_stale_failure(facts):
     return age.days >= _FAILURE_RETRY_DAYS
 
 
+_STRUCTURAL_METRIC_KEYS = (
+    "internal_linking_density", "heading_hierarchy_depth", "structured_content_ratio",
+    "paragraph_length_conformance", "emphasis_density",
+)
+
+
+def _missing_structural_metrics(facts):
+    """True for a status='ok' row cached before the geo_features.json 'ratio'
+    metrics existed. Unlike a deferred LLM tiebreak, these can't be backfilled
+    from the cached text alone - internal-link density, list/table ratios etc.
+    need the raw HTML, which isn't cached - so such a row must be treated as a
+    cache miss and refetched, not returned as-is with the new keys silently
+    absent (which would read as "unmeasurable" downstream, not "not yet
+    computed")."""
+    if facts.get("status") != "ok":
+        return False
+    return not any(k in (facts.get("features") or {}) for k in _STRUCTURAL_METRIC_KEYS)
+
+
 def _upgrade_deferred(facts, _cache=None):
     """
     Run the LLM tiebreak a defer_llm populate skipped, reusing the cached
@@ -618,7 +764,7 @@ def get_page_facts(url, force=False, defer_llm=False, _cache=None):
     url = normalize_url(url)
     if not force:
         cached = _cache.get(url) if _cache is not None else get_cached_fact(url)
-        if cached is not None and not _is_stale_failure(cached):
+        if cached is not None and not _is_stale_failure(cached) and not _missing_structural_metrics(cached):
             if not defer_llm and cached.get("page_type_source") == "deferred":
                 return _upgrade_deferred(cached, _cache)
             return cached
@@ -658,7 +804,8 @@ def get_page_facts(url, force=False, defer_llm=False, _cache=None):
         "brand_mentions": detect_brand_mentions(text, brands),
         "qc_mentioned": any(tok in text.lower().replace(" ", "") for tok in QC_DOMAIN_TOKENS)
                         or bool(re.search(r"\bQC (Career School|Pet Studies|Event Planning|Design School|Makeup Academy)\b", text, re.I)),
-        "features": _deterministic_features(structure, text),
+        "features": {**_deterministic_features(structure, text),
+                     **_structure_metrics(raw_html, final_url)},
     })
 
     if domain_type == "competitor":

@@ -75,7 +75,11 @@ export const METRIC_INFO = {
   },
   feature_diff_table: {
     label: "Feature diff columns",
-    text: "The weight column is the feature's importance for getting cited by AI engines; “Cited pages” is how many analyzed winners have it; “+ Add” means at least 60% of winners have it and QC doesn't; “below bar” means some winners have it, but fewer than 60%. Rows where QC lacks a feature are always shown — the collapsed view hides only rows where QC already matches.",
+    text: "The weight column is the feature's importance for getting cited by AI engines; “Cited pages” is how many analyzed winners have it; “+ Add” means at least 60% of winners have it and QC doesn't; “below bar” means some winners have it, but fewer than 60%. Only verified gaps (“+ Add”) show by default — below-bar and parity rows are collapsed behind the toggle, never discarded.",
+  },
+  metric_rows_table: {
+    label: "Structural metrics",
+    text: "Measured directly from QC's page HTML (linking density, heading depth, how much content sits in lists/tables, paragraph length, bold/italic emphasis) and checked against fixed target ranges from published GEO citation-structure research — not against what the specific cited winners measure. Only out-of-range metrics show by default; in-range ones are collapsed behind the toggle, never discarded. When several are out of range, the recommendation text leads with just the one most backed by research.",
   },
   inclusion_gate: {
     label: "Inclusion opportunity",
@@ -89,8 +93,20 @@ export const METRIC_INFO = {
     label: "Health summary",
     text: "Built directly from the dashboard's own numbers: each headline metric's change versus the previous equal-length period, the questions where QC is cited in 15% or fewer responses, and the weakest engine, school, and category (minimum 5 responses to count). No AI involved, so it always matches the metric tiles.",
   },
+  competitive_pattern: {
+    label: "Recurring competitive pattern",
+    text: "Free-text “win reasons” from head-to-head AI judgments are normalized into a fixed set of types (e.g. curriculum depth, flexibility) and rolled up across every tracked question. A pattern only fires here once it recurs on at least 2 distinct questions.",
+  },
+  pattern_coverage_check: {
+    label: "Content probe",
+    text: "QC's indexed content (sitemap pages plus every URL AI engines have ever cited) is searched for pages covering this angle; a candidate only counts as coverage when an AI pass confirms it and quotes the exact sentence.",
+  },
+  content_brief: {
+    label: "Content brief",
+    text: "The action text restructured into sections: the strategy, a page heading phrased as the actual question engines are asked, a suggested outline when one has been authored for this type, and the citability format every content rec shares. Facts the taxonomy doesn't already verify are flagged to confirm with QC, never invented.",
+  },
   reddit_spotlight: {
     label: "Reddit spotlight",
-    text: "Every reddit.com thread cited across tracked responses in the period, split by which kind of question surfaced it. \"Reply\" threads were cited answering a credibility question — QC's name is already in the conversation, so the play is to correct the record. \"Discovery\" threads were cited only for course/career questions — QC isn't part of the conversation yet, so the play is to answer authentically and earn the citation.",
+    text: "Every reddit.com thread cited across tracked responses in the period, split by which kind of question surfaced it. \"Reply\" threads were cited answering a credibility question — QC's name is already in the conversation, so the play is to correct the record. \"Discovery\" threads were cited only for course/career questions — QC isn't part of the conversation yet, so the play is to answer authentically and earn the citation. Threads are ranked recency-first within each group. Use \"Mark archived\" / \"Mark against rules\" on a thread once you've checked it and can't actually comment — that's saved and reflected here from then on. Subreddits with a known blanket self-promo ban are flagged automatically. Nothing is hidden, just sorted so the actionable ones rise to the top.",
   },
 };

@@ -146,6 +146,13 @@ p, h1, h2, h3, h4 {
   line-height: 1;
 }
 
+.metric-detail {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1314,6 +1321,41 @@ tr.rc-gap .rc-geo--high { background: var(--stream-fix-tint); color: var(--strea
 }
 .rc-insight__tag { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
 
+/* ── Content brief module (Action / Page heading / Suggested structure /
+   Format requirements) - shared shape across every content-writing rec,
+   regardless of which engine produced it. ── */
+.rc-brief { display: flex; flex-direction: column; gap: 16px; }
+.rc-brief__section { display: flex; flex-direction: column; gap: 8px; }
+.rc-brief__eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); }
+
+.rc-brief__heading { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; background: var(--color-blue-light); border-radius: var(--radius-md); padding: 9px 13px; }
+.rc-brief__heading-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-blue-dark); }
+.rc-brief__heading-text { font-size: 13px; font-weight: 600; color: var(--color-blue-dark); }
+
+.rc-brief__empty { font-size: 12px; color: var(--text-muted); font-style: italic; border: 1px dashed var(--border-emphasis); border-radius: var(--radius-md); padding: 9px 13px; margin: 0; }
+
+.rc-brief__quotes { display: flex; flex-direction: column; gap: 6px; }
+.rc-brief__quote {
+  font-size: 12.5px; font-style: italic; line-height: 1.5; color: var(--text-secondary);
+  border-left: 2px solid var(--border-emphasis); background: var(--surface-secondary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 6px 10px; margin: 0;
+}
+
+.rc-brief__confirm {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; width: fit-content;
+  font-size: 10.5px; font-weight: 600; color: var(--color-warn-text, #8a5a00);
+  background: var(--color-warn-bg, #fdf3e0); border-radius: var(--radius-pill); padding: 2px 8px;
+}
+
+.rc-brief__checklist { display: flex; flex-direction: column; gap: 6px; }
+.rc-brief__check {
+  font-size: 12px; color: var(--text-secondary);
+  background: var(--surface-secondary); border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-sm); padding: 7px 10px;
+}
+.rc-brief__check b { color: var(--text-primary); font-weight: 600; }
+.rc-brief__check-mark { color: var(--color-up-text); font-weight: 700; }
+
 /* ── REACH module: target dossier ── */
 .rc-dossier { border: 0.5px solid var(--border-emphasis); border-radius: var(--radius-md); overflow: hidden; }
 .rc-dossier__head {
@@ -1341,6 +1383,14 @@ tr.rc-gap .rc-geo--high { background: var(--stream-fix-tint); color: var(--strea
 
 /* ── Reddit spotlight (Outreach & Earn tab) ── */
 .reddit-spotlight { margin-top: 12px; }
+.reddit-spotlight__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.reddit-spotlight__export { font-size: 11.5px; padding: 4px 10px; }
+.reddit-strategy { margin: 2px 0 12px; }
+.reddit-strategy summary {
+  font-size: 11.5px; font-weight: 600; color: var(--stream-reach-ink); cursor: pointer; width: fit-content;
+}
+.reddit-strategy ol { margin: 6px 0 0; padding-left: 18px; font-size: 11.5px; color: var(--text-secondary); }
+.reddit-strategy li { margin: 3px 0; }
 .reddit-subs { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 4px; }
 .reddit-sub {
   font-size: 11.5px; font-weight: 500; padding: 3px 10px; border-radius: var(--radius-pill);
@@ -1366,6 +1416,12 @@ tr.rc-gap .rc-geo--high { background: var(--stream-fix-tint); color: var(--strea
 .reddit-thread__count { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
 .reddit-thread__questions { margin: 7px 0 0; padding-left: 16px; font-size: 11.5px; color: var(--text-secondary); }
 .reddit-thread__questions li { margin: 2px 0; }
+.reddit-thread--blocked { opacity: 0.6; }
+.reddit-thread__restriction-note { margin: 6px 0 0; font-size: 11.5px; color: var(--color-warn-text, #8a5a00); }
+.chip--dead { background: var(--color-down-bg); color: var(--color-down-text); }
+.chip--restricted { background: var(--color-warn-bg, #fdf3e0); color: var(--color-warn-text, #8a5a00); }
+.reddit-thread__mark-group { display: flex; gap: 4px; margin-left: auto; }
+.reddit-thread__mark { font-size: 10.5px; padding: 2px 8px; white-space: nowrap; }
 
 /* ── Demand / source-question links ── */
 .rc-demand { display: flex; flex-direction: column; gap: 5px; }
