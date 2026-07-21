@@ -537,57 +537,87 @@ function FanoutDrawer({ drawer, onClose }) {
 // ─── fanout queries expandable section ───────────────────────────────────────
 function FanoutQueriesSection({ promptId, days, onOpenFanoutDrawer }) {
   const [open, setOpen] = useState(false);
-  const [queries, setQueries] = useState(null);  // null = not yet fetched
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);  // null = not yet fetched
+
+  function fetchRun(runId) {
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    if (runId) params.append("run_id", runId);
+    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/fanout-queries?${params}`)
+      .then(r => r.json())
+      .then(d => setData(d))
+      .catch(() => setData({ total_runs: 0, queries: [], run_id: null, run_date: null, run_index: null, prev_run_id: null, next_run_id: null }));
+  }
 
   function handleToggle() {
     setOpen(o => {
       const next = !o;
-      if (next && queries === null && !loading) {
-        setLoading(true);
-        const params = new URLSearchParams();
-        if (days) params.append("days", days);
-        fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/fanout-queries?${params}`)
-          .then(r => r.json())
-          .then(data => { setQueries(Array.isArray(data) ? data : []); setLoading(false); })
-          .catch(() => { setQueries([]); setLoading(false); });
-      }
+      if (next && data === null) fetchRun(null);
       return next;
     });
   }
 
-  const count = queries ? queries.length : null;
+  const loading = open && data === null;
+  const queries = data ? data.queries : [];
 
   return (
     <div style={{ borderTop: "1px solid #f0efec", marginTop: 4 }}>
-      <button
-        onClick={handleToggle}
-        style={{
-          display: "flex", alignItems: "center", gap: 6,
-          width: "100%", background: "none", border: "none",
-          cursor: "pointer", padding: "8px 0", textAlign: "left",
-        }}
-      >
-        <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
-          ▶
-        </span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-          Fanout Queries
-        </span>
-        {count !== null && (
-          <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({count})</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 0" }}>
+        <button
+          onClick={handleToggle}
+          style={{
+            display: "flex", alignItems: "center", gap: 6,
+            flex: 1, background: "none", border: "none",
+            cursor: "pointer", textAlign: "left", padding: 0,
+          }}
+        >
+          <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
+            ▶
+          </span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Fanout Queries
+          </span>
+          {data && (
+            <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({queries.length})</span>
+          )}
+        </button>
+
+        {open && data && data.total_runs > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+            <button
+              onClick={e => { e.stopPropagation(); fetchRun(data.prev_run_id); }}
+              disabled={!data.prev_run_id}
+              style={{
+                background: "none", border: "none", cursor: data.prev_run_id ? "pointer" : "default",
+                fontSize: 12, color: data.prev_run_id ? "#6b6b6b" : "#d1d5db", padding: "2px 4px", lineHeight: 1,
+              }}
+              title="Older run"
+            >←</button>
+            <span style={{ fontSize: 10, color: "#9b9b9b", whiteSpace: "nowrap" }}>
+              {data.run_date} · {data.run_index + 1} of {data.total_runs}
+            </span>
+            <button
+              onClick={e => { e.stopPropagation(); fetchRun(data.next_run_id); }}
+              disabled={!data.next_run_id}
+              style={{
+                background: "none", border: "none", cursor: data.next_run_id ? "pointer" : "default",
+                fontSize: 12, color: data.next_run_id ? "#6b6b6b" : "#d1d5db", padding: "2px 4px", lineHeight: 1,
+              }}
+              title="Newer run"
+            >→</button>
+          </div>
         )}
-      </button>
+      </div>
 
       {open && (
         <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 8 }}>
           {loading && (
             <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
           )}
-          {!loading && queries !== null && queries.length === 0 && (
+          {!loading && data && queries.length === 0 && (
             <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>No fanout queries recorded yet.</p>
           )}
-          {!loading && queries && queries.map((fq, i) => {
+          {!loading && queries.map((fq, i) => {
             const color = LLM_COLORS[fq.engine] || "#9b9b9b";
             return (
               <button
