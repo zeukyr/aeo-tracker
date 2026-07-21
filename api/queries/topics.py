@@ -628,26 +628,51 @@ def get_prompt_detail(prompt_id: str, days=None):
     }
 
 
-def get_prompt_fanout_queries(prompt_id: str, days=None):
+def get_prompt_fanout_queries(prompt_id: str, days=None, run_id: str = None):
     """
-    Returns fanout queries (LLM sub-search queries) for a prompt, newest first.
-    Each row: { engine, query, query_order, run_date }
+    Returns fanout queries for a single run of a prompt (most recent by default).
+    Includes prev/next run_ids for navigation.
     """
     date_run = _date_filter(days).replace("AND created_at", "AND r.started_at")
     with get_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(f"""
-                SELECT fq.engine, fq.query, fq.query_order, date(r.started_at) AS run_date
+                SELECT DISTINCT fq.run_id::text, r.started_at
                 FROM fanout_queries fq
                 JOIN runs r ON r.id = fq.run_id
                 WHERE fq.question_id = %s {date_run}
-                ORDER BY r.started_at DESC, fq.engine, fq.query_order
+                ORDER BY r.started_at DESC
             """, (prompt_id,))
-            rows = cur.fetchall()
-    return [
-        {"engine": r[0], "query": r[1], "query_order": r[2], "run_date": str(r[3])}
-        for r in rows
-    ]
+            run_rows = cur.fetchall()
+
+    if not run_rows:
+        return {"run_id": None, "run_date": None, "run_index": None,
+                "total_runs": 0, "prev_run_id": None, "next_run_id": None, "queries": []}
+
+    run_ids   = [r[0] for r in run_rows]
+    run_dates = {r[0]: str(r[1].date()) for r in run_rows}
+    idx       = run_ids.index(run_id) if (run_id and run_id in run_ids) else 0
+    selected  = run_ids[idx]
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT fq.engine, fq.query, fq.query_order
+                FROM fanout_queries fq
+                WHERE fq.question_id = %s AND fq.run_id = %s
+                ORDER BY fq.engine, fq.query_order
+            """, (prompt_id, selected))
+            query_rows = cur.fetchall()
+
+    return {
+        "run_id":      selected,
+        "run_date":    run_dates[selected],
+        "run_index":   idx,
+        "total_runs":  len(run_ids),
+        "prev_run_id": run_ids[idx + 1] if idx + 1 < len(run_ids) else None,
+        "next_run_id": run_ids[idx - 1] if idx > 0 else None,
+        "queries":     [{"engine": r[0], "query": r[1], "query_order": r[2]} for r in query_rows],
+    }
 
 
 def get_prompt_qc_citations(prompt_id: str, days=None):
