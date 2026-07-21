@@ -271,8 +271,8 @@ def topic_prompt_responses(prompt_id: str, engine: str, days: int = None):
     return result
 
 @app.get("/api/topic-prompt/{prompt_id}/fanout-queries")
-def topic_prompt_fanout_queries(prompt_id: str, days: int = None):
-    return get_prompt_fanout_queries(prompt_id, days)
+def topic_prompt_fanout_queries(prompt_id: str, days: int = None, run_id: str = None):
+    return get_prompt_fanout_queries(prompt_id, days, run_id)
 
 @app.get("/api/topic-prompt/{prompt_id}/qc-citations")
 def topic_prompt_qc_citations(prompt_id: str, days: int = None):
