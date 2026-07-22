@@ -226,7 +226,7 @@ function Overview() {
         />
         <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
         <MetricCard label="Share of voice"     value={summary.sov ? `${summary.sov}%` : "--"} diff={summary.sov_diff} />
-        <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} />
+        <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} detail={summary.avg_rank_score != null ? `normalized: ${summary.avg_rank_score}/100` : undefined} />
       </div>
 
       <div className="chart-section">

@@ -93,8 +93,15 @@ function CitationPromptsDrawer({ url, competitor, days, school, promptsCache, on
                     {p.question_type}
                   </span>
                 )}
-                <span style={{ fontSize: 10, color: "#9b9b9b", marginLeft: "auto", display: "flex", gap: 8 }}>
-                  {p.avg_rank != null && <span>#{p.avg_rank} avg rank</span>}
+                <span style={{ fontSize: 10, color: "#9b9b9b", marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+                  {p.avg_rank != null && (
+                    <span style={{ textAlign: "right" }}>
+                      <div>#{p.avg_rank} avg rank</div>
+                      {p.avg_rank_score != null && (
+                        <div style={{ fontSize: 9, color: "#c4c4c0" }}>normalized: {p.avg_rank_score}/100</div>
+                      )}
+                    </span>
+                  )}
                   <span>{p.response_count} response{p.response_count === 1 ? "" : "s"}</span>
                 </span>
               </div>
@@ -206,7 +213,7 @@ function ComparePanel({ competitors, compareTarget, onSelectCompetitor, qcStats,
     { label: "Visibility score", qcVal: qcStats?.visibility_score, compVal: competitorStats?.visibility_score, format: v => v != null ? v.toFixed(1) : "—", lowerIsBetter: false },
     { label: "Citation rate",    qcVal: qcStats?.citation_rate,     compVal: competitorStats?.citation_rate,    format: v => v != null ? `${v}%` : "—",       lowerIsBetter: false },
     { label: "Share of voice",   qcVal: qcStats?.sov,               compVal: competitorStats?.sov,              format: v => v != null ? `${v}%` : "—",       lowerIsBetter: false },
-    { label: "Avg rank",         qcVal: qcStats?.avg_rank,          compVal: competitorStats?.avg_rank,         format: v => v != null ? `#${v}` : "—",       lowerIsBetter: true },
+    { label: "Avg rank",         qcVal: qcStats?.avg_rank,          compVal: competitorStats?.avg_rank,         format: v => v != null ? `#${v}` : "—",       lowerIsBetter: true, qcSub: qcStats?.avg_rank_score, compSub: competitorStats?.avg_rank_score },
     { label: "Citations",        qcVal: null,                        compVal: competitorStats?.citation_count,   format: v => v != null ? v : "—",             lowerIsBetter: false, qcNote: true },
   ];
 
@@ -244,7 +251,7 @@ function ComparePanel({ competitors, compareTarget, onSelectCompetitor, qcStats,
             </tr>
           </thead>
           <tbody>
-            {metrics.map(({ label, qcVal, compVal, format, lowerIsBetter, qcNote }) => {
+            {metrics.map(({ label, qcVal, compVal, format, lowerIsBetter, qcNote, qcSub, compSub }) => {
               let qcWins = null;
               if (!qcNote && qcVal != null && compVal != null) {
                 qcWins = lowerIsBetter ? qcVal < compVal : qcVal > compVal;
@@ -257,9 +264,11 @@ function ComparePanel({ competitors, compareTarget, onSelectCompetitor, qcStats,
                   <td style={{ padding: "9px 0", borderBottom: "1px solid #f9f9f7", color: "#6b6b6b", fontSize: 12 }}>{label}</td>
                   <td style={{ padding: "9px 24px 9px 0", textAlign: "right", borderBottom: "1px solid #f9f9f7", fontWeight: qcWins === true ? 600 : 400, color: qcColor, fontSize: 13 }}>
                     {qcNote ? "—" : format(qcVal)}
+                    {qcSub != null && <div style={{ fontSize: 10, fontWeight: 400, color: "#c4c4c0" }}>normalized: {qcSub}/100</div>}
                   </td>
                   <td style={{ padding: "9px 0", textAlign: "right", borderBottom: "1px solid #f9f9f7", fontWeight: qcWins === false ? 600 : 400, color: cmpColor, fontSize: 13 }}>
                     {format(compVal)}
+                    {compSub != null && <div style={{ fontSize: 10, fontWeight: 400, color: "#c4c4c0" }}>normalized: {compSub}/100</div>}
                   </td>
                 </tr>
               );
