@@ -1,4 +1,4 @@
-from api.db import get_connection, _date_filter, _school_clause_params
+from api.db import get_connection, _date_filter, _school_clause_params, _rank_score_cte, _rank_score_expr
 from src.parsing.brands import canonicalize
 
 def get_top_competitors_by_school(days=None, school=None):
@@ -105,18 +105,21 @@ def get_competitor_stats(competitor, days=None, school=None):
             """, school_params)
             total_responses = cur.fetchone()[0] or 0
 
-            # Mention count and avg rank
+            # Mention count, avg rank, and avg rank_score (field-size-normalized rank)
             cur.execute(f"""
-                SELECT COUNT(DISTINCT m.id), AVG(b.rank_position)
+                WITH {_rank_score_cte()}
+                SELECT COUNT(DISTINCT m.id), AVG(b.rank_position), AVG({_rank_score_expr('b.rank_position')})
                 FROM mention_response_brands b
                 JOIN mention_responses m ON m.id = b.mention_response_id
                 LEFT JOIN questions q ON q.id = m.question_id
+                LEFT JOIN rt ON rt.mention_response_id = m.id
                 WHERE b.brand_name = %s AND b.brand_type = 'competitor'
                 {filter_clause} {school_clause};
             """, [competitor] + school_params)
             row = cur.fetchone()
             mention_count = row[0] or 0
             avg_rank = round(float(row[1]), 2) if row[1] else None
+            avg_rank_score = float(row[2]) if row[2] is not None else None
 
             # Responses where this competitor has at least one citation URL
             cur.execute(f"""
@@ -159,11 +162,7 @@ def get_competitor_stats(competitor, days=None, school=None):
     sov = round(comp_mentions / total_mentions * 100, 1) if total_mentions else None
 
     # Visibility score: mirrors QC composite formula (mention 40%, rank 45%, citation 15%)
-    if avg_rank is not None:
-        rank_val = avg_rank
-        rank_score = 100 if rank_val <= 1 else 75 if rank_val <= 2 else 50 if rank_val <= 3 else 25
-    else:
-        rank_score = 0
+    rank_score = round((avg_rank_score or 0) * 100, 1)
     visibility_score = round(
         (mention_rate / 100) * 100 * 0.40 + rank_score * 0.45 + citation_rate * 0.15, 1
     )
@@ -174,6 +173,7 @@ def get_competitor_stats(competitor, days=None, school=None):
         "citation_rate": citation_rate,
         "sov": sov,
         "avg_rank": avg_rank,
+        "avg_rank_score": round(avg_rank_score * 100, 1) if avg_rank_score is not None else None,
         "visibility_score": visibility_score,
     }
 
