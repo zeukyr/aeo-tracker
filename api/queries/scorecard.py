@@ -46,7 +46,14 @@ _FEATURES_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "geo
 
 MIN_WINNERS = 3          # below this the comparison isn't trustworthy (high tier)
 MIN_READABLE_WINNERS = 2 # below this there is no comparison at all - insufficient data
-TOP_N_WINNERS = 5        # cited pages to compare against
+TOP_N_WINNERS = 8        # cited pages to compare against
+
+# Cited pages fail to fetch (403s, JS-rendered pages, paywalls) or turn out
+# not to be a comparable page_type often enough that asking for exactly
+# TOP_N_WINNERS candidates routinely leaves fewer than that once the
+# readability/genre filter below runs - overfetch by a wide margin so there's
+# real headroom to still land TOP_N_WINNERS comparable winners.
+CANDIDATE_POOL = 20
 
 # Cited page types that carry a comparable information architecture. Community
 # threads, videos and pages we couldn't read can't be scored.
@@ -76,8 +83,13 @@ _METRIC_PRIORITY = {
 
 # Features that don't apply to a commercial/course sales page - a course
 # listing has no "author" to byline, so never recommend it there even when
-# most cited winners (editorial guides) happen to have one.
-_INAPPLICABLE_ON_COMMERCIAL = {"author_expertise"}
+# most cited winners (editorial guides) happen to have one. comparison_table/
+# comparison_structure assume the page is weighing multiple options against
+# each other ("X vs Y") - QC's course page sells ONE course, it isn't a
+# roundup of alternatives, so "add a comparison" is never the right edit
+# there even when cited editorial roundups (which ARE comparing options)
+# commonly have one.
+_INAPPLICABLE_ON_COMMERCIAL = {"author_expertise", "comparison_table", "comparison_structure"}
 
 
 def _load_features():
@@ -166,6 +178,20 @@ def _page_features(facts, question, features):
     return present
 
 
+def _fix_hint(feat, qc_value, in_range):
+    """Direction-aware, concrete "what to actually change" text for an
+    out-of-range structural metric - these are generic template/CMS-level
+    properties (not winner-verified), so the guidance is fixed per metric
+    and direction rather than derived from this topic's cited pages. None
+    when in range, unmeasurable, or the feature has no guidance for that
+    direction (e.g. paragraph conformance/query-term coverage can't
+    realistically be "too high" against a 100% target_max)."""
+    if qc_value is None or in_range:
+        return None
+    direction = "fix_above" if qc_value > feat["target_max"] else "fix_below"
+    return feat.get(direction)
+
+
 def _ratio_value(feature_id, facts, question):
     """Numeric value for a 'ratio'-detection feature (geo_features.json), or
     None when not measurable. query_term_coverage is question-specific so it's
@@ -182,13 +208,29 @@ def _ratio_value(feature_id, facts, question):
 # Emergent pattern pass
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _emergent_pattern(qc_facts, winner_facts, question):
+def _emergent_pattern(qc_facts, winner_facts, question, qc_genre=None):
     """
     One LLM call: what content/ordering pattern do the cited pages share that
     QC's page lacks? Grounded in the fetched outlines; labelled lower-confidence.
+
+    qc_genre gates what kind of edit is even askable: cited winners are
+    frequently roundup/editorial pages that compare MULTIPLE courses or
+    certifications - a pattern that's real for THEM but doesn't transfer to
+    QC's page when it's commercial (a single course's own sales page, not a
+    directory). Without this the LLM would happily suggest "add a roundup of
+    top certifications" to a page that only has the one QC sells.
     """
     def outline(f):
         return {"title": f.get("title"), "headings": (f.get("headings") or [])[:18]}
+
+    genre_note = (
+        "\n\nQC's page is COMMERCIAL: it sells one specific course, it is not a directory or "
+        "roundup of options. Never suggest a section that compares, ranks, or lists multiple "
+        "courses/certifications/providers (e.g. \"top N certifications\", \"X vs Y\") - QC has only "
+        "the one course to offer, so that kind of section doesn't apply here even if cited pages "
+        "have it. Only suggest edits about QC's own single course."
+        if qc_genre == "commercial" else ""
+    )
 
     prompt = f"""Topic question: "{question}"
 
@@ -201,9 +243,9 @@ Outlines of the pages AI engines cite for this topic:
 What content or ordering pattern do the cited pages consistently share that QC's page does
 NOT? Focus on information architecture (what they cover and in what order), not styling. Be
 specific and only claim patterns visible across most cited outlines. If there is no clear
-shared pattern QC lacks, say so.
+shared pattern QC lacks, say so.{genre_note}
 
-Return JSON: {{"insight": "one or two sentences, or empty if none", "edit": "one concrete section-level change for QC, or empty"}}"""
+Return JSON: {{"insight": "one or two sentences, or empty if none", "edit": "one short, concrete section-level change for QC (under 12 words), or empty"}}"""
     try:
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -252,7 +294,7 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     qc_facts = get_page_facts(qc_url)
 
     if winner_facts is None:
-        cited = get_topic_cited_urls({"dimension": "topic", "value": topic}, days, limit=TOP_N_WINNERS + 4)
+        cited = get_topic_cited_urls({"dimension": "topic", "value": topic}, days, limit=CANDIDATE_POOL)
         counts = {c["url"]: c["count"] for c in cited}
         winner_facts = get_pages_facts([c["url"] for c in cited])
         for f in winner_facts:
@@ -296,6 +338,7 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
                 "qc_value": qc_value,
                 "in_range": in_range,
                 "recommend": bool(qc_facts.get("status") == "ok" and qc_value is not None and not in_range),
+                "fix_hint": _fix_hint(feat, qc_value, in_range),
             })
             continue
         wp = sum(1 for w in winner_present if w.get(feat["id"]))
@@ -314,7 +357,10 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
             "recommend": recommend,
         })
 
-    insight, emergent_edit = _emergent_pattern(qc_facts, winner_facts, question) if n >= MIN_WINNERS else ("", "")
+    insight, emergent_edit = (
+        _emergent_pattern(qc_facts, winner_facts, question, qc_genre=qc_genre)
+        if n >= MIN_WINNERS else ("", "")
+    )
 
     suggested_edits = [f"Add {r['label'].lower()}" for r in rows if r["recommend"]]
     if emergent_edit:
@@ -456,10 +502,12 @@ def scorecard_to_recommendation(sc):
 
     if rec_feats:
         labels = ", ".join(r["label"].lower() for r in rec_feats)
+        # QC's own page URL is shown in its own box on the card (TargetBox,
+        # RecommendationCard.jsx) - kept out of this sentence so it stays a
+        # short, scannable headline instead of a run-on with a URL in it.
         problem_parts.append(
-            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
-            f"for this question. Across {sc['winners_total']} analyzed cited pages it is missing "
-            f"{len(rec_feats)} feature(s) they share: {labels}."
+            f"AI engines cite other pages for '{sc['question']}' instead - "
+            f"missing {len(rec_feats)} feature(s) they share: {labels}."
         )
         action_parts.extend(sc["suggested_edits"][:5] or [f"Add: {labels}"])
         evidence_parts.extend(
@@ -470,16 +518,21 @@ def scorecard_to_recommendation(sc):
         priority = "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium"
     elif sufficient_winners:
         problem_parts.append(
-            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but AI engines cite other pages "
-            f"for this question. It matches the analyzed winners on every checklist feature most of "
-            f"them share - the remaining signals are weaker and below the evidence bar."
+            "QC matches the analyzed winners on every checklist feature most of them share - "
+            "remaining signals are weaker, below the evidence bar."
         )
+        # Only a short pointer here - the partial gaps themselves are already
+        # visible below (the feature-diff table falls back to showing them
+        # by default when there's no verified gap), so repeating each one's
+        # "Consider adding X - frac" line here would just duplicate that
+        # section in flat prose instead of pointing at it.
         if emergent_edit:
-            action_parts.append(f"{emergent_edit} (LLM-observed pattern, not a verified structural gap)")
-        action_parts.extend(
-            f"Consider adding {r['label'].lower()} - {_frac(r)} analyzed cited pages have it"
-            for r in partial[:3]
-        )
+            action_parts.append(f"{emergent_edit} (LLM-observed pattern - see note below)")
+        if partial:
+            action_parts.append(
+                f"{len(partial)} weaker signal{'s' if len(partial) != 1 else ''} below the evidence "
+                f"bar - see feature diff below"
+            )
         evidence_parts.extend(
             f"{r['label']} — {_frac(r)} cited pages have it, QC does not (below prevalence bar)"
             for r in partial
@@ -488,8 +541,8 @@ def scorecard_to_recommendation(sc):
             evidence_parts.append(f"LLM-observed pattern (lower confidence): {emergent_insight}")
     else:
         problem_parts.append(
-            f"QC has a page for '{sc['question']}' ({sc['qc_url']}) but too few cited pages were "
-            f"readable ({sc['winners_total']}) to run the winner-comparison checklist."
+            f"Too few cited pages were readable ({sc['winners_total']}) to run the "
+            f"winner-comparison checklist."
         )
 
     # Metric-gap evidence is built and joined SEPARATELY from the checklist
@@ -514,18 +567,25 @@ def scorecard_to_recommendation(sc):
         # for the reader's attention as if all were equally worth acting on.
         lead, rest = metric_gaps[0], metric_gaps[1:]
 
+        # One short sentence, always - naming every out-of-range metric here
+        # (as an earlier version did) just re-produced the structural-metrics
+        # table in prose. The lead is which one to act on FIRST, not the only
+        # one worth acting on; the rest (with their own fix hints) are one
+        # click away in that table, not duplicated here.
         problem_parts.append(
-            f"Separately, independent of the winner comparison above, QC's {lead['label'].lower()} "
-            f"is {_fmt(lead, 'qc_value')} against a published target of {lead['target_min']}-"
-            f"{lead['target_max']}{'%' if lead['unit'] == 'pct' else ' levels'} - the highest-priority "
-            f"structural metric out of range" +
-            (f" ({len(rest)} more also measured out of range - see structural metrics)."
-             if rest else ".")
+            f"Separately, independent of the winner comparison, QC's {lead['label'].lower()} measures "
+            f"{_fmt(lead, 'qc_value')} against a {lead['target_min']}-{lead['target_max']}"
+            f"{'%' if lead['unit'] == 'pct' else ' levels'} target" +
+            (f" - {len(rest)} more also measured out of range, see below."
+             if rest else " - see structural metrics below.")
         )
+        lead_action = (f"Bring {lead['label'].lower()} into the {lead['target_min']}-{lead['target_max']}"
+                       f"{'%' if lead['unit'] == 'pct' else ' levels'} target range")
+        if lead.get("fix_hint"):
+            lead_action += f" - {lead['fix_hint']}"
         action_parts.append(
-            f"Bring {lead['label'].lower()} into the {lead['target_min']}-{lead['target_max']}"
-            f"{'%' if lead['unit'] == 'pct' else ' levels'} target range (QC: {_fmt(lead, 'qc_value')})" +
-            (f"; {len(rest)} more metric(s) also out of range - see structural metrics table"
+            lead_action +
+            (f"; {len(rest)} more metric(s) out of range - see structural metrics table"
              if rest else "")
         )
         metric_evidence_parts.extend(
@@ -586,8 +646,8 @@ def scorecard_to_recommendation(sc):
                     for r in partial
                 ],
                 "metric_gaps": [
-                    {k: r[k] for k in ("id", "label", "geo_weight", "confidence", "unit",
-                                       "qc_value", "target_min", "target_max")}
+                    {k: r.get(k) for k in ("id", "label", "geo_weight", "confidence", "unit",
+                                            "qc_value", "target_min", "target_max", "fix_hint")}
                     for r in metric_gaps
                 ],
                 "emergent": ({"insight": emergent_insight, "edit": emergent_edit}

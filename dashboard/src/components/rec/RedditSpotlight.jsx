@@ -77,19 +77,9 @@ function ThreadRow({ t, onMarked }) {
     <div className={`reddit-thread${t.dead || t.restricted ? " reddit-thread--blocked" : ""}`}>
       <div className="reddit-thread__head">
         <span className="reddit-thread__sub">r/{t.subreddit ?? "reddit"}</span>
-        {t.is_qc_subreddit && (
-          <span className="chip chip--metric" title="A QC-branded subreddit — confirm who runs it before pitching.">
-            QC-branded
-          </span>
-        )}
         {t.dead && (
           <span className="chip chip--dead" title={`Manually marked ${t.dead_reason || "unavailable"} — can't be replied to.`}>
             {t.dead_reason === "archived" ? "Archived — can't comment" : "Against subreddit rules"}
-          </span>
-        )}
-        {t.restricted && (
-          <span className="chip chip--restricted" title={t.restriction_note}>
-            Self-promo restricted
           </span>
         )}
         <a className="reddit-thread__url" href={t.url} target="_blank" rel="noreferrer">
@@ -98,9 +88,6 @@ function ThreadRow({ t, onMarked }) {
         <span className="reddit-thread__count">{t.total_count}×</span>
         <ThreadStatusControl t={t} onMarked={onMarked} />
       </div>
-      {t.restricted && t.restriction_mechanism && (
-        <p className="reddit-thread__restriction-note">{t.restriction_mechanism}</p>
-      )}
       {t.questions.length > 0 && (
         <ul className="reddit-thread__questions">
           {t.questions.map((q) => (

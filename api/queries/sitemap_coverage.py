@@ -98,6 +98,23 @@ def _stem(word):
     return word
 
 
+# Synonyms for QC's own site vocabulary - words a real query uses that never
+# appear in QC's slugs/titles at all, so IDF would otherwise treat them as
+# maximally distinctive and tank the coverage score for the exact right page.
+# Case in point: QC always says "course(s)", never "class(es)" - "event
+# planning classes" scored 0.39 against /online-event-courses/event-planning
+# (the exact right page) because "class" had zero document frequency and
+# dominated the token weighting. Keyed/valued on the STEMMED form.
+_SYNONYM_ROOTS = {
+    "class": "cours",
+}
+
+
+def _canon(word):
+    stemmed = _stem(word)
+    return _SYNONYM_ROOTS.get(stemmed, stemmed)
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # B1: fetch + cache QC sitemaps
 # ─────────────────────────────────────────────────────────────────────────────
@@ -203,7 +220,7 @@ def load_sitemap_cache():
 def _tokens(text):
     words = re.split(r"[^a-z0-9]+", text.lower())
     return {
-        _stem(w) for w in words
+        _canon(w) for w in words
         if len(w) >= 3 and w not in _STOPWORDS and not w.isdigit()
     }
 
@@ -289,7 +306,7 @@ _TITLE_FLOOR  = 0.5    # a title must cover half the intent to override slugs
 def _content_tokens(text):
     words = re.split(r"[^a-z0-9]+", (text or "").lower())
     return {
-        _stem(w) for w in words
+        _canon(w) for w in words
         if len(w) >= 3 and w not in _CONTENT_STOPWORDS and not w.isdigit()
     }
 

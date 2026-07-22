@@ -23,7 +23,7 @@ def _feat(fid, qc_has, wp, n, weight="medium"):
     }
 
 
-def _metric(fid, qc_value, target_min, target_max, weight="medium", confidence="high", unit="pct"):
+def _metric(fid, qc_value, target_min, target_max, weight="medium", confidence="high", unit="pct", fix_hint=None):
     in_range = qc_value is not None and target_min <= qc_value <= target_max
     return {
         "id": fid, "label": fid.replace("_", " "), "geo_weight": weight,
@@ -31,6 +31,7 @@ def _metric(fid, qc_value, target_min, target_max, weight="medium", confidence="
         "target_min": target_min, "target_max": target_max,
         "qc_value": qc_value, "in_range": in_range,
         "recommend": qc_value is not None and not in_range,
+        "fix_hint": fix_hint,
     }
 
 
@@ -97,7 +98,11 @@ def test_subthreshold_gaps_and_emergent_produce_low_tier_card():
     assert rec["priority"] == "low"
     assert "Benefits of Taking the Course" in rec["action"]
     assert "LLM-observed pattern" in rec["action"]
-    assert "career outcomes" in rec["action"]
+    # The two partial gaps (career_outcomes, tuition_pricing) get a short
+    # count-and-pointer in the action text, not one enumerated line each -
+    # they're already visible in the feature-diff table below.
+    assert "2 weaker signals" in rec["action"]
+    assert "career outcomes" not in rec["action"]
     grade = rec["detail"]["evidence_grade"]
     assert grade["checklist_gaps"] == []
     assert {g["id"] for g in grade["partial_gaps"]} == {"career_outcomes", "tuition_pricing"}
@@ -211,6 +216,39 @@ def test_multiple_metric_gaps_lead_with_highest_research_priority():
     gap_ids = [g["id"] for g in rec["detail"]["evidence_grade"]["metric_gaps"]]
     assert set(gap_ids) == {"emphasis_density", "internal_linking_density"}
     assert gap_ids[0] == "internal_linking_density"  # ranked, lead first
+
+
+def test_metric_gap_action_names_lead_fix_hint_only():
+    # The action stays a one-line summary: only the LEAD metric's fix hint
+    # is inlined there. Every gap's hint (lead and rest) still reaches the
+    # frontend via detail.evidence_grade.metric_gaps, where the structural
+    # metrics table renders a "How to fix" line per out-of-range row -
+    # repeating each one in the action text too would defeat the point of
+    # keeping the card's headline text short.
+    sc = _sc([], n=1, metric_rows=[
+        _metric("internal_linking_density", qc_value=100, target_min=15, target_max=20,
+                weight="high", fix_hint="Cut back on internal links."),
+        _metric("paragraph_length_conformance", qc_value=0, target_min=60, target_max=100,
+                weight="medium", fix_hint="Rewrite paragraphs to land in the 150-300 word range."),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert "Cut back on internal links." in rec["action"]
+    assert "Rewrite paragraphs to land in the 150-300 word range." not in rec["action"]
+    fix_hints = {g["id"]: g["fix_hint"] for g in rec["detail"]["evidence_grade"]["metric_gaps"]}
+    assert fix_hints["internal_linking_density"] == "Cut back on internal links."
+    assert fix_hints["paragraph_length_conformance"] == "Rewrite paragraphs to land in the 150-300 word range."
+
+
+def test_metric_gap_without_fix_hint_omits_it_gracefully():
+    # A metric direction with no authored guidance (fix_hint=None) shouldn't
+    # produce a dangling "- None" in the action text.
+    sc = _sc([], n=1, metric_rows=[
+        _metric("query_term_coverage", qc_value=40, target_min=70, target_max=100, weight="high", fix_hint=None),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert "None" not in rec["action"]
 
 
 def test_true_parity_with_all_metrics_in_range_returns_none():

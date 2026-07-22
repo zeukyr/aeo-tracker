@@ -336,6 +336,14 @@ def get_reddit_targets(days=None, school=None, limit=None):
     if not rows:
         return {"threads": [], "subreddits": []}
 
+    # QC runs these subreddits itself (qccareerschool, qcpetstudies, etc.) -
+    # they're not outreach targets, so they're dropped here rather than just
+    # badged, unlike everything else this panel deliberately leaves in (see
+    # RedditSpotlight.jsx's header comment on why the rest stays unfiltered).
+    rows = [r for r in rows if not (_subreddit_of(r[0]) or "").startswith("qc")]
+    if not rows:
+        return {"threads": [], "subreddits": []}
+
     threads = defaultdict(lambda: {
         "reputation_count": 0, "discovery_count": 0, "question_ids": set(), "last_cited_at": None,
     })
@@ -375,7 +383,6 @@ def get_reddit_targets(days=None, school=None, limit=None):
             "reputation_count": t["reputation_count"],
             "discovery_count": t["discovery_count"],
             "category": "reputation" if t["reputation_count"] > 0 else "discovery",
-            "is_qc_subreddit": bool(subreddit and subreddit.startswith("qc")),
             "questions": sorted({qmap[q] for q in t["question_ids"] if q in qmap})[:4],
             "last_cited_at": t["last_cited_at"].isoformat() if t["last_cited_at"] else None,
             "restricted": restriction is not None,

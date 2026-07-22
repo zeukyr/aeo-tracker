@@ -79,7 +79,7 @@ export const METRIC_INFO = {
   },
   metric_rows_table: {
     label: "Structural metrics",
-    text: "Measured directly from QC's page HTML (linking density, heading depth, how much content sits in lists/tables, paragraph length, bold/italic emphasis) and checked against fixed target ranges from published GEO citation-structure research — not against what the specific cited winners measure. Only out-of-range metrics show by default; in-range ones are collapsed behind the toggle, never discarded. When several are out of range, the recommendation text leads with just the one most backed by research.",
+    text: "Measured directly from QC's page HTML (linking density, heading depth, how much content sits in lists/tables, paragraph length, bold/italic emphasis) and checked against fixed target ranges from published GEO citation-structure research — not against what the specific cited winners measure. Only out-of-range metrics show by default; in-range ones are collapsed behind the toggle, never discarded. Each out-of-range row includes a \"How to fix\" line — direction-aware guidance (too high vs. too low) on what to actually change, not just the target range. When several are out of range, the recommendation text leads with just the one most backed by research.",
   },
   inclusion_gate: {
     label: "Inclusion opportunity",

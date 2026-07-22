@@ -46,6 +46,13 @@ def wire(monkeypatch):
     q = _q()
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
     monkeypatch.setattr(qr, "route_question", lambda q, days=None: _route(q))
+    # route_question is stubbed above (its own get_question_cited_urls/
+    # get_pages_facts calls never run), but build_question_recommendations
+    # independently re-fetches a wider candidate pool for the scorecard - see
+    # question_router.py's fix branch. build_scorecard below ignores
+    # winner_facts entirely, so these just need to not hit a real DB.
+    monkeypatch.setattr(qr, "get_question_cited_urls", lambda qid, days=None, **kw: [])
+    monkeypatch.setattr(qr, "get_pages_facts", lambda urls, **kw: [])
 
     def set(scorecard=None, rec=None, inclusion=(), raise_scorecard=False):
         def _build(*a, **k):

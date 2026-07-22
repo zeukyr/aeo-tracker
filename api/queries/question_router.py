@@ -65,6 +65,7 @@ from api.queries.scorecard import (
     build_scorecard,
     scorecard_to_recommendation,
     scorecard_triage_reason,
+    CANDIDATE_POOL,
 )
 from api.queries.sitemap_coverage import diagnose_text_coverage
 
@@ -796,9 +797,23 @@ def build_question_recommendations(question_id, days=None):
 
     if route["branch"] == "fix":
         try:
+            # A wider, independently-fetched pool than route["winners"] (which
+            # is sized for the citation-share vote, not the scorecard): cited
+            # pages fail to fetch or turn out non-comparable often enough that
+            # asking for exactly TOP_N_WINNERS candidates routinely leaves
+            # fewer than that after build_scorecard's readability/genre filter
+            # - see scorecard.CANDIDATE_POOL. Deliberately NOT route["winners"]
+            # itself - that set must stay exactly what the routing vote
+            # measured, not grow just because the scorecard wants more
+            # comparison headroom.
+            scorecard_cited = get_question_cited_urls(q["question_id"], days, limit=CANDIDATE_POOL)
+            counts = {c["url"]: c["count"] for c in scorecard_cited}
+            scorecard_winners = get_pages_facts([c["url"] for c in scorecard_cited])
+            for f in scorecard_winners:
+                f["citation_count"] = counts.get(f["url"], 0)
             sc = build_scorecard(q["topic"] or q["question"], route["qc_url"],
                                  question=q["question"], days=days,
-                                 winner_facts=route["winners"])
+                                 winner_facts=scorecard_winners)
             primary = scorecard_to_recommendation(sc)
         except Exception as e:
             logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")

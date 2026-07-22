@@ -348,6 +348,37 @@ function BodyChips({ rec, variant }) {
     </div>
   );
 }
+function TargetBox({ url }) {
+  if (!url) return null;
+  return (
+    <a className="rc-target-box" href={url} target="_blank" rel="noreferrer">
+      <span className="rc-target-box__eyebrow">QC's page</span>
+      <span className="rc-target-box__url">{urlLabel(url)}</span>
+    </a>
+  );
+}
+
+function ActionLine({ text }) {
+  const parts = text.split("; ").filter(Boolean);
+  if (parts.length <= 1) {
+    return (
+      <p className="rc-body__action">
+        <span className="rc-body__arrow">→</span>
+        <span>{text}</span>
+      </p>
+    );
+  }
+  return (
+    <ul className="rc-body__action rc-body__action--list">
+      {parts.map((part, i) => (
+        <li key={i}>
+          <span className="rc-body__arrow">→</span>
+          <span>{part}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 // Source-question links back to the Prompts tab, shared by every card shape:
 // router-provided when routed, else the rec's question segment (R6) so even
@@ -430,10 +461,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
       <div className={`rc ${VARIANTS[variant].cls}`}>
         <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} />
         <div className="rc-body">
-          <p className="rc-body__action">
-            <span className="rc-body__arrow">→</span>
-            <span>{rec.action}</span>
-          </p>
+          <ActionLine text={rec.action} />
           {rec.detail?.opportunity?.lists_competitors?.length > 0 && (
             <span className="rc-rivals">
               {rec.detail.opportunity.lists_competitors.map((r) => (
@@ -458,11 +486,9 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
       <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} />
 
       <div className="rc-body">
+        {variant === "fix" && <TargetBox url={rec.target} />}
         <p className="rc-body__problem">{rec.problem}</p>
-        <p className="rc-body__action">
-          <span className="rc-body__arrow">→</span>
-          <span>{actionLine}</span>
-        </p>
+        <ActionLine text={actionLine} />
         {rec.detail?.priority_rank?.reason && (
           <p className="rc-body__note">{rec.detail.priority_rank.reason}</p>
         )}

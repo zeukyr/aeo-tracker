@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import InfoTip from "../InfoTip";
 
 // Feature-diff matrix for fix cards: rows from detail.scorecard.features,
@@ -55,25 +55,32 @@ function MetricRows({ metricRows }) {
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.id} className={r.recommend ? "rc-gap" : ""}>
-                  <td>{r.label}</td>
-                  <td><span className={`rc-geo rc-geo--${r.geo_weight}`}>{r.geo_weight}</span></td>
-                  <td className="rc-frac">
-                    {r.target_min}-{r.target_max}{r.unit === "pct" ? "%" : " levels"}
-                  </td>
-                  <td>
-                    <span className={r.in_range ? "rc-mark rc-mark--yes" : "rc-mark rc-mark--no"}>
-                      {r.qc_value === null ? "—" : fmtMetric(r.qc_value, r.unit)}
-                    </span>
-                  </td>
-                  <td>
-                    {r.recommend ? (
-                      <span className="rc-gapflag">out of range</span>
-                    ) : (
-                      <span className="rc-belowbar">{r.qc_value === null ? "—" : "in range"}</span>
-                    )}
-                  </td>
-                </tr>
+                <Fragment key={r.id}>
+                  <tr className={r.recommend ? "rc-gap" : ""}>
+                    <td>{r.label}</td>
+                    <td><span className={`rc-geo rc-geo--${r.geo_weight}`}>{r.geo_weight}</span></td>
+                    <td className="rc-frac">
+                      {r.target_min}-{r.target_max}{r.unit === "pct" ? "%" : " levels"}
+                    </td>
+                    <td>
+                      <span className={r.in_range ? "rc-mark rc-mark--yes" : "rc-mark rc-mark--no"}>
+                        {r.qc_value === null ? "—" : fmtMetric(r.qc_value, r.unit)}
+                      </span>
+                    </td>
+                    <td>
+                      {r.recommend ? (
+                        <span className="rc-gapflag">out of range</span>
+                      ) : (
+                        <span className="rc-belowbar">{r.qc_value === null ? "—" : "in range"}</span>
+                      )}
+                    </td>
+                  </tr>
+                  {r.recommend && r.fix_hint && (
+                    <tr className="rc-fixhint-row">
+                      <td colSpan={5} className="rc-fixhint">How to fix: {r.fix_hint}</td>
+                    </tr>
+                  )}
+                </Fragment>
               ))}
             </tbody>
           </table>

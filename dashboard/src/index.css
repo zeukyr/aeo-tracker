@@ -1203,6 +1203,15 @@ p, h1, h2, h3, h4 {
 
 /* ── Problem → action ── */
 .rc-body { padding: 4px 20px 18px; display: flex; flex-direction: column; gap: 10px; }
+.rc-target-box {
+  display: inline-flex; flex-direction: column; gap: 2px; align-self: flex-start;
+  background: var(--surface-secondary); border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-md); padding: 6px 12px; max-width: 70ch;
+  text-decoration: none; color: inherit;
+}
+.rc-target-box:hover { border-color: var(--border-emphasis); }
+.rc-target-box__eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.rc-target-box__url { font-size: 12.5px; color: var(--text-primary); font-weight: 600; word-break: break-all; }
 .rc-body__problem { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; margin: 0; max-width: 62ch; }
 .rc-body__action {
   display: flex; gap: 10px; font-size: 13px; color: var(--text-secondary);
@@ -1210,6 +1219,9 @@ p, h1, h2, h3, h4 {
   border-radius: var(--radius-md); padding: 10px 14px; max-width: 70ch; margin: 0;
 }
 .rc-body__action b { color: var(--text-primary); font-weight: 600; }
+.rc-body__action--list { flex-direction: column; gap: 8px; list-style: none; }
+.rc-body__action--list li { display: flex; gap: 10px; align-items: baseline; }
+.rc-body__action--list li + li { padding-top: 8px; border-top: 0.5px dashed var(--border-default); }
 .rc-body__arrow { color: var(--text-muted); font-weight: 700; }
 .rc-body__note { font-size: var(--text-xs); color: var(--text-muted); margin: 0; }
 
@@ -1306,6 +1318,8 @@ tr.rc-gap .rc-geo--high { background: var(--stream-fix-tint); color: var(--strea
 .rc-mark--no  { color: var(--color-down-text); }
 .rc-gapflag { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--stream-fix-ink); background: var(--stream-fix-tint); padding: 2px 8px; border-radius: var(--radius-pill); white-space: nowrap; }
 .rc-belowbar { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+.rc-fixhint-row td { padding: 0 10px 9px 0; border-bottom: 0.5px solid var(--border-default); }
+.rc-fixhint { font-size: 11.5px; color: var(--text-secondary); white-space: normal; }
 .rc-more {
   margin-top: 6px; font-size: 11.5px; color: var(--text-secondary);
   background: none; border: none; padding: 0; cursor: pointer; text-align: left;

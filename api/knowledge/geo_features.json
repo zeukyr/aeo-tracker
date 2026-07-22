@@ -177,7 +177,9 @@
       "target_max": 20,
       "geo_weight": "high",
       "confidence": "high",
-      "description": "Internal links as a share of all links in the main content (internal_links / total_links). Part of macro-structure, the largest single contributor (44.9%) to structural-optimization citation gains in the underlying study."
+      "description": "Internal links as a share of all links in the main content (internal_links / total_links). Part of macro-structure, the largest single contributor (44.9%) to structural-optimization citation gains in the underlying study.",
+      "fix_below": "Add more internal links to related QC pages within the body content - not just the nav/footer.",
+      "fix_above": "Internal links dominate the page's total links - add a few outbound links to back up specific claims (a professional/certifying body, a government labor-statistics page for salary/demand figures, an industry report), or cut back on internal cross-links, so internal links aren't nearly all of them."
     },
     {
       "id": "heading_hierarchy_depth",
@@ -188,7 +190,9 @@
       "target_max": 5,
       "geo_weight": "high",
       "confidence": "high",
-      "description": "Number of distinct heading levels (h1-h5) actually used in the main content. Macro-structure signal - deep, well-nested hierarchy mirrors how engines decompose a page into citable facts."
+      "description": "Number of distinct heading levels (h1-h5) actually used in the main content. Macro-structure signal - deep, well-nested hierarchy mirrors how engines decompose a page into citable facts.",
+      "fix_below": "Break long sections into nested subheadings (e.g. add H3s under each H2) instead of one flat run of H2s.",
+      "fix_above": "The heading structure is unusually deep - flatten some nesting so the hierarchy still reads as a clear outline."
     },
     {
       "id": "structured_content_ratio",
@@ -199,7 +203,9 @@
       "target_max": 35,
       "geo_weight": "high",
       "confidence": "high",
-      "description": "Share of main-content word count sitting inside lists, tables, or blockquote/comparison blocks. Meso-structure, the second-largest contributor (39.7%) to structural-optimization citation gains - distinct from comparison_table, which only checks whether at least one table exists at all."
+      "description": "Share of main-content word count sitting inside lists, tables, or blockquote/comparison blocks. Meso-structure, the second-largest contributor (39.7%) to structural-optimization citation gains - distinct from comparison_table, which only checks whether at least one table exists at all.",
+      "fix_below": "Convert more of the prose into bulleted/numbered lists, a comparison table, or a blockquote summary.",
+      "fix_above": "Too much of the page is lists/tables - fold some of that back into explanatory paragraphs so key points aren't just fragments."
     },
     {
       "id": "paragraph_length_conformance",
@@ -210,7 +216,9 @@
       "target_max": 100,
       "geo_weight": "medium",
       "confidence": "high",
-      "description": "Share of paragraphs in the main content whose length falls in the 150-300 word sweet spot. Meso-structure signal - too-short paragraphs read as thin, too-long paragraphs bury the answer."
+      "description": "Share of paragraphs in the main content whose length falls in the 150-300 word sweet spot. Meso-structure signal - too-short paragraphs read as thin, too-long paragraphs bury the answer.",
+      "fix_below": "Rewrite paragraphs to land in the 150-300 word range - merge choppy one-line paragraphs, split long ones that bury the point.",
+      "fix_above": null
     },
     {
       "id": "emphasis_density",
@@ -221,7 +229,9 @@
       "target_max": 10,
       "geo_weight": "low",
       "confidence": "medium",
-      "description": "Share of main-content word count wrapped in bold/italic emphasis. Micro-structure - the smallest contributor (15.4%) to structural-optimization citation gains, so treat as a minor supporting signal, not a primary lever. (Emphasis weighted toward sentence beginnings is a further nuance this deterministic check does not model.)"
+      "description": "Share of main-content word count wrapped in bold/italic emphasis. Micro-structure - the smallest contributor (15.4%) to structural-optimization citation gains, so treat as a minor supporting signal, not a primary lever. (Emphasis weighted toward sentence beginnings is a further nuance this deterministic check does not model.)",
+      "fix_below": "Bold or italicize key terms, numbers, and takeaways so a scanning reader (or engine) can find the answer fast.",
+      "fix_above": "Bold/italic is overused - reserve it for the few phrases that actually need to stand out, or it stops meaning anything."
     },
     {
       "id": "query_term_coverage",
@@ -232,7 +242,9 @@
       "target_max": 100,
       "geo_weight": "high",
       "confidence": "high",
-      "description": "Share of the tracked question's significant (non-stopword) terms that appear verbatim in the page text. The page must contain the words people actually search - a page can be well-structured and still never surface if it doesn't use the query's own vocabulary. The 70% threshold is a working default, not a number from the underlying research."
+      "description": "Share of the tracked question's significant (non-stopword) terms that appear verbatim in the page text. The page must contain the words people actually search - a page can be well-structured and still never surface if it doesn't use the query's own vocabulary. The 70% threshold is a working default, not a number from the underlying research.",
+      "fix_below": "Work the question's own key words into the page's headings and body text directly, not just synonyms or paraphrases.",
+      "fix_above": null
     }
   ]
 }
