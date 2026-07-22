@@ -200,6 +200,128 @@ function ColHeader({ label, colKey, sortBy, onSort, width, style = {} }) {
   );
 }
 
+// ─── third-party review sources card ─────────────────────────────────────────
+function ReviewSourcesCard({ data, loading }) {
+  const [view, setView] = useState("total");
+  const [expanded, setExpanded] = useState(new Set());
+
+  function toggleSite(domain) {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      next.has(domain) ? next.delete(domain) : next.add(domain);
+      return next;
+    });
+  }
+
+  const toggleStyles = (active) => ({
+    fontSize: 11, fontWeight: 600, padding: "3px 10px",
+    borderRadius: 99, border: "none", cursor: "pointer",
+    background: active ? PURPLE : "transparent",
+    color: active ? "#fff" : "#9b9b9b",
+  });
+
+  const filtered = data
+    ? [...data].filter(s => s[view] > 0).sort((a, b) => b[view] - a[view])
+    : [];
+  const maxVal = filtered.length ? Math.max(...filtered.map(s => s[view])) : 1;
+
+  return (
+    <div className="card">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+        <div>
+          <p className="panel-title">Where LLMs find reviews</p>
+          <p className="panel-subtitle">Third-party sites cited in AI responses</p>
+        </div>
+        <div style={{ display: "flex", gap: 2, background: "#f4f4f2", borderRadius: 99, padding: 3 }}>
+          {[["total", "All"], ["qc", "QC"], ["competitor", "Competitors"]].map(([key, label]) => (
+            <button key={key} style={toggleStyles(view === key)} onClick={() => setView(key)}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {loading ? (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[80, 60, 40].map(w => (
+            <div key={w} style={{ height: 28, background: "#f4f4f2", borderRadius: 6, width: `${w}%` }} />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
+        <p className="state-empty">No review site citations found for this selection.</p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {filtered.map(site => {
+            const isOpen = expanded.has(site.domain);
+            const pct = Math.round((site[view] / maxVal) * 100);
+            const brandList = view === "qc"
+              ? site.brands.filter(b => b.is_qc)
+              : view === "competitor"
+              ? site.brands.filter(b => !b.is_qc)
+              : site.brands;
+            const brandMax = brandList.length ? Math.max(...brandList.map(b => b.count)) : 1;
+
+            return (
+              <div key={site.domain}>
+                {/* site row */}
+                <div
+                  style={{ cursor: "pointer", userSelect: "none" }}
+                  onClick={() => toggleSite(site.domain)}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <span style={{ fontSize: 13, color: isOpen ? PURPLE : "#111", fontWeight: isOpen ? 500 : 400, flex: 1 }}>
+                      <span style={{ fontSize: 12, color: isOpen ? PURPLE : "#c4c4c0", marginRight: 6 }}>
+                        {isOpen ? "▼" : "▶"}
+                      </span>
+                      {site.site}
+                    </span>
+                    <span style={{ fontSize: 12, color: "#6b6b6b", flexShrink: 0 }}>{site[view]}</span>
+                  </div>
+                  <div style={{ height: 5, background: "#f0efec", borderRadius: 99, overflow: "hidden", marginLeft: 18 }}>
+                    <div style={{
+                      height: "100%", width: `${pct}%`,
+                      background: PURPLE, opacity: 0.4 + 0.6 * (site[view] / maxVal),
+                      borderRadius: 99, transition: "width 0.3s ease",
+                    }} />
+                  </div>
+                </div>
+
+                {/* expanded brand breakdown */}
+                {isOpen && brandList.length > 0 && (
+                  <div style={{ marginLeft: 18, marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+                    {brandList.map(brand => {
+                      const bPct = Math.round((brand.count / brandMax) * 100);
+                      const color = brand.is_qc ? "#378add" : "#6b6b6b";
+                      return (
+                        <div key={brand.name}>
+                          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                            <span style={{ fontSize: 11, color, fontWeight: brand.is_qc ? 600 : 400 }}>
+                              {brand.name}{brand.is_qc ? " (you)" : ""}
+                            </span>
+                            <span style={{ fontSize: 11, color: "#9b9b9b" }}>{brand.count}</span>
+                          </div>
+                          <div style={{ height: 3, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
+                            <div style={{
+                              height: "100%", width: `${bPct}%`,
+                              background: brand.is_qc ? "#378add" : PURPLE,
+                              opacity: 0.35 + 0.65 * (brand.count / brandMax),
+                              borderRadius: 99,
+                            }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── compare panel showing side-by-side QC vs competitor stats ───────────────
 function ComparePanel({ competitors, compareTarget, onSelectCompetitor, qcStats, competitorStats, loading }) {
   const metrics = [
@@ -339,6 +461,9 @@ function Competitors() {
   const [competitorStats, setCompetitorStats]   = useState(null);
   const [compareLoading, setCompareLoading]     = useState(false);
 
+  const [reviewSources, setReviewSources]       = useState(null);
+  const [reviewSourcesLoading, setReviewSourcesLoading] = useState(true);
+
   // Clear caches whenever the effective filter changes
   useEffect(() => {
     setExpandedCompetitor(null);
@@ -347,6 +472,8 @@ function Competitors() {
     setCompareTarget(null);
     setQcStats(null);
     setCompetitorStats(null);
+    setReviewSources(null);
+    setReviewSourcesLoading(true);
   }, [days, school]);
 
   useEffect(() => {
@@ -355,22 +482,26 @@ function Competitors() {
     if (days) params.append("days", days);
     if (school && school !== "All") params.append("school", school);
 
-    fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`)
-      .then(r => r.json())
-      .then(data => {
-        setCompetitorsBySchool(data);
+    Promise.all([
+      fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/api/review-sources?${params}`).then(r => r.json()),
+    ])
+      .then(([competitorData, reviewData]) => {
+        setCompetitorsBySchool(competitorData);
         setLoading(false);
         // Default to first competitor
-        if (data.length > 0) {
-          const first = data.reduce((acc, c) => {
+        if (competitorData.length > 0) {
+          const first = competitorData.reduce((acc, c) => {
             acc[c.competitor] = (acc[c.competitor] || 0) + c.count;
             return acc;
           }, {});
           const firstName = Object.entries(first).sort((a, b) => b[1] - a[1])[0]?.[0];
           if (firstName) setCompareTarget(firstName);
         }
+        setReviewSources(reviewData);
+        setReviewSourcesLoading(false);
       })
-      .catch(err => { setError(err.message); setLoading(false); });
+      .catch(err => { setError(err.message); setLoading(false); setReviewSourcesLoading(false); });
   }, [days, school]);
 
   useEffect(() => {
@@ -512,6 +643,8 @@ function Competitors() {
           loading={compareLoading}
         />
       )}
+
+      <ReviewSourcesCard data={reviewSources} loading={reviewSourcesLoading} />
 
       <div className="card">
         <p className="panel-title">Competitor win rate</p>

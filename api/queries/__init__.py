@@ -35,3 +35,4 @@ from api.queries.recommendations import (
 from api.queries.recommendations_synthesis import (
     generate_recommendations,
 )
+from api.queries.review_sources import get_review_sources

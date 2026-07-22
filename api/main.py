@@ -26,6 +26,7 @@ from api.queries import (
     get_topics_over_time,
     get_prompt_detail,
     get_prompt_responses,
+    get_review_sources,
 )
 
 from api.queries.recommendations_synthesis import (
@@ -107,6 +108,10 @@ def competitor_citations(competitor: str, days: int = None, school: str = None):
 @app.get("/api/competitor-stats")
 def competitor_stats(competitor: str, days: int = None, school: str = None):
     return get_competitor_stats(competitor, days, school)
+
+@app.get("/api/review-sources")
+def review_sources(days: int = None, school: str = None):
+    return get_review_sources(days, school)
 
 @app.get("/api/citation-prompts")
 def citation_prompts(url: str, competitor: str, days: int = None, school: str = None):
