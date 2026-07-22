@@ -40,13 +40,14 @@ def get_review_sources(days=None, school=None):
         WHERE 1=1 {filter_clause} {school_clause};
     """
 
-    # QC citation URLs from mention_response_links
+    # QC citation URLs — unnest raw citations[] from responses where QC was mentioned
     qc_query = f"""
-        SELECT mrl.url
-        FROM mention_response_links mrl
-        JOIN mention_responses m ON m.id = mrl.mention_response_id
+        SELECT unnest(m.citations) AS url
+        FROM mention_responses m
         LEFT JOIN questions q ON q.id = m.question_id
-        WHERE mrl.is_qc = TRUE {filter_clause} {school_clause};
+        WHERE m.qc_mentioned = TRUE
+          AND m.citations IS NOT NULL
+          {filter_clause} {school_clause};
     """
 
     with get_connection() as conn:
