@@ -105,10 +105,10 @@ def get_competitor_stats(competitor, days=None, school=None):
             """, school_params)
             total_responses = cur.fetchone()[0] or 0
 
-            # Mention count, avg rank, and avg rank_score (field-size-normalized rank)
+            # Mention count, avg rank, avg rank_score, and avg field size
             cur.execute(f"""
                 WITH {_rank_score_cte()}
-                SELECT COUNT(DISTINCT m.id), AVG(b.rank_position), AVG({_rank_score_expr('b.rank_position')})
+                SELECT COUNT(DISTINCT m.id), AVG(b.rank_position), AVG({_rank_score_expr('b.rank_position')}), AVG(rt.total_brands)
                 FROM mention_response_brands b
                 JOIN mention_responses m ON m.id = b.mention_response_id
                 LEFT JOIN questions q ON q.id = m.question_id
@@ -120,6 +120,7 @@ def get_competitor_stats(competitor, days=None, school=None):
             mention_count = row[0] or 0
             avg_rank = round(float(row[1]), 2) if row[1] else None
             avg_rank_score = float(row[2]) if row[2] is not None else None
+            avg_field_size = round(float(row[3]), 1) if row[3] is not None else None
 
             # Responses where this competitor has at least one citation URL
             cur.execute(f"""
@@ -174,6 +175,7 @@ def get_competitor_stats(competitor, days=None, school=None):
         "sov": sov,
         "avg_rank": avg_rank,
         "avg_rank_score": round(avg_rank_score * 100, 1) if avg_rank_score is not None else None,
+        "avg_field_size": avg_field_size,
         "visibility_score": visibility_score,
     }
 

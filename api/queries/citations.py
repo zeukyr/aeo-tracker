@@ -141,7 +141,8 @@ def get_citation_prompts(url, competitor, days=None, school=None):
             q.question_type,
             COUNT(DISTINCT m.id) AS response_count,
             ROUND(AVG(b.rank_position)::numeric, 1) AS avg_rank,
-            ROUND(AVG({_rank_score_expr('b.rank_position')})::numeric * 100, 1) AS avg_rank_score
+            ROUND(AVG({_rank_score_expr('b.rank_position')})::numeric * 100, 1) AS avg_rank_score,
+            ROUND(AVG(rt.total_brands)::numeric, 1) AS avg_field_size
         FROM competitor_citation_map ccm
         JOIN mention_responses m ON m.id = ccm.mention_response_id
         JOIN questions q ON q.id = m.question_id
@@ -160,4 +161,4 @@ def get_citation_prompts(url, competitor, days=None, school=None):
         with conn.cursor() as cur:
             cur.execute(query, [url, competitor] + school_params)
             rows = cur.fetchall()
-    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4], "avg_rank": float(r[5]) if r[5] is not None else None, "avg_rank_score": float(r[6]) if r[6] is not None else None} for r in rows]
+    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4], "avg_rank": float(r[5]) if r[5] is not None else None, "avg_rank_score": float(r[6]) if r[6] is not None else None, "avg_field_size": float(r[7]) if r[7] is not None else None} for r in rows]

@@ -17,7 +17,7 @@ def fetch_avg_rank_score(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
     cur.execute(f"""
         WITH {_rank_score_cte()}
-        SELECT AVG({_rank_score_expr('m.qc_mention_order')})
+        SELECT AVG({_rank_score_expr('m.qc_mention_order')}), AVG(rt.total_brands)
         FROM mention_responses m
         LEFT JOIN questions q ON q.id = m.question_id
         LEFT JOIN rt ON rt.mention_response_id = m.id
@@ -25,8 +25,10 @@ def fetch_avg_rank_score(cur, filter_clause, school=None):
         AND m.qc_mention_order IS NOT NULL
         {filter_clause.replace("created_at", "m.created_at")} {school_clause};
     """, params)
-    row = cur.fetchone()[0]
-    return float(row) if row is not None else None
+    row = cur.fetchone()
+    rank_score = float(row[0]) if row[0] is not None else None
+    field_size = float(row[1]) if row[1] is not None else None
+    return rank_score, field_size
 
 def fetch_sov(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
@@ -209,7 +211,7 @@ def get_summary(days=None, school=None):
 
             rank_curr = fetch_avg_rank(cur, filter_curr, school)
             rank_prev = fetch_avg_rank(cur, filter_prev, school)
-            rank_score_curr = fetch_avg_rank_score(cur, filter_curr, school)
+            rank_score_curr, field_size_curr = fetch_avg_rank_score(cur, filter_curr, school)
 
             sov_curr = fetch_sov(cur, filter_curr, school)
             sov_prev = fetch_sov(cur, filter_prev, school)
@@ -261,6 +263,7 @@ def get_summary(days=None, school=None):
         "avg_rank": round(rank_curr, 2) if rank_curr else None,
         "avg_rank_diff": rank_diff(rank_curr, rank_prev),
         "avg_rank_score": round(rank_score_curr * 100, 1) if rank_score_curr is not None else None,
+        "avg_field_size": round(field_size_curr, 1) if field_size_curr is not None else None,
         "sov": sov_curr,
         "sov_diff": sov_diff(sov_curr, sov_prev),
         "visibility_score": visibility_curr,
