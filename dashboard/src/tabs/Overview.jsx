@@ -220,7 +220,7 @@ function Overview() {
           label="Positive sentiment"
           value={`${summary.positive_sentiment_rate}%`}
           detail={summary.sentiment_total
-            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative`
+            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative${summary.sentiment_score != null ? ` · score ${summary.sentiment_score > 0 ? "+" : ""}${summary.sentiment_score}` : ""}`
             : null}
           diff={summary.positive_sentiment_diff}
         />
