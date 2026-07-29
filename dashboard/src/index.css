@@ -297,6 +297,50 @@ p, h1, h2, h3, h4 {
 
 
 /* ============================================================
+   COMPETITOR RANK LIST
+   Plain ranked list (rank, name, count) — no bars.
+   ============================================================ */
+
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rank-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rank-row__index {
+  width: 18px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.rank-row__name {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-row__count {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
    CHART LEGEND
    Sits above Chart.js canvases.
    ============================================================ */
@@ -1226,10 +1270,15 @@ p, h1, h2, h3, h4 {
 .rc-body__note { font-size: var(--text-xs); color: var(--text-muted); margin: 0; }
 
 /* ── Two-pane evidence ── */
-.rc-panes { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); border-top: 0.5px solid var(--border-default); }
+.rc-panes { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); border-top: 0.5px solid var(--border-default); align-items: start; }
 .rc-pane { padding: 16px 20px 20px; min-width: 0; }
 .rc-pane + .rc-pane { border-left: 0.5px solid var(--border-default); }
 .rc-pane__title { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 12px; }
+/* Collapsed reasoning pane has nothing but a toggle button - side-by-side
+   with the (much taller) evidence pane would strand a tall blank gap under
+   it, so stack single-column instead until it's expanded. */
+.rc-panes--collapsed { grid-template-columns: 1fr; }
+.rc-panes--collapsed .rc-pane + .rc-pane { border-left: none; border-top: 0.5px solid var(--border-default); }
 .rc-module { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border-default); }
 @media (max-width: 860px) {
   .rc-panes { grid-template-columns: 1fr; }
@@ -1289,6 +1338,7 @@ p, h1, h2, h3, h4 {
 .rc-cite__n { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--text-secondary); text-align: right; font-variant-numeric: tabular-nums; }
 .rc-cite--dim { opacity: 0.62; }
 .rc-cite--dim .rc-cite__bar i { background: var(--bucket-abstain); }
+.rc-cite__unread { font-weight: 400; color: var(--text-muted); }
 .rc-cites__note { font-size: 11px; color: var(--text-muted); margin: 8px 0 0; }
 .rc-cites__qcnote {
   margin: 10px -8px 0; padding: 6px 8px; border-radius: var(--radius-sm);
@@ -1459,6 +1509,52 @@ tr.rc-gap .rc-geo--high { background: var(--stream-fix-tint); color: var(--strea
 .rc--build .rc-track .btn--primary { background: var(--stream-build); border-color: var(--stream-build); }
 .rc--fix   .rc-track .btn--primary { background: var(--stream-fix);   border-color: var(--stream-fix); }
 .rc--reach .rc-track .btn--primary { background: var(--stream-reach); border-color: var(--stream-reach); }
+
+/* ── Question group (Outreach & Earn: one question, several channels) ── */
+.rec-qgroup {
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-top: 3px solid var(--stream-reach);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.rec-qgroup__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 14px 20px; flex-wrap: wrap;
+}
+.rec-qgroup__question { font-size: var(--text-base); font-weight: 600; color: var(--text-primary); margin: 0; }
+.rec-qgroup__stats { font-size: var(--text-sm); color: var(--text-muted); white-space: nowrap; }
+.rec-qgroup__rows {
+  display: flex; flex-direction: column;
+  border-top: 0.5px solid var(--border-default);
+}
+.rec-qgroup__rows .rc {
+  border: none; border-radius: 0; box-shadow: none;
+  border-top: 0.5px solid var(--border-default);
+}
+.rec-qgroup__rows .rc:first-child { border-top: none; }
+
+.rec-row {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%; padding: 10px 20px;
+  background: none; border: none; border-top: 0.5px solid var(--border-default);
+  font-family: inherit; font-size: var(--text-sm); color: var(--text-secondary);
+  text-align: left; cursor: pointer;
+}
+.rec-row:first-child { border-top: none; }
+.rec-row:hover { background: var(--surface-secondary); }
+.rec-row__badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: var(--radius-pill); white-space: nowrap;
+  background: var(--stream-reach-tint); color: var(--stream-reach-ink);
+}
+.rec-row__target { flex: 1; min-width: 0; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rec-row__bucket { color: var(--text-muted); }
+.rec-row__meta { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: var(--text-xs); }
+.rec-row__status { color: var(--text-muted); font-weight: 600; }
+.rec-row__chevron { color: var(--text-muted); }
 
 
 /* ── Question action-plan page (rc-plan__*) ── */

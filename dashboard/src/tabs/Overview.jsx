@@ -50,6 +50,16 @@ function BrandBar({ name, pct, delta, isYou, color }) {
   );
 }
 
+function RankRow({ rank, name, count }) {
+  return (
+    <div className="rank-row">
+      <span className="rank-row__index">{rank}</span>
+      <span className="rank-row__name">{name}</span>
+      <span className="rank-row__count">{count}</span>
+    </div>
+  );
+}
+
 function MentionChart({ data }) {
   const canvasRef = useRef(null);
   const chartRef = useRef(null);
@@ -158,6 +168,7 @@ function Overview() {
   const { days, school } = useFilter();
   const [mentionData, setMentionData] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [competitorRanking, setCompetitorRanking] = useState([]);
   const [error, setError] = useState(null);
 
   const loading = summary === null && error === null;
@@ -170,10 +181,12 @@ function Overview() {
     Promise.all([
       fetch(`${API_BASE_URL}/api/mention-rate-by-engine?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/summary?${params}`).then((r) => r.json()),
+      fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`).then((r) => r.json()),
     ])
-      .then(([mentionData, summaryData]) => {
+      .then(([mentionData, summaryData, rankingData]) => {
         setMentionData(mentionData);
         setSummary(summaryData);
+        setCompetitorRanking(rankingData);
       })
       .catch((err) => setError(err.message));
   }, [days, school]);
@@ -182,6 +195,16 @@ function Overview() {
   if (error)   return <p className="state-msg state-msg--error">Error: {error}</p>;
 
   const competitors = summary.top_competitors ?? [];
+
+  const topCompetitors = Object.values(
+    competitorRanking.reduce((acc, c) => {
+      if (!acc[c.competitor]) acc[c.competitor] = { name: c.competitor, count: 0 };
+      acc[c.competitor].count += c.count;
+      return acc;
+    }, {})
+  )
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
 
   return (
     <div>
@@ -245,6 +268,19 @@ function Overview() {
               <p className="state-empty">No competitor data yet.</p>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: 12 }}>
+        <p className="panel-title">Top competitors</p>
+        <p className="panel-subtitle">Ranked by total mentions across responses</p>
+        <div className="rank-list">
+          {topCompetitors.map((c, i) => (
+            <RankRow key={c.name} rank={i + 1} name={c.name} count={c.count} />
+          ))}
+          {topCompetitors.length === 0 && (
+            <p className="state-empty">No competitor data yet.</p>
+          )}
         </div>
       </div>
     </div>

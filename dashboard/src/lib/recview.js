@@ -40,6 +40,13 @@ export function domainOf(url) {
   }
 }
 
+// "https://reddit.com/r/wedding/comments/..." -> "r/wedding"; anything else -> its domain.
+const REDDIT_SUB = /reddit\.com\/r\/([^/?#]+)/i;
+export function channelLabel(url) {
+  const m = REDDIT_SUB.exec(url || "");
+  return m ? `r/${m[1]}` : domainOf(url);
+}
+
 export const pctLabel = (x) => (x == null ? "—" : `${Math.round(x * 100)}%`);
 
 // source_type bucket → color token. The set is CVD-validated as a group;

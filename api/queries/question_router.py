@@ -65,6 +65,7 @@ from api.queries.scorecard import (
     build_scorecard,
     scorecard_to_recommendation,
     scorecard_triage_reason,
+    build_winner_checklist,
     CANDIDATE_POOL,
 )
 from api.queries.sitemap_coverage import diagnose_text_coverage
@@ -350,7 +351,12 @@ def _segment_for(q):
 
 
 def _winner_summary(facts, limit=5):
-    facts = sorted(facts or [], key=lambda f: -(f.get("citation_count") or 0))[:limit]
+    """`limit=None` returns every fetched winner - used for the card's full
+    citations panel, where truncating to 5 would silently drop pages the
+    router actually fetched (up to _TOP_N_URLS=8, cited_urls.py)."""
+    facts = sorted(facts or [], key=lambda f: -(f.get("citation_count") or 0))
+    if limit is not None:
+        facts = facts[:limit]
     return [{"url": f["url"], "page_type": f.get("page_type"),
              "source_type": source_type(f),
              "citation_count": f.get("citation_count") or 0} for f in facts]
@@ -426,7 +432,7 @@ def _router_detail(route, group=None):
             "buckets": vote.get("buckets"),
             "cleared_bar": (share or 0.0) >= SOURCE_TYPE_DOMINANCE if share is not None else False,
         },
-        "winners": _winner_summary(winners),
+        "winners": _winner_summary(winners, limit=None),
         "abstentions": [{
             "url": f.get("url"),
             "domain": f.get("domain"),
@@ -455,6 +461,24 @@ def _build_rec(route, group):
     card_winners = _card_winners(route)
     evidence = _winners_evidence(q, card_winners)
     benchmark = ", ".join(w["url"] for w in _winner_summary(card_winners, limit=2))
+
+    # The genre of the page we're telling QC to build - same signal genre_gap
+    # already computed when a QC page exists; inferred from the winning bucket
+    # otherwise (the "editorial pages win" / "rival pages win" prose below
+    # already assumes exactly this mapping, so the checklist stratifies on the
+    # same assumption rather than a second, independent guess).
+    if route["reason"] == "earn_indirect":
+        target_genre = None
+    elif gm:
+        target_genre = gm["winner_genre"]
+    else:
+        target_genre = "commercial" if bucket == "competitor" else "informational"
+
+    # What the new page needs to actually include - the same checklist
+    # machinery that makes Tab 2 fix-cards concrete, run against the winners
+    # instead of against a QC page that doesn't exist yet (or exists as the
+    # wrong kind). [] when too few comparable winners are readable.
+    checklist = build_winner_checklist(route.get("winners") or [], q["question"], target_genre=target_genre)
 
     if route["reason"] == "earn_indirect":
         domain = (route.get("feasibility_target") or {}).get("domain") or "the citing sources"
@@ -500,6 +524,14 @@ def _build_rec(route, group):
             if benchmark:
                 action += f" Model it on: {benchmark}."
 
+    if checklist:
+        must_include = ", ".join(
+            f"{r['label'].lower()} ({r['winners_pct']}% of cited pages have it)" for r in checklist[:5])
+        action += f" Must include: {must_include}."
+        evidence += (" Structural checklist: " + "; ".join(
+            f"{r['label']} — {r['winners_present']}/{r['winners_total']} ({r['winners_pct']}%) "
+            f"cited pages have it" for r in checklist) + ".")
+
     priority = "high" if len(group) >= 2 else "medium"
     school = q.get("school") or (school_for_url(route.get("qc_url")) if route.get("qc_url") else None)
     return {
@@ -515,8 +547,9 @@ def _build_rec(route, group):
         "expected_direction": 1,
         "expected_magnitude": None,
         "effort": "L",
-        "confidence": 0.55,
-        "detail": {"router": _router_detail(route, group)},
+        "confidence": 0.6 if checklist else 0.55,
+        "detail": {"router": _router_detail(route, group),
+                   **({"build_checklist": {"target_genre": target_genre, "gaps": checklist}} if checklist else {})},
     }
 
 

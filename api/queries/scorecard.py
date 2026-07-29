@@ -37,7 +37,8 @@ from openai import OpenAI
 from src.logger import logger
 from api.queries.cited_urls import get_topic_cited_urls
 from api.queries.page_facts import (
-    get_pages_facts, get_page_facts, page_genre, school_for_url, query_term_coverage,
+    get_pages_facts, get_page_facts, page_genre, winner_genre, school_for_url, query_term_coverage,
+    source_type,
 )
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -46,7 +47,7 @@ _FEATURES_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "geo
 
 MIN_WINNERS = 3          # below this the comparison isn't trustworthy (high tier)
 MIN_READABLE_WINNERS = 2 # below this there is no comparison at all - insufficient data
-TOP_N_WINNERS = 8        # cited pages to compare against
+TOP_N_WINNERS = 15       # cited pages to compare against
 
 # Cited pages fail to fetch (403s, JS-rendered pages, paywalls) or turn out
 # not to be a comparable page_type often enough that asking for exactly
@@ -95,6 +96,19 @@ _INAPPLICABLE_ON_COMMERCIAL = {"author_expertise", "comparison_table", "comparis
 def _load_features():
     with open(_FEATURES_PATH, "r", encoding="utf-8") as f:
         return json.load(f)["features"]
+
+
+def _effective_geo_weight(feat, genre):
+    """Resolve a feature's geo_weight for the genre it's being scored against.
+    Most features are genre-flat; a few carry a geo_features.json
+    'geo_weight_by_genre' override where real-world lift measurably differs
+    by genre (e.g. certification_pathway: a 2026-07-27 citation-correlation
+    check found 1.43x lift on informational pages vs a weak 1.08x on
+    commercial ones) - scoring those identically regardless of genre would
+    overstate the commercial-page case. None/unmatched genre falls back to
+    the feature's plain geo_weight."""
+    overrides = feat.get("geo_weight_by_genre") or {}
+    return overrides.get(genre, feat["geo_weight"])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -277,6 +291,58 @@ def _prevalence_label(present, total):
     return "most" if frac >= _PREVALENCE_MOST else ("some" if frac >= 0.3 else "few")
 
 
+def build_winner_checklist(winner_facts, question, target_genre=None, min_winners=MIN_WINNERS):
+    """
+    For a BUILD rec (no existing QC page to score against): which
+    geo_features.json checklist features do the cited winners consistently
+    share? Same detection + prevalence machinery as the Tab 2 scorecard,
+    minus the "QC already has it" half - there's no QC page here, so a
+    "most winners share X" finding IS the recommendation ("the new page
+    needs X"), not a gap against QC.
+
+    target_genre stratifies to winners that share the KIND of page being
+    built (mirrors build_scorecard's own genre stratification - "most cited
+    pages have X" should mean "most pages like the one we're building have
+    X"); falls back to the full comparable pool when too few genre-matched
+    winners exist. None skips stratification (e.g. the earn_indirect branch,
+    where the target page's genre isn't knowable).
+
+    Returns [] below min_winners readable+comparable pages - a builder needs
+    a real sample to name required features, same bar the fix side uses.
+    """
+    features = _load_features()
+    comparable = [f for f in (winner_facts or [])
+                  if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
+    if target_genre:
+        matched = [f for f in comparable if winner_genre(f) == target_genre]
+        if len(matched) >= min_winners:
+            comparable = matched
+    comparable.sort(key=lambda f: -(f.get("citation_count") or 0))
+    n = len(comparable)
+    if n < min_winners:
+        return []
+
+    present = [_page_features(f, question, features) for f in comparable]
+    rows = []
+    for feat in features:
+        if feat["detection"] == "ratio":
+            continue   # template-level metrics need a page to measure; nothing to measure yet
+        if target_genre == "commercial" and feat["id"] in _INAPPLICABLE_ON_COMMERCIAL:
+            continue
+        weight = _effective_geo_weight(feat, target_genre)
+        wp = sum(1 for p in present if p.get(feat["id"]))
+        if _prevalence_label(wp, n) != "most" or weight == "low":
+            continue
+        rows.append({
+            "id": feat["id"], "label": feat["label"], "geo_weight": weight,
+            "winners_present": wp, "winners_total": n,
+            "winners_pct": round(100 * wp / n),
+        })
+    _weight_rank = {"high": 2, "medium": 1, "low": 0}
+    rows.sort(key=lambda r: (-_weight_rank[r["geo_weight"]], -r["winners_pct"]))
+    return rows
+
+
 def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     """
     Full Tab 2 scorecard comparing QC's page against the pages AI cites for the
@@ -303,9 +369,14 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     # Dropped winners are DISCLOSED, not silently removed from the denominator:
     # prevalence over 4 readable pages means something different when 4 more
     # couldn't be fetched, and the card must say so.
-    unreadable = [f for f in all_winners if f.get("status") != "ok"]
+    # "not_fetched" (page_facts.py's community/video short-circuit, e.g.
+    # Reddit threads) never attempted a fetch - it isn't a failure, so it
+    # belongs with the other not-comparable page types, not in the
+    # "could not be fetched" failure list.
+    unreadable = [f for f in all_winners if f.get("status") not in ("ok", "not_fetched")]
     excluded = [f for f in all_winners
-                if f.get("status") == "ok" and f.get("page_type") not in _COMPARABLE_TYPES]
+                if (f.get("status") == "ok" and f.get("page_type") not in _COMPARABLE_TYPES)
+                or f.get("status") == "not_fetched"]
     winner_facts = [f for f in all_winners
                     if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
     winner_facts.sort(key=lambda f: -(f.get("citation_count") or 0))
@@ -315,6 +386,24 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     qc_present = _page_features(qc_facts, question, features) if qc_facts.get("status") == "ok" else {}
     winner_present = [_page_features(f, question, features) for f in winner_facts]
     qc_genre = page_genre(qc_facts) if qc_facts.get("status") == "ok" else None
+
+    # Prevalence over the FULL comparable pool conflates genres that share
+    # almost no structural features by construction - a .gov stats page
+    # (informational) will never phrase "career outcomes" the way a
+    # commercial course page does, so pooling them just drags every feature's
+    # count toward "few" regardless of whether it actually transfers to QC's
+    # page. Stratify to the subset that shares QC's own genre: "most cited
+    # pages have X" should mean "most pages LIKE QC's has X", not "most pages
+    # of any kind cited for this topic". Falls back to the full pool when
+    # too few same-genre winners exist to trust a stratified count, or QC's
+    # own genre couldn't be determined - never silently asserts a stratum
+    # that isn't there.
+    winner_genres = [winner_genre(f) for f in winner_facts]
+    genre_matched_idx = [i for i, g in enumerate(winner_genres) if qc_genre and g == qc_genre]
+    genre_stratified = qc_genre is not None and len(genre_matched_idx) >= MIN_WINNERS
+    strat_idx = genre_matched_idx if genre_stratified else range(len(winner_facts))
+    strat_present = [winner_present[i] for i in strat_idx]
+    n_strat = len(strat_present)
 
     rows = []
     metric_rows = []
@@ -341,17 +430,18 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
                 "fix_hint": _fix_hint(feat, qc_value, in_range),
             })
             continue
-        wp = sum(1 for w in winner_present if w.get(feat["id"]))
+        wp = sum(1 for w in strat_present if w.get(feat["id"]))
         qc_has = bool(qc_present.get(feat["id"]))
-        prevalence = _prevalence_label(wp, n)
-        recommend = (prevalence == "most") and (not qc_has) and (feat["geo_weight"] != "low")
+        prevalence = _prevalence_label(wp, n_strat)
+        weight = _effective_geo_weight(feat, qc_genre)
+        recommend = (prevalence == "most") and (not qc_has) and (weight != "low")
         rows.append({
             "id": feat["id"],
             "label": feat["label"],
-            "geo_weight": feat["geo_weight"],
+            "geo_weight": weight,
             "winners_present": wp,
-            "winners_total": n,
-            "winners_pct": round(100 * wp / n) if n else None,
+            "winners_total": n_strat,
+            "winners_pct": round(100 * wp / n_strat) if n_strat else None,
             "prevalence": prevalence,
             "qc_has": qc_has,
             "recommend": recommend,
@@ -372,21 +462,34 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
         "qc_url": qc_facts.get("final_url") or qc_url,
         "qc_title": qc_facts.get("title"),
         "qc_readable": qc_facts.get("status") == "ok",
+        # source_type is added on every bucket (not just comparable winners) so
+        # the frontend can render one merged "all cited pages" list - source_type()
+        # is explicitly designed to classify unfetched pages too (domain-derived
+        # rules still apply without page content), so this isn't a guess.
         "winners": [
             {"url": f["url"], "domain": f.get("domain"), "page_type": f.get("page_type"),
-             "citation_count": f.get("citation_count") or 0}
-            for f in winner_facts
+             "citation_count": f.get("citation_count") or 0, "source_type": source_type(f),
+             "genre": winner_genres[i]}
+            for i, f in enumerate(winner_facts)
         ],
         "winners_total": n,
         "winners_cited_total": len(all_winners),
+        # Feature rows above are computed over the genre-matched stratum when
+        # one exists (qc_genre, genre_matched_winners) - fall back to the full
+        # winners_total pool otherwise, which is what genre_stratified=False
+        # discloses.
+        "qc_genre": qc_genre,
+        "genre_stratified": genre_stratified,
+        "genre_matched_winners": len(genre_matched_idx),
         "winners_unreadable": [
             {"url": f["url"], "domain": f.get("domain"), "status": f.get("status"),
-             "citation_count": f.get("citation_count") or 0}
+             "citation_count": f.get("citation_count") or 0, "source_type": source_type(f)}
             for f in unreadable
         ],
         "winners_excluded": [
             {"url": f["url"], "domain": f.get("domain"), "page_type": f.get("page_type"),
-             "citation_count": f.get("citation_count") or 0}
+             "status": f.get("status"),
+             "citation_count": f.get("citation_count") or 0, "source_type": source_type(f)}
             for f in excluded
         ],
         "sufficient": n >= MIN_WINNERS,
@@ -579,10 +682,12 @@ def scorecard_to_recommendation(sc):
             (f" - {len(rest)} more also measured out of range, see below."
              if rest else " - see structural metrics below.")
         )
+        # fix_hint is deliberately left out here - it already renders under this
+        # metric's row in the structural-metrics table (FixDiffModule.jsx), so
+        # repeating it in the checklist action would duplicate the same detail
+        # twice on the card.
         lead_action = (f"Bring {lead['label'].lower()} into the {lead['target_min']}-{lead['target_max']}"
                        f"{'%' if lead['unit'] == 'pct' else ' levels'} target range")
-        if lead.get("fix_hint"):
-            lead_action += f" - {lead['fix_hint']}"
         action_parts.append(
             lead_action +
             (f"; {len(rest)} more metric(s) out of range - see structural metrics table"

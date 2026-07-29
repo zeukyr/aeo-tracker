@@ -1,48 +1,16 @@
 import { useState } from "react";
 import { formatDate } from "../lib/format";
-import { cardVariant, domainOf, urlLabel } from "../lib/recview";
+import { cardVariant, channelLabel, urlLabel } from "../lib/recview";
 import InfoTip from "./InfoTip";
 import RecTrail from "./rec/RecTrail";
 import RecCitations from "./rec/RecCitations";
 import FixDiffModule from "./rec/FixDiffModule";
 import TargetDossier from "./rec/TargetDossier";
 import ContentBrief from "./rec/ContentBrief";
+import { VARIANTS, BADGE_ICONS } from "./rec/variantMeta";
 
 const EFFORT_DOTS = { S: 1, M: 2, L: 3 };
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
-
-// Card identity per variant. Inclusion shares the reach (green) identity —
-// it's the outreach stream's high-confidence sub-type.
-const VARIANTS = {
-  fix: { cls: "rc--fix", badge: "Fix page" },
-  reach: { cls: "rc--reach", badge: "Reach out" },
-  inclusion: { cls: "rc--reach", badge: "Get listed" },
-  build: { cls: "rc--build", badge: "Build" },
-  generic: { cls: "rc--build", badge: "Strategy" },
-};
-
-const BADGE_ICONS = {
-  fix: (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="currentColor" aria-hidden="true">
-      <path d="M10.5 3.9L8.1 1.5a3.2 3.2 0 00-4 4L1 8.6V11h2.4l3.1-3.1a3.2 3.2 0 004-4zM6.3 5.7a1.7 1.7 0 112.4-2.4z" />
-    </svg>
-  ),
-  reach: (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" aria-hidden="true">
-      <path d="M11 1L5.5 6.5M11 1L7.5 11l-2-4.5L1 4.5z" />
-    </svg>
-  ),
-  inclusion: (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="currentColor" aria-hidden="true">
-      <path d="M2 2h8v2H2zm0 3h8v2H2zm0 3h5v2H2z" />
-    </svg>
-  ),
-  build: (
-    <svg viewBox="0 0 12 12" width="12" height="12" fill="currentColor" aria-hidden="true">
-      <path d="M6 1l5 4v6H7V8H5v3H1V5z" />
-    </svg>
-  ),
-};
 
 const feasibilityOf = (rec) =>
   rec.detail?.outreach_feasibility ?? rec.detail?.router?.outreach_feasibility;
@@ -71,6 +39,28 @@ function formatOutcome(rec) {
   return ` · ${rec.metric_impact} ${sign}${o.diff_in_diff_lift}pts vs baseline`;
 }
 
+// Fix cards already restate every gap in the checklist below (ActionLine) -
+// the intro paragraph only needs to set the scene, not re-list the specifics.
+// Other variants' rec.problem isn't duplicated by a checklist, so it's left as-is.
+function problemLine(rec, variant) {
+  if (variant !== "fix") return rec.problem;
+  const sc = rec.detail?.scorecard;
+  const gaps =
+    rec.detail?.evidence_grade?.checklist_gaps?.length ??
+    (sc?.features || []).filter((f) => f.recommend).length;
+  const metricGaps =
+    rec.detail?.evidence_grade?.metric_gaps?.length ??
+    (sc?.metric_rows || []).filter((r) => r.recommend).length;
+  const total = gaps + metricGaps;
+  if (!total) return rec.problem;
+  return (
+    <>
+      Engines cite competitors instead of QC{sc?.question ? <> for &lsquo;{sc.question}&rsquo;</> : ""}.{" "}
+      {total} structural issue{total === 1 ? "" : "s"} out of range — fixes below.
+    </>
+  );
+}
+
 // The verdict band's one-line "why this card exists", per variant.
 function verdictLine(rec, variant) {
   const router = rec.detail?.router;
@@ -91,8 +81,7 @@ function verdictLine(rec, variant) {
     // Fan-out companions supplement an ownable-field primary (fix/build) —
     // "QC can't own" belongs only to the true reach_out branch.
     if (router?.branch === "reach_out_fanout") {
-      const sub = /reddit\.com\/r\/([^/?#]+)/i.exec(rec.target || "");
-      const source = sub ? `r/${sub[1]}` : domainOf(rec.target) || "a source";
+      const source = channelLabel(rec.target) || "a source";
       return (
         <>
           <b>Engines also draw on {source} for this query</b> — earn presence there alongside the
@@ -429,10 +418,55 @@ function BenchmarkModule({ router }) {
   );
 }
 
+// The router's decision trail is trust/debugging material, not something a
+// person fixing the page needs to read every time the checklist above already
+// tells them what to do - collapsed by default. The emergent-insight callout
+// is explicitly lower-confidence than the verified gaps above it, so it rides
+// along in the same collapsed section rather than sitting next to them as if
+// it were equally actionable.
+function RouterReasoning({ rec, variant, router, sc, expanded, onToggle }) {
+  return (
+    <div className="rc-pane">
+      <button className="rc-more" type="button" onClick={onToggle}>
+        {expanded ? "Hide reasoning ▴" : "Show reasoning ▾"}
+      </button>
+      {expanded && (
+        <>
+          <p className="rc-pane__title">How the router decided</p>
+          <RecTrail rec={rec} variant={variant} />
+          {variant === "fix" && (
+            <div className="rc-module">
+              <RecCitations
+                router={router}
+                sc={sc}
+                title={sc ? `Compared against · ${sc.winners_total} of ${sc.winners_cited_total} cited pages` : undefined}
+              />
+              {sc && sc.winners_cited_total > sc.winners_total && (
+                <p className="rc-cites__note">
+                  Coverage: analyzed {sc.winners_total} of {sc.winners_cited_total} cited pages
+                  {sc.winners_unreadable?.length ? ` — ${sc.winners_unreadable.length} could not be fetched` : ""}
+                  , so "most winners" means most of the analyzed ones.
+                </p>
+              )}
+            </div>
+          )}
+          {variant === "fix" && sc?.emergent_insight && (
+            <div className="rc-insight">
+              <span className="rc-insight__tag">◆ LLM-observed pattern · lower confidence</span>
+              {sc.emergent_insight}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
 // onOpenDetail (optional): shows a permalink button that opens this rec's own
 // detail page (/recommendations/:id). Omit it on the detail page itself.
 export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented, onOpenPrompt, onOpenDetail }) {
   const [showRaw, setShowRaw] = useState(false);
+  const [showReasoning, setShowReasoning] = useState(false);
   const variant = cardVariant(rec);
   const router = rec.detail?.router;
   const sc = rec.detail?.scorecard;
@@ -487,7 +521,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
 
       <div className="rc-body">
         {variant === "fix" && <TargetBox url={rec.target} />}
-        <p className="rc-body__problem">{rec.problem}</p>
+        <p className="rc-body__problem">{problemLine(rec, variant)}</p>
         <ActionLine text={actionLine} />
         {rec.detail?.priority_rank?.reason && (
           <p className="rc-body__note">{rec.detail.priority_rank.reason}</p>
@@ -496,26 +530,15 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
       </div>
 
       {router ? (
-        <div className="rc-panes">
-          <div className="rc-pane">
-            <p className="rc-pane__title">How the router decided</p>
-            <RecTrail rec={rec} variant={variant} />
-            {variant === "fix" && (
-              <div className="rc-module">
-                <RecCitations
-                  router={router}
-                  title={sc ? `Compared against · ${sc.winners_total} of ${sc.winners_cited_total} cited pages` : undefined}
-                />
-                {sc && sc.winners_cited_total > sc.winners_total && (
-                  <p className="rc-cites__note">
-                    Coverage: analyzed {sc.winners_total} of {sc.winners_cited_total} cited pages
-                    {sc.winners_unreadable?.length ? ` — ${sc.winners_unreadable.length} could not be fetched` : ""}
-                    , so "most winners" means most of the analyzed ones.
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+        <div className={`rc-panes${showReasoning ? "" : " rc-panes--collapsed"}`}>
+          <RouterReasoning
+            rec={rec}
+            variant={variant}
+            router={router}
+            sc={sc}
+            expanded={showReasoning}
+            onToggle={() => setShowReasoning(!showReasoning)}
+          />
           <div className="rc-pane">
             {variant === "fix" && sc && <FixDiffModule sc={sc} />}
             {variant === "reach" && (

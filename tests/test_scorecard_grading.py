@@ -218,13 +218,13 @@ def test_multiple_metric_gaps_lead_with_highest_research_priority():
     assert gap_ids[0] == "internal_linking_density"  # ranked, lead first
 
 
-def test_metric_gap_action_names_lead_fix_hint_only():
-    # The action stays a one-line summary: only the LEAD metric's fix hint
-    # is inlined there. Every gap's hint (lead and rest) still reaches the
-    # frontend via detail.evidence_grade.metric_gaps, where the structural
-    # metrics table renders a "How to fix" line per out-of-range row -
-    # repeating each one in the action text too would defeat the point of
-    # keeping the card's headline text short.
+def test_metric_gap_action_omits_fix_hint():
+    # The action stays a one-line summary naming only the metric and its
+    # target range - fix_hint text is never inlined there. Every gap's hint
+    # still reaches the frontend via detail.evidence_grade.metric_gaps, where
+    # the structural metrics table renders a "How to fix" line per
+    # out-of-range row; repeating it in the action text would duplicate the
+    # same detail twice on the card.
     sc = _sc([], n=1, metric_rows=[
         _metric("internal_linking_density", qc_value=100, target_min=15, target_max=20,
                 weight="high", fix_hint="Cut back on internal links."),
@@ -233,22 +233,11 @@ def test_metric_gap_action_names_lead_fix_hint_only():
     ])
     rec = ts.scorecard_to_recommendation(sc)
     assert rec is not None
-    assert "Cut back on internal links." in rec["action"]
+    assert "Cut back on internal links." not in rec["action"]
     assert "Rewrite paragraphs to land in the 150-300 word range." not in rec["action"]
     fix_hints = {g["id"]: g["fix_hint"] for g in rec["detail"]["evidence_grade"]["metric_gaps"]}
     assert fix_hints["internal_linking_density"] == "Cut back on internal links."
     assert fix_hints["paragraph_length_conformance"] == "Rewrite paragraphs to land in the 150-300 word range."
-
-
-def test_metric_gap_without_fix_hint_omits_it_gracefully():
-    # A metric direction with no authored guidance (fix_hint=None) shouldn't
-    # produce a dangling "- None" in the action text.
-    sc = _sc([], n=1, metric_rows=[
-        _metric("query_term_coverage", qc_value=40, target_min=70, target_max=100, weight="high", fix_hint=None),
-    ])
-    rec = ts.scorecard_to_recommendation(sc)
-    assert rec is not None
-    assert "None" not in rec["action"]
 
 
 def test_true_parity_with_all_metrics_in_range_returns_none():

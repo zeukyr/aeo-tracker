@@ -21,7 +21,16 @@
     "how much to trust a given signal.",
     "Recommend rule (deterministic/semantic): prevalence high AND QC missing AND",
     "geo_weight > low. Recommend rule (ratio): QC's measured value falls outside",
-    "[target_min, target_max]."
+    "[target_min, target_max].",
+    "",
+    "geo_weight_by_genre (optional): overrides geo_weight for a specific",
+    "page_facts.py genre ('commercial'/'informational') when a feature's real-world",
+    "lift measurably differs by genre - resolved by scorecard._effective_geo_weight()",
+    "against qc_genre/target_genre. Missing genre or no override -> plain geo_weight.",
+    "'note' (optional, on some features): provenance/caveat for a confidence or",
+    "geo_weight_by_genre value, usually pointing at a specific dated internal check.",
+    "Neither key is read by the semantic detection prompt (_semantic_features only",
+    "reads id/description) - they're Python-side weighting only, never seen by the LLM."
   ],
   "features": [
     {
@@ -37,8 +46,10 @@
       "label": "Certification / pathway section",
       "detection": "semantic",
       "geo_weight": "high",
+      "geo_weight_by_genre": {"commercial": "medium"},
       "confidence": "medium",
-      "description": "Explains certification requirements, professional bodies, and the path into the career - not just the course being sold."
+      "description": "Explains certification requirements, professional bodies, and the path into the career - not just the course being sold.",
+      "note": "2026-07-27 citation-correlation check (544 non-QC winner pages, gpt-4o-mini feature detection joined against real citation counts): 1.34x lift overall, but almost entirely driven by informational-genre pages (1.43x, n=158) vs a weak, borderline signal on commercial pages (1.08x, n=265). Kept 'high' as the default (informational) weight; geo_weight_by_genre downgrades it to 'medium' specifically when recommended on a commercial page, since that's where QC's own certification content usually lives and where the real-data signal is weakest. Correlational, not causal - see recommendation-system-plan's Phase 3/C diff-in-diff for the eventual causal test."
     },
     {
       "id": "career_outcomes",
@@ -85,8 +96,9 @@
       "label": "Comparison table",
       "detection": "deterministic",
       "geo_weight": "medium",
-      "confidence": "high",
-      "description": "At least one HTML table comparing options/features/costs."
+      "confidence": "low",
+      "description": "At least one HTML table comparing options/features/costs.",
+      "note": "Downgraded from 'high' 2026-07-27: a citation-correlation check (544 non-QC winner pages) found a NEGATIVE lift (0.74x overall, 0.58x on commercial pages, ~flat 0.98x on informational) - the opposite direction of the literature claim this confidence was based on. Correlational, not causal, and a single internal check - don't treat either direction as settled until the Phase 3/C diff-in-diff (recommendation-system-plan) tests it causally."
     },
     {
       "id": "author_expertise",
@@ -101,8 +113,9 @@
       "label": "Cites primary sources / professional bodies",
       "detection": "semantic",
       "geo_weight": "medium",
-      "confidence": "high",
-      "description": "References professional associations, government statistics, or original data rather than only self-referential claims."
+      "confidence": "medium",
+      "description": "References professional associations, government statistics, or original data rather than only self-referential claims.",
+      "note": "Downgraded from 'high' 2026-07-27: a citation-correlation check (544 non-QC winner pages) found a weak/mixed lift (1.11x overall, but 0.71x - negative - on commercial pages specifically, 1.10x on informational). Not as clean a reversal as comparison_table, so kept at 'medium' rather than 'low', but the 'high' confidence this used to carry isn't supported by the data on hand. Correlational, not causal - needs the Phase 3/C diff-in-diff (recommendation-system-plan) before being trusted either way."
     },
     {
       "id": "evidence_density",
@@ -118,7 +131,7 @@
       "detection": "semantic",
       "geo_weight": "high",
       "confidence": "high",
-      "description": "Reads like reference material: no first-person blog voice, no hard sell. First-person/blog tone is the single strongest NEGATIVE predictor of citation across studies - marketing tone reduces the odds an engine quotes the page as an authority."
+      "description": "Reads like reference material, written about the subject in the third person - not a first-person blog voice ('I', 'we', 'our') and not direct second-person address to the reader ('you', 'your', 'you'll'), which is how sales/marketing copy talks. Answer false if the page frequently says 'you'/'your' rather than describing the course/career/school in the third person, even if it's otherwise well-organized - that second-person address IS the hard-sell marketing voice this feature screens out. First-person/second-person marketing tone is the single strongest NEGATIVE predictor of citation across studies - it reduces the odds an engine quotes the page as an authority."
     },
     {
       "id": "comprehensiveness",
@@ -133,8 +146,9 @@
       "label": "Extractable value propositions",
       "detection": "semantic",
       "geo_weight": "medium",
-      "confidence": "medium",
-      "description": "Short, quotable justification claims an engine can lift when shortlisting ('A+ BBB rating', '21-day money-back guarantee') - stated plainly, not buried in prose."
+      "confidence": "high",
+      "description": "Short, quotable justification claims an engine can lift when shortlisting ('A+ BBB rating', '21-day money-back guarantee') - stated plainly, not buried in prose.",
+      "note": "Upgraded from 'medium' 2026-07-27: a citation-correlation check (544 non-QC winner pages) found the STRONGEST lift of every checklist feature (1.58x overall, 1.49x commercial, 1.75x informational) - underweighted relative to what the data shows. geo_weight left at 'medium' since it already clears the recommend floor either way (geo_weight is a veto floor, not a ranker) and priority impact is what confidence-driven trust, not weight, should carry here. Correlational, not causal - see recommendation-system-plan's Phase 3/C diff-in-diff for the eventual causal test."
     },
     {
       "id": "pros_cons",
@@ -178,8 +192,8 @@
       "geo_weight": "high",
       "confidence": "high",
       "description": "Internal links as a share of all links in the main content (internal_links / total_links). Part of macro-structure, the largest single contributor (44.9%) to structural-optimization citation gains in the underlying study.",
-      "fix_below": "Add more internal links to related QC pages within the body content - not just the nav/footer.",
-      "fix_above": "Internal links dominate the page's total links - add a few outbound links to back up specific claims (a professional/certifying body, a government labor-statistics page for salary/demand figures, an industry report), or cut back on internal cross-links, so internal links aren't nearly all of them."
+      "fix_below": "Add internal links to related QC pages within the body content, not just nav/footer.",
+      "fix_above": "Add outbound links to authoritative sources (certifying bodies, government stats, industry reports), or trim internal cross-links."
     },
     {
       "id": "heading_hierarchy_depth",
@@ -191,8 +205,8 @@
       "geo_weight": "high",
       "confidence": "high",
       "description": "Number of distinct heading levels (h1-h5) actually used in the main content. Macro-structure signal - deep, well-nested hierarchy mirrors how engines decompose a page into citable facts.",
-      "fix_below": "Break long sections into nested subheadings (e.g. add H3s under each H2) instead of one flat run of H2s.",
-      "fix_above": "The heading structure is unusually deep - flatten some nesting so the hierarchy still reads as a clear outline."
+      "fix_below": "Nest subheadings (add H3s under H2s) instead of one flat run of H2s.",
+      "fix_above": "Flatten some nesting so the hierarchy still reads as a clear outline."
     },
     {
       "id": "structured_content_ratio",
@@ -204,8 +218,8 @@
       "geo_weight": "high",
       "confidence": "high",
       "description": "Share of main-content word count sitting inside lists, tables, or blockquote/comparison blocks. Meso-structure, the second-largest contributor (39.7%) to structural-optimization citation gains - distinct from comparison_table, which only checks whether at least one table exists at all.",
-      "fix_below": "Convert more of the prose into bulleted/numbered lists, a comparison table, or a blockquote summary.",
-      "fix_above": "Too much of the page is lists/tables - fold some of that back into explanatory paragraphs so key points aren't just fragments."
+      "fix_below": "Convert prose into bulleted/numbered lists, a comparison table, or a blockquote summary.",
+      "fix_above": "Fold list/table content back into explanatory paragraphs."
     },
     {
       "id": "paragraph_length_conformance",
@@ -217,7 +231,7 @@
       "geo_weight": "medium",
       "confidence": "high",
       "description": "Share of paragraphs in the main content whose length falls in the 150-300 word sweet spot. Meso-structure signal - too-short paragraphs read as thin, too-long paragraphs bury the answer.",
-      "fix_below": "Rewrite paragraphs to land in the 150-300 word range - merge choppy one-line paragraphs, split long ones that bury the point.",
+      "fix_below": "Merge choppy short paragraphs and split long ones to land in the 150-300 word range.",
       "fix_above": null
     },
     {
@@ -230,8 +244,8 @@
       "geo_weight": "low",
       "confidence": "medium",
       "description": "Share of main-content word count wrapped in bold/italic emphasis. Micro-structure - the smallest contributor (15.4%) to structural-optimization citation gains, so treat as a minor supporting signal, not a primary lever. (Emphasis weighted toward sentence beginnings is a further nuance this deterministic check does not model.)",
-      "fix_below": "Bold or italicize key terms, numbers, and takeaways so a scanning reader (or engine) can find the answer fast.",
-      "fix_above": "Bold/italic is overused - reserve it for the few phrases that actually need to stand out, or it stops meaning anything."
+      "fix_below": "Bold or italicize key terms, numbers, and takeaways.",
+      "fix_above": "Reserve bold/italic for the few phrases that need to stand out."
     },
     {
       "id": "query_term_coverage",
@@ -243,7 +257,7 @@
       "geo_weight": "high",
       "confidence": "high",
       "description": "Share of the tracked question's significant (non-stopword) terms that appear verbatim in the page text. The page must contain the words people actually search - a page can be well-structured and still never surface if it doesn't use the query's own vocabulary. The 70% threshold is a working default, not a number from the underlying research.",
-      "fix_below": "Work the question's own key words into the page's headings and body text directly, not just synonyms or paraphrases.",
+      "fix_below": "Use the question's own key words in headings and body text, not just synonyms.",
       "fix_above": null
     }
   ]

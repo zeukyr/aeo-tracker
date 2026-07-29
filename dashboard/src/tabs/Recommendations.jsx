@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 import RecommendationCard from "../components/RecommendationCard";
+import QuestionGroup from "../components/rec/QuestionGroup";
 import InfoTip from "../components/InfoTip";
 import { formatDate } from "../lib/format";
 import { recTriageMessage } from "../lib/recTriage";
@@ -188,6 +189,7 @@ function Recommendations() {
   const [refreshing, setRefreshing] = useState(false);
   const [stream, setStream] = useState("strategic");
   const [popoverId, setPopoverId] = useState(null);
+  const [expandedRows, setExpandedRows] = useState(() => new Set());
   const [candidates, setCandidates] = useState([]);
   const [selected, setSelected] = useState(() => new Set());
   const [generatingSelected, setGeneratingSelected] = useState(false);
@@ -335,6 +337,15 @@ function Recommendations() {
   const handleConfirmImplemented = (id, dateStr) =>
     patchRecommendation(id, { status: "implemented", implemented_at: dateStr });
 
+  const toggleExpandRow = (id) => {
+    setExpandedRows((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   if (error) return <p className="state-msg state-msg--error">Error: {error}</p>;
   if (loading) return <p className="state-msg">Loading...</p>;
 
@@ -353,6 +364,30 @@ function Recommendations() {
 
   const byPriority = { high: [], medium: [], low: [] };
   proposedRecs.forEach((r) => (byPriority[r.priority] ?? byPriority.low).push(r));
+
+  // Outreach & Earn only: one question can have several pitchable channels
+  // (a subreddit, a certifying body, a directory) - grouping by question_id
+  // makes that shape visible instead of scattering them across priority
+  // tiers. Active + proposed merge into the same groups; priority becomes a
+  // sort input (best label in the group, then citation volume), not a
+  // section boundary. Questions with only one channel render exactly as
+  // before - a flat full card, no group header.
+  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
+  let outreachGroups = [];
+  if (stream === "outreach") {
+    const byQuestion = new Map();
+    streamFiltered.forEach((rec) => {
+      const qid = rec.detail?.router?.question_id ?? `_solo_${rec.id}`;
+      if (!byQuestion.has(qid)) byQuestion.set(qid, []);
+      byQuestion.get(qid).push(rec);
+    });
+    outreachGroups = [...byQuestion.values()].sort((a, b) => {
+      const aPri = Math.min(...a.map((r) => PRIORITY_ORDER[r.priority] ?? 3));
+      const bPri = Math.min(...b.map((r) => PRIORITY_ORDER[r.priority] ?? 3));
+      if (aPri !== bPri) return aPri - bPri;
+      return (b[0].detail?.router?.n_citations ?? 0) - (a[0].detail?.router?.n_citations ?? 0);
+    });
+  }
 
   const cardProps = {
     onAccept: handleAccept,
@@ -389,49 +424,86 @@ function Recommendations() {
       </div>
       <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
 
-      {activeRecs.length > 0 && (
-        <section>
-          <p className="section-header">Active · {activeRecs.length}</p>
-          <div className="rec-list">
-            {activeRecs.map((rec) => (
-              <RecommendationCard
-                key={rec.id}
-                rec={rec}
-                isPopoverOpen={popoverId === rec.id}
-                {...cardProps}
-              />
-            ))}
+      {stream === "outreach" ? (
+        <>
+          <div className="rec-filter-bar">
+            <p className="panel-title">Prioritized recommendations</p>
           </div>
-        </section>
-      )}
-
-      <div className="rec-filter-bar">
-        <p className="panel-title">Prioritized recommendations</p>
-      </div>
-
-      {proposedRecs.length === 0 ? (
-        <p className="state-empty">
-          No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question below to generate a recommendation for it."}
-        </p>
+          {streamFiltered.length === 0 ? (
+            <p className="state-empty">
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question below to generate a recommendation for it."}
+            </p>
+          ) : (
+            <div className="rec-list">
+              {outreachGroups.map((group) =>
+                group.length > 1 ? (
+                  <QuestionGroup
+                    key={group[0].detail?.router?.question_id ?? group[0].id}
+                    group={group}
+                    expandedIds={expandedRows}
+                    onToggleExpand={toggleExpandRow}
+                    popoverId={popoverId}
+                    cardProps={cardProps}
+                  />
+                ) : (
+                  <RecommendationCard
+                    key={group[0].id}
+                    rec={group[0]}
+                    isPopoverOpen={popoverId === group[0].id}
+                    {...cardProps}
+                  />
+                )
+              )}
+            </div>
+          )}
+        </>
       ) : (
-        ["high", "medium", "low"].map(
-          (priority) =>
-            byPriority[priority].length > 0 && (
-              <section key={priority}>
-                <p className="section-header">{PRIORITY_LABELS[priority]} · {byPriority[priority].length}</p>
-                <div className="rec-list">
-                  {byPriority[priority].map((rec) => (
-                    <RecommendationCard
-                      key={rec.id}
-                      rec={rec}
-                      isPopoverOpen={popoverId === rec.id}
-                      {...cardProps}
-                    />
-                  ))}
-                </div>
-              </section>
+        <>
+          {activeRecs.length > 0 && (
+            <section>
+              <p className="section-header">Active · {activeRecs.length}</p>
+              <div className="rec-list">
+                {activeRecs.map((rec) => (
+                  <RecommendationCard
+                    key={rec.id}
+                    rec={rec}
+                    isPopoverOpen={popoverId === rec.id}
+                    {...cardProps}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <div className="rec-filter-bar">
+            <p className="panel-title">Prioritized recommendations</p>
+          </div>
+
+          {proposedRecs.length === 0 ? (
+            <p className="state-empty">
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question below to generate a recommendation for it."}
+            </p>
+          ) : (
+            ["high", "medium", "low"].map(
+              (priority) =>
+                byPriority[priority].length > 0 && (
+                  <section key={priority}>
+                    <p className="section-header">{PRIORITY_LABELS[priority]} · {byPriority[priority].length}</p>
+                    <div className="rec-list">
+                      {byPriority[priority].map((rec) => (
+                        <RecommendationCard
+                          key={rec.id}
+                          rec={rec}
+                          isPopoverOpen={popoverId === rec.id}
+                          {...cardProps}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                )
             )
-        )
+          )}
+        </>
       )}
 
       <CandidateQuestionPicker

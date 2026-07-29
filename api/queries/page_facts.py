@@ -38,6 +38,7 @@ from psycopg2.extras import Json
 
 from src.logger import logger
 from src.parsing.urls import normalize_url
+from src.parsing.domains import QC_BRAND_LIST
 from api.db import get_connection
 
 _FETCH_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; qc-ai-tracker page analysis)"}
@@ -47,8 +48,15 @@ _EXCERPT_CHARS = 4000
 
 QC_DOMAIN_TOKENS = (
     "qccareerschool", "qcpetstudies", "qceventplanning",
-    "qcdesignschool", "qcmakeupacademy",
+    "qcdesignschool", "qcmakeupacademy", "qcwellnessstudies",
 )
+
+# QC_BRAND_LIST (src/parsing/domains.py) is the reviewed name-alias list -
+# it already knows "QC Event School" is QC Event Planning's alias, which a
+# separate hardcoded pattern here previously didn't, so a real third-party
+# mention using that name (e.g. a roundup blog) was missed as qc_mentioned.
+_QC_MENTION_RE = re.compile(
+    r"\b(" + "|".join(re.escape(name) for name in QC_BRAND_LIST) + r")\b", re.I)
 
 # Classified from the domain alone - never fetched.
 _COMMUNITY_DOMAINS = {
@@ -71,6 +79,13 @@ _VIDEO_DOMAINS = {"youtube.com", "youtu.be", "vimeo.com"}
 _SUBPATH_SOURCE_TYPES = {
     ("linkedin.com", "learning"): "review",
     ("coursera.org", "learn"):    "competitor",
+    # Social Tables the SaaS product is not_actionable (job-board/e-commerce
+    # registry ruling), but socialtables.com/blog/* is a genuine third-party
+    # editorial surface (course roundups) - a different slot than their
+    # product pages, same shape as the LinkedIn Learning carve-out above.
+    # Verified 2026-07-24: this blog's wedding-planner-courses roundup
+    # already lists QC by name.
+    ("socialtables.com", "blog"): "review",
 }
 
 
@@ -803,7 +818,7 @@ def get_page_facts(url, force=False, defer_llm=False, _cache=None):
         "content_excerpt": text[:_EXCERPT_CHARS],
         "brand_mentions": detect_brand_mentions(text, brands),
         "qc_mentioned": any(tok in text.lower().replace(" ", "") for tok in QC_DOMAIN_TOKENS)
-                        or bool(re.search(r"\bQC (Career School|Pet Studies|Event Planning|Design School|Makeup Academy)\b", text, re.I)),
+                        or bool(_QC_MENTION_RE.search(text)),
         "features": {**_deterministic_features(structure, text),
                      **_structure_metrics(raw_html, final_url)},
     })
@@ -944,7 +959,7 @@ def page_genre(facts):
     return None
 
 
-def _winner_genre(facts):
+def winner_genre(facts):
     """Genre of one cited page: format-implied types first, content signals for
     ownership types, URL hints for pages that blocked the fetch. Unread
     competitor pages with no URL hint default to commercial (a rival's cited
@@ -975,7 +990,7 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
     qc_genre = page_genre(qc_facts)
     if not qc_genre:
         return None
-    genres = [g for g in (_winner_genre(f) for f in winner_facts) if g]
+    genres = [g for g in (winner_genre(f) for f in winner_facts) if g]
     if len(genres) < min_classified:
         return None
     dominant = max(set(genres), key=genres.count)
@@ -1071,6 +1086,23 @@ def _registry_source_type(domain):
     return _REGISTRY_SOURCE_BUCKETS.get(registry_type)
 
 
+# The registry answers "is this ORG a rival" (domain-level default); whether
+# THIS PAGE is the org's own sales content or a neutral multi-provider
+# comparison is a page-level question page_type already answers (LLM-verified
+# roundup/directory classification) - a competitor's content-marketing "best
+# X courses" roundup naming several OTHER schools is not the same slot as
+# their own course page, even though both live on the same domain. Threshold
+# deliberately generous (>=3 distinct brand_mentions keys): a competitor's own
+# single-product page can still self-mention under 1-2 name variants ("Wedding
+# Academy" / "V Wedding Academy") without being a genuine comparison.
+_MIN_ROUNDUP_BRANDS = 3
+
+
+def _is_multi_provider_roundup(facts):
+    return (facts.get("page_type") in ("roundup", "directory")
+            and len(facts.get("brand_mentions") or {}) >= _MIN_ROUNDUP_BRANDS)
+
+
 def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
     certifying_body | editorial | competitor | other. Domain rules override
@@ -1082,7 +1114,12 @@ def source_type(facts):
     a domain owned by a registry-typed brand buckets by that type (competitor/
     platform/certifying_body pin the bucket; not_actionable vetoes only a
     competitor verdict, so a stale competitor stamp on a job board's page
-    abstains instead of swinging the vote).
+    abstains instead of swinging the vote) - EXCEPT a competitor pin on a page
+    that's itself a multi-provider roundup/directory (_is_multi_provider_roundup):
+    the registry says the ORG is a rival, but a "best X courses" comparison
+    page naming several OTHER schools is a different slot than that rival's
+    own course page, and page_type (LLM-verified) already knows which one this
+    is. Falls through to the page_type-based mapping below in that case.
 
     A page we FAILED to read whose domain matched no rule carries the
     "editorial" page_type as a fallback guess, not a classification - it
@@ -1100,7 +1137,8 @@ def source_type(facts):
     if subpath:
         return subpath
     registry_bucket = _registry_source_type(domain)
-    if registry_bucket is not None:
+    if registry_bucket is not None and not (
+            registry_bucket == "competitor" and _is_multi_provider_roundup(facts)):
         return registry_bucket
     root = _root_domain(domain)
     if root in _REVIEW_DOMAINS:

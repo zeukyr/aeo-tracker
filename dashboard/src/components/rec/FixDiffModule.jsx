@@ -161,22 +161,6 @@ export default function FixDiffModule({ sc }) {
       )}
 
       <MetricRows metricRows={sc.metric_rows} />
-
-      {sc.suggested_edits?.length > 0 && (
-        <div className="rc-edits">
-          <p className="rc-pane__title" style={{ margin: "0 0 2px" }}>Suggested edits</p>
-          {sc.suggested_edits.map((e, i) => (
-            <div className="rc-edit" key={i}><b>+</b><span>{e}</span></div>
-          ))}
-        </div>
-      )}
-
-      {sc.emergent_insight && (
-        <div className="rc-insight">
-          <span className="rc-insight__tag">◆ LLM-observed pattern · lower confidence</span>
-          {sc.emergent_insight}
-        </div>
-      )}
     </div>
   );
 }
