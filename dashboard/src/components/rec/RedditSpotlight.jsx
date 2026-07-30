@@ -8,10 +8,11 @@ import { downloadRedditSpotlightXlsx } from "../../lib/redditSpotlightExport";
 // Reddit is one domain but two different plays: threads that already name QC
 // (correct the record) versus threads that never mention QC (earn the
 // citation by answering authentically). Comprehensive/unfiltered - every
-// reddit.com URL ever cited, no threshold or lifecycle - so it lives in
-// Citations (situational awareness) rather than Recommendations, where the
-// thresholded, trackable reach-out/fanout cards are the actionable Reddit
-// plays.
+// reddit.com URL ever cited, no threshold or lifecycle - so it's the Reddit
+// half of Outreach & Earn's split (Reddit / get mentioned in third parties);
+// reddit-targeted reach-out/inclusion recs are filtered out of the other
+// half's card list (Recommendations.jsx's isRedditTarget) so Reddit only
+// ever appears here, not duplicated as a weaker rec card too.
 
 function SubredditChips({ subreddits }) {
   if (!subreddits.length) return null;

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
-import RecommendationCard from "../components/RecommendationCard";
-import QuestionGroup from "../components/rec/QuestionGroup";
+import RecListItem from "../components/rec/RecListItem";
+import GetMentionedTable from "../components/rec/GetMentionedTable";
+import RedditSpotlight from "../components/rec/RedditSpotlight";
 import InfoTip from "../components/InfoTip";
 import { formatDate } from "../lib/format";
 import { recTriageMessage } from "../lib/recTriage";
@@ -34,9 +35,9 @@ const WORK_STREAMS = [
   },
   {
     key: "outreach",
-    label: "Outreach & Earn",
+    label: "Get Mentioned",
     question: "Where does AI look that we can't own?",
-    note: "For PR / partnerships / community — earn presence on the third-party sources engines cite. Each card shows whether a channel exists (open / requires approval).",
+    note: "For PR / partnerships — earn a mention on the third-party sources engines cite (directories, roundups, review sites, certifying bodies). Each card shows whether a channel exists (open / requires approval).",
   },
 ];
 
@@ -82,7 +83,7 @@ function GenerationHeader({ genStatus, refreshing, onRefreshSignals }) {
         title={
           !canGenerate
             ? `Available again ${nextDate}`
-            : "Refreshes brand concern and credibility recommendations — not tied to a specific question"
+            : "Refreshes brand concern, credibility, and outreach recommendations — not tied to a specific question"
         }
       >
         {refreshing ? "Refreshing…" : canGenerate ? "↻ Refresh signal recommendations" : `Locked until ${nextDate}`}
@@ -188,8 +189,6 @@ function Recommendations() {
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [stream, setStream] = useState("strategic");
-  const [popoverId, setPopoverId] = useState(null);
-  const [expandedRows, setExpandedRows] = useState(() => new Set());
   const [candidates, setCandidates] = useState([]);
   const [selected, setSelected] = useState(() => new Set());
   const [generatingSelected, setGeneratingSelected] = useState(false);
@@ -197,7 +196,6 @@ function Recommendations() {
 
   const loading = recommendations === null && error === null;
 
-  const openPrompt = (promptId) => navigate(`/prompts/${promptId}`);
   const openRecommendation = (recId) => navigate(`/recommendations/${recId}`);
 
   const loadRecommendations = () => {
@@ -309,7 +307,11 @@ function Recommendations() {
                 : "Already has an active recommendation in progress",
             };
           } else {
-            next[id] = { status: "triage", message: recTriageMessage(res.triage) };
+            // reach_out_auto_covered isn't a failure - the router routed this
+            // question to reach-out, which the auto sweep now covers instead
+            // of this manual build/fix flow (see reach_out_sweep.py).
+            const covered = res.triage?.reason === "reach_out_auto_covered";
+            next[id] = { status: covered ? "reach_out_covered" : "triage", message: recTriageMessage(res.triage) };
           }
         });
         return next;
@@ -321,43 +323,48 @@ function Recommendations() {
     });
   };
 
-  const patchRecommendation = (id, body) => {
-    setPopoverId(null);
-    setRecommendations((prev) => prev.map((r) => (r.id === id ? { ...r, ...body } : r)));
+  // Accept / mark-implemented live only on the full card now (reached via
+  // onOpenDetail below), which is its own page with its own local state
+  // (RecommendationDetail.jsx) - pin is the only mutation this list view
+  // itself still needs, for the star on each compact row.
+  const handleTogglePin = (id, next) => {
+    setRecommendations((prev) => prev.map((r) => (r.id === id ? { ...r, is_pinned: next } : r)));
     fetch(`${API_BASE_URL}/api/recommendations/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ is_pinned: next }),
     })
       .then(() => loadRecommendations())
       .catch((err) => console.error("Failed to update recommendation:", err));
   };
 
-  const handleAccept = (id) => patchRecommendation(id, { status: "accepted" });
-  const handleConfirmImplemented = (id, dateStr) =>
-    patchRecommendation(id, { status: "implemented", implemented_at: dateStr });
-
-  const toggleExpandRow = (id) => {
-    setExpandedRows((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
   if (error) return <p className="state-msg state-msg--error">Error: {error}</p>;
   if (loading) return <p className="state-msg">Loading...</p>;
+
+  // Outreach & Earn splits into two plays (Reddit is comprehensively covered
+  // by RedditSpotlight, complete with its own dead/archived-thread tracking -
+  // a rec card here would just be a weaker duplicate of that), so
+  // reddit-targeted recs are excluded from the "get mentioned in third
+  // parties" card list (and its tab count) entirely rather than shown twice
+  // in different forms.
+  const isRedditTarget = (rec) => (rec.target || "").includes("reddit.com");
 
   const schoolFiltered = recommendations.filter((r) => matchesSchool(r, school));
   const streamCounts = Object.fromEntries(
     WORK_STREAMS.map((s) => [
       s.key,
       schoolFiltered.filter(
-        (r) => streamOf(r) === s.key && (r.status === "proposed" || ACTIVE_STATUSES.includes(r.status))
+        (r) => streamOf(r) === s.key
+          && (r.status === "proposed" || ACTIVE_STATUSES.includes(r.status))
+          && (s.key !== "outreach" || !isRedditTarget(r))
       ).length,
     ])
   );
+  const pinnedCount = schoolFiltered.filter((r) => r.is_pinned).length;
+  const pinnedRecs = schoolFiltered
+    .filter((r) => r.is_pinned)
+    .sort((a, b) => new Date(b.pinned_at ?? 0) - new Date(a.pinned_at ?? 0));
+
   const streamFiltered = schoolFiltered.filter((r) => streamOf(r) === stream);
   const activeRecs = streamFiltered.filter((r) => ACTIVE_STATUSES.includes(r.status));
   const proposedRecs = streamFiltered.filter((r) => r.status === "proposed");
@@ -365,42 +372,28 @@ function Recommendations() {
   const byPriority = { high: [], medium: [], low: [] };
   proposedRecs.forEach((r) => (byPriority[r.priority] ?? byPriority.low).push(r));
 
-  // Outreach & Earn only: one question can have several pitchable channels
-  // (a subreddit, a certifying body, a directory) - grouping by question_id
-  // makes that shape visible instead of scattering them across priority
-  // tiers. Active + proposed merge into the same groups; priority becomes a
-  // sort input (best label in the group, then citation volume), not a
-  // section boundary. Questions with only one channel render exactly as
-  // before - a flat full card, no group header.
-  const PRIORITY_ORDER = { high: 0, medium: 1, low: 2 };
-  let outreachGroups = [];
-  if (stream === "outreach") {
-    const byQuestion = new Map();
-    streamFiltered.forEach((rec) => {
-      const qid = rec.detail?.router?.question_id ?? `_solo_${rec.id}`;
-      if (!byQuestion.has(qid)) byQuestion.set(qid, []);
-      byQuestion.get(qid).push(rec);
-    });
-    outreachGroups = [...byQuestion.values()].sort((a, b) => {
-      const aPri = Math.min(...a.map((r) => PRIORITY_ORDER[r.priority] ?? 3));
-      const bPri = Math.min(...b.map((r) => PRIORITY_ORDER[r.priority] ?? 3));
-      if (aPri !== bPri) return aPri - bPri;
-      return (b[0].detail?.router?.n_citations ?? 0) - (a[0].detail?.router?.n_citations ?? 0);
-    });
-  }
-
-  const cardProps = {
-    onAccept: handleAccept,
-    onOpenPopover: setPopoverId,
-    onCancelPopover: () => setPopoverId(null),
-    onConfirmImplemented: handleConfirmImplemented,
-    onOpenPrompt: openPrompt,
-    onOpenDetail: openRecommendation,
-  };
+  // Flat table (GetMentionedTable) instead of per-question card groups - see
+  // its own header comment for why. Active + proposed both feed it; the
+  // table's own priority column/sort replaces the old section boundary.
+  const thirdPartyRecs = stream === "outreach" ? streamFiltered.filter((r) => !isRedditTarget(r)) : [];
 
   return (
     <div className="rec-page">
       <GenerationHeader genStatus={genStatus} refreshing={refreshing} onRefreshSignals={handleRefreshSignals} />
+
+      {/* Page-level generation action, same footing as the refresh button
+          above - lives here (not under any one tab) because it always
+          produces a build/fix rec regardless of which tab happens to be
+          showing when you use it; sitting below tab content used to imply
+          it was that tab's own action. */}
+      <CandidateQuestionPicker
+        candidates={candidates}
+        selected={selected}
+        onToggle={toggleSelected}
+        onGenerate={handleGenerateSelected}
+        generating={generatingSelected}
+        rowResults={rowResults}
+      />
 
       <div className="health-grid">
         <HealthColumn variant="good" title="What's going well" items={health?.going_well ?? []} />
@@ -421,40 +414,64 @@ function Recommendations() {
             <span className="rec-tab__count">{streamCounts[s.key]}</span>
           </button>
         ))}
+        <button
+          role="tab"
+          aria-selected={stream === "reddit"}
+          className={`rec-tab ${stream === "reddit" ? "rec-tab--active" : ""}`}
+          onClick={() => setStream("reddit")}
+        >
+          Reddit
+          <span className="rec-tab__question">Where does AI go on Reddit for QC's topics?</span>
+        </button>
+        <button
+          role="tab"
+          aria-selected={stream === "pinned"}
+          className={`rec-tab rec-tab--pinned ${stream === "pinned" ? "rec-tab--active" : ""}`}
+          onClick={() => setStream("pinned")}
+        >
+          ★ Pinned
+          <span className="rec-tab__count">{pinnedCount}</span>
+        </button>
       </div>
-      <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
+      {stream !== "pinned" && stream !== "reddit" && (
+        <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
+      )}
 
-      {stream === "outreach" ? (
+      {stream === "reddit" ? (
+        <RedditSpotlight />
+      ) : stream === "pinned" ? (
+        <>
+          <div className="rec-filter-bar">
+            <p className="panel-title">Pinned</p>
+          </div>
+          {pinnedRecs.length === 0 ? (
+            <p className="state-empty">
+              Nothing pinned yet — use the star on any recommendation to add it here.
+            </p>
+          ) : (
+            <div className="rec-list">
+              {pinnedRecs.map((rec) => (
+                <RecListItem
+                  key={rec.id}
+                  rec={rec}
+                  onOpenDetail={openRecommendation}
+                  onTogglePin={handleTogglePin}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : stream === "outreach" ? (
         <>
           <div className="rec-filter-bar">
             <p className="panel-title">Prioritized recommendations</p>
           </div>
-          {streamFiltered.length === 0 ? (
+          {thirdPartyRecs.length === 0 ? (
             <p className="state-empty">
-              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question below to generate a recommendation for it."}
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question above to generate a recommendation for it."}
             </p>
           ) : (
-            <div className="rec-list">
-              {outreachGroups.map((group) =>
-                group.length > 1 ? (
-                  <QuestionGroup
-                    key={group[0].detail?.router?.question_id ?? group[0].id}
-                    group={group}
-                    expandedIds={expandedRows}
-                    onToggleExpand={toggleExpandRow}
-                    popoverId={popoverId}
-                    cardProps={cardProps}
-                  />
-                ) : (
-                  <RecommendationCard
-                    key={group[0].id}
-                    rec={group[0]}
-                    isPopoverOpen={popoverId === group[0].id}
-                    {...cardProps}
-                  />
-                )
-              )}
-            </div>
+            <GetMentionedTable recs={thirdPartyRecs} onOpenDetail={openRecommendation} />
           )}
         </>
       ) : (
@@ -464,11 +481,11 @@ function Recommendations() {
               <p className="section-header">Active · {activeRecs.length}</p>
               <div className="rec-list">
                 {activeRecs.map((rec) => (
-                  <RecommendationCard
+                  <RecListItem
                     key={rec.id}
                     rec={rec}
-                    isPopoverOpen={popoverId === rec.id}
-                    {...cardProps}
+                    onOpenDetail={openRecommendation}
+                    onTogglePin={handleTogglePin}
                   />
                 ))}
               </div>
@@ -481,7 +498,7 @@ function Recommendations() {
 
           {proposedRecs.length === 0 ? (
             <p className="state-empty">
-              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question below to generate a recommendation for it."}
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question above to generate a recommendation for it."}
             </p>
           ) : (
             ["high", "medium", "low"].map(
@@ -491,11 +508,11 @@ function Recommendations() {
                     <p className="section-header">{PRIORITY_LABELS[priority]} · {byPriority[priority].length}</p>
                     <div className="rec-list">
                       {byPriority[priority].map((rec) => (
-                        <RecommendationCard
+                        <RecListItem
                           key={rec.id}
                           rec={rec}
-                          isPopoverOpen={popoverId === rec.id}
-                          {...cardProps}
+                          onOpenDetail={openRecommendation}
+                          onTogglePin={handleTogglePin}
                         />
                       ))}
                     </div>
@@ -505,15 +522,6 @@ function Recommendations() {
           )}
         </>
       )}
-
-      <CandidateQuestionPicker
-        candidates={candidates}
-        selected={selected}
-        onToggle={toggleSelected}
-        onGenerate={handleGenerateSelected}
-        generating={generatingSelected}
-        rowResults={rowResults}
-      />
     </div>
   );
 }

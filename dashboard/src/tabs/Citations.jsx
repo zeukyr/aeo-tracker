@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
-import RedditSpotlight from "../components/rec/RedditSpotlight";
 
 const ALL_SCHOOLS = [
   "All",
@@ -268,8 +267,6 @@ function Citations() {
           </div>
         )}
       </div>
-
-      <RedditSpotlight />
 
     </div>
   );

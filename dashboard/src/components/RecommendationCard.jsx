@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { formatDate } from "../lib/format";
-import { cardVariant, channelLabel, urlLabel } from "../lib/recview";
+import { cardVariant, channelLabel, urlLabel, feasibilityOf } from "../lib/recview";
 import InfoTip from "./InfoTip";
 import RecTrail from "./rec/RecTrail";
 import RecCitations from "./rec/RecCitations";
@@ -11,9 +11,6 @@ import { VARIANTS, BADGE_ICONS } from "./rec/variantMeta";
 
 const EFFORT_DOTS = { S: 1, M: 2, L: 3 };
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
-
-const feasibilityOf = (rec) =>
-  rec.detail?.outreach_feasibility ?? rec.detail?.router?.outreach_feasibility;
 
 function addDays(iso, days) {
   const d = new Date(iso);
@@ -243,7 +240,7 @@ function StrategicEvidence({ ev }) {
   );
 }
 
-function VerdictBand({ rec, variant, onOpenDetail }) {
+function VerdictBand({ rec, variant, onOpenDetail, onTogglePin }) {
   const v = VARIANTS[variant];
   const rank = rec.detail?.priority_rank;
   const tier = rec.detail?.evidence_tier;
@@ -301,6 +298,15 @@ function VerdictBand({ rec, variant, onOpenDetail }) {
               {Math.round(rec.confidence * 100)}%
             </span>
           </div>
+        )}
+        {onTogglePin && (
+          <button
+            type="button"
+            className={`btn btn--ghost rc-pin ${rec.is_pinned ? "rc-pin--active" : ""}`}
+            onClick={() => onTogglePin(rec.id, !rec.is_pinned)}
+          >
+            {rec.is_pinned ? "★ Pinned" : "☆ Pin"}
+          </button>
         )}
         {onOpenDetail && (
           <button className="btn btn--ghost" onClick={() => onOpenDetail(rec.id)}>Open →</button>
@@ -464,7 +470,7 @@ function RouterReasoning({ rec, variant, router, sc, expanded, onToggle }) {
 
 // onOpenDetail (optional): shows a permalink button that opens this rec's own
 // detail page (/recommendations/:id). Omit it on the detail page itself.
-export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented, onOpenPrompt, onOpenDetail }) {
+export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpenPopover, onCancelPopover, onConfirmImplemented, onOpenPrompt, onOpenDetail, onTogglePin }) {
   const [showRaw, setShowRaw] = useState(false);
   const [showReasoning, setShowReasoning] = useState(false);
   const variant = cardVariant(rec);
@@ -493,7 +499,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
   if (variant === "inclusion") {
     return (
       <div className={`rc ${VARIANTS[variant].cls}`}>
-        <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} />
+        <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} onTogglePin={onTogglePin} />
         <div className="rc-body">
           <ActionLine text={rec.action} />
           {rec.detail?.opportunity?.lists_competitors?.length > 0 && (
@@ -517,7 +523,7 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
 
   return (
     <div className={`rc ${VARIANTS[variant].cls}`}>
-      <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} />
+      <VerdictBand rec={rec} variant={variant} onOpenDetail={onOpenDetail} onTogglePin={onTogglePin} />
 
       <div className="rc-body">
         {variant === "fix" && <TargetBox url={rec.target} />}

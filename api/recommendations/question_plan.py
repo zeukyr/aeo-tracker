@@ -54,23 +54,42 @@ def get_question_recommendations(question_id):
     return _live_recs_for_question(question_id)
 
 
+def _is_sweep_produced(rec):
+    return ((rec.get("detail") or {}).get("question_plan") or {}).get("source") == "sweep"
+
+
 def get_question_recommendation_status(question_id, cooldown_days=GENERATION_COOLDOWN_DAYS):
     """
-    Per-question analogue of get_generation_status: whether an on-demand rec
-    may be generated for this question, and the live rec that blocks it (so
-    the UI can navigate there instead). Blocked by: an active rec (committed
-    work never gets a duplicate), or a proposed rec younger than the same
-    30-day cooldown the batch uses.
+    Per-question analogue of get_generation_status: whether an on-demand
+    build/fix rec may be generated for this question, and the live rec that
+    blocks it (so the UI can navigate there instead). Blocked by: an active
+    rec (committed work never gets a duplicate), or a proposed rec younger
+    than the same 30-day cooldown the batch uses.
+
+    Sweep-produced rows (reach_out_sweep.py's auto reach-out/inclusion/
+    community recs, tagged detail.question_plan.source="sweep") are excluded
+    from this gating: they land on EVERY losing question regardless of that
+    question's own branch, so a fix/build question would otherwise show
+    falsely blocked_by="cooldown"/"active_rec" purely because an unrelated
+    sweep rec landed on it moments ago - locking out the one thing this
+    button is actually for. get_question_recommendations (the plan-page
+    read) is unaffected - a human still sees the full plan including sweep
+    rows, only the generate-button gate ignores them. Rows without a
+    question_plan.source key (pre-existing data from before this change)
+    are NOT sweep-produced, so they keep gating exactly as before.
     """
     recs = _live_recs_for_question(question_id)
     if not recs:
         return {"recommendation": None, "recommendations": [], "count": 0,
                 "can_generate": True, "next_available_at": None, "blocked_by": None}
     base = {"recommendation": recs[0], "recommendations": recs, "count": len(recs)}
-    if any(r["status"] in ACTIVE_STATUSES for r in recs):
+    gating = [r for r in recs if not _is_sweep_produced(r)]
+    if not gating:
+        return {**base, "can_generate": True, "next_available_at": None, "blocked_by": None}
+    if any(r["status"] in ACTIVE_STATUSES for r in gating):
         return {**base, "can_generate": False,
                 "next_available_at": None, "blocked_by": "active_rec"}
-    newest = max(r["generated_at"] for r in recs)
+    newest = max(r["generated_at"] for r in gating)
     generated_at = datetime.fromisoformat(newest)
     if generated_at.tzinfo is None:
         generated_at = generated_at.replace(tzinfo=timezone.utc)
@@ -83,7 +102,7 @@ def get_question_recommendation_status(question_id, cooldown_days=GENERATION_COO
 
 def save_question_recommendations(recs, question_id):
     """
-    Insert one question's on-demand plan under ONE shared batch_id.
+    Insert one question's on-demand build/fix plan under ONE shared batch_id.
     Supersession is scoped to the question: prior untouched (proposed) recs
     covering the same question are archived - matched by segment OR by
     source_questions containment, the same predicate _live_recs_for_question
@@ -91,6 +110,11 @@ def save_question_recommendations(recs, question_id):
     topic-grained). The rest of the live batch is untouched (unlike
     save_recommendations). No triage rows are written: the batch triage
     queue must keep reflecting the latest full batch.
+
+    Excludes sweep-produced rows (detail.question_plan.source="sweep") from
+    supersession - those are reach_out_sweep.py's territory, regenerated on
+    its own cadence, and this question's build/fix plan sharing the same
+    question_id must not wipe them out.
     """
     qid = str(question_id)
     batch_id = str(uuid.uuid4())
@@ -101,6 +125,7 @@ def save_question_recommendations(recs, question_id):
                 WHERE status = 'proposed'
                   AND (segment->>'question_id' = %s
                        OR (detail->'router'->'source_questions') @> %s)
+                  AND COALESCE(detail->'question_plan'->>'source', 'on_demand') != 'sweep'
             """, (qid, Json([{"question_id": qid}])))
             rec_ids = [_insert_rec(cur, rec, batch_id) for rec in recs]
         conn.commit()

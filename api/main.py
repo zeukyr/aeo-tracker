@@ -32,9 +32,12 @@ from api.queries import (
 from api.recommendations import (
     generate_recommendations,
     save_recommendations,
+    generate_reach_out_sweep,
+    save_reach_out_recommendations,
     get_saved_recommendations,
     get_recommendation,
     update_recommendation_status,
+    set_recommendation_pinned,
     get_generation_status,
     get_question_recommendation_status,
     generate_question_recommendation,
@@ -132,7 +135,14 @@ def topics(
 
 @app.get("/api/recommendations/refresh-signals")
 def refresh_signal_recommendations(days: int = None, force: bool = False):
-    """Refresh the concern + credibility recs (no per-question selection)."""
+    """
+    Refresh the concern + credibility recs (no per-question selection), plus
+    the reach-out sweep (reach-out primary + inclusion opportunities +
+    community fan-out for every current losing question) - both share this
+    one cooldown-gated action; the reach-out sweep is cheap (no LLM call)
+    but still tied to the same cadence as a deliberate, simple choice rather
+    than its own button/schedule.
+    """
     status = get_generation_status()
     if not status["can_generate"] and not force:
         raise HTTPException(status_code=429, detail={
@@ -141,6 +151,8 @@ def refresh_signal_recommendations(days: int = None, force: bool = False):
         })
     recs = generate_recommendations(days)
     result = save_recommendations(recs)
+    reach_out_recs = generate_reach_out_sweep(days)
+    result["reach_out"] = save_reach_out_recommendations(reach_out_recs)
     return result
 
 @app.get("/api/recommendations/candidates")
@@ -185,8 +197,18 @@ def single_recommendation(rec_id: str):
     return rec
 
 @app.patch("/api/recommendations/{rec_id}")
-def patch_recommendation_status(rec_id: str, status: str = Body(...), implemented_at: str = Body(None)):
-    update_recommendation_status(rec_id, status, implemented_at)
+def patch_recommendation_status(
+    rec_id: str,
+    status: str = Body(None),
+    implemented_at: str = Body(None),
+    is_pinned: bool = Body(None),
+):
+    if status is None and is_pinned is None:
+        raise HTTPException(status_code=400, detail="No update provided")
+    if status is not None:
+        update_recommendation_status(rec_id, status, implemented_at)
+    if is_pinned is not None:
+        set_recommendation_pinned(rec_id, is_pinned)
     return {"updated": True}
 
 @app.get("/api/questions/{question_id}/recommendation-status")

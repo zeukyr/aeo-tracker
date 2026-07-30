@@ -178,12 +178,27 @@ def update_recommendation_status(rec_id, status, implemented_at=None):
             logger.warning(f"Baseline recording failed for rec {rec_id}: {e}")
 
 
+def set_recommendation_pinned(rec_id, is_pinned):
+    """Toggle the cross-cutting "Pinned" flag. Orthogonal to status - never
+    touches the lifecycle column or triggers baseline snapshotting."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE recommendations "
+                "SET is_pinned = %s, pinned_at = CASE WHEN %s THEN now() ELSE NULL END "
+                "WHERE id = %s",
+                (is_pinned, is_pinned, rec_id),
+            )
+        conn.commit()
+
+
 _REC_SELECT = """
     SELECT id, generated_at, problem, action, priority, school, evidence, status,
            action_type, target, segment, metric_impact,
            expected_direction, expected_magnitude, effort, confidence,
            implemented_at, measurement_window_days, batch_id, detail,
-           baseline_value, baseline_sample_n, measured_at, outcome
+           baseline_value, baseline_sample_n, measured_at, outcome,
+           is_pinned, pinned_at
     FROM recommendations
 """
 
@@ -214,6 +229,8 @@ def _rec_dict(r):
         "baseline_sample_n": r[21],
         "measured_at": str(r[22]) if r[22] is not None else None,
         "outcome": r[23],
+        "is_pinned": r[24],
+        "pinned_at": str(r[25]) if r[25] is not None else None,
         "work_stream": _work_stream(r[8]),
     }
 

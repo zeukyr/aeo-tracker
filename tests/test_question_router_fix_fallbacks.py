@@ -75,7 +75,7 @@ def test_scorecard_rec_leads_and_inclusion_coexists(wire):
     assert recs[0]["detail"]["router"]["branch"] == "fix"
     assert recs[0]["detail"]["question_plan"]["role"] == "primary"
     assert recs[1]["detail"]["question_plan"] == {
-        "question_id": "q1", "role": "companion", "emitter": "inclusion_opportunity"}
+        "question_id": "q1", "role": "companion", "emitter": "inclusion_opportunity", "source": "on_demand"}
 
 
 def test_low_tier_rec_still_leads_over_inclusions(wire):

@@ -52,6 +52,7 @@ function QuestionRecButton({ questionId, onOpenPlan }) {
   const [status, setStatus] = useState(null);      // recommendation-status payload
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState(null);    // triage / error outcome
+  const [messageIsInfo, setMessageIsInfo] = useState(false);
 
   // State resets between questions by remount - the parent keys this
   // component on questionId - so the effect only fetches.
@@ -75,6 +76,7 @@ function QuestionRecButton({ questionId, onOpenPlan }) {
     }
     setGenerating(true);
     setMessage(null);
+    setMessageIsInfo(false);
     const params = new URLSearchParams();
     if (days) params.append("days", days);
     fetch(`${API_BASE_URL}/api/questions/${questionId}/recommendation?${params}`, { method: "POST" })
@@ -86,11 +88,15 @@ function QuestionRecButton({ questionId, onOpenPlan }) {
           setStatus({ recommendations: recs, can_generate: false });
           onOpenPlan?.();
         } else {
+          // reach_out_auto_covered isn't a failure - the router routed this
+          // question away from build/fix on purpose (see reach_out_sweep.py).
+          setMessageIsInfo(res.triage?.reason === "reach_out_auto_covered");
           setMessage(recTriageMessage(res.triage));
         }
       })
       .catch(err => {
         setGenerating(false);
+        setMessageIsInfo(false);
         setMessage(`Generation failed: ${err.message}`);
       });
   };
@@ -111,7 +117,11 @@ function QuestionRecButton({ questionId, onOpenPlan }) {
           : existingCount === 1 ? "View recommendation"
           : "Generate recommendations"}
       </button>
-      {message && <p className="question-view__rec-message">{message}</p>}
+      {message && (
+        <p className={`question-view__rec-message${messageIsInfo ? " question-view__rec-message--info" : ""}`}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }

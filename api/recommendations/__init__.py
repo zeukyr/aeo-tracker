@@ -14,22 +14,30 @@ from api.recommendations.question_plan import (
     get_question_recommendation_status,
     get_question_recommendations,
 )
+from api.recommendations.reach_out_sweep import (
+    generate_reach_out_sweep,
+    save_reach_out_recommendations,
+)
 from api.recommendations.store import (
     get_generation_status,
     get_recommendation,
     get_saved_recommendations,
     save_recommendations,
+    set_recommendation_pinned,
     update_recommendation_status,
 )
 
 __all__ = [
     "generate_recommendations",
     "generate_question_recommendation",
+    "generate_reach_out_sweep",
     "get_generation_status",
     "get_question_recommendation_status",
     "get_question_recommendations",
     "get_recommendation",
     "get_saved_recommendations",
+    "save_reach_out_recommendations",
     "save_recommendations",
+    "set_recommendation_pinned",
     "update_recommendation_status",
 ]

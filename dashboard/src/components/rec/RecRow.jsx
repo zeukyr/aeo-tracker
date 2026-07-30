@@ -1,21 +1,13 @@
-import { cardVariant, channelLabel, bucketLabel } from "../../lib/recview";
+import { cardVariant, channelLabel, bucketLabel, STATUS_LABELS } from "../../lib/recview";
 import { VARIANTS, BADGE_ICONS } from "./variantMeta";
 
-const STATUS_LABELS = {
-  accepted: "Accepted",
-  in_progress: "In progress",
-  implemented: "Implemented",
-  measuring: "Measuring",
-  validated: "Worked",
-  failed: "No lift",
-  inconclusive: "Inconclusive",
-};
-
-// One channel option inside a QuestionGroup - a single-line summary of what a
-// full RecommendationCard would show. Clicking it expands that full card in
-// place (see QuestionGroup), so this only needs to convey enough to decide
-// whether it's worth opening: which channel, how confident, whether it's gated.
-export default function RecRow({ rec, onToggleExpand }) {
+// A single-line summary of what the full RecommendationCard would show.
+// Clicking it navigates to the rec's own /recommendations/:id detail page
+// (rather than expanding a full card in place) - so the list itself never
+// grows taller the more of them you look at, and this only needs to convey
+// enough to decide whether it's worth opening: which channel, how confident,
+// whether it's gated.
+export default function RecRow({ rec, onOpenDetail, onTogglePin }) {
   const variant = cardVariant(rec);
   const label = channelLabel(rec.target);
   const isReddit = label.startsWith("r/");
@@ -25,7 +17,18 @@ export default function RecRow({ rec, onToggleExpand }) {
   const statusLabel = STATUS_LABELS[rec.status];
 
   return (
-    <button type="button" className="rec-row" onClick={() => onToggleExpand(rec.id)}>
+    <div
+      className="rec-row"
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpenDetail(rec.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpenDetail(rec.id);
+        }
+      }}
+    >
       <span className="rec-row__badge">{BADGE_ICONS[variant] ?? BADGE_ICONS.build}{VARIANTS[variant]?.badge}</span>
       <span className="rec-row__target">
         {label}
@@ -37,7 +40,21 @@ export default function RecRow({ rec, onToggleExpand }) {
         {rec.confidence != null && <span>{Math.round(rec.confidence * 100)}% conf</span>}
         {feas?.feasibility === "gated" && <span className="chip chip--gated">gated</span>}
       </span>
-      <span className="rec-row__chevron">▾</span>
-    </button>
+      {onTogglePin && (
+        <button
+          type="button"
+          className={`rec-row__pin ${rec.is_pinned ? "rec-row__pin--active" : ""}`}
+          aria-label={rec.is_pinned ? "Unpin" : "Pin"}
+          title={rec.is_pinned ? "Remove from Pinned" : "Add to Pinned"}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePin(rec.id, !rec.is_pinned);
+          }}
+        >
+          {rec.is_pinned ? "★" : "☆"}
+        </button>
+      )}
+      <span className="rec-row__chevron">→</span>
+    </div>
   );
 }

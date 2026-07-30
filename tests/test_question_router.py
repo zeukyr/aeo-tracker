@@ -121,7 +121,7 @@ def test_genre_mismatch_routes_build_and_never_runs_scorecard(monkeypatch):
     route = qr.route_question(q)
     assert route["branch"] == "build"
     assert route["reason"] == "ownable_wrong_kind_page"
-    assert route["genre_mismatch"]["winner_genre"] == "informational"
+    assert route["genre_mismatch"]["winner_format"] == "how_to"
 
 
 def test_same_kind_page_routes_fix_and_scorecard_runs(monkeypatch):
@@ -344,7 +344,7 @@ def test_single_question_build_returns_rec_not_triage(monkeypatch):
                               "value": q["question"], "question_id": "20"}
     assert rec["detail"]["router"]["branch"] == "build"
     assert rec["detail"]["question_plan"] == {
-        "question_id": "20", "role": "primary", "emitter": "build"}
+        "question_id": "20", "role": "primary", "emitter": "build", "source": "on_demand"}
 
 
 def test_single_question_triage_comes_back_as_entry(monkeypatch):
@@ -361,6 +361,23 @@ def test_single_question_triage_comes_back_as_entry(monkeypatch):
 def test_single_question_without_mention_responses(monkeypatch):
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: None)
     assert qr.build_question_recommendations(22) == ([], None)
+
+
+def test_reach_out_branch_is_auto_covered_not_manual(monkeypatch):
+    # The manual, cooldown-gated per-question flow no longer fabricates a
+    # reach-out primary (or its companions) - that's reach_out_sweep.py's
+    # job now, run for every losing question on its own cadence.
+    q = question(30, "is dog grooming worth it reddit")
+    winners = [(facts("reddit.com", "community", status="not_fetched",
+                      url=f"https://reddit.com/r/dogs/{i}"), 6) for i in range(3)]
+    wire(monkeypatch, {30: winners})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    recs, triage = qr.build_question_recommendations(30)
+    assert recs == []
+    assert triage["reason"] == "reach_out_auto_covered"
+    assert triage["question_id"] == 30
 
 
 def test_single_question_fix_attaches_router_detail(monkeypatch):

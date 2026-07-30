@@ -27,6 +27,7 @@ import os
 import re
 import json
 import urllib.robotparser
+from collections import Counter
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
@@ -1002,6 +1003,135 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
         "winner_genre":        dominant,
         "winners_with_genre":  genres.count(dominant),
         "winners_classified":  len(genres),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Content FORMAT (how_to / long_form / listicle / landing) - a refinement of
+# genre for the BUILD branch's prose. Two pages can share genre="informational"
+# (a how-to guide and a long-form career explainer) while being different
+# formats to actually build - genre can't see that, format can. Buckets nest
+# inside the existing genre split (how_to/long_form -> informational;
+# listicle/landing -> commercial) so FORMAT_TO_GENRE recovers the exact old
+# genre value - target_genre (which gates GEO-feature applicability in
+# scorecard.py) is unaffected by this refinement.
+#
+# "comparison" and "alternatives" were dropped from the original 6-bucket
+# proposal: a calibration pass over the 27 live losing questions' cited
+# winners never classified a single one into either bucket (this niche's
+# competitive content just doesn't produce them at meaningful volume) - two
+# structurally-empty buckets would only have made the plurality easier to
+# win by default in the remaining four.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FORMAT_TO_GENRE = {
+    "how_to":    "informational",
+    "long_form": "informational",
+    "listicle":  "commercial",
+    "landing":   "commercial",
+}
+
+_HOWTO_URL_HINT = re.compile(r"how[\s-]to", re.I)
+
+
+def _is_howto_signal(facts):
+    f = facts.get("features") or {}
+    return (bool(_HOWTO_TITLE.search(facts.get("title") or ""))
+            or "HowTo" in (facts.get("schema_types") or [])
+            or (f.get("question_headings") or 0) >= 3)
+
+
+def page_format(facts):
+    """
+    how_to | long_form | listicle | landing for a FETCHED page. Roundup/
+    directory fold straight to listicle AHEAD of the genre vote (their genre
+    was already pinned "commercial" by PAGE_TYPE_GENRE for an unrelated
+    reason - buying intent, not format - so reusing page_genre here would
+    wrongly merge them with landing pages). Everything else defers to
+    page_genre and only splits its "informational" verdict into how_to vs
+    long_form using the same how-to signals page_genre already voted with.
+    None when unread or genre itself is ambiguous - never guess.
+    """
+    if facts.get("status") != "ok":
+        return None
+    page_type = facts.get("page_type")
+    if page_type in ("roundup", "directory"):
+        return "listicle"
+    if page_type in ("association", "government"):
+        return "long_form"
+    genre = page_genre(facts)
+    if genre is None:
+        return None
+    if genre == "commercial":
+        return "landing"
+    return "how_to" if _is_howto_signal(facts) else "long_form"
+
+
+def winner_format(facts):
+    """Format of one cited page - mirrors winner_genre's fallback ladder
+    (format-implied page_types first, content signals via page_format for
+    ownership types, URL hints for pages that blocked the fetch) so a 403'd
+    page still votes instead of silently abstaining. An unread competitor
+    page with no format-specific URL hint defaults to landing, same default
+    winner_genre uses (a rival's cited page is overwhelmingly its sales
+    page)."""
+    page_type = facts.get("page_type")
+    url = facts.get("final_url") or facts.get("url") or ""
+    if page_type in ("roundup", "directory"):
+        return "listicle"
+    if page_type in ("association", "government"):
+        return "long_form"
+    if page_type in ("community", "video"):
+        return None
+    fmt = page_format(facts)
+    if fmt:
+        return fmt
+    url_genre = _url_genre(url)
+    if url_genre == "commercial":
+        return "landing"
+    if url_genre == "informational":
+        return "how_to" if _HOWTO_URL_HINT.search(url) else "long_form"
+    if page_type == "competitor":
+        return "landing"
+    return None
+
+
+# Calibrated against the router's real losing-question winner sets (27
+# questions, CANDIDATE_POOL=20 winners each): margin, not floor, turned out to
+# be the binding constraint - across floor 2-4 the pass rate barely moved once
+# margin was fixed at 2, so the floor mainly exists to keep a lone winner or a
+# 2-0 split from counting as a plurality, not to set the real bar.
+_FORMAT_FLOOR = 3
+_FORMAT_MARGIN = 2
+
+
+def format_gap(qc_facts, winner_facts):
+    """
+    The "have a page, wrong FORMAT" detector - format_gap's plurality-based
+    replacement for genre_gap's fixed 60%-share bar. Splitting genre into 4
+    format buckets dilutes any fixed-percentage dominance bar (more buckets
+    to split votes across, so a real signal can end up under 60% just from
+    fragmentation) - the guard here is a raw PLURALITY instead: the leading
+    format must clear _FORMAT_FLOOR classified winners AND beat the
+    runner-up by _FORMAT_MARGIN. Returns None (insufficient signal) rather
+    than asserting a mismatch on a near-tied vote - ambiguity never asserts.
+    """
+    qc_format = page_format(qc_facts)
+    if not qc_format:
+        return None
+    formats = [f for f in (winner_format(wf) for wf in winner_facts) if f]
+    if len(formats) < _FORMAT_FLOOR:
+        return None
+    ranked = Counter(formats).most_common()
+    dominant, top_count = ranked[0]
+    second_count = ranked[1][1] if len(ranked) > 1 else 0
+    if top_count < _FORMAT_FLOOR or (top_count - second_count) < _FORMAT_MARGIN or dominant == qc_format:
+        return None
+    return {
+        "qc_format":            qc_format,
+        "winner_format":        dominant,
+        "winners_with_format":  top_count,
+        "winners_classified":   len(formats),
     }
 
 

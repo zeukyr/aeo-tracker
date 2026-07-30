@@ -9,6 +9,7 @@ export const REC_TRIAGE_MESSAGES = {
   fragmented_field: "No single source type dominates the cited winners — needs a human call.",
   feasibility_unknown: "The winning sources can't be owned and no outreach channel was found.",
   reputation_no_channel: "Reputation question with nothing to pitch.",
+  reach_out_auto_covered: "AI engines answer this from sources QC can't own directly — outreach opportunities for this question are found automatically. Check the Outreach & Earn tab.",
   // Legacy slug — only reachable when the scorecard itself threw; the three
   // precise reasons below replaced it for normal empty results.
   fix_no_feature_gaps: "The scorecard comparison could not produce a recommendation for QC's page.",

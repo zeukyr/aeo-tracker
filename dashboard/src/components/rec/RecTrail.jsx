@@ -262,8 +262,8 @@ function buildSteps(rec) {
       info: "coverage_check",
       fact: (
         <>
-          QC's page is <b>{gm.qc_genre}</b>; <b>{gm.winners_with_genre}/{gm.winners_classified}</b>{" "}
-          classifiable winners are <b>{gm.winner_genre}</b> · <Check pass={false}>genre mismatch</Check>
+          QC's page is <b>{gm.qc_format}</b>; <b>{gm.winners_with_format}/{gm.winners_classified}</b>{" "}
+          classifiable winners are <b>{gm.winner_format}</b> · <Check pass={false}>format mismatch</Check>
         </>
       ),
     });

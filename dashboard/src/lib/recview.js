@@ -63,3 +63,19 @@ const BUCKET_COLOR = {
 export const bucketColor = (b) => BUCKET_COLOR[b] ?? "var(--bucket-abstain)";
 export const bucketLabel = (b) =>
   b === "certifying_body" ? "certifying" : b === "other" ? "abstained" : (b ?? "unknown");
+
+// A rec's own outreach_feasibility (reach-branch primary) or its router's
+// (inclusion/fan-out companions, which share the parent route's feasibility
+// read) - whichever is present.
+export const feasibilityOf = (rec) =>
+  rec.detail?.outreach_feasibility ?? rec.detail?.router?.outreach_feasibility;
+
+export const STATUS_LABELS = {
+  accepted: "Accepted",
+  in_progress: "In progress",
+  implemented: "Implemented",
+  measuring: "Measuring",
+  validated: "Worked",
+  failed: "No lift",
+  inconclusive: "Inconclusive",
+};
