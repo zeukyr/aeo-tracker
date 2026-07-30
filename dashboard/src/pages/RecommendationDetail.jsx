@@ -43,6 +43,7 @@ export default function RecommendationDetail() {
   const handleAccept = (id) => patchRecommendation(id, { status: "accepted" });
   const handleConfirmImplemented = (id, dateStr) =>
     patchRecommendation(id, { status: "implemented", implemented_at: dateStr });
+  const handleTogglePin = (id, next) => patchRecommendation(id, { is_pinned: next });
 
   return (
     <div className="rec-page">
@@ -80,6 +81,7 @@ export default function RecommendationDetail() {
             onCancelPopover={() => setPopoverOpen(false)}
             onConfirmImplemented={handleConfirmImplemented}
             onOpenPrompt={(promptId) => navigate(`/prompts/${promptId}`)}
+            onTogglePin={handleTogglePin}
           />
         </div>
       ) : (

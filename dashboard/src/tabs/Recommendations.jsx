@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
-import RecommendationCard from "../components/RecommendationCard";
+import RecListItem from "../components/rec/RecListItem";
+import GetMentionedTable from "../components/rec/GetMentionedTable";
+import RedditSpotlight from "../components/rec/RedditSpotlight";
+import InfoTip from "../components/InfoTip";
 import { formatDate } from "../lib/format";
+import { recTriageMessage } from "../lib/recTriage";
 
 // Statuses that count as "committed work" - immune to being superseded by a
 // new batch, and shown in the Active section regardless of which batch they
@@ -31,9 +35,9 @@ const WORK_STREAMS = [
   },
   {
     key: "outreach",
-    label: "Outreach & Earn",
+    label: "Get Mentioned",
     question: "Where does AI look that we can't own?",
-    note: "For PR / partnerships / community — earn presence on the third-party sources engines cite. Each card shows whether a channel exists (open / requires approval).",
+    note: "For PR / partnerships — earn a mention on the third-party sources engines cite (directories, roundups, review sites, certifying bodies). Each card shows whether a channel exists (open / requires approval).",
   },
 ];
 
@@ -57,7 +61,7 @@ function matchesSchool(rec, school) {
 
 const PRIORITY_LABELS = { high: "High priority", medium: "Medium priority", low: "Low priority" };
 
-function GenerationHeader({ genStatus, generating, onGenerate }) {
+function GenerationHeader({ genStatus, refreshing, onRefreshSignals }) {
   const lastDate = genStatus?.last_generated_at ? formatDate(genStatus.last_generated_at) : null;
   const nextDate = genStatus?.next_available_at ? formatDate(genStatus.next_available_at) : null;
   const canGenerate = genStatus?.can_generate ?? true;
@@ -68,17 +72,21 @@ function GenerationHeader({ genStatus, generating, onGenerate }) {
         <p className="panel-title">Recommendations</p>
         <p className="panel-subtitle">AI-visibility strategy generated from your tracked data</p>
         <p className="rec-header__meta">
-          {lastDate ? `Last updated ${lastDate}` : "No recommendations generated yet"}
-          {!canGenerate && nextDate && ` · next refresh available ${nextDate}`}
+          Pick questions in the panel below to generate recommendations for them.
+          {lastDate && ` · signals last refreshed ${lastDate}`}
         </p>
       </div>
       <button
-        className="btn btn--primary"
-        onClick={onGenerate}
-        disabled={generating || !canGenerate}
-        title={!canGenerate ? `Available again ${nextDate}` : undefined}
+        className="btn btn--ghost"
+        onClick={onRefreshSignals}
+        disabled={refreshing || !canGenerate}
+        title={
+          !canGenerate
+            ? `Available again ${nextDate}`
+            : "Refreshes brand concern, credibility, and outreach recommendations — not tied to a specific question"
+        }
       >
-        {generating ? "Generating…" : canGenerate ? "↻ Generate new recommendations" : `Locked until ${nextDate}`}
+        {refreshing ? "Refreshing…" : canGenerate ? "↻ Refresh signal recommendations" : `Locked until ${nextDate}`}
       </button>
     </div>
   );
@@ -87,7 +95,10 @@ function GenerationHeader({ genStatus, generating, onGenerate }) {
 function HealthColumn({ variant, title, items }) {
   return (
     <div className={`card health-col--${variant}`}>
-      <p className="panel-title">{title}</p>
+      <p className="panel-title">
+        {title}
+        <InfoTip id="health_summary" />
+      </p>
       <ul className="health-list">
         {items.length === 0 && <li className="state-empty">Not enough data yet.</li>}
         {items.map((item, i) => (
@@ -101,53 +112,69 @@ function HealthColumn({ variant, title, items }) {
   );
 }
 
-// Human-readable framing per triage reason (question-router plan §5.9).
-const TRIAGE_REASONS = {
-  fragmented_field: "No single source type wins this query",
-  insufficient_voters: "Too few citations to call it",
-  no_cited_winners: "QC loses but nothing external is cited",
-  feasibility_unknown: "Winners can't be owned; no channel found",
-  reputation_no_channel: "Reputation question with nothing to pitch",
-};
+// The live, weakest-first list of losing questions (question-router plan
+// §9.1: qc_share <= 15%). A human checks the ones worth generating a
+// recommendation for and fires them one at a time against the same on-demand
+// endpoint QuestionDetail.jsx uses - no auto-pick-the-weakest-question step.
+function CandidateQuestionPicker({ candidates, selected, onToggle, onGenerate, generating, rowResults }) {
+  const [open, setOpen] = useState(true);
+  if (!candidates.length) return null;
+  const selectedCount = selected.size;
 
-// The losing questions the router could not auto-action - ranked by how much
-// is at stake (rank_score = citation volume x how badly QC is losing), so the
-// strongest own-the-field candidates surface first. Collapsed by default;
-// lives OUTSIDE the three action tabs because these rows need a human
-// decision, not a team's backlog.
-function TriagePanel({ items }) {
-  const [open, setOpen] = useState(false);
-  if (!items.length) return null;
   return (
-    <section className="triage-panel">
-      <button className="triage-panel__toggle" onClick={() => setOpen(!open)}>
-        <span>{open ? "▾" : "▸"} Needs triage — {items.length} losing question{items.length === 1 ? "" : "s"} the router couldn't auto-action</span>
-      </button>
+    <section className="candidate-panel">
+      <div className="candidate-panel__head">
+        <button className="candidate-panel__toggle" onClick={() => setOpen(!open)}>
+          <span>{open ? "▾" : "▸"} Select questions to generate recommendations for — {candidates.length} losing question{candidates.length === 1 ? "" : "s"}</span>
+        </button>
+        <InfoTip id="losing_question" dir="up" align="right" />
+      </div>
       {open && (
-        <div className="triage-panel__list">
-          {items.map((t, i) => (
-            <div className="triage-row" key={t.question_id ?? i}>
-              <span className="triage-row__rank">#{i + 1}</span>
-              <div className="triage-row__body">
-                <p className="triage-row__question">{t.question}</p>
-                <p className="triage-row__meta">
-                  {TRIAGE_REASONS[t.reason] ?? t.reason}
-                  {t.topic ? ` · ${t.topic}` : ""}
-                  {t.n_citations != null ? ` · ${t.n_citations} citations` : ""}
-                  {t.qc_share != null ? ` · QC cited ${Math.round(t.qc_share * 100)}%` : ""}
-                </p>
-              </div>
-              <div className="triage-row__chips">
-                <span className="chip">{t.reason}</span>
-                {t.build_candidate && (
-                  <span className="chip chip--metric" title="Buildable topic — QC could plausibly own this query with one strong page. Needs a human green-light.">
-                    build candidate
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="candidate-panel__list">
+            {candidates.map((c, i) => {
+              const result = rowResults[c.question_id];
+              const busy = generating && result?.status === "generating";
+              return (
+                <label className="candidate-row" key={c.question_id ?? i}>
+                  <input
+                    type="checkbox"
+                    checked={selected.has(c.question_id)}
+                    disabled={generating}
+                    onChange={() => onToggle(c.question_id)}
+                  />
+                  <span className="candidate-row__rank">#{i + 1}</span>
+                  <div className="candidate-row__body">
+                    <p className="candidate-row__question">{c.question}</p>
+                    <p className="candidate-row__meta">
+                      {c.topic ? `${c.topic} · ` : ""}
+                      QC cited {Math.round(c.qc_share * 100)}% · {c.n_citations} citations
+                    </p>
+                    {result && (
+                      <p className={`candidate-row__result candidate-row__result--${result.status}`}>
+                        {busy ? "Generating…" : result.message}
+                      </p>
+                    )}
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+          <div className="candidate-panel__actions">
+            <span className="candidate-panel__count">{selectedCount} selected</span>
+            <button
+              className="btn btn--primary"
+              onClick={onGenerate}
+              disabled={selectedCount === 0 || generating}
+            >
+              {generating
+                ? "Generating…"
+                : selectedCount > 0
+                  ? `Generate recommendations for ${selectedCount} selected`
+                  : "Select questions to generate"}
+            </button>
+          </div>
+        </>
       )}
     </section>
   );
@@ -160,33 +187,46 @@ function Recommendations() {
   const [genStatus, setGenStatus] = useState(null);
   const [health, setHealth] = useState(null);
   const [error, setError] = useState(null);
-  const [generating, setGenerating] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [stream, setStream] = useState("strategic");
-  const [popoverId, setPopoverId] = useState(null);
-  const [triage, setTriage] = useState([]);
+  const [candidates, setCandidates] = useState([]);
+  const [selected, setSelected] = useState(() => new Set());
+  const [generatingSelected, setGeneratingSelected] = useState(false);
+  const [rowResults, setRowResults] = useState({});
 
   const loading = recommendations === null && error === null;
 
-  const openPrompt = (promptId) => navigate(`/prompts/${promptId}`);
   const openRecommendation = (recId) => navigate(`/recommendations/${recId}`);
 
   const loadRecommendations = () => {
     Promise.all([
       fetch(`${API_BASE_URL}/api/recommendations`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/recommendations/generation-status`).then((r) => r.json()),
-      fetch(`${API_BASE_URL}/api/recommendations/triage`).then((r) => r.json()),
     ])
-      .then(([recs, gen, tri]) => {
+      .then(([recs, gen]) => {
         setRecommendations(recs);
         setGenStatus(gen);
-        setTriage(Array.isArray(tri) ? tri : []);
       })
+      .catch((err) => setError(err.message));
+  };
+
+  const loadCandidates = () => {
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+
+    fetch(`${API_BASE_URL}/api/recommendations/candidates?${params}`)
+      .then((r) => r.json())
+      .then((data) => setCandidates(Array.isArray(data) ? data : []))
       .catch((err) => setError(err.message));
   };
 
   useEffect(() => {
     loadRecommendations();
   }, []);
+
+  useEffect(() => {
+    loadCandidates();
+  }, [days]);
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -199,54 +239,132 @@ function Recommendations() {
       .catch((err) => setError(err.message));
   }, [days, school]);
 
-  const handleGenerate = () => {
-    setGenerating(true);
+  const handleRefreshSignals = () => {
+    setRefreshing(true);
     const params = new URLSearchParams();
     if (days) params.append("days", days);
 
-    fetch(`${API_BASE_URL}/api/generate-recommendations?${params}`)
+    fetch(`${API_BASE_URL}/api/recommendations/refresh-signals?${params}`)
       .then((r) => {
-        if (!r.ok) return r.json().then((body) => { throw new Error(body?.detail?.message || "Generation failed"); });
+        if (!r.ok) return r.json().then((body) => { throw new Error(body?.detail?.message || "Refresh failed"); });
         return r.json();
       })
       .then(() => {
         loadRecommendations();
-        setGenerating(false);
+        setRefreshing(false);
       })
       .catch((err) => {
         setError(err.message);
-        setGenerating(false);
+        setRefreshing(false);
       });
   };
 
-  const patchRecommendation = (id, body) => {
-    setPopoverId(null);
-    setRecommendations((prev) => prev.map((r) => (r.id === id ? { ...r, ...body } : r)));
+  const toggleSelected = (questionId) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(questionId)) next.delete(questionId);
+      else next.add(questionId);
+      return next;
+    });
+  };
+
+  const handleGenerateSelected = () => {
+    const ids = Array.from(selected);
+    if (!ids.length) return;
+    setGeneratingSelected(true);
+    setRowResults((prev) => {
+      const next = { ...prev };
+      ids.forEach((id) => { next[id] = { status: "generating" }; });
+      return next;
+    });
+
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+
+    Promise.allSettled(
+      ids.map((id) =>
+        fetch(`${API_BASE_URL}/api/questions/${id}/recommendation?${params}`, { method: "POST" })
+          .then((r) => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
+      )
+    ).then((settled) => {
+      setRowResults((prev) => {
+        const next = { ...prev };
+        settled.forEach((outcome, i) => {
+          const id = ids[i];
+          if (outcome.status === "rejected") {
+            next[id] = { status: "error", message: outcome.reason?.message || "Generation failed" };
+            return;
+          }
+          const res = outcome.value;
+          const recs = res.recommendations ?? (res.recommendation ? [res.recommendation] : []);
+          if (res.generated) {
+            next[id] = { status: "success", message: `Generated ${recs.length} recommendation${recs.length === 1 ? "" : "s"}` };
+          } else if (recs.length > 0) {
+            next[id] = {
+              status: "blocked",
+              message: res.blocked_by === "cooldown"
+                ? `Already has a plan — next refresh available ${formatDate(res.next_available_at)}`
+                : "Already has an active recommendation in progress",
+            };
+          } else {
+            // reach_out_auto_covered isn't a failure - the router routed this
+            // question to reach-out, which the auto sweep now covers instead
+            // of this manual build/fix flow (see reach_out_sweep.py).
+            const covered = res.triage?.reason === "reach_out_auto_covered";
+            next[id] = { status: covered ? "reach_out_covered" : "triage", message: recTriageMessage(res.triage) };
+          }
+        });
+        return next;
+      });
+      setGeneratingSelected(false);
+      setSelected(new Set());
+      loadRecommendations();
+      loadCandidates();
+    });
+  };
+
+  // Accept / mark-implemented live only on the full card now (reached via
+  // onOpenDetail below), which is its own page with its own local state
+  // (RecommendationDetail.jsx) - pin is the only mutation this list view
+  // itself still needs, for the star on each compact row.
+  const handleTogglePin = (id, next) => {
+    setRecommendations((prev) => prev.map((r) => (r.id === id ? { ...r, is_pinned: next } : r)));
     fetch(`${API_BASE_URL}/api/recommendations/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ is_pinned: next }),
     })
       .then(() => loadRecommendations())
       .catch((err) => console.error("Failed to update recommendation:", err));
   };
 
-  const handleAccept = (id) => patchRecommendation(id, { status: "accepted" });
-  const handleConfirmImplemented = (id, dateStr) =>
-    patchRecommendation(id, { status: "implemented", implemented_at: dateStr });
-
   if (error) return <p className="state-msg state-msg--error">Error: {error}</p>;
   if (loading) return <p className="state-msg">Loading...</p>;
+
+  // Outreach & Earn splits into two plays (Reddit is comprehensively covered
+  // by RedditSpotlight, complete with its own dead/archived-thread tracking -
+  // a rec card here would just be a weaker duplicate of that), so
+  // reddit-targeted recs are excluded from the "get mentioned in third
+  // parties" card list (and its tab count) entirely rather than shown twice
+  // in different forms.
+  const isRedditTarget = (rec) => (rec.target || "").includes("reddit.com");
 
   const schoolFiltered = recommendations.filter((r) => matchesSchool(r, school));
   const streamCounts = Object.fromEntries(
     WORK_STREAMS.map((s) => [
       s.key,
       schoolFiltered.filter(
-        (r) => streamOf(r) === s.key && (r.status === "proposed" || ACTIVE_STATUSES.includes(r.status))
+        (r) => streamOf(r) === s.key
+          && (r.status === "proposed" || ACTIVE_STATUSES.includes(r.status))
+          && (s.key !== "outreach" || !isRedditTarget(r))
       ).length,
     ])
   );
+  const pinnedCount = schoolFiltered.filter((r) => r.is_pinned).length;
+  const pinnedRecs = schoolFiltered
+    .filter((r) => r.is_pinned)
+    .sort((a, b) => new Date(b.pinned_at ?? 0) - new Date(a.pinned_at ?? 0));
+
   const streamFiltered = schoolFiltered.filter((r) => streamOf(r) === stream);
   const activeRecs = streamFiltered.filter((r) => ACTIVE_STATUSES.includes(r.status));
   const proposedRecs = streamFiltered.filter((r) => r.status === "proposed");
@@ -254,18 +372,28 @@ function Recommendations() {
   const byPriority = { high: [], medium: [], low: [] };
   proposedRecs.forEach((r) => (byPriority[r.priority] ?? byPriority.low).push(r));
 
-  const cardProps = {
-    onAccept: handleAccept,
-    onOpenPopover: setPopoverId,
-    onCancelPopover: () => setPopoverId(null),
-    onConfirmImplemented: handleConfirmImplemented,
-    onOpenPrompt: openPrompt,
-    onOpenDetail: openRecommendation,
-  };
+  // Flat table (GetMentionedTable) instead of per-question card groups - see
+  // its own header comment for why. Active + proposed both feed it; the
+  // table's own priority column/sort replaces the old section boundary.
+  const thirdPartyRecs = stream === "outreach" ? streamFiltered.filter((r) => !isRedditTarget(r)) : [];
 
   return (
     <div className="rec-page">
-      <GenerationHeader genStatus={genStatus} generating={generating} onGenerate={handleGenerate} />
+      <GenerationHeader genStatus={genStatus} refreshing={refreshing} onRefreshSignals={handleRefreshSignals} />
+
+      {/* Page-level generation action, same footing as the refresh button
+          above - lives here (not under any one tab) because it always
+          produces a build/fix rec regardless of which tab happens to be
+          showing when you use it; sitting below tab content used to imply
+          it was that tab's own action. */}
+      <CandidateQuestionPicker
+        candidates={candidates}
+        selected={selected}
+        onToggle={toggleSelected}
+        onGenerate={handleGenerateSelected}
+        generating={generatingSelected}
+        rowResults={rowResults}
+      />
 
       <div className="health-grid">
         <HealthColumn variant="good" title="What's going well" items={health?.going_well ?? []} />
@@ -286,55 +414,114 @@ function Recommendations() {
             <span className="rec-tab__count">{streamCounts[s.key]}</span>
           </button>
         ))}
+        <button
+          role="tab"
+          aria-selected={stream === "reddit"}
+          className={`rec-tab ${stream === "reddit" ? "rec-tab--active" : ""}`}
+          onClick={() => setStream("reddit")}
+        >
+          Reddit
+          <span className="rec-tab__question">Where does AI go on Reddit for QC's topics?</span>
+        </button>
+        <button
+          role="tab"
+          aria-selected={stream === "pinned"}
+          className={`rec-tab rec-tab--pinned ${stream === "pinned" ? "rec-tab--active" : ""}`}
+          onClick={() => setStream("pinned")}
+        >
+          ★ Pinned
+          <span className="rec-tab__count">{pinnedCount}</span>
+        </button>
       </div>
-      <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
+      {stream !== "pinned" && stream !== "reddit" && (
+        <p className="rec-stream-note">{WORK_STREAMS.find((s) => s.key === stream).note}</p>
+      )}
 
-      {activeRecs.length > 0 && (
-        <section>
-          <p className="section-header">Active · {activeRecs.length}</p>
-          <div className="rec-list">
-            {activeRecs.map((rec) => (
-              <RecommendationCard
-                key={rec.id}
-                rec={rec}
-                isPopoverOpen={popoverId === rec.id}
-                {...cardProps}
-              />
-            ))}
+      {stream === "reddit" ? (
+        <RedditSpotlight />
+      ) : stream === "pinned" ? (
+        <>
+          <div className="rec-filter-bar">
+            <p className="panel-title">Pinned</p>
           </div>
-        </section>
-      )}
-
-      <div className="rec-filter-bar">
-        <p className="panel-title">Prioritized recommendations</p>
-      </div>
-
-      {proposedRecs.length === 0 ? (
-        <p className="state-empty">
-          No open suggestions in this work-stream. {recommendations.length === 0 && 'Click "Generate new recommendations" to analyze the current data.'}
-        </p>
+          {pinnedRecs.length === 0 ? (
+            <p className="state-empty">
+              Nothing pinned yet — use the star on any recommendation to add it here.
+            </p>
+          ) : (
+            <div className="rec-list">
+              {pinnedRecs.map((rec) => (
+                <RecListItem
+                  key={rec.id}
+                  rec={rec}
+                  onOpenDetail={openRecommendation}
+                  onTogglePin={handleTogglePin}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      ) : stream === "outreach" ? (
+        <>
+          <div className="rec-filter-bar">
+            <p className="panel-title">Prioritized recommendations</p>
+          </div>
+          {thirdPartyRecs.length === 0 ? (
+            <p className="state-empty">
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question above to generate a recommendation for it."}
+            </p>
+          ) : (
+            <GetMentionedTable recs={thirdPartyRecs} onOpenDetail={openRecommendation} />
+          )}
+        </>
       ) : (
-        ["high", "medium", "low"].map(
-          (priority) =>
-            byPriority[priority].length > 0 && (
-              <section key={priority}>
-                <p className="section-header">{PRIORITY_LABELS[priority]} · {byPriority[priority].length}</p>
-                <div className="rec-list">
-                  {byPriority[priority].map((rec) => (
-                    <RecommendationCard
-                      key={rec.id}
-                      rec={rec}
-                      isPopoverOpen={popoverId === rec.id}
-                      {...cardProps}
-                    />
-                  ))}
-                </div>
-              </section>
-            )
-        )
-      )}
+        <>
+          {activeRecs.length > 0 && (
+            <section>
+              <p className="section-header">Active · {activeRecs.length}</p>
+              <div className="rec-list">
+                {activeRecs.map((rec) => (
+                  <RecListItem
+                    key={rec.id}
+                    rec={rec}
+                    onOpenDetail={openRecommendation}
+                    onTogglePin={handleTogglePin}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
 
-      <TriagePanel items={triage} />
+          <div className="rec-filter-bar">
+            <p className="panel-title">Prioritized recommendations</p>
+          </div>
+
+          {proposedRecs.length === 0 ? (
+            <p className="state-empty">
+              No open suggestions in this work-stream. {recommendations.length === 0 && "Select a question above to generate a recommendation for it."}
+            </p>
+          ) : (
+            ["high", "medium", "low"].map(
+              (priority) =>
+                byPriority[priority].length > 0 && (
+                  <section key={priority}>
+                    <p className="section-header">{PRIORITY_LABELS[priority]} · {byPriority[priority].length}</p>
+                    <div className="rec-list">
+                      {byPriority[priority].map((rec) => (
+                        <RecListItem
+                          key={rec.id}
+                          rec={rec}
+                          onOpenDetail={openRecommendation}
+                          onTogglePin={handleTogglePin}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                )
+            )
+          )}
+        </>
+      )}
     </div>
   );
 }

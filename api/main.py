@@ -24,18 +24,21 @@ from api.queries import (
     get_prompt_detail,
     get_prompt_responses,
     get_health_summary,
+    get_reddit_targets,
+    set_reddit_thread_status,
+    get_losing_questions,
 )
 
 from api.recommendations import (
     generate_recommendations,
     save_recommendations,
+    generate_reach_out_sweep,
+    save_reach_out_recommendations,
     get_saved_recommendations,
     get_recommendation,
-    get_triage,
     update_recommendation_status,
+    set_recommendation_pinned,
     get_generation_status,
-)
-from api.queries.recommendations_synthesis import (
     get_question_recommendation_status,
     generate_question_recommendation,
     get_question_recommendations,
@@ -130,37 +133,32 @@ def topics(
 ):
     return get_topics(days, engine, question_type, school, qc_mentioned, sentiment)
 
-@app.get("/api/competitor-wins")
-def competitor_wins(days: int = None):
-    return get_competitor_wins(days)
-
-@app.get("/api/qc-buried-positions")
-def qc_buried_positions(days: int = None):
-    return get_qc_buried_positions(days)
-
-@app.get("/api/citation-gaps")
-def citation_gaps(days: int = None):
-    return get_citation_gaps(days)
-
-@app.get("/api/recurring-concerns")
-def recurring_concerns(days: int = None):
-    return get_recurring_concerns(days)
-
-@app.get("/api/generate-recommendations")
-def trigger_recommendations(days: int = None, force: bool = False):
+@app.get("/api/recommendations/refresh-signals")
+def refresh_signal_recommendations(days: int = None, force: bool = False):
+    """
+    Refresh the concern + credibility recs (no per-question selection), plus
+    the reach-out sweep (reach-out primary + inclusion opportunities +
+    community fan-out for every current losing question) - both share this
+    one cooldown-gated action; the reach-out sweep is cheap (no LLM call)
+    but still tied to the same cadence as a deliberate, simple choice rather
+    than its own button/schedule.
+    """
     status = get_generation_status()
     if not status["can_generate"] and not force:
         raise HTTPException(status_code=429, detail={
             "message": "Recommendations were generated recently; cooldown still active.",
             **status,
         })
-    recs, triage = generate_recommendations(days)
-    result = save_recommendations(recs, triage)
+    recs = generate_recommendations(days)
+    result = save_recommendations(recs)
+    reach_out_recs = generate_reach_out_sweep(days)
+    result["reach_out"] = save_reach_out_recommendations(reach_out_recs)
     return result
 
-@app.get("/api/recommendations/triage")
-def list_triage():
-    return get_triage()
+@app.get("/api/recommendations/candidates")
+def recommendation_candidates(days: int = None):
+    """Live, weakest-first list of losing questions for the question picker."""
+    return get_losing_questions(days)
 
 @app.get("/api/recommendations/generation-status")
 def recommendations_generation_status():
@@ -169,6 +167,23 @@ def recommendations_generation_status():
 @app.get("/api/recommendations/health-summary")
 def recommendations_health_summary(days: int = None, school: str = None):
     return get_health_summary(days, school)
+
+@app.get("/api/recommendations/reddit-targets")
+def recommendations_reddit_targets(days: int = None, school: str = None):
+    return get_reddit_targets(days, school)
+
+@app.put("/api/recommendations/reddit-targets/{post_id}/status")
+def put_reddit_thread_status(
+    post_id: str,
+    url: str = Body(...),
+    subreddit: str = Body(None),
+    status: str = Body(...),
+    reason: str = Body(None),
+):
+    if status not in ("dead", "open"):
+        raise HTTPException(status_code=400, detail="status must be 'dead' or 'open'")
+    set_reddit_thread_status(post_id, url, subreddit, status, reason)
+    return {"updated": True}
 
 @app.get("/api/recommendations")
 def list_recommendations(include_superseded: bool = False):
@@ -182,8 +197,18 @@ def single_recommendation(rec_id: str):
     return rec
 
 @app.patch("/api/recommendations/{rec_id}")
-def patch_recommendation_status(rec_id: str, status: str = Body(...), implemented_at: str = Body(None)):
-    update_recommendation_status(rec_id, status, implemented_at)
+def patch_recommendation_status(
+    rec_id: str,
+    status: str = Body(None),
+    implemented_at: str = Body(None),
+    is_pinned: bool = Body(None),
+):
+    if status is None and is_pinned is None:
+        raise HTTPException(status_code=400, detail="No update provided")
+    if status is not None:
+        update_recommendation_status(rec_id, status, implemented_at)
+    if is_pinned is not None:
+        set_recommendation_pinned(rec_id, is_pinned)
     return {"updated": True}
 
 @app.get("/api/questions/{question_id}/recommendation-status")

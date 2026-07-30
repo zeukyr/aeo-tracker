@@ -49,6 +49,10 @@ from src.parsing.urls import normalize_url
 from api.db import get_connection, _date_filter
 from api.queries.page_facts import get_pages_facts, QC_DOMAIN_TOKENS, school_for_url
 from api.queries.signal_taxonomy import classify_concern, load_taxonomy
+from api.queries.rec_shaping import (
+    volume_confidence, confidence_basis_note, format_spec_sentence, checkpoint_note,
+    dominant_channel, channel_for_bucket,
+)
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -56,6 +60,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 _INDEX_DOMAINS = ("qcpetstudies.com", "qceventplanning.com", "qccareerschool.com")
 
 _MAX_REBUTTAL_CANDIDATES = 4   # semantic-confirm LLM calls per concern type
+_MIN_COUNT = 3           # confidence gate for missing/invisible states
+_MIN_FACTUAL_COUNT = 5   # confidence gate for the factual/reframe state
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -131,7 +137,7 @@ def concern_severity(days=None):
             continue
         entry = out.setdefault(ctype, {
             "count": 0, "not_positive": 0, "schools": {}, "examples": [],
-            "question_ids": set(), "cited_urls": set(),
+            "question_ids": set(), "cited_urls": {},
         })
         entry["count"] += 1
         if sentiment != "positive":
@@ -141,7 +147,9 @@ def concern_severity(days=None):
         if len(entry["examples"]) < 3 and concern not in entry["examples"]:
             entry["examples"].append(concern)
         entry["question_ids"].add(str(question_id))
-        entry["cited_urls"].update(normalize_url(u) for u in citations or [])
+        for u in citations or []:
+            nu = normalize_url(u)
+            entry["cited_urls"][nu] = entry["cited_urls"].get(nu, 0) + 1
 
     for entry in out.values():
         entry["share_not_positive"] = round(entry["not_positive"] / entry["count"], 2)
@@ -225,22 +233,27 @@ def analyze_concern(ctype, severity_entry, index):
         "examples": severity_entry["examples"],
         "schools": severity_entry["schools"],
         "reframe": spec.get("reframe"),
+        "page_outline": spec.get("page_outline"),
+        "as_question": spec.get("as_question"),
         "rebuttals": [],
     }
     if not spec["addressable"]:
         analysis["state"] = "factual"
         return analysis
 
+    analysis["cited_urls"] = severity_entry["cited_urls"]
+
     probe = spec.get("probe")
-    if probe:
-        for facts in _rebuttal_candidates(probe, index):
-            quote = _confirm_rebuttal(probe, facts)
-            if quote:
-                analysis["rebuttals"].append({
-                    "url": facts.get("final_url") or facts["url"],
-                    "title": facts.get("title"),
-                    "quote": quote[:300],
-                })
+    candidates = _rebuttal_candidates(probe, index) if probe else []
+    for facts in candidates:
+        quote = _confirm_rebuttal(probe, facts)
+        if quote:
+            analysis["rebuttals"].append({
+                "url": facts.get("final_url") or facts["url"],
+                "title": facts.get("title"),
+                "quote": quote[:300],
+            })
+    analysis["candidates_checked"] = [c.get("final_url") or c["url"] for c in candidates]
 
     if not analysis["rebuttals"]:
         analysis["state"] = "missing"
@@ -268,9 +281,17 @@ def concern_to_recommendation(analysis):
     """
     n = analysis["count"]
     label = analysis["label"].lower()
+    # format_spec_sentence needs a natural page heading, not the internal
+    # objection label ("not formally accredited / recognized" reads as a
+    # complaint, not a title) - as_question is the taxonomy's customer-phrased
+    # form; fall back to the label when a type doesn't have one yet.
+    heading = analysis.get("as_question") or analysis["label"]
     examples = "; ".join(f'"{e}"' for e in analysis["examples"][:2])
     school = _top_school(analysis["schools"])
-    priority = "high" if (n >= 10 and analysis["share_not_positive"] >= 0.5) else "medium"
+    share = analysis["share_not_positive"]
+    priority = "high" if (n >= 10 and share >= 0.5) else "medium"
+    detail = {k: v for k, v in analysis.items() if k != "schools"}
+    detail["checkpoint"] = checkpoint_note()
     base = {
         "priority": priority,
         "school": school,
@@ -279,24 +300,43 @@ def concern_to_recommendation(analysis):
         "expected_direction": 1,
         "expected_magnitude": None,
         "effort": "M",
-        "confidence": 0.6,
-        "detail": {"concern": {k: v for k, v in analysis.items() if k != "schools"}},
+        "confidence": volume_confidence(n, _MIN_COUNT, floor=0.45, cap=0.80),
+        "detail": {"concern": detail},
     }
+    base["detail"]["concern"]["confidence_basis"] = confidence_basis_note(n, _MIN_COUNT, share)
 
     if analysis["state"] == "factual":
-        if not analysis.get("reframe") or n < 5:
+        if not analysis.get("reframe") or n < _MIN_FACTUAL_COUNT:
             return None  # pure business insight; nothing GEO should claim to fix
+        base["confidence"] = volume_confidence(n, _MIN_FACTUAL_COUNT, floor=0.35, cap=0.65)
+        base["detail"]["concern"]["confidence_basis"] = confidence_basis_note(n, _MIN_FACTUAL_COUNT, share)
+        action = analysis["reframe"]
+        outline = analysis.get("page_outline")
+        # Structure guidance, not new facts: page_outline restructures the
+        # same reframe QC already approved into headings; any fact it names
+        # that isn't already verified elsewhere says so explicitly rather
+        # than inventing one. content_brief carries the same data structured
+        # (not string-concatenated) for the Content Brief UI module; the flat
+        # `action` string stays fully self-contained for non-UI consumers.
+        if outline:
+            numbered = "\n".join(f"{i}. {o['title']}: {o['detail']}" for i, o in enumerate(outline, 1))
+            action += f"\n\nSuggested page structure:\n{numbered}\n\n{format_spec_sentence(heading)}"
+            base["detail"]["concern"]["content_brief"] = {
+                "heading": heading, "action": analysis["reframe"], "outline": outline,
+                "evidence_quotes": analysis["examples"][:3],
+            }
         return {**base,
-            "problem": (f"Engines raise '{label}' on {n} responses ({analysis['share_not_positive']:.0%} "
+            "problem": (f"Engines raise '{label}' on {n} responses ({share:.0%} "
                         f"with non-positive sentiment), e.g. {examples}. This is a structural fact - "
                         f"content cannot resolve it."),
-            "action": analysis["reframe"],
+            "action": action,
             "action_type": "strategy",
             "target": analysis["concern_type"],
-            "confidence": 0.5,
         }
 
     if analysis["state"] == "missing":
+        problem = (f"Engines raise '{label}' on {n} responses (e.g. {examples}) and no QC page "
+                   f"in the indexed corpus was confirmed to answer it.")
         # The taxonomy knows what KIND of fix answers this objection: "content"
         # -> publish an answer on QC's site; "citation" -> the rebuttal is
         # third-party by nature (independent reviews), publishing won't help.
@@ -306,13 +346,48 @@ def concern_to_recommendation(analysis):
                       f"self-hosted testimonials are what triggered '{label}'.")
             action_type = "citation"
         else:
-            action = (f"Publish - or make prominent, if it exists outside the sitemap and cited set - "
-                      f"content that directly answers '{label}', structured so engines can quote it "
-                      f"(direct answer first, specifics, not marketing copy).")
-            action_type = "content"
+            # Channel check: don't default to "publish" when the citations
+            # this concern already attracts are dominated by sources QC
+            # doesn't own (mirrors credibility.py's community-dominance check
+            # and question_router's per-question dominance vote).
+            bucket, ch_share, top_fact, vote = dominant_channel(analysis.get("cited_urls") or {})
+            base["detail"]["concern"]["citation_vote"] = vote
+            feas = channel_for_bucket(bucket, top_fact) if bucket else None
+            if bucket and feas and feas["feasibility"] in ("open", "gated"):
+                action = (f"Engines answering '{label}' lean on {bucket} sources QC doesn't own "
+                          f"({ch_share:.0%} of citations on this concern) - {feas['mechanism']}")
+                if feas["feasibility"] == "gated":
+                    action += " (Requires application/approval - budget lead time.)"
+                action_type = "community" if bucket == "ugc" else "citation"
+            elif bucket == "reference":
+                action_core = (f"Engines answering '{label}' lean on reference sources QC can't "
+                                f"pitch directly ({ch_share:.0%} of citations) - publish the "
+                                f"authoritative, citable content on '{label}' such sources would "
+                                f"reference, to earn the citation indirectly.")
+                action = f"{action_core} {format_spec_sentence(heading)}"
+                action_type = "content"
+                base["detail"]["concern"]["content_brief"] = {
+                    "heading": heading, "action": action_core, "outline": None,
+                    "evidence_quotes": analysis["examples"][:3],
+                }
+            else:
+                # candidates_checked (kept in detail, not asserted here) are
+                # keyword-hit pages the confirm step already ran and
+                # rejected - crude keyword overlap ("job", "salary",
+                # "graduate") isn't reliable enough evidence of relevance to
+                # name a page as a "near miss" once the quote-gated check has
+                # already said it doesn't cover this.
+                action_core = (f"No page in QC's indexed content (sitemap + ever-cited URLs) "
+                                f"addresses '{label}' at all - publish new content that directly "
+                                f"answers it.")
+                action = f"{action_core} {format_spec_sentence(heading)}"
+                action_type = "content"
+                base["detail"]["concern"]["content_brief"] = {
+                    "heading": heading, "action": action_core, "outline": None,
+                    "evidence_quotes": analysis["examples"][:3],
+                }
         return {**base,
-            "problem": (f"Engines raise '{label}' on {n} responses (e.g. {examples}) and no QC page "
-                        f"in the indexed corpus was confirmed to answer it."),
+            "problem": problem,
             "action": action,
             "action_type": action_type,
             "target": analysis["concern_type"],
@@ -320,6 +395,8 @@ def concern_to_recommendation(analysis):
 
     if analysis["state"] == "invisible":
         top = analysis["rebuttals"][0]
+        base["confidence"] = volume_confidence(n, _MIN_COUNT, floor=0.55, cap=0.90)
+        base["detail"]["concern"]["confidence_basis"] = confidence_basis_note(n, _MIN_COUNT, share)
         return {**base,
             "problem": (f"Engines raise '{label}' on {n} responses (e.g. {examples}). QC already has a "
                         f"confirmed rebuttal at {top['url']} (\"{top['quote'][:140]}...\") - but engines "
@@ -329,13 +406,12 @@ def concern_to_recommendation(analysis):
                        f"references to it so engines find it when this objection arises."),
             "action_type": "technical",
             "target": top["url"],
-            "confidence": 0.7,
         }
 
     return None  # covered
 
 
-def build_concern_recommendations(days=None, min_count=3, max_recs=3):
+def build_concern_recommendations(days=None, min_count=_MIN_COUNT, max_recs=3):
     """
     Deterministic concern recs for the most-raised concern types. Bounded:
     index is cached, <= _MAX_REBUTTAL_CANDIDATES LLM calls per addressable type.

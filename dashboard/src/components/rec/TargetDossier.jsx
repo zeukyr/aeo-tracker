@@ -1,4 +1,5 @@
 import { urlLabel } from "../../lib/recview";
+import InfoTip from "../InfoTip";
 
 // One pitchable destination, consolidated so a PR person can act without
 // opening anything: proof it matters (citations), proof it's winnable
@@ -17,7 +18,10 @@ export default function TargetDossier({ rec }) {
 
   return (
     <div>
-      <p className="rc-pane__title">Target dossier</p>
+      <p className="rc-pane__title">
+        Target dossier
+        <InfoTip id="target_selection" />
+      </p>
       <div className="rc-dossier">
         <div className="rc-dossier__head">
           <span className="rc-dossier__url">

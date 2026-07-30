@@ -6,7 +6,7 @@ trends, weak segments, competitive "why we lose" detail, and "what's already
 working" - consumed by the deterministic rec builders and the health summary.
 
 Bucket A - Momentum:        trend direction on the headline KPIs
-Bucket B - Segment gaps:    weakest engine / category / school / topic
+Bucket B - Segment gaps:    weakest engine / category / school + losing questions
 Bucket C - Competitive intel: existing losses/buried positions + win_reasons
 Bucket D - Content leverage: positives, QC citations that work, top domains
 
@@ -56,7 +56,9 @@ def get_momentum(days=None, school=None):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Bucket B: Segment gaps - weakest engine / category / school / topic
+# Bucket B: Segment gaps - weakest engine / category / school, and the
+# question-grained loss summary (per-question citation share; topic-level
+# score rollups were dropped as meaningless)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _positive_rate_by(group_col, days=None, school=None):
@@ -166,57 +168,42 @@ def get_weakest_schools(days=None, limit=10):
     return rows[:limit]
 
 
-def get_weakest_topics(days=None, school=None, limit=10):
+def get_losing_question_summary(days=None, school=None, max_qc_share=0.15):
     """
-    Per-topic rollup across both mention-kind topics (course/general -> visibility)
-    and sentiment-kind topics (credibility/competition -> positive rate).
-    Mirrors the split in topics.py but flattened to one aggregate score per topic.
+    Question-grained "where are we losing" rollup (replaces the old
+    weakest-topic score, which averaged unlike metrics across a whole topic
+    into a meaningless number): how many tracked questions QC is losing -
+    cited in <= max_qc_share of the question's responses - how many citations
+    those questions carry, and the single biggest loss by citation volume.
+    Same losing bar as the question router's selection
+    (question_router._MAX_QC_SHARE), so the health summary and the rec
+    engine agree on what a losing question is.
     """
     date_m = _date_filter(days).replace("AND created_at", "AND m.created_at")
-    date_s = _date_filter(days).replace("AND created_at", "AND s.created_at")
     school_clause, params = _school_clause_params(school)
-
-    mention_query = f"""
-        SELECT COALESCE(q.topic, 'Uncategorized') as topic,
-            AVG(CASE WHEN m.qc_mentioned THEN 1 ELSE 0 END) as mention_rate,
-            AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as citation_rate,
-            COUNT(*) as sample_n
+    query = f"""
+        SELECT q.question,
+            AVG(CASE WHEN m.qc_cited THEN 1 ELSE 0 END) as qc_share,
+            COALESCE(SUM(COALESCE(array_length(m.citations, 1), 0)), 0) as n_citations
         FROM mention_responses m
         JOIN questions q ON q.id = m.question_id
-        WHERE q.topic IS NOT NULL AND q.question_type IN ('course', 'general')
-        {date_m} {school_clause}
-        GROUP BY q.topic;
-    """
-    sentiment_query = f"""
-        SELECT COALESCE(q.topic, 'Uncategorized') as topic,
-            AVG(CASE WHEN s.qc_sentiment = 'positive' THEN 1 ELSE 0 END) as positive_rate,
-            COUNT(*) as sample_n
-        FROM sentiment_responses s
-        JOIN questions q ON q.id = s.question_id
-        WHERE q.topic IS NOT NULL AND q.question_type IN ('credibility', 'competition')
-        {date_s} {school_clause}
-        GROUP BY q.topic;
+        WHERE 1=1 {date_m} {school_clause}
+        GROUP BY q.id, q.question;
     """
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(mention_query, params)
-            mention_rows = cur.fetchall()
-            cur.execute(sentiment_query, params)
-            sentiment_rows = cur.fetchall()
+            cur.execute(query, params)
+            rows = [(r[0], float(r[1]), int(r[2])) for r in cur.fetchall()]
 
-    rows = []
-    for topic, mention_rate, citation_rate, n in mention_rows:
-        score = round((float(mention_rate or 0) + float(citation_rate or 0)) / 2 * 100, 1)
-        rows.append({"topic": topic, "kind": "mention", "score": score, "sample_n": n})
-
-    for topic, positive_rate, n in sentiment_rows:
-        rows.append({
-            "topic": topic, "kind": "sentiment",
-            "score": round(float(positive_rate or 0) * 100, 1), "sample_n": n,
-        })
-
-    rows.sort(key=lambda r: r["score"])
-    return rows[:limit]
+    losing = [r for r in rows if r[1] <= max_qc_share]
+    worst = max(losing, key=lambda r: r[2], default=None)
+    return {
+        "losing_n":           len(losing),
+        "total_n":            len(rows),
+        "citations_at_stake": sum(r[2] for r in losing),
+        "worst": ({"question": worst[0], "qc_share": round(worst[1], 3),
+                   "n_citations": worst[2]} if worst else None),
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -225,9 +212,8 @@ def get_weakest_topics(days=None, school=None, limit=10):
 
 def get_win_reasons(days=None, school=None, limit=15):
     """
-    Why competitors win head-to-head, aggregated from sentiment_responses.win_reasons.
-    Complements get_competitor_wins/get_qc_buried_positions (which show *that* QC
-    loses) with *why* - previously-unused column.
+    Why competitors win head-to-head, aggregated from sentiment_responses.win_reasons -
+    the *why* behind the losses the win-rate view shows.
     """
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
     school_clause, params = _school_clause_params(school)
@@ -263,8 +249,9 @@ def get_competitive_loss_topics(days=None, min_losses=1):
     """
     date_f = _date_filter(days).replace("AND created_at", "AND mr.created_at")
     query = f"""
-        SELECT q.topic, COUNT(*) AS losses,
-               array_agg(DISTINCT b.brand_name) AS competitors
+        SELECT q.topic,
+               COUNT(DISTINCT (b.mention_response_id, COALESCE(b.canonical_name, b.brand_name))) AS losses,
+               array_agg(DISTINCT COALESCE(b.canonical_name, b.brand_name)) AS competitors
         FROM mention_response_brands b
         JOIN mention_responses mr ON mr.id = b.mention_response_id
         JOIN questions q ON q.id = mr.question_id
@@ -325,7 +312,7 @@ def get_competitor_profile(competitor, days=None, limit=10):
             SELECT DISTINCT m.id, m.citations
             FROM mention_responses m
             JOIN mention_response_brands b ON b.mention_response_id = m.id
-            WHERE b.brand_type = 'competitor' AND b.brand_name = %s
+            WHERE b.brand_type = 'competitor' AND COALESCE(b.canonical_name, b.brand_name) = %s
             {filter_m}
         ),
         expanded AS (
@@ -466,7 +453,7 @@ def get_citation_contrast(segment, competitor=None, days=None, limit=10):
             FROM mention_responses m
             JOIN questions q ON q.id = m.question_id
             JOIN mention_response_brands b ON b.mention_response_id = m.id
-            WHERE b.brand_type = 'competitor' AND b.brand_name = %s
+            WHERE b.brand_type = 'competitor' AND COALESCE(b.canonical_name, b.brand_name) = %s
             {date_m} {seg_clause}
         ),
         expanded AS (
@@ -567,7 +554,7 @@ def get_health_summary(days=None, school=None, limit=4):
     weakest_engines    = get_weakest_engines(days, school, limit=5)
     weakest_categories = get_weakest_categories(days, school, limit=5)
     weakest_schools    = get_weakest_schools(days, limit=5)
-    weakest_topics     = get_weakest_topics(days, school, limit=5)
+    losing_questions   = get_losing_question_summary(days, school)
     qc_citations       = get_qc_citations(days, school)
 
     good, bad = [], []
@@ -599,9 +586,26 @@ def get_health_summary(days=None, school=None, limit=4):
             "magnitude": 0.5,
         })
 
+    # Question-grained loss picture (topic rollups averaged unlike metrics
+    # into a meaningless score; per-question citation share is the real unit).
+    if losing_questions["losing_n"]:
+        n, total = losing_questions["losing_n"], losing_questions["total_n"]
+        at_stake = losing_questions["citations_at_stake"]
+        bad.append({
+            "text": (f"QC is cited in 15% or fewer responses on {n} of {total} tracked "
+                     f"questions — {at_stake:,} citations going to other sources"),
+            "magnitude": round(100 * n / total, 1),
+        })
+        worst = losing_questions["worst"]
+        if worst:
+            bad.append({
+                "text": (f"Biggest gap: “{worst['question']}” — {worst['n_citations']} citations "
+                         f"in play, QC cited in {round(worst['qc_share'] * 100)}% of its responses"),
+                "magnitude": 100 - worst["qc_share"] * 100,
+            })
+
     for rows, key, label in (
         (weakest_engines,    "engine",   "engine"),
-        (weakest_topics,     "topic",    "topic"),
         (weakest_schools,    "school",   "school"),
         (weakest_categories, "category", "category"),
     ):

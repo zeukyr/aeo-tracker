@@ -46,6 +46,13 @@ def wire(monkeypatch):
     q = _q()
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
     monkeypatch.setattr(qr, "route_question", lambda q, days=None: _route(q))
+    # route_question is stubbed above (its own get_question_cited_urls/
+    # get_pages_facts calls never run), but build_question_recommendations
+    # independently re-fetches a wider candidate pool for the scorecard - see
+    # question_router.py's fix branch. build_scorecard below ignores
+    # winner_facts entirely, so these just need to not hit a real DB.
+    monkeypatch.setattr(qr, "get_question_cited_urls", lambda qid, days=None, **kw: [])
+    monkeypatch.setattr(qr, "get_pages_facts", lambda urls, **kw: [])
 
     def set(scorecard=None, rec=None, inclusion=(), raise_scorecard=False):
         def _build(*a, **k):
@@ -68,7 +75,7 @@ def test_scorecard_rec_leads_and_inclusion_coexists(wire):
     assert recs[0]["detail"]["router"]["branch"] == "fix"
     assert recs[0]["detail"]["question_plan"]["role"] == "primary"
     assert recs[1]["detail"]["question_plan"] == {
-        "question_id": "q1", "role": "companion", "emitter": "inclusion_opportunity"}
+        "question_id": "q1", "role": "companion", "emitter": "inclusion_opportunity", "source": "on_demand"}
 
 
 def test_low_tier_rec_still_leads_over_inclusions(wire):

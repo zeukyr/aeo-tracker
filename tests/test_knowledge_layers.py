@@ -8,11 +8,14 @@ from datetime import datetime, timedelta, timezone
 
 from api.queries.page_facts import (
     source_type, inclusion_opportunity, _is_stale_failure, _token_matches_domain,
-    _classify_by_domain,
+    _classify_by_domain, _missing_structural_metrics,
 )
 from scripts.registry_pipeline_diff import _expected_override
 from api.queries.question_router import outreach_feasibility
 from api.queries.sitemap_coverage import _NOISE_SLUG
+from api.queries.cited_urls import (
+    _post_id_of, _recency_score, _load_restricted_subreddits,
+)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -260,6 +263,36 @@ def test_failures_retry_after_window_successes_never():
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Reddit outreach actionability: restricted subreddits, confirmed-dead
+# threads, and the recency-weighted ranking that replaced raw total_count
+# (see api/queries/cited_urls.py get_reddit_targets - a batch of "top" reddit
+# leads all turned out archived/rule-blocked because pure citation-count
+# ranking systematically favors the oldest threads)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_post_id_extracted_from_reddit_permalink():
+    assert _post_id_of("https://reddit.com/r/doggrooming/comments/egxxe2/online_grooming_courses") == "egxxe2"
+    assert _post_id_of("https://reddit.com/comments/egxxe2") == "egxxe2"
+    assert _post_id_of("https://example.com/not-reddit") is None
+
+
+def test_restricted_subreddits_registry_loads_seeded_entries():
+    restricted = _load_restricted_subreddits()
+    assert "smallbusiness" in restricted
+    assert "rule" in restricted["smallbusiness"]
+    assert "mechanism" in restricted["smallbusiness"]
+
+
+def test_recency_score_decays_with_age_not_just_count():
+    fresh = _recency_score(5, datetime.now(timezone.utc) - timedelta(days=1))
+    stale = _recency_score(20, datetime.now(timezone.utc) - timedelta(days=900))
+    # a smaller, recent count can outrank a much larger, ancient one once
+    # decayed - that's the point: raw total_count alone always favored age.
+    assert fresh > stale
+    assert _recency_score(10, None) == 0.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Brand-token domain match is provisional: content decides for fetched pages
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -273,6 +306,45 @@ def _wire_fetch(monkeypatch, brands, llm_result):
     monkeypatch.setattr(pf, "_classify_editorial_llm", lambda *a: llm_result)
     monkeypatch.setattr(pf, "_store", lambda facts, _cache: facts)
     return pf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# A cached row from before the structural ratio metrics existed must be
+# treated as a cache miss (refetched), never returned as-is - the missing
+# keys would otherwise read as "unmeasurable" instead of "not yet computed".
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_legacy_row_missing_ratio_metrics_flagged_for_refetch():
+    legacy_row = {"status": "ok", "features": {"faq_schema": False, "course_schema": True}}
+    assert _missing_structural_metrics(legacy_row) is True
+
+
+def test_row_with_ratio_metrics_not_flagged():
+    fresh_row = {"status": "ok", "features": {"internal_linking_density": 17, "faq_schema": False}}
+    assert _missing_structural_metrics(fresh_row) is False
+
+
+def test_unfetched_or_failed_rows_never_flagged():
+    # community/video "not_fetched" rows and fetch failures never had HTML-
+    # derived features at all - that's expected, not a legacy-cache problem.
+    assert _missing_structural_metrics({"status": "not_fetched"}) is False
+    assert _missing_structural_metrics({"status": "fetch_failed"}) is False
+
+
+def test_legacy_cached_row_triggers_real_refetch_not_a_stale_return(monkeypatch):
+    import api.queries.page_facts as pf
+    legacy_row = {"url": "https://example.com/x", "status": "ok",
+                  "page_type": "guide", "page_type_source": "llm",
+                  "features": {"faq_schema": False}}  # pre-dates ratio metrics
+    monkeypatch.setattr(pf, "get_cached_fact", lambda url: legacy_row)
+    monkeypatch.setattr(pf, "load_competitor_brands", lambda min_len=4: [])
+    monkeypatch.setattr(pf, "_fetch_html",
+                        lambda url: ("<html><title>T</title><body><p>"
+                                     + ("word " * 40) + "</p></body></html>", url, None))
+    monkeypatch.setattr(pf, "_classify_editorial_llm", lambda *a: ("guide", "llm"))
+    monkeypatch.setattr(pf, "_store", lambda facts, _cache: facts)
+    facts = pf.get_page_facts("https://example.com/x")
+    assert "internal_linking_density" in facts["features"]
 
 
 def test_fetched_brand_domain_page_classified_by_content(monkeypatch):
@@ -359,6 +431,12 @@ def _deferred_row(url, page_type):
         "page_type": page_type, "page_type_source": "deferred",
         "title": "Some Title", "headings": ["A Heading"],
         "content_excerpt": "some cached body text",
+        # defer_llm only skips the classification LLM call - the structural
+        # ratio metrics are always computed on any real fetch, so a genuine
+        # deferred row already has them (unlike a pre-feature legacy row).
+        "features": {"internal_linking_density": 0, "heading_hierarchy_depth": 1,
+                     "structured_content_ratio": 0, "paragraph_length_conformance": None,
+                     "emphasis_density": 0},
     }
 
 

@@ -153,7 +153,14 @@
   "Effectiveness in securing employment or advancing a career can vary": "employer_recognition",
   "limited recognition of proprietary certifications among some employers": "employer_recognition",
   "some material can be dated": "content_quality",
-  "isolated negative reviews criticizing the school as a 'for-profit scam'": "legitimacy_reviews"
+  "isolated negative reviews criticizing the school as a 'for-profit scam'": "legitimacy_reviews",
+  "not a top-tier professional credential": "employer_recognition",
+  "not commonly recommended in trainer communities": "legitimacy_reviews",
+  "lacks strong hands-on training": "practical_hands_on",
+  "may not provide a credential that guarantees a job": "content_quality",
+  "not as valuable for those with strong hands-on event experience": "practical_hands_on",
+  "expectations versus actual career opportunities": "employer_recognition",
+  "may be more beneficial to invest in experiences rather than certifications": "employer_recognition"
  },
  "win_reason": {
   "appeared first in the list of options": "mention_position",

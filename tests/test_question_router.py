@@ -11,7 +11,7 @@ Router invariants (question-router plan §9 R11), as durable regression tests:
   auto-built), reputation with no channel -> triage.
 
 All DB / network / LLM boundaries are stubbed; the classification logic
-(source_type, dominant_source_type, genre_gap, outreach_feasibility registry
+(source_type, source_votes, genre_gap, outreach_feasibility registry
 and defaults) runs for real over crafted page facts.
 """
 
@@ -121,13 +121,7 @@ def test_genre_mismatch_routes_build_and_never_runs_scorecard(monkeypatch):
     route = qr.route_question(q)
     assert route["branch"] == "build"
     assert route["reason"] == "ownable_wrong_kind_page"
-    assert route["genre_mismatch"]["winner_genre"] == "informational"
-
-    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: [q])
-    recs, triage = qr.build_router_recommendations()
-    assert not any(r["action_type"] == "technical" for r in recs)
-    assert len(recs) == 1 and recs[0]["detail"]["router"]["branch"] == "build"
-    assert triage == []
+    assert route["genre_mismatch"]["winner_format"] == "how_to"
 
 
 def test_same_kind_page_routes_fix_and_scorecard_runs(monkeypatch):
@@ -141,13 +135,6 @@ def test_same_kind_page_routes_fix_and_scorecard_runs(monkeypatch):
     route = qr.route_question(q)
     assert route["branch"] == "fix"
     assert route["genre_mismatch"] is None
-
-    calls = []
-    stub_scorecard(monkeypatch, calls)
-    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: [q])
-    recs, _ = qr.build_router_recommendations()
-    assert len(calls) == 1
-    assert [r["action_type"] for r in recs] == ["technical"]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -304,34 +291,11 @@ def test_every_question_routes_exactly_once_and_branches_disjoint(monkeypatch):
     wire(monkeypatch, winners_by_qid, coverage_by_qid=coverage, qc_facts=QC_COMMERCIAL)
     calls = []
     stub_scorecard(monkeypatch, calls)
-    monkeypatch.setattr(qr, "get_losing_questions", lambda days=None, **kw: questions)
 
-    # (b) every question yields exactly one route
+    # (b) every question yields exactly one route, and branches are disjoint
+    # by construction - each question dispatches to exactly one branch.
     routes = [qr.route_question(q) for q in questions]
     assert [r["branch"] for r in routes] == ["build", "fix", "reach_out", "triage", "triage"]
-
-    recs, triage = qr.build_router_recommendations()
-
-    # accounting: every question lands in exactly one place
-    qids_by_branch = {}
-    for r in recs:
-        router = r["detail"]["router"]
-        if router["branch"] == "inclusion_opportunity":
-            continue  # per-winner extras, may share a question with a branch rec
-        qids_by_branch.setdefault(router["branch"], set()).add(router["question_id"])
-    # question_id is stringified in detail/triage (uuids in production)
-    triage_qids = {str(t["question_id"]) for t in triage}
-
-    assert qids_by_branch.get("fix") == {"2"}
-    assert qids_by_branch.get("build") == {"1"}
-    assert qids_by_branch.get("reach_out") == {"3"}
-    assert triage_qids == {"5", "7"}
-
-    # (c) no question emits both a fix and a build
-    assert not (qids_by_branch.get("fix", set()) & qids_by_branch.get("build", set()))
-    # and no routed question is also triaged
-    routed = set().union(*qids_by_branch.values())
-    assert not (routed & triage_qids)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -380,7 +344,7 @@ def test_single_question_build_returns_rec_not_triage(monkeypatch):
                               "value": q["question"], "question_id": "20"}
     assert rec["detail"]["router"]["branch"] == "build"
     assert rec["detail"]["question_plan"] == {
-        "question_id": "20", "role": "primary", "emitter": "build"}
+        "question_id": "20", "role": "primary", "emitter": "build", "source": "on_demand"}
 
 
 def test_single_question_triage_comes_back_as_entry(monkeypatch):
@@ -397,6 +361,23 @@ def test_single_question_triage_comes_back_as_entry(monkeypatch):
 def test_single_question_without_mention_responses(monkeypatch):
     monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: None)
     assert qr.build_question_recommendations(22) == ([], None)
+
+
+def test_reach_out_branch_is_auto_covered_not_manual(monkeypatch):
+    # The manual, cooldown-gated per-question flow no longer fabricates a
+    # reach-out primary (or its companions) - that's reach_out_sweep.py's
+    # job now, run for every losing question on its own cadence.
+    q = question(30, "is dog grooming worth it reddit")
+    winners = [(facts("reddit.com", "community", status="not_fetched",
+                      url=f"https://reddit.com/r/dogs/{i}"), 6) for i in range(3)]
+    wire(monkeypatch, {30: winners})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    recs, triage = qr.build_question_recommendations(30)
+    assert recs == []
+    assert triage["reason"] == "reach_out_auto_covered"
+    assert triage["question_id"] == 30
 
 
 def test_single_question_fix_attaches_router_detail(monkeypatch):

@@ -7,7 +7,7 @@ UI can navigate to it instead. DB is stubbed at _live_recs_for_question.
 
 from datetime import datetime, timedelta, timezone
 
-import api.queries.recommendations_synthesis as rs
+import api.recommendations.question_plan as rs
 
 
 def _rec(status, generated_days_ago, rec_id="rec-1"):

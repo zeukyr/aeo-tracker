@@ -15,10 +15,15 @@ def fetch_avg_rank(cur, filter_clause, school=None):
 
 def fetch_sov(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
+    # Count distinct (response, canonical brand) pairs — the LLM can store
+    # several spelling variants of one brand in a single response, which
+    # plain row counts would double-count.
     cur.execute(f"""
         SELECT
-            SUM(CASE WHEN b.brand_type = 'qc' THEN 1 ELSE 0 END) AS qc_mentions,
-            SUM(CASE WHEN b.brand_type = 'competitor' THEN 1 ELSE 0 END) AS competitor_mentions
+            COUNT(DISTINCT (b.mention_response_id, COALESCE(b.canonical_name, b.brand_name)))
+                FILTER (WHERE b.brand_type = 'qc') AS qc_mentions,
+            COUNT(DISTINCT (b.mention_response_id, COALESCE(b.canonical_name, b.brand_name)))
+                FILTER (WHERE b.brand_type = 'competitor') AS competitor_mentions
         FROM mention_response_brands b
         JOIN mention_responses m
             ON b.mention_response_id = m.id
@@ -76,12 +81,13 @@ def fetch_visibility_score(cur, filter_clause, school=None):
 def fetch_competitor_mention_counts(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
     cur.execute(f"""
-        SELECT b.brand_name, COUNT(DISTINCT b.mention_response_id) as mentions
+        SELECT COALESCE(b.canonical_name, b.brand_name) AS brand,
+               COUNT(DISTINCT b.mention_response_id) as mentions
         FROM mention_response_brands b
         JOIN mention_responses m ON m.id = b.mention_response_id
         LEFT JOIN questions q ON q.id = m.question_id
         WHERE b.brand_type = 'competitor' {filter_clause.replace("created_at", "m.created_at")} {school_clause}
-        GROUP BY b.brand_name;
+        GROUP BY brand;
     """, params)
     return {row[0]: row[1] for row in cur.fetchall()}
 
@@ -144,6 +150,35 @@ def get_summary(days=None, school=None):
         row = cur.fetchone()[0]
         return float(row) if row else None
 
+    def fetch_count_and_total(cur, column, table, filter_clause):
+        """Raw numerator/denominator behind a rate - lets the dashboard show
+        '26/78' alongside the percentage instead of the percentage alone."""
+        cur.execute(f"""
+            SELECT COUNT(*) FILTER (WHERE {column}), COUNT(*)
+            FROM {table} t
+            LEFT JOIN questions q ON q.id = t.question_id
+            WHERE 1=1 {filter_clause.replace("created_at", "t.created_at")} {school_clause};
+        """, school_params)
+        n, total = cur.fetchone()
+        return (n or 0), (total or 0)
+
+    def fetch_sentiment_distribution(cur, filter_clause):
+        """positive/neutral/negative counts for the current period - the
+        positive_sentiment_rate tile shows this split, not just the
+        positive share vs an undifferentiated remainder."""
+        cur.execute(f"""
+            SELECT qc_sentiment::text, COUNT(*)
+            FROM sentiment_responses s
+            LEFT JOIN questions q ON q.id = s.question_id
+            WHERE 1=1 {filter_clause.replace("created_at", "s.created_at")} {school_clause}
+            GROUP BY qc_sentiment;
+        """, school_params)
+        counts = {"positive": 0, "neutral": 0, "negative": 0}
+        for sentiment, n in cur.fetchall():
+            if sentiment in counts:
+                counts[sentiment] = n
+        return counts
+
     def diff(curr, prev):
         if curr is None or prev is None:
             return None
@@ -153,12 +188,14 @@ def get_summary(days=None, school=None):
         with conn.cursor() as cur:
             mention_curr = fetch_rate(cur, "qc_mentioned", "mention_responses", filter_curr)
             mention_prev = fetch_rate(cur, "qc_mentioned", "mention_responses", filter_prev)
+            mention_n, mention_total = fetch_count_and_total(cur, "qc_mentioned", "mention_responses", filter_curr)
 
             citation_curr = fetch_rate(cur, "qc_cited", "mention_responses", filter_curr)
             citation_prev = fetch_rate(cur, "qc_cited", "mention_responses", filter_prev)
 
             sentiment_curr = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_curr)
             sentiment_prev = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_prev)
+            sentiment_dist = fetch_sentiment_distribution(cur, filter_curr)
 
             rank_curr = fetch_avg_rank(cur, filter_curr, school)
             rank_prev = fetch_avg_rank(cur, filter_prev, school)
@@ -170,12 +207,13 @@ def get_summary(days=None, school=None):
             visibility_prev = fetch_visibility_score(cur, filter_prev, school)
 
             cur.execute(f"""
-                SELECT b.brand_name, COUNT(*) as count
+                SELECT COALESCE(b.canonical_name, b.brand_name) AS brand,
+                       COUNT(DISTINCT b.mention_response_id) as count
                 FROM mention_response_brands b
                 JOIN mention_responses m ON m.id = b.mention_response_id
                 LEFT JOIN questions q ON q.id = m.question_id
                 WHERE b.brand_type = 'competitor' {filter_curr.replace("created_at", "m.created_at")} {school_clause}
-                GROUP BY b.brand_name
+                GROUP BY brand
                 ORDER BY count DESC
                 LIMIT 1;
             """, school_params)
@@ -199,10 +237,16 @@ def get_summary(days=None, school=None):
     return {
         "mention_rate": round(mention_curr * 100, 1) if mention_curr else 0,
         "mention_rate_diff": diff(mention_curr, mention_prev),
+        "mention_count": mention_n,
+        "mention_total": mention_total,
         "citation_rate": round(citation_curr * 100, 1) if citation_curr else 0,
         "citation_rate_diff": diff(citation_curr, citation_prev),
         "positive_sentiment_rate": round(sentiment_curr * 100, 1) if sentiment_curr else 0,
         "positive_sentiment_diff": diff(sentiment_curr, sentiment_prev),
+        "sentiment_total": sum(sentiment_dist.values()),
+        "positive_sentiment_count": sentiment_dist["positive"],
+        "neutral_sentiment_count": sentiment_dist["neutral"],
+        "negative_sentiment_count": sentiment_dist["negative"],
         "avg_rank": round(rank_curr, 2) if rank_curr else None,
         "avg_rank_diff": rank_diff(rank_curr, rank_prev),
         "sov": sov_curr,

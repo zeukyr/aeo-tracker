@@ -352,6 +352,19 @@ _COMPETITOR_EXPLICIT = {
     # it so); community.cvent.com stays ugc via the community-subdomain rule
     # (approved 2026-07-10).
     "cvent": "approved: vendor's own pages hold ownable slots (competitor)",
+    # AACWP's own site (verified 2026-07-24): "AACWP offers unmatched initial
+    # training and continuing education programs" - it delivers its own
+    # certification directly, not just a name-pattern "Association" - the
+    # same fearfree shape (certifying body in name, course seller in
+    # practice), just missed by the association/council/institute-of rule
+    # below since that rule only reads the name, never the page content.
+    "aacwp": "approved: delivers its own wedding-planner certification program (competitor)",
+    # American Academy of Wedding Professionals / beaweddingplanner.com
+    # (verified 2026-07-24): "Enroll in the Certification ... 12-week live
+    # cohort program ... delivered through her professional education
+    # platform" - a direct course seller despite the "Academy"/"credentialing
+    # body" framing on its own site.
+    "aawp": "approved: sells its own 12-week certification cohort directly (competitor)",
 }
 
 _JOB_ECOM_SAAS = {
@@ -377,6 +390,24 @@ _CERTIFYING_EXPLICIT = {
     "americankennelclub", "petsittersinternational",
     "eventindustrycouncil", "petindustryfederation", "thebridalsociety",
     "bridalsociety", "certifiedweddingplannersociety", "cwpsociety",
+}
+
+# Domains verified by hand for a brand whose citation text never spells out
+# the literal domain, so Entry._domain_key (which only reads extracted
+# variant strings that already look like a domain) never has a chance to
+# learn it - registry_brand_type()'s name-token domain match also can't find
+# it, since "beaweddingplanner.com" shares no substring with "American
+# Academy of Wedding Professionals". Keyed the same way as _COMPETITOR_EXPLICIT
+# / _CERTIFYING_EXPLICIT (squashed token or verified acronym).
+#
+# aacwp.org needs the same override for a different reason: its only
+# candidate token IS the verified 5-char acronym "aacwp", but page_facts.py's
+# _load_brand_registry() drops any token under 6 chars (aimed at the long
+# squashed full-name tokens, to avoid short-substring false positives) - so
+# even a correct, exact acronym token never reaches the domain matcher.
+_KNOWN_DOMAINS = {
+    "aawp": ["beaweddingplanner.com"],
+    "aacwp": ["aacwp.org"],
 }
 
 # Bare credential acronyms we can vouch for (everything else short + capsy
@@ -448,7 +479,7 @@ def classify(group):
     entry_names = [" ".join(e.tokens) for e in group.entries]
 
     for k, why in _COMPETITOR_EXPLICIT.items():
-        if k in squashed_all:
+        if k in squashed_all or k in group.acronyms:
             return "competitor", why, False
     if squashed_all & _PLATFORMS:
         return "platform", "platform list (course marketplace)", False
@@ -514,12 +545,20 @@ def build():
         # brands abstain (not_actionable) and skip review entirely - the rule
         # verdict is preserved in matched_rule so they can be promoted later
         # if they accumulate volume. Review effort goes to n >= 3 only.
-        if g.n <= 2:
+        # Exception: an _COMPETITOR_EXPLICIT/_CERTIFYING_EXPLICIT verdict is a
+        # manually verified fact (someone read the brand's own page), not a
+        # volume-dependent guess - low citation count doesn't make AAWP's own
+        # "Enroll in the Certification" page any less a direct sale, so it
+        # shouldn't get silently demoted back to not_actionable.
+        explicit_keys = ({_squash(e.tokens) for e in g.entries} | {g.rep.key} | g.acronyms) \
+            & (set(_COMPETITOR_EXPLICIT) | set(_CERTIFYING_EXPLICIT))
+        if g.n <= 2 and not explicit_keys:
             rule = f"low volume (n<=2) - abstains; rule said {ptype}: {rule}"
             ptype = "not_actionable"
             review = False
         else:
-            review = True
+            review = not explicit_keys
+        known_domains = [d for k in explicit_keys for d in _KNOWN_DOMAINS.get(k, [])]
         out.append({
             "canonical_name": g.canonical,
             "variants": "; ".join(g.variants),
@@ -527,7 +566,7 @@ def build():
             "schools": "; ".join(g.schools),
             "proposed_type": ptype,
             "matched_rule": rule,
-            "domains": "; ".join(g.domains),
+            "domains": "; ".join(sorted(set(g.domains) | set(known_domains))),
             "needs_review": review,
         })
     out.sort(key=lambda r: (-r["n_responses"], r["canonical_name"].lower()))

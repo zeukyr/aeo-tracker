@@ -29,10 +29,13 @@
    "name": "Animal Behavior College",
    "type": "competitor",
    "rule": "university-word override: vocational school",
-   "n": 33,
+   "n": 52,
    "variants": [
+    "ABC Grooming School",
     "Animal Behavior College",
+    "Animal Behavior College (ABC)",
     "Animal Behaviour College",
+    "Animal Behaviour College (ABC)",
     "animalbehaviorcollege.com"
    ],
    "domains": [
@@ -164,8 +167,8 @@
   },
   {
    "name": "American Association of Certified Wedding Planners (AACWP)",
-   "type": "certifying_body",
-   "rule": "association/council/institute-of pattern",
+   "type": "competitor",
+   "rule": "approved: delivers its own wedding-planner certification program (competitor)",
    "n": 11,
    "variants": [
     "AACWP",
@@ -174,7 +177,9 @@
     "certifications from American Association of Certified Wedding Planners (AACWP)",
     "The American Association of Certified Wedding Planners (AACWP)"
    ],
-   "domains": []
+   "domains": [
+    "aacwp.org"
+   ]
   },
   {
    "name": "CATCH Canine Trainers Academy",
@@ -414,8 +419,8 @@
   },
   {
    "name": "Whole Pet Grooming Academy",
-   "type": "certifying_body",
-   "rule": "association/council/institute-of pattern",
+   "type": "competitor",
+   "rule": "approved: NH-DOE-licensed career school selling its own grooming certification directly (competitor)",
    "n": 8,
    "variants": [
     "Whole Pet Grooming Academy",
@@ -424,7 +429,9 @@
     "WPGA Grooming Certification",
     "WPGA Online Grooming Certification"
    ],
-   "domains": []
+   "domains": [
+    "wholepetnh.com"
+   ]
   },
   {
    "name": "Calm Canines Academy",
@@ -485,18 +492,17 @@
    ]
   },
   {
-   "name": "Animal Behavior College (ABC)",
-   "type": "certifying_body",
-   "rule": "association/council/institute-of pattern",
+   "name": "Association of Bridal Consultants (ABC)",
+   "type": "competitor",
+   "rule": "approved: sells its own Certified Wedding Planner Program directly (competitor); split out 2026-07-24 from a bad merge with the unrelated Animal Behavior College (ABC)",
    "n": 6,
    "variants": [
-    "ABC Grooming School",
-    "Animal Behavior College (ABC)",
-    "Animal Behaviour College (ABC)",
     "Association of Bridal Consultants",
     "Association of Bridal Consultants (ABC)"
    ],
-   "domains": []
+   "domains": [
+    "abcweddingplanners.com"
+   ]
   },
   {
    "name": "Canine Correspondence Studies (CCS)",
@@ -1169,13 +1175,15 @@
   },
   {
    "name": "American Academy of Wedding Professionals (AAWP)",
-   "type": "not_actionable",
-   "rule": "low volume (n<=2) - abstains; rule said competitor: named school/program word",
+   "type": "competitor",
+   "rule": "approved: sells its own 12-week certification cohort directly (competitor)",
    "n": 2,
    "variants": [
     "American Academy of Wedding Professionals (AAWP)"
    ],
-   "domains": []
+   "domains": [
+    "beaweddingplanner.com"
+   ]
   },
   {
    "name": "American School of Dog Grooming",

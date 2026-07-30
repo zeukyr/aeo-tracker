@@ -8,7 +8,7 @@ silently dropped from the denominator. All inputs are constructed scorecards -
 no DB, no LLM.
 """
 
-import api.queries.tab2_scorecard as ts
+import api.queries.scorecard as ts
 
 
 def _feat(fid, qc_has, wp, n, weight="medium"):
@@ -23,8 +23,20 @@ def _feat(fid, qc_has, wp, n, weight="medium"):
     }
 
 
+def _metric(fid, qc_value, target_min, target_max, weight="medium", confidence="high", unit="pct", fix_hint=None):
+    in_range = qc_value is not None and target_min <= qc_value <= target_max
+    return {
+        "id": fid, "label": fid.replace("_", " "), "geo_weight": weight,
+        "confidence": confidence, "unit": unit,
+        "target_min": target_min, "target_max": target_max,
+        "qc_value": qc_value, "in_range": in_range,
+        "recommend": qc_value is not None and not in_range,
+        "fix_hint": fix_hint,
+    }
+
+
 def _sc(features, n=4, qc_readable=True, unreadable=(), excluded=(),
-        emergent_insight="", emergent_edit=""):
+        emergent_insight="", emergent_edit="", metric_rows=()):
     edits = ([emergent_edit] if emergent_edit else []) + [
         f"Add {f['label']}" for f in features if f["recommend"]]
     return {
@@ -40,6 +52,7 @@ def _sc(features, n=4, qc_readable=True, unreadable=(), excluded=(),
         "winners_excluded": list(excluded),
         "sufficient": n >= ts.MIN_WINNERS,
         "features": features,
+        "metric_rows": list(metric_rows),
         "emergent_insight": emergent_insight,
         "emergent_edit": emergent_edit,
         "suggested_edits": edits,
@@ -85,7 +98,11 @@ def test_subthreshold_gaps_and_emergent_produce_low_tier_card():
     assert rec["priority"] == "low"
     assert "Benefits of Taking the Course" in rec["action"]
     assert "LLM-observed pattern" in rec["action"]
-    assert "career outcomes" in rec["action"]
+    # The two partial gaps (career_outcomes, tuition_pricing) get a short
+    # count-and-pointer in the action text, not one enumerated line each -
+    # they're already visible in the feature-diff table below.
+    assert "2 weaker signals" in rec["action"]
+    assert "career outcomes" not in rec["action"]
     grade = rec["detail"]["evidence_grade"]
     assert grade["checklist_gaps"] == []
     assert {g["id"] for g in grade["partial_gaps"]} == {"career_outcomes", "tuition_pricing"}
@@ -122,3 +139,117 @@ def test_unreadable_qc_page_is_its_own_state():
     sc = _sc([_feat("career_outcomes", qc_has=False, wp=3, n=4)], qc_readable=False)
     assert ts.scorecard_to_recommendation(sc) is None
     assert ts.scorecard_triage_reason(sc) == "fix_qc_page_unreadable"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Ratio ("metric") features: absolute literature targets, not winner-relative,
+# scored against a fixed target range rather than this topic's cited winners.
+# They stay on the SAME card as any checklist finding, but their prose,
+# evidence, and priority/confidence contribution are kept separate from the
+# competitor-verified checklist - a metric gap is backed by literature, not
+# by this topic's competitors, so it must never read as (or outrank) a
+# competitor-verified finding on its own.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_metric_gap_is_actionable_even_with_insufficient_winners():
+    sc = _sc([], n=1, metric_rows=[
+        _metric("internal_linking_density", qc_value=6, target_min=15, target_max=20, weight="high"),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert "internal linking density" in rec["problem"].lower()
+    assert "15-20%" in rec["action"]
+    # a metric gap alone can nudge low -> medium priority but never claims high
+    # on its own, regardless of geo_weight - that's reserved for competitor-
+    # verified checklist gaps.
+    assert rec["priority"] == "medium"
+    assert rec["confidence"] <= 0.5
+    assert rec["detail"]["evidence_grade"]["metric_gaps"][0]["id"] == "internal_linking_density"
+    # checklist comparison genuinely didn't run - no false parity claim
+    assert "matches the analyzed winners" not in rec["problem"]
+    # evidence text keeps the metric finding out from behind the winner-sample
+    # completeness caveat, which never applied to it
+    assert "Structural metrics (independent of the winner comparison)" in rec["evidence"]
+
+
+def test_metric_gap_shares_card_but_stays_narratively_separate():
+    sc = _sc(
+        [_feat("career_outcomes", qc_has=False, wp=3, n=4, weight="high")],
+        metric_rows=[_metric("structured_content_ratio", qc_value=10, target_min=25, target_max=35, weight="high")],
+    )
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    # one card, both findings present
+    assert rec["detail"]["evidence_grade"]["checklist_gaps"][0]["id"] == "career_outcomes"
+    assert rec["detail"]["evidence_grade"]["metric_gaps"][0]["id"] == "structured_content_ratio"
+    assert "structured content ratio" in rec["action"].lower()
+    # the checklist gap alone already earns "high" priority/0.7 confidence -
+    # the metric gap must not be why, and must not be indistinguishable from it
+    assert rec["priority"] == "high"
+    assert rec["confidence"] == 0.7
+    assert "independent of the winner comparison" in rec["problem"].lower()
+    checklist_evidence, _, metric_evidence = rec["evidence"].partition(" | ")
+    assert "career outcomes" in checklist_evidence.lower()
+    assert "structured content ratio" in metric_evidence.lower()
+    assert "Analyzed" in checklist_evidence   # coverage note stays on the checklist half
+    assert "Analyzed" not in metric_evidence  # ...never bleeds into the metric half
+
+
+def test_multiple_metric_gaps_lead_with_highest_research_priority():
+    # emphasis_density (micro-structure, lowest priority) and
+    # internal_linking_density (macro-structure, highest priority) both fail -
+    # the narrative should lead with internal_linking_density, not emphasis
+    # density or a flat listing of both.
+    sc = _sc([], n=1, metric_rows=[
+        _metric("emphasis_density", qc_value=1, target_min=5, target_max=10, weight="low", confidence="medium"),
+        _metric("internal_linking_density", qc_value=3, target_min=15, target_max=20, weight="high"),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert "internal linking density" in rec["problem"].lower()
+    assert "emphasis density" not in rec["problem"].lower()
+    assert rec["problem"].lower().count("more also measured out of range") == 1
+    assert "internal linking density" in rec["action"].lower()
+    assert "1 more metric(s)" in rec["action"]
+    # both still fully present in the stored evidence/detail data - nothing dropped
+    assert "emphasis density" in rec["evidence"].lower()
+    gap_ids = [g["id"] for g in rec["detail"]["evidence_grade"]["metric_gaps"]]
+    assert set(gap_ids) == {"emphasis_density", "internal_linking_density"}
+    assert gap_ids[0] == "internal_linking_density"  # ranked, lead first
+
+
+def test_metric_gap_action_omits_fix_hint():
+    # The action stays a one-line summary naming only the metric and its
+    # target range - fix_hint text is never inlined there. Every gap's hint
+    # still reaches the frontend via detail.evidence_grade.metric_gaps, where
+    # the structural metrics table renders a "How to fix" line per
+    # out-of-range row; repeating it in the action text would duplicate the
+    # same detail twice on the card.
+    sc = _sc([], n=1, metric_rows=[
+        _metric("internal_linking_density", qc_value=100, target_min=15, target_max=20,
+                weight="high", fix_hint="Cut back on internal links."),
+        _metric("paragraph_length_conformance", qc_value=0, target_min=60, target_max=100,
+                weight="medium", fix_hint="Rewrite paragraphs to land in the 150-300 word range."),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert "Cut back on internal links." not in rec["action"]
+    assert "Rewrite paragraphs to land in the 150-300 word range." not in rec["action"]
+    fix_hints = {g["id"]: g["fix_hint"] for g in rec["detail"]["evidence_grade"]["metric_gaps"]}
+    assert fix_hints["internal_linking_density"] == "Cut back on internal links."
+    assert fix_hints["paragraph_length_conformance"] == "Rewrite paragraphs to land in the 150-300 word range."
+
+
+def test_true_parity_with_all_metrics_in_range_returns_none():
+    sc = _sc(
+        [_feat("direct_answer_first", qc_has=True, wp=4, n=4),
+         _feat("faq_section", qc_has=True, wp=3, n=4)],
+        metric_rows=[_metric("internal_linking_density", qc_value=17, target_min=15, target_max=20)],
+    )
+    assert ts.scorecard_to_recommendation(sc) is None
+    assert ts.scorecard_triage_reason(sc) == "fix_true_feature_parity"
+
+
+def test_metric_value_unmeasurable_does_not_recommend():
+    m = _metric("internal_linking_density", qc_value=None, target_min=15, target_max=20)
+    assert m["recommend"] is False

@@ -15,11 +15,12 @@ function DiffBadge({ diff }) {
   );
 }
 
-function MetricCard({ label, value, diff, highlight }) {
+function MetricCard({ label, value, diff, detail, highlight }) {
   return (
     <div className={`metric-card ${highlight ? "metric-card--highlight" : ""}`}>
       <p className="metric-label">{label}</p>
       <p className="metric-value">{value}</p>
+      {detail && <p className="metric-detail">{detail}</p>}
       <DiffBadge diff={diff} />
     </div>
   );
@@ -45,6 +46,16 @@ function BrandBar({ name, pct, delta, isYou, color }) {
       <div className="bar-track">
         <div className="bar-fill" style={{ width: `${pct}%`, background: color }} />
       </div>
+    </div>
+  );
+}
+
+function RankRow({ rank, name, count }) {
+  return (
+    <div className="rank-row">
+      <span className="rank-row__index">{rank}</span>
+      <span className="rank-row__name">{name}</span>
+      <span className="rank-row__count">{count}</span>
     </div>
   );
 }
@@ -157,6 +168,7 @@ function Overview() {
   const { days, school } = useFilter();
   const [mentionData, setMentionData] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [competitorRanking, setCompetitorRanking] = useState([]);
   const [error, setError] = useState(null);
 
   const loading = summary === null && error === null;
@@ -169,10 +181,12 @@ function Overview() {
     Promise.all([
       fetch(`${API_BASE_URL}/api/mention-rate-by-engine?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/summary?${params}`).then((r) => r.json()),
+      fetch(`${API_BASE_URL}/api/top-competitors-by-school?${params}`).then((r) => r.json()),
     ])
-      .then(([mentionData, summaryData]) => {
+      .then(([mentionData, summaryData, rankingData]) => {
         setMentionData(mentionData);
         setSummary(summaryData);
+        setCompetitorRanking(rankingData);
       })
       .catch((err) => setError(err.message));
   }, [days, school]);
@@ -182,12 +196,34 @@ function Overview() {
 
   const competitors = summary.top_competitors ?? [];
 
+  const topCompetitors = Object.values(
+    competitorRanking.reduce((acc, c) => {
+      if (!acc[c.competitor]) acc[c.competitor] = { name: c.competitor, count: 0 };
+      acc[c.competitor].count += c.count;
+      return acc;
+    }, {})
+  )
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 20);
+
   return (
     <div>
       <div className="metric-grid">
-        <MetricCard label="Mention rate"       value={`${summary.mention_rate}%`}                          diff={summary.mention_rate_diff} />
+        <MetricCard
+          label="Mention rate"
+          value={`${summary.mention_rate}%`}
+          detail={summary.mention_total ? `${summary.mention_count}/${summary.mention_total} responses` : null}
+          diff={summary.mention_rate_diff}
+        />
         <MetricCard label="Visibility score"   value={summary.visibility_score ?? "--"}                    diff={summary.visibility_score_diff} />
-        <MetricCard label="Positive sentiment" value={`${summary.positive_sentiment_rate}%`}               diff={summary.positive_sentiment_diff} />
+        <MetricCard
+          label="Positive sentiment"
+          value={`${summary.positive_sentiment_rate}%`}
+          detail={summary.sentiment_total
+            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative`
+            : null}
+          diff={summary.positive_sentiment_diff}
+        />
         <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
         <MetricCard label="Share of voice"     value={summary.sov ? `${summary.sov}%` : "--"} diff={summary.sov_diff} />
         <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} />
@@ -232,6 +268,19 @@ function Overview() {
               <p className="state-empty">No competitor data yet.</p>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: 12 }}>
+        <p className="panel-title">Top competitors</p>
+        <p className="panel-subtitle">Ranked by total mentions across responses</p>
+        <div className="rank-list">
+          {topCompetitors.map((c, i) => (
+            <RankRow key={c.name} rank={i + 1} name={c.name} count={c.count} />
+          ))}
+          {topCompetitors.length === 0 && (
+            <p className="state-empty">No competitor data yet.</p>
+          )}
         </div>
       </div>
     </div>

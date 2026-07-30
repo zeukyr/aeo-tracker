@@ -1,372 +1,599 @@
 ﻿canonical_name,variants,n_responses,schools,proposed_type,matched_rule,domains,needs_review
-Penn Foster,Dog Trainer Certification Program from Penn Foster; Penn Foster; penn foster; Penn Foster Career School; Penn Foster Online Certificate; Penn Foster Pet and Dog Grooming Certificate; Penn Foster Pet Grooming; Penn Foster Pet Grooming Certificate; Penn Foster Pet Grooming Program; Penn Foster's Pet Grooming Certificate; Penn Foster's Pet Grooming Certificate Program; pennfoster.edu,68,QC Event Planning; QC Pet Studies,competitor,named school/program word,pennfoster.edu,True
-Animal Behavior College,Animal Behavior College; Animal Behaviour College; animalbehaviorcollege.com,33,QC Pet Studies,competitor,university-word override: vocational school,animalbehaviorcollege.com,True
-NYIAD,courses offered by NYIAD; New York Institute of Art & Design (NYIAD); New York Institute of Art and Design; New York Institute of Art and Design (NYIAD); NYIAD; NYIAD (Event Planning Course); NYIAD (New York Institute of Art & Design); NYIAD Online Event Planning Course; nyiad.edu; NYIAD’s Online Event Planning Course; The New York Institute of Art & Design (NYIAD); The New York Institute of Art and Design (NYIAD),33,QC Event Planning,competitor,named school/program word,nyiad.edu,True
-Karen Pryor Academy,Karen Pryor Academy; Karen Pryor Academy (KPA); Karen Pryor Academy Certified Training Partner (KPA CTP); KPA-CTP,29,QC Pet Studies,competitor,named school/program word,,True
-Certification Council for Professional Dog Trainers (CCPDT),CCPDT; CCPDT®; Certification Council for Professional Dog Trainers; Certification Council for Professional Dog Trainers (CCPDT),21,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Coursera,Coursera,21,General; QC Event Planning; QC Pet Studies,platform,platform list (course marketplace),,True
-Event Decorating Academy,Event Decorating Academy; eventdecoratingacademy.com,20,QC Event Planning,competitor,named school/program word,eventdecoratingacademy.com,True
-Good Dog Academy,Good Dog Academy,15,QC Pet Studies,competitor,named school/program word,,True
-Udemy,Udemy,14,QC Event Planning; QC Pet Studies,competitor,approved: marketplace cited via course product pages (competitor),,True
-Paragon School of Pet Grooming,Paragon School of Pet Grooming,13,QC Pet Studies,competitor,named school/program word,,True
-IAP Career College,IAP Career College; IAP Career College’s Event Planner Certificate Course,12,QC Event Planning,competitor,university-word override: vocational school,,True
-IWED Global,IWED Global,12,QC Event Planning,competitor,default (no rule matched),,True
-American Association of Certified Wedding Planners (AACWP),AACWP; American Association of Certified Wedding Planners; American Association of Certified Wedding Planners (AACWP); certifications from American Association of Certified Wedding Planners (AACWP); The American Association of Certified Wedding Planners (AACWP),11,QC Event Planning,certifying_body,association/council/institute-of pattern,,True
-CATCH Canine Trainers Academy,Catch Canine Trainers Academy; CATCH Canine Trainers Academy,11,QC Pet Studies,competitor,named school/program word,,True
-West Coast Grooming Academy,West Coast Grooming; West Coast Grooming Academy; west coast grooming academy,11,QC Pet Studies,competitor,named school/program word,,True
-Yes! Event Decor & More,Yes! Event Decor; YES! Event Decor & More; Yes! Event Decor & More,11,QC Event Planning,competitor,default (no rule matched),,True
-Association of Professional Dog Trainers (APDT),Association of Professional Dog Trainers; Association of Professional Dog Trainers (APDT),10,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-International Professional Groomers (IPG),International Professional Groomers; International Professional Groomers (IPG); IPG,9,QC Pet Studies,certifying_body,known credential acronym,,True
-LinkedIn Learning,LinkedIn Learning,9,QC Event Planning,platform,platform list (course marketplace),,True
-Professional Dog Grooming Academy,PDGA; PDGA (Professional Dog Grooming Academy); Professional Dog Grooming Academy; Professional Dog Grooming Academy (PDGA),9,QC Pet Studies,competitor,named school/program word,,True
-University of Texas at Arlington,University of Texas at Arlington,9,QC Event Planning,not_actionable,university / college,,True
-American Grooming Academy,American Grooming Academy,8,QC Pet Studies,competitor,named school/program word,,True
-edX,edX,8,General; QC Event Planning,platform,platform list (course marketplace),,True
-Elevify,Elevify,8,QC Event Planning,competitor,default (no rule matched),,True
-Fear Free,Fear Free; Fear Free Groomer Certification; Fear Free Groomer Certification Program,8,QC Pet Studies,competitor,approved: sells its own certification program (competitor),,True
-International Association of Animal Behavior Consultants,International Association of Animal Behavior Consultants; International Association of Animal Behavior Consultants (IAABC),8,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Meeting Professionals International (MPI),Meeting Professionals International; Meeting Professionals International (MPI); The Meeting Professionals International (MPI),8,QC Event Planning,certifying_body,known credential acronym,,True
-National Association of Professional Pet Sitters,NAPPS; NAPPS Certification; NAPPS Certification Course; National Association of Professional Pet Sitters,8,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-National Dog Groomers Association of America (NDGAA),National Dog Groomers Association of America; National Dog Groomers Association of America (NDGAA); NDGAA,8,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Shield K9 Online,SHIELD K9 Dog Training; Shield K9 Online; SHIELD K9 Online; SHIELD K9 Online Dog Training,8,QC Pet Studies,competitor,named school/program word,,True
-Skillshare,Skillshare,8,QC Event Planning,competitor,approved: cited via its own class product pages (competitor),,True
-UNC Charlotte,UNC Charlotte,8,QC Event Planning,competitor,default (no rule matched),,True
-University of Houston,University of Houston; University of Houston (Master Event Design),8,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
-Wedding Planning Institute,The Wedding Planning Institute; Wedding Planning Institute,8,QC Event Planning,competitor,named school/program word,,True
-Whole Pet Grooming Academy,Whole Pet Grooming Academy; WPGA; WPGA (World Pet Grooming Association); WPGA Grooming Certification; WPGA Online Grooming Certification,8,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Calm Canines Academy,Calm Canines Academy,7,QC Pet Studies,competitor,named school/program word,,True
-International Association of Canine Professionals (IACP),International Association of Canine Professionals; International Association of Canine Professionals (IACP),7,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Lovegevity,Certified Master Wedding and Event Planner by Lovegevity; Certified Wedding Planner course by Lovegevity; Lovegevity,7,QC Event Planning,competitor,named school/program word,,True
-The Academy of Pet Careers,Academy of Pet Careers; The Academy of Pet Careers,7,QC Pet Studies,competitor,named school/program word,,True
-Alison,Alison; Alison Free Online Event Planning; Alison.com,6,QC Event Planning,competitor,"approved: sells its own courses, cited as the place to take them (competitor)",alison.com,True
-Animal Behavior College (ABC),ABC Grooming School; Animal Behavior College (ABC); Animal Behaviour College (ABC); Association of Bridal Consultants; Association of Bridal Consultants (ABC),6,QC Event Planning; QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Canine Correspondence Studies (CCS),Canine Correspondence Studies; Canine Correspondence Studies (CCS); CCS (Canine Correspondence Studies),6,QC Pet Studies,competitor,named school/program word,,True
-Dogue Academy,Dogue Academy; Dogue Academy Professional Dog Trainer School,6,QC Pet Studies,competitor,named school/program word,,True
-Emory University,Emory University,6,QC Event Planning,not_actionable,university / college,,True
-International Live Events Association (ILEA),ILEA; International Live Events Association; International Live Events Association (ILEA),6,QC Event Planning,certifying_body,association/council/institute-of pattern,,True
-MSI Certified,MSI Certified; MSI Certified Event Planning Certification; MSICertified; MSICertified’s Event Planning Certification,6,QC Event Planning,competitor,default (no rule matched),,True
-Posh Events Institute,Posh Events Institute,6,QC Event Planning,competitor,named school/program word,,True
-Georgian College,Canine Training Academy at Georgian College; Georgian College,5,QC Pet Studies,competitor,university-word override: vocational school,,True
-New York University School of Professional Studies,New York University (NYU) School of Professional Studies; New York University School of Professional Studies; NYU SPS,5,QC Event Planning,not_actionable,university / college,,True
+Penn Foster,Dog Trainer Certification Program from Penn Foster; Penn Foster; penn foster; Penn Foster Career School; Penn Foster Online Certificate; Penn Foster Pet and Dog Grooming Certificate; Penn Foster Pet Grooming; Penn Foster Pet Grooming Certificate; Penn Foster Pet Grooming Program; Penn Foster – Pet and Dog Grooming Certificate; Penn Foster's Pet Grooming Certificate; Penn Foster's Pet Grooming Certificate Program; Penn Foster's Pet Grooming Program; pennfoster.edu,96,QC Event Planning; QC Pet Studies,competitor,named school/program word,pennfoster.edu,True
+Animal Behavior College,Animal Behavior College; Animal Behaviour College; animalbehaviorcollege.com,48,QC Pet Studies,competitor,university-word override: vocational school,animalbehaviorcollege.com,True
+CCPDT,Animal Certification Council for Professional Dog Trainers; CCPDT; CCPDT®; Certification Council for Professional Dog Trainers; Certification Council for Professional Dog Trainers (CCPDT),47,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+NYIAD,courses offered by NYIAD; New York Institute of Art & Design (NYIAD); New York Institute of Art and Design; New York Institute of Art and Design (NYIAD); NYIAD; NYIAD (Event Planning Course); NYIAD (New York Institute of Art & Design); NYIAD Online Event Planning Course; nyiad.edu; NYIAD’s Online Event Planning Course; The New York Institute of Art & Design (NYIAD); The New York Institute of Art and Design (NYIAD),47,QC Event Planning,certifying_body,bare acronym - UNVERIFIED,nyiad.edu,True
+Karen Pryor Academy,Karen Pryor Academy; Karen Pryor Academy (KPA); Karen Pryor Academy for Animal Training & Behavior; KPA,44,QC Pet Studies,certifying_body,bare acronym - UNVERIFIED,,True
+Coursera,Coursera,38,General; QC Event Planning; QC Pet Studies,platform,platform list (course marketplace),,True
+Event Decorating Academy,Event Decorating Academy; eventdecoratingacademy.com,37,QC Event Planning,competitor,named school/program word,eventdecoratingacademy.com,True
+Udemy,Udemy,25,General; QC Event Planning; QC Pet Studies,competitor,approved: marketplace cited via course product pages (competitor),,False
+AKC,AKC; AKC (S.A.F.E. Groomer); AKC Canine College; American Kennel Club; American Kennel Club (AKC); American Kennel Club Canine College,23,QC Pet Studies,certifying_body,known certifying body,,False
+Good Dog Academy,Good Dog Academy,23,QC Pet Studies,competitor,named school/program word,,True
+LinkedIn Learning,LinkedIn Learning,21,General; QC Event Planning,platform,platform list (course marketplace),,True
+IAABC,IAABC; International Association of Animal Behavior Consultants; International Association of Animal Behavior Consultants (IAABC),20,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+IAP Career College,IAP Career College; IAP Career College’s Event Planner Certificate Course,20,QC Event Planning,competitor,university-word override: vocational school,,True
+Meeting Professionals International (MPI),Meeting Professionals International; Meeting Professionals International (MPI); MPI; MPI (Meeting Professionals); MPI Academy; The Meeting Professionals International (MPI),20,QC Event Planning,certifying_body,known credential acronym,,True
+National Dog Groomers Association of America (NDGAA),National Dog Groomers Association of America; National Dog Groomers Association of America (NDGAA); National Dog Groomers Association of America (NDGAA) Certification; NDGAA,20,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Paragon School of Pet Grooming,Paragon School of Pet Grooming; Paragon School of Pet Grooming – Professional Dog Groomer Certificate Program,20,QC Pet Studies,competitor,named school/program word,,True
+American Association of Certified Wedding Planners (AACWP),AACWP; AACWP Training; American Association of Certified Wedding Planners; American Association of Certified Wedding Planners (AACWP); certifications from American Association of Certified Wedding Planners (AACWP); The American Association of Certified Wedding Planners (AACWP),18,QC Event Planning,competitor,approved: delivers its own wedding-planner certification program (competitor),aacwp.org,False
+Association of Professional Dog Trainers,Association of Professional Dog Trainers; Association of Professional Dog Trainers (APDT); The Association of Professional Dog Trainers,18,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+CATCH Canine Trainers Academy,Catch Canine Trainers Academy; CATCH Canine Trainers Academy,18,QC Pet Studies,competitor,named school/program word,,True
+West Coast Grooming Academy,West Coast Grooming; west coast grooming academy; West Coast Grooming Academy,18,QC Pet Studies,competitor,named school/program word,,True
+Yes! Event Decor & More,Yes Event Decor; Yes! Event Decor; YES! Event Decor & More; Yes! Event Decor & More,18,QC Event Planning,competitor,default (no rule matched),,True
+Posh Events Institute,Posh Events Institute,17,QC Event Planning,competitor,named school/program word,,True
+edX,edX,16,General; QC Event Planning; QC Pet Studies,platform,platform list (course marketplace),,True
+IWED Global,IWED Global,16,QC Event Planning,competitor,default (no rule matched),,True
+Elevify,Elevify,15,QC Event Planning; QC Pet Studies,competitor,default (no rule matched),,True
+IPG,International Professional Groomers; International Professional Groomers (IPG); IPG,15,QC Pet Studies,certifying_body,known credential acronym,,True
+National Association of Professional Pet Sitters,NAPPS; NAPPS Certification; NAPPS Certification Course; National Association of Professional Pet Sitters; National Association of Professional Pet Sitters (NAPPS),15,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Paragon Pet School,Paragon Pet School; Paragon Petschool,14,QC Pet Studies,competitor,named school/program word,,True
+University of Texas at Arlington,University of Texas at Arlington,14,QC Event Planning,not_actionable,university / college,,True
+Fear Free,Fear Free; Fear Free Groomer; Fear Free Groomer Certification; Fear Free Groomer Certification Program; Fear Free Pets,13,QC Pet Studies,competitor,approved: sells its own certification program (competitor),,False
+MSI Certified,Management & Strategy Institute; MSI; MSI Certified; MSI Certified Event Planning Certification; MSiCertified; MSICertified; MSICertified’s Event Planning Certification,13,QC Event Planning,competitor,named school/program word,,True
+Professional Dog Grooming Academy (PDGA),PDGA; PDGA (Professional Dog Grooming Academy); Professional Dog Grooming Academy; Professional Dog Grooming Academy (PDGA),13,QC Pet Studies,competitor,named school/program word,,True
+UNC Charlotte,UNC Charlotte,13,QC Event Planning,competitor,default (no rule matched),,True
+Wedding Planning Institute,The Wedding Planning Institute; Wedding Planning Institute; weddingplanninginstitute.com,13,QC Event Planning,competitor,named school/program word,weddingplanninginstitute.com,True
+American Grooming Academy,American Grooming Academy,12,QC Pet Studies,competitor,named school/program word,,True
+Association of Bridal Consultants,ABC Grooming School; Animal Behavior College (ABC); Animal Behaviour College (ABC); Association of Bridal Consultants; Association of Bridal Consultants (ABC),12,QC Event Planning; QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Alison,Alison; Alison Free Online Event Planning; Alison.com,11,QC Event Planning,competitor,"approved: sells its own courses, cited as the place to take them (competitor)",alison.com,False
+Lovegevity,Certified Master Wedding and Event Planner by Lovegevity; Certified Wedding Planner course by Lovegevity; Lovegevity,11,QC Event Planning,competitor,named school/program word,,True
+Skillshare,Skillshare,11,QC Event Planning,competitor,approved: cited via its own class product pages (competitor),,False
+Calm Canines Academy,Calm Canines Academy,10,QC Pet Studies,competitor,named school/program word,,True
+Georgian College,Canine Training Academy at Georgian College; Georgian College; Georgian College’s Canine Training Academy,10,QC Pet Studies,competitor,university-word override: vocational school,,True
+International Association of Canine Professionals (IACP),International Association of Canine Professionals; International Association of Canine Professionals (IACP),10,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Pet Sitters International,Pet Sitters International; Pet Sitters International (PSI); PSI,10,QC Pet Studies,certifying_body,known certifying body,,False
+The Academy of Pet Careers,Academy of Pet Careers; The Academy of Pet Careers,10,QC Pet Studies,competitor,named school/program word,,True
+University of Houston,University of Houston; University of Houston (Master Event Design),10,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
+Whole Pet Grooming Academy,Whole Pet Grooming Academy; WPGA; WPGA (World Pet Grooming Association); WPGA Grooming Certification; WPGA Grooming School; WPGA Online Grooming Certification,10,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+AKC S.A.F.E. Program,AKC S.A.F.E. Dog Grooming Program; AKC S.A.F.E. Groomer Certification; AKC S.A.F.E. Program; AKC® S.A.F.E.; AKC® S.A.F.E. Dog Groomer; AKC® S.A.F.E. Dog Grooming Program; AKC® S.A.F.E. Program,9,QC Pet Studies,competitor,named school/program word,,True
+Canadian Association of Professional Dog Trainers,Canadian Association of Professional Dog Trainers; Canadian Association of Professional Dog Trainers (CAPDT); CAPDT; CAPDT (Developing),9,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Lovegevity / Wedding Planning Institute,Lovegevity / Wedding Planning Institute; Lovegevity Wedding Planning Institute (LWPI); Lovegevity’s LWPI; Lovegevity’s Wedding Planning Institute; Lovegevity’s Wedding Planning Institute (CWP),9,QC Event Planning,competitor,named school/program word,,True
+Shield K9 Online,SHIELD K9 Dog Training; Shield K9 Online; SHIELD K9 Online; SHIELD K9 Online Dog Training,9,QC Pet Studies,competitor,named school/program word,,True
+Certified Meeting Professional (CMP),Certified Meeting Professional; Certified Meeting Professional (CMP),8,QC Event Planning,certifying_body,credential name (Certified ...),,True
+Dogue Academy,Dogue Academy; Dogue Academy Professional Dog Trainer School,8,QC Pet Studies,competitor,named school/program word,,True
+Flawless Pet Grooming,Flawless Pet Grooming,8,QC Pet Studies,competitor,named school/program word,,True
+International Live Events Association (ILEA),ILEA; International Live Events Association; International Live Events Association (ILEA),8,QC Event Planning,certifying_body,association/council/institute-of pattern,,True
+Victoria Stilwell Academy,Victoria Stilwell Academy; Victoria Stilwell Academy for Dog Training & Behavior (VSA),8,QC Pet Studies,competitor,named school/program word,,True
+Canine Correspondence Studies (CCS),Canine Correspondence Studies; Canine Correspondence Studies (CCS); CCS (Canine Correspondence Studies),7,QC Pet Studies,competitor,named school/program word,,True
+Emory University,Emory University,7,QC Event Planning,not_actionable,university / college,,True
+Lehman College,Lehman College; Lehman College – Wedding and Event Planner Classes Online; Lehman College – Wedding and Event Planning Certificate; Lehman College's Wedding and Event Planner Classes,7,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
+MSU Denver,MSU Denver,7,QC Event Planning,competitor,default (no rule matched),,True
+New York University School of Professional Studies,New York University (NYU) School of Professional Studies; New York University School of Professional Studies; NYU SPS,7,QC Event Planning,not_actionable,university / college,,True
+PCMA,PCMA,7,QC Event Planning,certifying_body,bare acronym - UNVERIFIED,,True
+Petco,Petco,7,QC Pet Studies,competitor,default (no rule matched),,True
+Yes! Event Academy,Yes! Event Academy,7,QC Event Planning,competitor,named school/program word,,True
+Certified Special Events Professional,Certified Special Events Professional; Certified Special Events Professional (CSEP),6,QC Event Planning,certifying_body,credential name (Certified ...),,True
+Clip Shoppe School of Dog Grooming,Clip Shoppe School of Dog Grooming,6,QC Pet Studies,competitor,named school/program word,,True
+DogStars Training Academy,DogStars Training Academy,6,QC Pet Studies,competitor,named school/program word,,True
+Edmonds College,Edmonds College,6,QC Event Planning,not_actionable,university / college,,True
+EventPlanning.com,event planning course; EventPlanning.com,6,QC Event Planning,competitor,named school/program word,eventplanning.com,True
+Instinct Dog Training,Instinct Dog Training; Instinct Dog Training Online School,6,QC Pet Studies,competitor,named school/program word,,True
+Oxford Home Study,Oxford Home Study; Oxford Home Study College,6,QC Event Planning,competitor,university-word override: vocational school,,True
+Pretty Paws Grooming Academy,Pretty Paws Grooming Academy,6,QC Pet Studies,competitor,named school/program word,,True
+The Wedding Academy,The Wedding Academy; Wedding Academy,6,QC Event Planning,competitor,named school/program word,,True
+Cvent,Cvent; Cvent Academy; cvent.com,5,QC Event Planning,competitor,approved: vendor's own pages hold ownable slots (competitor),cvent.com,False
+e-Training for Dogs,e-Training for Dogs,5,QC Pet Studies,competitor,named school/program word,,True
+Ethology Institute,Ethology Institute,5,QC Pet Studies,competitor,named school/program word,,True
+Events Industry Council,Event Industry Council; Events Industry Council,5,QC Event Planning,certifying_body,known certifying body,,False
+Fenzi Dog Sports Academy,Fenzi Dog Sports Academy,5,QC Pet Studies,competitor,named school/program word,,True
+George Washington University,Event Planning Certificate from the George Washington University; George Washington University; George Washington University (GWU),5,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
+International Canine Training Institute (ICTI),International Canine Training Institute (ICTI),5,QC Pet Studies,competitor,named school/program word,,True
+MidMo Dog Training,MidMo Dog Training,5,QC Pet Studies,competitor,named school/program word,,True
+Prestige Dog Grooming School,Prestige Dog Grooming School,5,QC Pet Studies,competitor,named school/program word,,True
 Social Tables,Social Tables; socialtables.com,5,QC Event Planning,not_actionable,job board / e-commerce / SaaS list,socialtables.com,True
-Victoria Stilwell Academy,Victoria Stilwell Academy; Victoria Stilwell Academy for Dog Training & Behavior (VSA),5,QC Pet Studies,competitor,named school/program word,,True
+South Texas College,South Texas College,5,QC Pet Studies,competitor,university-word override: vocational school,,True
+Unleashed Potential K9 Academy,Unleashed Potential K9 Academy,5,QC Pet Studies,competitor,named school/program word,,True
+V Wedding Academy,V Wedding Academy,5,QC Event Planning,competitor,named school/program word,,True
+Wedding Academy Global,Wedding Academy Global,5,QC Event Planning,competitor,named school/program word,,True
 ZipRecruiter,ZipRecruiter; ziprecruiter.com,5,QC Pet Studies,not_actionable,job board / e-commerce / SaaS list,ziprecruiter.com,True
-American Kennel Club,American Kennel Club; American Kennel Club Canine College,4,QC Pet Studies,certifying_body,known certifying body,,True
+American Academy of Wedding Professionals (AAWP),American Academy of Wedding Professionals (AAWP),4,QC Event Planning,competitor,approved: sells its own 12-week certification cohort directly (competitor),beaweddingplanner.com,False
+American College of Veterinary Behaviorists,ACVB; American College of Veterinary Behaviorists,4,QC Pet Studies,not_actionable,university / college,,True
+Animal Behavior Institute,Animal Behavior Institute; Animal Behavior Institute (ABI),4,QC Pet Studies,competitor,named school/program word,,True
+Building Bonds Online Courses,Building Bonds Online Courses,4,QC Pet Studies,competitor,named school/program word,,True
 C2H Online,C2H Online,4,QC Pet Studies,competitor,default (no rule matched),,True
 Cali K9 Online Training,Cali K9 Online Training; Cali K9®; Cali K9® Online Training,4,QC Pet Studies,competitor,named school/program word,,True
-CAPDT,Canadian Association of Professional Dog Trainers; CAPDT; CAPDT (Developing),4,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
-Certified Meeting Professional (CMP),Certified Meeting Professional (CMP),4,QC Event Planning,certifying_body,credential name (Certified ...),,True
-Clip Shoppe School of Dog Grooming,Clip Shoppe School of Dog Grooming,4,QC Pet Studies,competitor,named school/program word,,True
-Cvent,Cvent; cvent.com,4,QC Event Planning,competitor,approved: vendor's own pages hold ownable slots (competitor),cvent.com,True
-DogStars Training Academy,DogStars Training Academy,4,QC Pet Studies,competitor,named school/program word,,True
-Edmonds College,Edmonds College,4,QC Event Planning,not_actionable,university / college,,True
-George Washington University,Event Planning Certificate from the George Washington University; George Washington University; George Washington University (GWU),4,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
+Canine Club Academy,Canine Club Academy,4,QC Pet Studies,competitor,named school/program word,,True
+Carroll Community College,Carroll Community College,4,QC Pet Studies,not_actionable,university / college,,True
+Certified Wedding Planner Society,Certified Wedding Planner Society; Certified Wedding Planner Society (CWP Society),4,QC Event Planning,certifying_body,known certifying body,,False
+CSULB,"California State University Long Beach; California State University, Long Beach; CSULB",4,QC Event Planning,not_actionable,university / college,,True
+CWP Society,CWP Society; The CWP Society,4,QC Event Planning,certifying_body,known certifying body,,False
+Dogma Academy,Dogma Academy,4,QC Pet Studies,competitor,named school/program word,,True
+Event Academy,Event Academy,4,QC Event Planning,competitor,named school/program word,,True
+Groom Curriculum,Groom Curriculum,4,QC Pet Studies,competitor,default (no rule matched),,True
+GW School of Business,GW School of Business; GW School of Business (GWSB),4,QC Event Planning,not_actionable,university / college,,True
+Harford Community College,Harford Community College,4,QC Pet Studies,not_actionable,university / college,,True
 International Dog Trainer School,International Dog Trainer School; internationaldogtrainerschool.com,4,QC Pet Studies,competitor,named school/program word,internationaldogtrainerschool.com,True
+Jodi Murphy’s Distance Learning Program,Jodi Murphy; Jodi Murphy Distance Learning; Jodi Murphy’s Distance Learning Program,4,QC Pet Studies,competitor,default (no rule matched),,True
+Let's Groom Virtual Academy,Let's Groom Virtual Academy,4,QC Pet Studies,competitor,named school/program word,,True
 New Skills Academy,New Skills Academy,4,QC Pet Studies,competitor,named school/program word,,True
 Northern California Grooming Academy,Northern California Grooming Academy,4,QC Pet Studies,competitor,named school/program word,,True
-Paragon Pet School,Paragon Pet School; Paragon Petschool,4,QC Pet Studies,competitor,named school/program word,,True
-Pretty Paws Grooming Academy,Pretty Paws Grooming Academy,4,QC Pet Studies,competitor,named school/program word,,True
-South Texas College,South Texas College,4,QC Pet Studies,competitor,university-word override: vocational school,,True
-The Wedding Academy,The Wedding Academy; Wedding Academy,4,QC Event Planning,competitor,named school/program word,,True
-Unity,Unity; Unity College; unity.edu; Unity.edu,4,QC Pet Studies,not_actionable,university / college,unity.edu,True
-Wedding Academy Global,Wedding Academy Global,4,QC Event Planning,competitor,named school/program word,,True
-Yes! Event Academy,Yes! Event Academy,4,QC Event Planning,competitor,named school/program word,,True
+PACCC,PACCC; Professional Animal Care Certification Council (PACCC),4,QC Pet Studies,certifying_body,association/council/institute-of pattern,,True
+Paragon,Paragon,4,QC Pet Studies,competitor,default (no rule matched),,True
+PLH School,PLH School,4,QC Pet Studies,competitor,named school/program word,,True
+Posh Events Course,Posh Events Course; Poshevents Course; Posheventscourse,4,QC Event Planning,competitor,named school/program word,,True
+Printify,Printify,4,QC Event Planning; QC Pet Studies,not_actionable,job board / e-commerce / SaaS list,,True
+SpiritDog Training,SpiritDog Training,4,QC Pet Studies,competitor,named school/program word,,True
+Tuma Event Ambience Creators (TEAC),Tuma Event Ambience Creators (TEAC),4,QC Event Planning,competitor,default (no rule matched),,True
+Unity,Unity; Unity College; Unity.edu; unity.edu,4,QC Pet Studies,not_actionable,university / college,unity.edu,True
+University of Georgia,University of Georgia,4,QC Event Planning,not_actionable,university / college,,True
+Wedding Planner Institute,The Wedding Planner Institute; Wedding Planner Institute; Wedding Planning Institute (WPI),4,QC Event Planning,competitor,named school/program word,,True
+American Red Cross,American Red Cross,3,QC Pet Studies,competitor,default (no rule matched),,True
+American School of Dog Grooming,American School of Dog Grooming,3,QC Pet Studies,competitor,named school/program word,,True
 Berry College,Berry College; berry.edu,3,QC Pet Studies,not_actionable,university / college,berry.edu,True
-Canine Club Academy,Canine Club Academy,3,QC Pet Studies,competitor,named school/program word,,True
+Cake Hoopla,Cake Hoopla,3,QC Event Planning,competitor,default (no rule matched),,True
 Career Village,Career Village; careervillage.org,3,QC Event Planning; QC Pet Studies,not_actionable,job board / e-commerce / SaaS list,careervillage.org,True
-Certified Wedding Planner Society,Certified Wedding Planner Society; Certified Wedding Planner Society (CWP Society),3,QC Event Planning,certifying_body,known certifying body,,True
-e-Training for Dogs,e-Training for Dogs,3,QC Pet Studies,competitor,named school/program word,,True
-Ethology Institute,Ethology Institute,3,QC Pet Studies,competitor,named school/program word,,True
-EventPlanning.com,Event Planning Schools; EventPlanning.com,3,QC Event Planning,competitor,default (no rule matched),eventplanning.com,True
-Flawless Pet Grooming,Flawless Pet Grooming,3,QC Pet Studies,competitor,named school/program word,,True
-Groom Curriculum,Groom Curriculum,3,QC Pet Studies,competitor,default (no rule matched),,True
+City College of New York,City College of New York; City College of New York (CCNY),3,QC Event Planning,not_actionable,university / college,,True
+Class Central,Class Central,3,QC Event Planning; QC Pet Studies,competitor,default (no rule matched),,True
+CynoDo,CynoDo; CynoDo®,3,QC Pet Studies,competitor,default (no rule matched),,True
+Diamond Cut Dog Grooming School,Diamond Cut Dog Grooming; Diamond Cut Dog Grooming School,3,QC Pet Studies,competitor,named school/program word,,True
+Event Decorating Academy (EDA),Event Decorating Academy (EDA),3,QC Event Planning,competitor,default (no rule matched),,True
+Event Leadership Institute,Event Leadership Institute,3,QC Event Planning,competitor,named school/program word,,True
+Eventbrite,Eventbrite,3,QC Event Planning,not_actionable,job board / e-commerce / SaaS list,,True
+FutureLearn,FutureLearn,3,QC Event Planning,platform,platform list (course marketplace),,True
 Groomer to Groomer,Groomer to Groomer,3,QC Pet Studies,not_actionable,generic noun - no proper noun,,True
-Instinct Dog Training,Instinct Dog Training,3,QC Pet Studies,competitor,named school/program word,,True
-International Canine Training Institute (ICTI),International Canine Training Institute (ICTI),3,QC Pet Studies,competitor,named school/program word,,True
+Indeed,Indeed,3,General; QC Event Planning; QC Pet Studies,not_actionable,job board / e-commerce / SaaS list,,True
+International Academy,International Academy,3,QC Pet Studies,competitor,named school/program word,,True
 International Institute of Event Management,International Institute of Event Management; The International Institute of Event Management,3,QC Event Planning,competitor,named school/program word,,True
-Jodi Murphy’s Distance Learning Program,Jodi Murphy; Jodi Murphy’s Distance Learning Program,3,QC Pet Studies,competitor,default (no rule matched),,True
+JKL Grooming,JKL Grooming; JKL Grooming Academy,3,QC Pet Studies,competitor,named school/program word,,True
 Just Four Paws Academy,Just Four Paws Academy,3,QC Pet Studies,competitor,named school/program word,,True
-Lehman College,Lehman College; Lehman College's Wedding and Event Planner Classes,3,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
-Lovegevity’s LWPI,Lovegevity Wedding Planning Institute (LWPI); Lovegevity’s LWPI; Lovegevity’s Wedding Planning Institute (CWP),3,QC Event Planning,competitor,named school/program word,,True
-MidMo Dog Training,MidMo Dog Training,3,QC Pet Studies,competitor,named school/program word,,True
+K9 Training Institute,K9 Training Institute,3,QC Pet Studies,competitor,named school/program word,,True
+McNeese State University,McNeese State University,3,QC Event Planning,not_actionable,university / college,,True
 Mindfulness4dogs Online Dog School,Mindfulness4dogs Online Dog School,3,QC Pet Studies,competitor,named school/program word,,True
 New York Institute of Pet Grooming,New York Institute of Pet Grooming; New York Institute of Pet Grooming (NYIPG); NYIPG,3,QC Pet Studies,certifying_body,bare acronym - UNVERIFIED,,True
-Oxford Home Study,Oxford Home Study; Oxford Home Study College,3,QC Event Planning,competitor,university-word override: vocational school,,True
-PACCC,PACCC,3,QC Pet Studies,certifying_body,known credential acronym,,True
+Palm Beach State College,Palm Beach State College; PBSC (Palm Beach State),3,QC Event Planning,not_actionable,university / college,,True
 Paw Parent Academy,Paw Parent Academy; Paw Parent Academy's Dog Grooming Courses,3,QC Pet Studies,competitor,named school/program word,,True
-Pet Sitters International,Pet Sitters International,3,QC Pet Studies,certifying_body,known certifying body,,True
-Posheventscourse,Posh Events Course; Poshevents Course; Posheventscourse,3,QC Event Planning,competitor,named school/program word,,True
-Prestige Dog Grooming School,Prestige Dog Grooming School,3,QC Pet Studies,competitor,named school/program word,,True
-Printify,Printify,3,QC Event Planning; QC Pet Studies,not_actionable,job board / e-commerce / SaaS list,,True
-Unleashed Potential K9 Academy,Unleashed Potential K9 Academy,3,QC Pet Studies,competitor,named school/program word,,True
-V Wedding Academy,V Wedding Academy,3,QC Event Planning,competitor,named school/program word,,True
+Shear Excellence Dog Grooming Academy,Shear Excellence Dog Grooming Academy,3,QC Pet Studies,competitor,named school/program word,,True
+The Bridal Society,The Bridal Society; The Bridal Society (TBS),3,QC Event Planning,certifying_body,known certifying body,,False
+The Event Management Course,event management; Institute of Event Management; The Event Management Course,3,QC Event Planning,certifying_body,association/council/institute-of pattern,,True
+The Event School London,Event School London; The Event School London,3,QC Event Planning,competitor,named school/program word,,True
+The International School for Canine Psychology and Behaviour,The International School for Canine Psychology and Behaviour; The International School for Canine Psychology and Behaviour (ISCP),3,QC Pet Studies,competitor,named school/program word,,True
+Tipsy Cake OKC,Tipsy Cake OKC,3,QC Event Planning,competitor,default (no rule matched),,True
+University of Florida,University of Florida; University of Florida (AA),3,QC Event Planning,not_actionable,university / college,,True
+University of New Orleans – Certified Master Wedding and Event Planner,University of New Orleans (UNO); University of New Orleans – Certified Master Wedding and Event Planner,3,QC Event Planning,not_actionable,university - but may sell a standalone certificate (flagged),,True
+University of North Carolina at Charlotte,University of North Carolina at Charlotte,3,QC Event Planning,not_actionable,university / college,,True
+Vocational School,Vocational School; Vocational School Programs; vocational schools,3,QC Pet Studies,not_actionable,generic noun - no proper noun,,True
+Wagner College,Wagner College,3,QC Event Planning,not_actionable,university / college,,True
 Webber International University,Webber International University,3,QC Event Planning,not_actionable,university / college,,True
-American Academy of Wedding Professionals (AAWP),American Academy of Wedding Professionals (AAWP),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-American School of Dog Grooming,American School of Dog Grooming,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Animal Behavior Institute,Animal Behavior Institute,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+99 Business Ideas,99 Business Ideas; 99businessideas,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Academy for Dog Trainers,Academy for Dog Trainers,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Academy of Animal Arts,Academy of Animal Arts,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+American Animal Hospital Association,American Animal Hospital Association,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+American Professional Pet Groomers Association,American Professional Pet Groomers Association; APPGA,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+American Society of Association Executives (ASAE),American Society of Association Executives (ASAE),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+Animal Behavior College (ABCDT),ABCDT; Animal Behavior College (ABCDT),2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Animal Behavior Society,Animal Behavior Society,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 animalcoursesdirect.co.uk,animalcoursesdirect.co.uk,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),animalcoursesdirect.co.uk,False
-Building Bonds Online Courses,Building Bonds Online Courses,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-California State University Long Beach,California State University Long Beach; CSULB,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+AVMA,AVMA,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Behavior Vets,Behavior Vets,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Bingo Institute of Grooming,Bingo Institute of Grooming,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Boujee Pet Grooming School and Academy,Boujee Pet Grooming School and Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Brain Training for Dogs,Brain Training for Dogs,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Brentwood Open Learning Center,Brentwood Open Learning Center,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Broward College,Broward College,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Bureau of Labor Statistics,BLS; Bureau of Labor Statistics,2,QC Event Planning; QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 Canine Academy,Canine Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Certified Special Events Professional (CSEP),Certified Special Events Professional (CSEP),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
-CWP Society,CWP Society,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: known certifying body,,False
-CynoDo,CynoDo; CynoDo®,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Diamond Cut Dog Grooming School,Diamond Cut Dog Grooming School,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Canine Behavior Academy,Canine Behavior Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Canine Foundations,Canine Foundations,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Canine Principles,Canine Principles,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Certified Event Designer,Certified Event Designer,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
+Certified Professional Dog Trainer – Knowledge Assessed (CPDT-KA),Certified Professional Dog Trainer – Knowledge Assessed (CPDT-KA),2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
+City & Guilds,City & Guilds,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Cochrane & Area Humane Society,Cochrane & Area Humane Society; Cochrane and Area Humane Society,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+Cochrane & Area Humane Society PACE Instructor Certificate,Cochrane & Area Humane Society PACE Instructor Certificate; Cochrane and Area Humane Society's PACE Instructor Certificate,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+CourseHorse,CourseHorse,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
+Dallas College,Dallas College,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Dog Groomer Academy,Dog Groomer Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Dog Grooming Academy of Indianapolis,Dog Grooming Academy of Indianapolis,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Dog Grooming School of Pennsylvania,Dog Grooming School of Pennsylvania,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Dogma Academy,Dogma Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Domestika,Domestika,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Dreamy Dogs Grooming Academy,Dreamy Dogs Grooming Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Dunbar Academy,Dunbar Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Eastside Academy of Dog Grooming,Eastside Academy of Dog Grooming,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Easy Busy Pets,Easy Busy Pets,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Eventbrite,Eventbrite,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Fenzi Dog Sports Academy,Fenzi Dog Sports Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Etsy,Etsy,2,QC Event Planning; QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+Event Design Certificate,Event Design Certificate,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Flawless Pet Grooming School & Salon,Flawless Pet Grooming School & Salon,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+GateWay Community College,GateWay Community College,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Groomarts,Groom Arts; Groomarts,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Grooming School of Indiana,Grooming School of Indiana,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+IBPSA,IBPSA,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 Julius K9,Julius K9,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Let's Groom Virtual Academy,Let's Groom Virtual Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Karen Pryor Academy Certified Training Partner (KPA CTP),Karen Pryor Academy Certified Training Partner (KPA CTP); KPA-CTP,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Madison College,Madison College,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 MasterClass,MasterClass,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
-McNeese State University,McNeese State University,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Merryfield,Merryfield,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Moego,Moego,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-MSU Denver,MSU Denver,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Nassau BOCES,Nassau BOCES; nassau boces,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+National Dog Groomers Association,National Association of Professional Pet Groomers (NAPPG); National Dog Groomers Association,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 NJ Dog Grooming School,NJ Dog Grooming School; nj dog grooming school,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 OKC Unleashed,OKC Unleashed,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Online Grooming School,Online Grooming School,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Paragon,Paragon,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Oxford Home Study Centre,Oxford Home Study Centre,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Party R Uz,Party R Uz,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 PCMA Institute,PCMA Institute,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Pennsylvania Dog Grooming School,Pennsylvania Dog Grooming School; pennsylvania dog grooming school,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Pennsylvania Dog Grooming School,pennsylvania dog grooming school; Pennsylvania Dog Grooming School,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Pet Courses CA,Pet Courses CA,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Pet Professional,Pet Professional,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Portland Community College,PCC; Portland Community College,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-Shear Excellence Dog Grooming Academy,Shear Excellence Dog Grooming Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-SpiritDog Training,SpiritDog Training,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-The Bridal Society,The Bridal Society; The Bridal Society (TBS),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: known certifying body,,False
-The International School for Canine Psychology and Behaviour,The International School for Canine Psychology and Behaviour; The International School for Canine Psychology and Behaviour (ISCP),2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+PetCareIns,Pet Care Ins; PetCareIns,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+Portland Community College,Portland Community College; Portland Community College (PCC),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Royal Dog Academy,Royal Dog Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+SBA,SBA,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+School of Canine Science,School of Canine Science; The School of Canine Science,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Shopify,Shopify,2,QC Event Planning; QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+Stautzenberger College,Stautzenberger College,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Sunflower Events Hall,Sunflower Events Hall; Sunflower Events Hall (EnglobArt),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Team Dog,Team Dog,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Tellington TTouch Practitioner Training,Tellington TTouch Practitioner Training; Tellington TTouch® Practitioner Training,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+The Canine University,The Canine University,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+The CreATEery,The CreATEery,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+The International School of Canine Psychology (ISC),ISCP; The International School of Canine Psychology (ISC),2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 The Sheffield School,The Sheffield School,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Top Universities,Top Universities; topuniversities.com,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,topuniversities.com,False
-Tuma Event Ambience Creators (TEAC),Tuma Event Ambience Creators (TEAC),2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Toronto Humane Society,Toronto Humane Society,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+U.S. Bureau of Labor Statistics,U.S. Bureau of Labor Statistics,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 UC Davis,UC Davis; ucdavis.edu,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,ucdavis.edu,False
-Vocational School,Vocational School; Vocational School Programs,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Wagner College,Wagner College,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+UCLA Extension,UCLA Extension,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Udacity,Udacity,2,General,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
+UGA,UGA,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+US Career Institute,US Career Institute,2,General; QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Wear Wag Repeat,Wear Wag Repeat,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Weddings Beautiful Worldwide,Weddings Beautiful Worldwide,2,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Xtra Dog Academy,Xtra Dog Academy,2,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 2handsart,2handsart,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+AAPPG,AAPPG,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+AAWP Certification,AAWP Certification,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 ABC Wedding Education,ABC Wedding Education,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+abcweddingplanners.com,abcweddingplanners.com,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),abcweddingplanners.com,False
 ABS,ABS,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 academic animal behaviorist,academic animal behaviorist,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Academy for Dog Trainers,Academy for Dog Trainers,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Academy of Animal Arts,Academy of Animal Arts,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Academy of Wedding and Event Planning,Academy of Wedding and Event Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Accelerated programs,Accelerated programs,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-AKC® S.A.F.E. Program,AKC® S.A.F.E. Program,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+ADA,ADA,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Aggression in Dogs,Aggression in Dogs,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+AKC Canine College / AKC Groomer Education,AKC Canine College / AKC Groomer Education,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
+AKC Safety in the Salon / AKC S.A.F.E. Grooming,AKC Safety in the Salon / AKC S.A.F.E. Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Alibaba,Alibaba,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 All Breed Pet Salon,All Breed Pet Salon,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Allied Health Career Training,Allied Health Career Training,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-American Red Cross,American Red Cross,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-American Society of Association Executives (ASAE),American Society of Association Executives (ASAE),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+Allied Health Education,Allied Health Education,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Ambiance Event Designs,Ambiance Event Designs,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+American School,American School,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Andrea Eppolito,Andrea Eppolito,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Animal Behavior Specialist,Animal Behavior Specialist,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Animal Behaviorist,Animal Behaviorist,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Animal Behaviour College Canada,Animal Behaviour College Canada,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
+Animal Control Officer,Animal Control Officer,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Animal Education,Animal Education,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Animal Nutritionist,Animal Nutritionist,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Ankorstore,Ankorstore,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+Applause Dog Training,Applause Dog Training,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Apprenticeships,Apprenticeships,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Apprenticeships or mentorships,Apprenticeships or mentorships,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Apprenticeships/Mentorships,Apprenticeships/Mentorships,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Arizona State University (via Coursera),Arizona State University (via Coursera),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Art Event,Art Event,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Art Studios,Art Studios,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Ashford University,Ashford University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 ASPCA Learning Lab,ASPCA Learning Lab,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Athens Technical College,Athens Technical College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Augusta Technical College,Augusta Technical College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+AVSAB,AVSAB,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Azalia Cute Designs,Azalia Cute Designs,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Barnsley College,Barnsley College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Baxter & Bella,Baxter & Bella,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Become An Event Planner,Become An Event Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Best (Paragon Pet School),Best (Paragon Pet School),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Bingo Institute of Grooming,Bingo Institute of Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Boujee Pet Grooming School and Academy,Boujee Pet Grooming School and Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Brentwood Open Learning Center,Brentwood Open Learning Center,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+BMCC (CUNY),BMCC (CUNY),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Boarding Kennel Manager/Owner,Boarding Kennel Manager/Owner,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Boise State University,Boise State University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Bonnie's Place,Bonnie's Place,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Brentwood Open Learning,Brentwood Open Learning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 British College of Canine Studies,British College of Canine Studies,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: university-word override: vocational school,,False
 Bryant University,Bryant University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Bunker Hill Community College Event Management,Bunker Hill Community College Event Management,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
-Cake Hoopla,Cake Hoopla,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Butler Community College,Butler Community College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+cake and event-style decorating classes,cake and event-style decorating classes,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 CalCareers,CalCareers,1,General,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+California school,California school,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Canadian Assistance Dog Institute,Canadian Assistance Dog Institute,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Candice Coppola,Candice Coppola,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Canine Behavior Academy,Canine Behavior Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Canine,Canine,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Canine & Feline Behaviour Association,Canine & Feline Behaviour Association,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+Canine Behavior Associates,Canine Behavior Associates,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Canine Behavior Consultant Certificate,Canine Behavior Consultant Certificate,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Canine Behaviour College,Canine Behaviour College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Canine College,Canine College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Canine Foundations,Canine Foundations,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Canine Design Academy,Canine Design Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Canine Physical Therapist,Canine Physical Therapist,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Canine Training & Behavior,Canine Training & Behavior,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 caninecrews.com,caninecrews.com,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),caninecrews.com,False
+Cape Fear Community College (CFCC),Cape Fear Community College (CFCC),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Career Fitter,Career Fitter,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Careershifters,Careershifters,1,General,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Carroll Community College,Carroll Community College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+CATCH Dog Trainers,CATCH Dog Trainers,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 caterers,caterers,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+CCBC,CCBC,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 ccny.cuny.edu,ccny.cuny.edu,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),ccny.cuny.edu,False
 Central Virginia Career Training,Central Virginia Career Training,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Centre of Excellence,Centre of Excellence,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Certification,Certification,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Certified Canine Groomer (CCG),Certified Canine Groomer (CCG),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
+Certified Event Decorator,Certified Event Decorator,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
 Certified Master Groomer (CMG),Certified Master Groomer (CMG),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
+Certified Master Groomer (CMG) via Animal Behavior College,Certified Master Groomer (CMG) via Animal Behavior College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
 Certified Master Wedding and Event Planner,Certified Master Wedding and Event Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Certified Pet Care Professional,Certified Pet Care Professional,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Certified Pet Expert,Certified Pet Expert,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Certified Professional Dog Trainer,Certified Professional Dog Trainer,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Certified Professional Pet Groomer (CPPG),Certified Professional Pet Groomer (CPPG),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
 Certified Special Event Professional (CSEP),Certified Special Event Professional (CSEP),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
 Certified Wedding & Event Planning (CWEP) program,Certified Wedding & Event Planning (CWEP) program,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: credential name (Certified ...),,False
+Certified Wedding Planner,Certified Wedding Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Certified Wedding Planners Society,Certified Wedding Planners Society,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+CEWPI Event Designer Certification,CEWPI Event Designer Certification,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 chambers of commerce,chambers of commerce,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Chef Schonberg’s Sweets,Chef Schonberg’s Sweets,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Chicago State University,Chicago State University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-City College of New York,City College of New York,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-Cochrane and Area Humane Society,Cochrane and Area Humane Society,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 Cochrane and Area Humane Society's PACE Program,Cochrane and Area Humane Society's PACE Program,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+College of Animal Welfare (CAW),College of Animal Welfare (CAW),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
 College of International Education,College of International Education,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 College Raptor,College Raptor,1,General,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 Collin College,Collin College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+CommuniCanine,CommuniCanine,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Complete K9 Training,Complete K9 Training,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Comprehensive/Professional Programs (In-Person),Comprehensive/Professional Programs (In-Person),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Cornell University,Cornell University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Corporate training or bather-to-stylist paths,Corporate training or bather-to-stylist paths,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-CourseHorse,CourseHorse,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
 CPL Event Decorating School,CPL Event Decorating School,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 CPPS-Certified Professional Pet Sitter®,CPPS-Certified Professional Pet Sitter®,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 CPS-DW,CPS-DW,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Creek Life Canine Academy,Creek Life Canine Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 cvlinens.com,cvlinens.com,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,cvlinens.com,False
 CynoDo Academy,CynoDo Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Dallas College,Dallas College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+DACVB,DACVB,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Dallas School of Floral Design,Dallas School of Floral Design,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Davron,Davron,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Decor Arabia,Decor Arabia,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Decorating Den,Decorating Den,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Decorating Den Interiors,Decorating Den Interiors,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 DesignFiles,DesignFiles,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+Digital Event Strategist,Digital Event Strategist,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 DIGMODA Academy,DIGMODA Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 DIYK9,DIYK9,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
-Dog Grooming Academy of Indianapolis,Dog Grooming Academy of Indianapolis,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Dog Breeder,Dog Breeder,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Dog Groomer Academy (Florida),Dog Groomer Academy (Florida),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Dog Trainer Academy,Dog Trainer Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Dog Trainer College,Dog Trainer College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Dog Trainer Network,Dog Trainer Network,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Dog Walking Business Owner,Dog Walking Business Owner,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Doggone Rite Dog Grooming Academy,Doggone Rite Dog Grooming Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Dreamy Dogs Grooming Academy,Dreamy Dogs Grooming Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Eastern Kentucky University,Eastern Kentucky University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-Eastside Academy of Dog Grooming,Eastside Academy of Dog Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+ed2go,ed2go,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+EDCO Global,EDCO Global,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+EDPA,EDPA,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+eLearning College,eLearning College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Elevify's Pet Bather & Groomer Course,Elevify's Pet Bather & Groomer Course,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Eloise Market and Cakery,Eloise Market and Cakery,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Emory,Emory,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Emory University’s Event Planning & Management Certificate,Emory University’s Event Planning & Management Certificate,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
-Etsy,Etsy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Event Academy,Event Academy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+ESPA,ESPA,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 Event Decor Technology on Udemy,Event Decor Technology on Udemy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Event Decorating Academy (EDA),Event Decorating Academy (EDA),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Event Industry Council,Event Industry Council,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: known certifying body,,False
-Event Leadership Institute,Event Leadership Institute,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Event Decorating Academy (Dallas branch),Event Decorating Academy (Dallas branch),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Event Decorating Academy LLC,Event Decorating Academy LLC,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+event decoration,event decoration,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Event Planning Schools,Event Planning Schools,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Event Styling Academy,Event Styling Academy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Eventbrite and Event Planning Certification,Eventbrite and Event Planning Certification,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Eventbrite Workshops,Eventbrite Workshops,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Eventective,Eventective,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 Eventive,Eventive,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Events Industry Council Live Learning Center,Events Industry Council Live Learning Center,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+FACT Academy,FACT Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 FGCU / FIU (Florida),FGCU / FIU (Florida),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+floral wedding/event design classes,floral wedding/event design classes,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Florida Dog Groomer School,Florida Dog Groomer School,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Florida International University (FIU),Florida International University (FIU),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+FlowerSchool NY,FlowerSchool NY,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+FMF Events Academy,FMF Events Academy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Foundr,Foundr,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Free Courses in England,Free Courses in England,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Free YouTube Tutorials,Free YouTube Tutorials,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-FutureLearn,FutureLearn,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
 Garver Grooming,Garver Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-GateWay Community College,GateWay Community College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 George Mason University’s Online Event Management and Design,George Mason University’s Online Event Management and Design,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
+George Washington University School of Business,George Washington University School of Business,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Glassdoor,Glassdoor,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 Groomadog Course Online,Groomadog Course Online,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Groomer Outlet Academy,Groomer Outlet Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 GroomHaus,GroomHaus,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Grooming School of Indiana,Grooming School of Indiana,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-GW School of Business,GW School of Business,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+grooming academies,grooming academies,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+grooming schools,grooming schools,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 GWSB International,GWSB International,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Hivelife,Hivelife,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+hospitality management,hospitality management,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Hound Therapy,Hound Therapy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Hudson County Community College,Hudson County Community College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Husson University,Husson University,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Hustle Up Dog Trainer Academy,Hustle Up Dog Trainer Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 HVCC (Herkimer County Community College),HVCC (Herkimer County Community College),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+IAABC Foundation,IAABC Foundation,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 IACP CDT,IACP CDT,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+IAEE,IAEE,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+ICMG,ICMG,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 imexevents.com,imexevents.com,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),imexevents.com,False
 In The Details Weddings,In The Details Weddings,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Institute of Event Management,Institute of Event Management,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+Indian Institute (IISDT),Indian Institute (IISDT),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Indian Institute of Skill Development Training (IISDT),Indian Institute of Skill Development Training (IISDT),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Institute of Modern Dog Trainers,Institute of Modern Dog Trainers,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 Institute of Wedding and Event Planning,Institute of Wedding and Event Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
-International Academy,International Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+interior design,interior design,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+International Institute of Wedding Planning,International Institute of Wedding Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+International Open Academy,International Open Academy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+International Professional Groomers (IPG) Certification,International Professional Groomers (IPG) Certification,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 International Special Events Society (ISES),International Special Events Society (ISES),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+ISCDT,ISCDT,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+IWED / Institute of Wedding & Event Design,IWED / Institute of Wedding & Event Design,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Jean Donaldson's Academy for Dog Trainers,Jean Donaldson's Academy for Dog Trainers,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Jess Rona,Jess Rona,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-JKL Grooming Academy,JKL Grooming Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Just a Little Something,Just a Little Something,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Just Four Paws Academy of Pet Styling,Just Four Paws Academy of Pet Styling,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+K9 Handler,K9 Handler,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Kennesaw State,Kennesaw State,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Kent State,Kent State,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Lab productora,Lab productora,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Lake Norman Grooming Academy,Lake Norman Grooming Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 learn2groomdogs.com,learn2groomdogs.com,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),learn2groomdogs.com,False
+Learndirect,Learndirect,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Les Roches,Les Roches,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Level 3 course,Level 3 course,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Little Design Corner,Little Design Corner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Little Legs Dog Grooming School,Little Legs Dog Grooming School,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Local Community Colleges,Local Community Colleges,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Local Community Colleges or Adult Education Centers,Local Community Colleges or Adult Education Centers,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 local community colleges or vocational schools,local community colleges or vocational schools,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Louisiana Culinary Institute,Louisiana Culinary Institute,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 LSIB,LSIB,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
-Madison College,Madison College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Luz Paz Academy,Luz Paz Academy,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Maker’s Row,Maker’s Row,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Management & Strategy Institute,Management & Strategy Institute,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+marketing,marketing,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Mayflower Distributing,Mayflower Distributing,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 MCI Certified,MCI Certified,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Meghaa Modi,Meghaa Modi,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Meghha Amodi (Floral Design School),Meghha Amodi (Floral Design School),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Merryfield Academy,Merryfield Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Metropolitan State University of Denver,Metropolitan State University of Denver,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+MidMo Dogs,MidMo Dogs,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Midwest School,Midwest School,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Montgomery College,Montgomery College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+MOOCs,MOOCs,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+MPI Event Design Certificate,MPI Event Design Certificate,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 MUNBYN,MUNBYN,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
+N.A.P.G.,N.A.P.G.,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 National Cat Groomers Institute,National Cat Groomers Institute,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+National Certified Master Groomer,National Certified Master Groomer,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 National Dog Groomers,National Dog Groomers,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-National Dog Groomers Association,National Dog Groomers Association,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
+National Pet College,National Pet College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
 Nevada State University,Nevada State University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 New York (Wagner) Wedding and Event Planning,New York (Wagner) Wedding and Event Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 New York Academy of Pet Styling,New York Academy of Pet Styling,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+NGDAA,NGDAA,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 North Carolina Central University,North Carolina Central University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 North Carolina State University,North Carolina State University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+North Idaho College,North Idaho College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 North Seattle College Corporate Event Planner (CEP),North Seattle College Corporate Event Planner (CEP),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
+Northwestern University,Northwestern University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Occupational Outlook Handbook,Occupational Outlook Handbook,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 OCSO Careers,OCSO Careers,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Olesia Cake Studio,Olesia Cake Studio,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Online Courses,Online Courses,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Online Platforms,Online Platforms,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Online programs,Online programs,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Online/Self-Study Programs,Online/Self-Study Programs,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Palm Beach State College,Palm Beach State College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Paragon online certificate courses,Paragon online certificate courses,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Park Ranger,Park Ranger,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+PCC,PCC,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+PCMA Business Event Bootcamp,PCMA Business Event Bootcamp,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Pensacola Young Professionals,Pensacola Young Professionals,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Perfect Venue,Perfect Venue,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Pet Care Ins,Pet Care Ins,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Pet Industry Federation (PIF),Pet Industry Federation (PIF),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: known certifying body,,False
+Pet Care Classes,Pet Care Classes,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Pet Courses US,Pet Courses US,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Pet Industry Corporate Roles,Pet Industry Corporate Roles,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Pet Industry Federation (PIF),Pet Industry Federation (PIF),1,QC Pet Studies,certifying_body,known certifying body,,False
 Pet Photographer,Pet Photographer,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Pet Professional Guild (PPG),Pet Professional Guild (PPG),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 Pet Professional Guild (PPG) / Pet Professional Accreditation Board (PPAB),Pet Professional Guild (PPG) / Pet Professional Accreditation Board (PPAB),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 Pet Sitter/Boarder,Pet Sitter/Boarder,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
-Petco,Petco,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Pet Supplies Plus,Pet Supplies Plus,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+PETBC Diploma,PETBC Diploma,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Petco Academy,Petco Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+PetCourses.co.uk,PetCourses.co.uk,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),petcourses.co.uk,False
 Peticademy,Peticademy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Pets Playground Pet Grooming School,Pets Playground Pet Grooming School,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+PetSitterCourse.com,PetSitterCourse.com,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),petsittercourse.com,False
 PetSmart,PetSmart,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 PetSmart Groomer Class,PetSmart Groomer Class,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Pettable Academy,Pettable Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 PetTech,PetTech,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Pippy's Puppy Parlor LLC,Pippy's Puppy Parlor LLC,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Posh Event Institute,Posh Event Institute,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Poshe Event Course,Poshe Event Course,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Poshe Events Course,Poshe Events Course,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Poshevents Online,Poshevents Online,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Power Home Biz,Power Home Biz,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Private Grooming Academies,Private Grooming Academies,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+professional associations,professional associations,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Professional Dog Trainer,Professional Dog Trainer,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Professional grooming school,Professional grooming school,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Professional Pet Groomers Support Team (PPGST),Professional Pet Groomers Support Team (PPGST),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 PSI CPPS,PSI CPPS,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Purdue,Purdue,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Purdue for Life Foundation,Purdue for Life Foundation,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Purdue Veterinary Medicine,Purdue Veterinary Medicine,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Purdue’s Canine Care Certified,Purdue’s Canine Care Certified,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+QC Event Planning,QC Event Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Red Cross,Red Cross,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Reddit,Reddit,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Revelation Pets,Revelation Pets,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 Rover,Rover,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Royal Dog Academy,Royal Dog Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+San Diego State University Global Campus,San Diego State University Global Campus,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Santa Monica College,Santa Monica College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+SCORE,SCORE,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Scouting,Scouting,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Self-Directed Search,Self-Directed Search,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Senior Dog Vets,Senior Dog Vets,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+SHIELD K9 Dog Training's Pro Trainer and Certification Course,SHIELD K9 Dog Training's Pro Trainer and Certification Course,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 SHMS,SHMS,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
-Shopify,Shopify,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 Short-Term/Basic Certification Programs (In-Person),Short-Term/Basic Certification Programs (In-Person),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Specialty Certification (Fear Free),Specialty Certification (Fear Free),1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+SpiritDog,SpiritDog,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Stacey’s Canine Design,Stacey’s Canine Design,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Stautzenberger College,Stautzenberger College,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+Stanford University,Stanford University,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+SugarPlum Event Co.,SugarPlum Event Co.,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+SugarPlum Event Co. - Houston,SugarPlum Event Co. - Houston,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+SUNY Event Decorating microcredential,SUNY Event Decorating microcredential,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Super Styling Sessions,Super Styling Sessions,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Team Dog,Team Dog,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Suzanne Clothier,Suzanne Clothier,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Tarheel Canine,Tarheel Canine,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Tellington TTouch Canada,Tellington TTouch Canada,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Tellington TTouch® Online Learning Platform,Tellington TTouch® Online Learning Platform,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-Tellington TTouch® Practitioner Training,Tellington TTouch® Practitioner Training,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Temple University Event Leadership,Temple University Event Leadership,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
-The Canine University,The Canine University,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Temple’s Event & Entertainment Management Certificate,Temple’s Event & Entertainment Management Certificate,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+The Crazy Dog Ladies Grooming Academy,The Crazy Dog Ladies Grooming Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 The CWP Society - Sheree Amour Weddings & Event Planning,The CWP Society - Sheree Amour Weddings & Event Planning,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
-The Event Management Course,The Event Management Course,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-The Event School London,The Event School London,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+The Dog Stop,The Dog Stop,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+The Event School,The Event School,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+The Hartford,The Hartford,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+The International School of Hospitality (TISOH),The International School of Hospitality (TISOH),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 The Pooch Parlor Groomer Academy,The Pooch Parlor Groomer Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 The Wedding Planner School (US),The Wedding Planner School (US),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+The Wedding School,The Wedding School,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Therapy Dog Training Certification Course,Therapy Dog Training Certification Course,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Thimble,Thimble,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 TimetoPet,TimetoPet,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Tipsy Cake OKC,Tipsy Cake OKC,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+TISOH,TISOH,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+Toronto Humane Society’s Certified Dog Training Instructor Program,Toronto Humane Society’s Certified Dog Training Instructor Program,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: association/council/institute-of pattern,,False
 Trade school / hands-on grooming schools,Trade school / hands-on grooming schools,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Triple Crown Academy,Triple Crown Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-UCLA Extension,UCLA Extension,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+U.S. Chamber of Commerce,U.S. Chamber of Commerce,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+UCF Online,UCF Online,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 UCLA Extension’s Event Planning and Management Specialization,UCLA Extension’s Event Planning and Management Specialization,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
-Udacity,Udacity,1,General,not_actionable,low volume (n<=2) - abstains; rule said platform: platform list (course marketplace),,False
-UGA,UGA,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-University of Florida,University of Florida,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+UGA / ed2go Certified Wedding Planner,UGA / ed2go Certified Wedding Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+UGA Georgia Center,UGA Georgia Center,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+United States Department of Agriculture,United States Department of Agriculture,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+University of Charlotte,University of Charlotte,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 University of Houston’s Master Event Design,University of Houston’s Master Event Design,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
-University of New Orleans (UNO),University of New Orleans (UNO),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
-University of North Carolina at Charlotte,University of North Carolina at Charlotte,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+University of Iowa,University of Iowa,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+University of New England Online,University of New England Online,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+University of New Mexico,University of New Mexico,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
+University of Queensland,University of Queensland,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 University of Texas at San Antonio's Certified Master Wedding and Event Planner,University of Texas at San Antonio's Certified Master Wedding and Event Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university - but may sell a standalone certificate (flagged),,False
+University of Washington,University of Washington,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 University/College Hospitality Programs with Event Concentrations,University/College Hospitality Programs with Event Concentrations,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+UNO Certified Wedding Planner,UNO Certified Wedding Planner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Urban Pawsibilities,Urban Pawsibilities,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
-US Career Institute,US Career Institute,1,General,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 US News,US News,1,General,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 veterinary behavior,veterinary behavior,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
 Veterinary Technician,Veterinary Technician,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
+Veterinary Technician/Nurse,Veterinary Technician/Nurse,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Virginia School of Pet Grooming,Virginia School of Pet Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 Virginia Schools,Virginia Schools,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Vocational Schools/Community Colleges,Vocational Schools/Community Colleges,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: generic noun - no proper noun,,False
@@ -376,13 +603,21 @@ Wagner,Wagner,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; r
 Wake Tech,Wake Tech,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 Wake Technical Community College,Wake Technical Community College,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 webber.edu,webber.edu,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),webber.edu,False
-Wedding Planner Institute,Wedding Planner Institute,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
-Wedding Planning Institute (WPI),Wedding Planning Institute (WPI),1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Wedding MBA Certification,Wedding MBA Certification,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Wedding Planning Institute / Lovegevity,Wedding Planning Institute / Lovegevity,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 WeddingMart,WeddingMart,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 Weddings Beautiful Online,Weddings Beautiful Online,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
 WeddingWire,WeddingWire,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
 WedTech Academy - Lovegevity,WedTech Academy - Lovegevity,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
 West Coast Hybrid Course,West Coast Hybrid Course,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+When Hounds Fly,When Hounds Fly,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+wholepetnh.com,wholepetnh.com,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),wholepetnh.com,False
+WIPA,WIPA,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
 WooCommerce,WooCommerce,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: job board / e-commerce / SaaS list,,False
-Xtra Dog Academy,Xtra Dog Academy,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+Woof Gang® Academy of Grooming,Woof Gang® Academy of Grooming,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: named school/program word,,False
+WPIC,WPIC,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said certifying_body: bare acronym - UNVERIFIED,,False
+York College CPE,York College CPE,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said not_actionable: university / college,,False
 YWED Global,YWED Global,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Zak George,Zak George,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Zoho,Zoho,1,QC Event Planning,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False
+Zookeeper,Zookeeper,1,QC Pet Studies,not_actionable,low volume (n<=2) - abstains; rule said competitor: default (no rule matched),,False

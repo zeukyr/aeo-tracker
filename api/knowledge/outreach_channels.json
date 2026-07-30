@@ -4,7 +4,32 @@
     "reddit.com": {
       "channel": "participate",
       "feasibility": "open",
-      "mechanism": "Post authentic expert answers / host an AMA as a named QC account."
+      "mechanism": "Post authentic expert answers / host an AMA as a named QC account.",
+      "participation_strategy": {
+        "reputation": [
+          "Reply from a named QC account, not anonymously - correcting the record only works if it's visibly QC saying it.",
+          "Acknowledge the specific concern before countering it; a defensive first line reads as spin.",
+          "Disclose the affiliation in the reply itself (\"I work at QC...\") - undisclosed brand replies get called out and downvoted.",
+          "Link out only if asked or if it directly substantiates the correction - don't turn a correction into a pitch."
+        ],
+        "discovery": [
+          "Answer the question on its own terms first; QC only belongs in the reply if it's a genuine, relevant answer.",
+          "Check the subreddit's self-promotion rule (sidebar/wiki) before naming QC - some cap it at once per week or require mod approval.",
+          "Favor a comment on an existing thread over a new post - existing threads already have the search/AI-citation traction.",
+          "Build karma/history in the subreddit before the first QC mention where possible; a brand-new account naming a brand reads as an ad."
+        ]
+      },
+      "restricted_subreddits": {
+        "_comment": "Subreddits a real outreach attempt confirmed ban self-promotion outright (rule text quoted from the sidebar/wiki at the time), keyed by subreddit name (lowercase, no r/). get_reddit_targets() in api/queries/cited_urls.py flags any thread in one of these as restricted rather than a plain 'answer & get discovered' opportunity. Add an entry whenever outreach hits a rule like this.",
+        "smallbusiness": {
+          "rule": "No business promotion posts are allowed - promote your business in the weekly Promote-your-business thread only. Also scoped to small businesses specifically; QC likely doesn't fit that definition either.",
+          "mechanism": "Post only in the pinned weekly promo thread, if QC qualifies as 'small business' there at all."
+        },
+        "smallbusinessuk": {
+          "rule": "Same rule as r/smallbusiness - no business promotion posts outside the weekly promote-your-business thread, scoped to small businesses.",
+          "mechanism": "Post only in the pinned weekly promo thread, if QC qualifies as 'small business' there at all."
+        }
+      }
     },
     "quora.com": {
       "channel": "participate",

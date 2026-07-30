@@ -20,6 +20,7 @@ import re
 from src.logger import logger
 from api.db import get_connection, _date_filter
 from api.queries.page_facts import QC_DOMAIN_TOKENS
+from api.queries.rec_shaping import volume_confidence, confidence_basis_note, checkpoint_note
 
 _COMMUNITY_ROOTS = ("reddit.com", "quora.com", "facebook.com", "instagram.com", "youtube.com", "tiktok.com")
 
@@ -107,6 +108,9 @@ def credibility_to_recommendation(analysis):
     neg_total = sum(d["count"] for d in neg) or 1
     community = sum(d["count"] for d in neg if any(r in d["domain"] for r in _COMMUNITY_ROOTS))
 
+    detail = dict(analysis)
+    detail["confidence_basis"] = confidence_basis_note(analysis["sample_n"], _MIN_SAMPLE, analysis["share_not_positive"])
+    detail["checkpoint"] = checkpoint_note()
     base = {
         "priority": "high",
         "school": None,
@@ -115,9 +119,9 @@ def credibility_to_recommendation(analysis):
         "expected_direction": 1,
         "expected_magnitude": None,
         "effort": "M",
-        "confidence": 0.6,
+        "confidence": volume_confidence(analysis["sample_n"], _MIN_SAMPLE, floor=0.45, cap=0.85),
         "problem": problem,
-        "detail": {"credibility": analysis},
+        "detail": {"credibility": detail},
     }
 
     if community / neg_total >= 0.5:

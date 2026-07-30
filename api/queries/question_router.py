@@ -49,7 +49,8 @@ from api.db import get_connection, _date_filter
 from api.queries.page_facts import (
     get_page_facts,
     get_pages_facts,
-    genre_gap,
+    format_gap,
+    FORMAT_TO_GENRE,
     source_type,
     registry_brand_type,
     source_votes,
@@ -60,11 +61,13 @@ from api.queries.page_facts import (
     OWNABLE_SOURCE_BUCKETS,
     NON_OWNABLE_SOURCE_BUCKETS,
 )
-from api.queries.tab1_strategy import get_question_cited_urls
-from api.queries.tab2_scorecard import (
+from api.queries.cited_urls import get_question_cited_urls
+from api.queries.scorecard import (
     build_scorecard,
     scorecard_to_recommendation,
     scorecard_triage_reason,
+    build_winner_checklist,
+    CANDIDATE_POOL,
 )
 from api.queries.sitemap_coverage import diagnose_text_coverage
 
@@ -253,7 +256,12 @@ def route_question(q, days=None):
     claim, reference -> align). `dominant` carries (stage-leader bucket,
     stage share) for wording/dedup; `vote` carries the full tally.
     """
-    winners = get_question_cited_urls(q["question_id"], days)
+    # CANDIDATE_POOL (20), not the cited_urls.py display default (8, tuned for
+    # a readable card): the router's dominance/genre votes need real headroom -
+    # every losing question has 24+ distinct cited URLs in practice, so an
+    # 8-URL cap was starving the vote, not reflecting scarcity. Same pool size
+    # the fix-branch scorecard already uses (line ~842) for the same reason.
+    winners = get_question_cited_urls(q["question_id"], days, limit=CANDIDATE_POOL)
     if not winners:
         return triage(q, "no_cited_winners")
 
@@ -314,7 +322,7 @@ def route_question(q, days=None):
     if qc_url:
         # Has a page - but is it the KIND engines reward? A mismatch SUPPRESSES
         # the feature-diff (the core bug fix); the build branch owns that case.
-        gm = genre_gap(get_page_facts(qc_url), facts)
+        gm = format_gap(get_page_facts(qc_url), facts)
         if not gm:
             # ── FIX: same-kind vs same-kind, the feature-diff is legitimate ──
             return {"branch": "fix", "reason": "qc_page_same_kind_still_loses",
@@ -349,7 +357,12 @@ def _segment_for(q):
 
 
 def _winner_summary(facts, limit=5):
-    facts = sorted(facts or [], key=lambda f: -(f.get("citation_count") or 0))[:limit]
+    """`limit=None` returns every fetched winner - used for the card's full
+    citations panel, where truncating to 5 would silently drop pages the
+    router actually fetched (up to CANDIDATE_POOL=20, scorecard.py)."""
+    facts = sorted(facts or [], key=lambda f: -(f.get("citation_count") or 0))
+    if limit is not None:
+        facts = facts[:limit]
     return [{"url": f["url"], "page_type": f.get("page_type"),
              "source_type": source_type(f),
              "citation_count": f.get("citation_count") or 0} for f in facts]
@@ -425,7 +438,7 @@ def _router_detail(route, group=None):
             "buckets": vote.get("buckets"),
             "cleared_bar": (share or 0.0) >= SOURCE_TYPE_DOMINANCE if share is not None else False,
         },
-        "winners": _winner_summary(winners),
+        "winners": _winner_summary(winners, limit=None),
         "abstentions": [{
             "url": f.get("url"),
             "domain": f.get("domain"),
@@ -445,6 +458,17 @@ def _router_detail(route, group=None):
     return detail
 
 
+
+# Prose for each format_gap format, used both standalone ("build X") and to
+# name QC's existing wrong-format page ("the existing page is a Y").
+_FORMAT_LABEL = {
+    "how_to":    "a how-to / step-by-step guide",
+    "long_form": "a long-form explainer/career guide",
+    "listicle":  "a ranked listicle (\"best X\" roundup)",
+    "landing":   "a dedicated course/program page",
+}
+
+
 def _build_rec(route, group):
     """One BUILD rec per dedup group. Singletons fire (a lone question can
     carry independent demand); group size is a priority booster, not a gate."""
@@ -455,6 +479,26 @@ def _build_rec(route, group):
     evidence = _winners_evidence(q, card_winners)
     benchmark = ", ".join(w["url"] for w in _winner_summary(card_winners, limit=2))
 
+    # The genre of the page we're telling QC to build, for the checklist's
+    # GEO-feature stratification - derived from format_gap's finer format via
+    # FORMAT_TO_GENRE so this stays the exact old informational/commercial
+    # value regardless of the format refinement (checklist behavior is
+    # unaffected by adding format-specific prose below); inferred from the
+    # winning bucket otherwise (the "editorial pages win" / "rival pages win"
+    # prose already assumes exactly this mapping).
+    if route["reason"] == "earn_indirect":
+        target_genre = None
+    elif gm:
+        target_genre = FORMAT_TO_GENRE[gm["winner_format"]]
+    else:
+        target_genre = "commercial" if bucket == "competitor" else "informational"
+
+    # What the new page needs to actually include - the same checklist
+    # machinery that makes Tab 2 fix-cards concrete, run against the winners
+    # instead of against a QC page that doesn't exist yet (or exists as the
+    # wrong kind). [] when too few comparable winners are readable.
+    checklist = build_winner_checklist(route.get("winners") or [], q["question"], target_genre=target_genre)
+
     if route["reason"] == "earn_indirect":
         domain = (route.get("feasibility_target") or {}).get("domain") or "the citing sources"
         problem = (f"'{q['question']}' is answered from reference sources QC cannot own or pitch "
@@ -464,20 +508,20 @@ def _build_rec(route, group):
         if benchmark:
             action += f" Benchmark: {benchmark}."
     elif gm:
-        if gm["winner_genre"] == "informational":
-            action = (f"Build a standalone informational asset answering '{q['question']}' - a "
-                      f"how-to / career guide, not another course page - and link it to the "
-                      f"existing page ({route['qc_url']}). Keep tuning that page separately.")
-        else:
+        target_label = _FORMAT_LABEL[gm["winner_format"]]
+        qc_label = _FORMAT_LABEL[gm["qc_format"]]
+        if gm["winner_format"] == "landing":
             action = (f"Build a dedicated course/program page for '{q['question']}' - the existing "
-                      f"informational page ({route['qc_url']}) serves a different intent than the "
+                      f"page ({route['qc_url']}) is {qc_label}, a different format than the "
                       f"commercial pages engines cite here. Link the two.")
-        problem = (f"QC's page for '{q['question']}' ({route['qc_url']}) is a {gm['qc_genre']} page, "
-                   f"but {gm['winners_with_genre']}/{gm['winners_classified']} genre-classifiable "
-                   f"cited pages are {gm['winner_genre']} - engines reward a kind of page QC "
-                   f"doesn't have here.")
-        evidence += (f" QC's covered page is {gm['qc_genre']}; {gm['winners_with_genre']} of "
-                     f"{gm['winners_classified']} classifiable cited pages are {gm['winner_genre']}.")
+        else:
+            action = (f"Build {target_label} answering '{q['question']}', separate from the existing "
+                      f"page ({route['qc_url']}) - and link the two. Keep tuning that page separately.")
+        problem = (f"QC's page for '{q['question']}' ({route['qc_url']}) is {qc_label}, "
+                   f"but {gm['winners_with_format']}/{gm['winners_classified']} format-classifiable "
+                   f"cited pages are {target_label} - engines reward a format QC doesn't have here.")
+        evidence += (f" QC's covered page is {gm['qc_format']}; {gm['winners_with_format']} of "
+                     f"{gm['winners_classified']} classifiable cited pages are {gm['winner_format']}.")
     else:
         problem = f"QC has no page answering '{q['question']}', and engines cite {bucket} pages instead."
         if bucket == "competitor":
@@ -499,6 +543,14 @@ def _build_rec(route, group):
             if benchmark:
                 action += f" Model it on: {benchmark}."
 
+    if checklist:
+        must_include = ", ".join(
+            f"{r['label'].lower()} ({r['winners_pct']}% of cited pages have it)" for r in checklist[:5])
+        action += f" Must include: {must_include}."
+        evidence += (" Structural checklist: " + "; ".join(
+            f"{r['label']} — {r['winners_present']}/{r['winners_total']} ({r['winners_pct']}%) "
+            f"cited pages have it" for r in checklist) + ".")
+
     priority = "high" if len(group) >= 2 else "medium"
     school = q.get("school") or (school_for_url(route.get("qc_url")) if route.get("qc_url") else None)
     return {
@@ -514,8 +566,9 @@ def _build_rec(route, group):
         "expected_direction": 1,
         "expected_magnitude": None,
         "effort": "L",
-        "confidence": 0.55,
-        "detail": {"router": _router_detail(route, group)},
+        "confidence": 0.6 if checklist else 0.55,
+        "detail": {"router": _router_detail(route, group),
+                   **({"build_checklist": {"target_genre": target_genre, "gaps": checklist}} if checklist else {})},
     }
 
 
@@ -630,84 +683,6 @@ def _triage_entry(route):
         "genre_mismatch":  route.get("genre_mismatch"),
         "winners":         _winner_summary(route.get("winners")),
     }
-
-
-def _weakest(group):
-    """Representative route: lowest QC share, then highest citation volume."""
-    return min(group, key=lambda r: (r["question"]["qc_share"],
-                                     -r["question"]["n_citations"]))
-
-
-def _grouped(routes, key_fn):
-    groups = {}
-    for r in routes:
-        groups.setdefault(key_fn(r), []).append(r)
-    return groups.values()
-
-
-def build_router_recommendations(days=None):
-    """
-    Route every losing question; returns (recommendations, triage).
-    Dedup per §5.6 - near-duplicate questions converge on the same target:
-      fix       one scorecard per unique QC page (bounds the LLM passes)
-      build     one rec per (school, topic, page-kind, qc_url) group;
-                group size boosts priority, singletons still fire
-      reach_out one rec per (bucket, target root domain)
-    Inclusion opportunities are surfaced across all routed winners, deduped
-    by URL. The triage list is ranked weakest-first by construction.
-    """
-    routes = [route_question(q, days) for q in get_losing_questions(days)]
-    by_branch = {}
-    for r in routes:
-        by_branch.setdefault(r["branch"], []).append(r)
-
-    recommendations = []
-
-    # fix: one scorecard per unique QC page
-    for group in _grouped(by_branch.get("fix", []), lambda r: r["qc_url"]):
-        rep = _weakest(group)
-        q = rep["question"]
-        sc = None
-        try:
-            sc = build_scorecard(q["topic"] or q["question"], rep["qc_url"],
-                                 question=q["question"], days=days,
-                                 winner_facts=rep["winners"])
-            rec = scorecard_to_recommendation(sc)
-        except Exception as e:
-            logger.warning(f"Router fix branch failed for {rep['qc_url']}: {e}")
-            rec = None
-        if not rec:
-            reason = scorecard_triage_reason(sc) if sc else "scorecard_failed"
-            logger.info(f"Router fix: no rec for {rep['qc_url']} ({reason}; "
-                        f"question: {q['question'][:60]})")
-            continue
-        rec["detail"]["router"] = _router_detail(rep, group)
-        recommendations.append(rec)
-
-    # build: group by (school, topic, kind of page to build, existing qc page)
-    def _build_key(r):
-        gm = r.get("genre_mismatch")
-        kind = gm["winner_genre"] if gm else (
-            "commercial" if (r.get("dominant") or (None,))[0] == "competitor" else "informational")
-        return (r["question"].get("school"), r["question"].get("topic"), kind, r.get("qc_url"))
-
-    for group in _grouped(by_branch.get("build", []), _build_key):
-        recommendations.append(_build_rec(_weakest(group), group))
-
-    # reach out: group by (bucket, root domain of the channel target)
-    def _reach_key(r):
-        target = r.get("feasibility_target") or {}
-        return ((r.get("dominant") or (None,))[0],
-                _root_domain(target.get("domain") or ""))
-
-    for group in _grouped(by_branch.get("reach_out", []), _reach_key):
-        recommendations.append(_reach_out_rec(_weakest(group), group))
-
-    # verified inclusion opportunities across every route's winners
-    recommendations.extend(_inclusion_recs(routes))
-
-    triage_list = [_triage_entry(r) for r in by_branch.get("triage", [])]
-    return recommendations, triage_list
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -847,47 +822,17 @@ def _reach_out_fanout(route, taken_keys, limit=3):
     return out
 
 
-def build_question_recommendations(question_id, days=None):
+def _companion_recs(route, taken_keys=None):
     """
-    Route ONE question on demand and build its full action plan - multiple
-    recommendations that coexist, each from an independent signal:
-      primary    the routed branch's own rec (fix scorecard / build / reach-out)
-      inclusion  EVERY verified inclusion opportunity among the winners
-      community  reach-out fan-out: one rec per distinct pitchable
-                 community/site (reddit communities keyed r/<subreddit>)
-    Returns (recs, triage_entry). recs is [] with a PRECISE triage reason when
-    nothing was actionable (unchanged semantics from the single-rec era:
-    qc page unreadable / insufficient winner data / true feature parity, plus
-    winner-coverage counts), and ([], None) when the question has no mention
-    responses to route. Each rec carries detail.question_plan so the plan
-    page can group and label them.
+    Inclusion opportunities + reach-out fan-out for one routed question -
+    the "companion" signals that fire regardless of the question's own
+    branch (a build- or fix-branch question can still have winners that are
+    verified inclusion opportunities or pitchable communities). `taken_keys`
+    seeds already-claimed community keys (the reach_out branch's own primary
+    rec seeds its target's key before calling this); pass None to start
+    empty.
     """
-    q = get_question_stats(question_id, days)
-    if q is None:
-        return [], None
-    route = route_question(q, days)
-    if route["branch"] == "triage":
-        return [], _triage_entry(route)
-
-    taken_keys = set()
-    primary, sc = None, None
-
-    if route["branch"] == "fix":
-        try:
-            sc = build_scorecard(q["topic"] or q["question"], route["qc_url"],
-                                 question=q["question"], days=days,
-                                 winner_facts=route["winners"])
-            primary = scorecard_to_recommendation(sc)
-        except Exception as e:
-            logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")
-        if primary is not None:
-            primary["detail"]["router"] = _router_detail(route)
-    elif route["branch"] == "build":
-        primary = _build_rec(route, [route])
-    else:
-        primary = _reach_out_rec(route, [route])
-        taken_keys.add(_community_key(route.get("feasibility_target")))
-
+    taken_keys = set() if taken_keys is None else taken_keys
     inclusion = _inclusion_recs([route])
     inclusion.sort(key=lambda r: -(r["detail"]["opportunity"]["citation_count"]))
     for rec in inclusion:
@@ -897,18 +842,97 @@ def build_question_recommendations(question_id, days=None):
 
     companions = inclusion + _reach_out_fanout(route, taken_keys)
     companions.sort(key=lambda r: -(r.get("confidence") or 0))
+    return companions
+
+
+def _tag_question_plan(recs, question_id, fallback_branch, has_primary=True, source="on_demand"):
+    """Stamp detail.question_plan on each rec of one question's plan so the
+    plan page can group/label them. `has_primary` controls whether recs[0]
+    is tagged "primary" - False for a sweep's fix/build-branch companions,
+    where there IS no real primary here (the manual flow owns that rec under
+    its own tag), so nothing here should claim the primary role and collide
+    with it. `source` distinguishes sweep-produced rows (see
+    reach_out_sweep.py) from on-demand ones for cooldown-gating purposes."""
+    qid = str(question_id)
+    for i, rec in enumerate(recs):
+        emitter = ((rec.get("detail") or {}).get("router") or {}).get("branch", fallback_branch)
+        role = "primary" if (has_primary and i == 0) else "companion"
+        rec.setdefault("detail", {})["question_plan"] = {
+            "question_id": qid,
+            "role": role,
+            "emitter": emitter,
+            "source": source,
+        }
+    return recs
+
+
+def build_question_recommendations(question_id, days=None):
+    """
+    Route ONE question on demand and build its full action plan - multiple
+    recommendations that coexist, each from an independent signal:
+      primary    the routed branch's own rec (fix scorecard / build)
+      inclusion  EVERY verified inclusion opportunity among the winners
+      community  reach-out fan-out: one rec per distinct pitchable
+                 community/site (reddit communities keyed r/<subreddit>)
+    Returns (recs, triage_entry). recs is [] with a PRECISE triage reason when
+    nothing was actionable (unchanged semantics from the single-rec era:
+    qc page unreadable / insufficient winner data / true feature parity, plus
+    winner-coverage counts), and ([], None) when the question has no mention
+    responses to route. Each rec carries detail.question_plan so the plan
+    page can group and label them.
+
+    reach_out is deliberately NOT fabricated here anymore: reach-out primary
+    + inclusion + community fan-out for EVERY losing question (regardless of
+    its own branch) is the auto sweep's job now (reach_out_sweep.py, run on
+    the same "refresh signal recommendations" action) - this manual,
+    cooldown-gated per-question flow only ever produces build/fix.
+    """
+    q = get_question_stats(question_id, days)
+    if q is None:
+        return [], None
+    route = route_question(q, days)
+    if route["branch"] == "triage":
+        return [], _triage_entry(route)
+    if route["branch"] == "reach_out":
+        entry = _triage_entry(route)
+        entry["reason"] = "reach_out_auto_covered"
+        return [], entry
+
+    primary, sc = None, None
+
+    if route["branch"] == "fix":
+        try:
+            # A wider, independently-fetched pool than route["winners"] (which
+            # is sized for the citation-share vote, not the scorecard): cited
+            # pages fail to fetch or turn out non-comparable often enough that
+            # asking for exactly TOP_N_WINNERS candidates routinely leaves
+            # fewer than that after build_scorecard's readability/genre filter
+            # - see scorecard.CANDIDATE_POOL. Deliberately NOT route["winners"]
+            # itself - that set must stay exactly what the routing vote
+            # measured, not grow just because the scorecard wants more
+            # comparison headroom.
+            scorecard_cited = get_question_cited_urls(q["question_id"], days, limit=CANDIDATE_POOL)
+            counts = {c["url"]: c["count"] for c in scorecard_cited}
+            scorecard_winners = get_pages_facts([c["url"] for c in scorecard_cited])
+            for f in scorecard_winners:
+                f["citation_count"] = counts.get(f["url"], 0)
+            sc = build_scorecard(q["topic"] or q["question"], route["qc_url"],
+                                 question=q["question"], days=days,
+                                 winner_facts=scorecard_winners)
+            primary = scorecard_to_recommendation(sc)
+        except Exception as e:
+            logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")
+        if primary is not None:
+            primary["detail"]["router"] = _router_detail(route)
+    else:
+        primary = _build_rec(route, [route])
+
+    companions = _companion_recs(route)
 
     # The plan's first rec is its lead ("primary") even when the branch rec
     # itself came back empty and a companion carries the plan alone.
     recs = ([primary] if primary else []) + companions
-    qid = str(q["question_id"])
-    for i, rec in enumerate(recs):
-        emitter = ((rec.get("detail") or {}).get("router") or {}).get("branch", route["branch"])
-        rec.setdefault("detail", {})["question_plan"] = {
-            "question_id": qid,
-            "role": "primary" if i == 0 else "companion",
-            "emitter": emitter,
-        }
+    recs = _tag_question_plan(recs, q["question_id"], route["branch"])
     if recs:
         return recs, None
 
@@ -925,18 +949,3 @@ def build_question_recommendations(question_id, days=None):
                 "winners_unreadable": sc.get("winners_unreadable") or [],
             }
     return [], entry
-
-
-if __name__ == "__main__":
-    import io, sys
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-    recs, tri = build_router_recommendations()
-    print(f"=== recommendations ({len(recs)}) ===")
-    for r in recs:
-        branch = (r.get("detail", {}).get("router") or {}).get("branch", "?")
-        print(f"  [{branch}/{r['action_type']}] {r['target']}")
-        print(f"      {r['action'][:150]}")
-    print(f"\n=== triage ({len(tri)}) ===")
-    for t in tri:
-        print(f"  [{t['reason']:<24}] share={t['qc_share']:.2f} "
-              f"dominant={t['dominant_source']} {t['question'][:70]}")

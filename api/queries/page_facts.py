@@ -27,16 +27,19 @@ import os
 import re
 import json
 import urllib.robotparser
+from collections import Counter
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 import requests
 import trafilatura
+from lxml import etree
 from lxml import html as lxml_html
 from psycopg2.extras import Json
 
 from src.logger import logger
 from src.parsing.urls import normalize_url
+from src.parsing.domains import QC_BRAND_LIST
 from api.db import get_connection
 
 _FETCH_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; qc-ai-tracker page analysis)"}
@@ -46,8 +49,15 @@ _EXCERPT_CHARS = 4000
 
 QC_DOMAIN_TOKENS = (
     "qccareerschool", "qcpetstudies", "qceventplanning",
-    "qcdesignschool", "qcmakeupacademy",
+    "qcdesignschool", "qcmakeupacademy", "qcwellnessstudies",
 )
+
+# QC_BRAND_LIST (src/parsing/domains.py) is the reviewed name-alias list -
+# it already knows "QC Event School" is QC Event Planning's alias, which a
+# separate hardcoded pattern here previously didn't, so a real third-party
+# mention using that name (e.g. a roundup blog) was missed as qc_mentioned.
+_QC_MENTION_RE = re.compile(
+    r"\b(" + "|".join(re.escape(name) for name in QC_BRAND_LIST) + r")\b", re.I)
 
 # Classified from the domain alone - never fetched.
 _COMMUNITY_DOMAINS = {
@@ -70,6 +80,13 @@ _VIDEO_DOMAINS = {"youtube.com", "youtu.be", "vimeo.com"}
 _SUBPATH_SOURCE_TYPES = {
     ("linkedin.com", "learning"): "review",
     ("coursera.org", "learn"):    "competitor",
+    # Social Tables the SaaS product is not_actionable (job-board/e-commerce
+    # registry ruling), but socialtables.com/blog/* is a genuine third-party
+    # editorial surface (course roundups) - a different slot than their
+    # product pages, same shape as the LinkedIn Learning carve-out above.
+    # Verified 2026-07-24: this blog's wedding-planner-courses roundup
+    # already lists QC by name.
+    ("socialtables.com", "blog"): "review",
 }
 
 
@@ -404,6 +421,132 @@ def _deterministic_features(structure, text):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Structural ratio metrics (geo_features.json: detection="ratio")
+#
+# Computed from a SECOND, structure-preserving trafilatura pass
+# (include_formatting/include_tables/include_links, output_format="xml") over
+# the same raw HTML, rather than from the raw lxml tree `_extract_structure`
+# uses - the raw tree still contains nav/sidebar/footer chrome, which would
+# inflate link density and emphasis density with boilerplate that isn't part
+# of the actual article. trafilatura's XML schema (v2.1): <head rend="h1..">
+# for headings, <list rend="ul|ol"><item> for lists, <table><row><cell>,
+# <quote> for blockquotes, <hi rend="#b|#i"> for bold/italic, <ref target=...>
+# for links (already resolved to absolute URLs when `url=` is passed).
+# ─────────────────────────────────────────────────────────────────────────────
+
+_HEADING_LEVEL = re.compile(r"^h[1-6]$")
+
+_EMPTY_STRUCTURE_METRICS = {
+    "internal_linking_density": None,
+    "heading_hierarchy_depth": 0,
+    "structured_content_ratio": None,
+    "paragraph_length_conformance": None,
+    "emphasis_density": None,
+}
+
+
+def _el_word_count(el):
+    return len(" ".join(el.itertext()).split())
+
+
+def _structure_metrics(raw_html, final_url):
+    """Ratio-based GEO metrics (geo_features.json ids: internal_linking_density,
+    heading_hierarchy_depth, structured_content_ratio, paragraph_length_conformance,
+    emphasis_density). Returns _EMPTY_STRUCTURE_METRICS (all None/0) when the page
+    has no extractable main content - callers must treat None as "not measurable",
+    never as zero."""
+    try:
+        xml = trafilatura.extract(
+            raw_html, url=final_url, include_formatting=True,
+            include_tables=True, include_links=True, output_format="xml",
+        )
+    except Exception:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    if not xml:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    return _metrics_from_xml(xml, final_url)
+
+
+def _metrics_from_xml(xml, final_url):
+    """The arithmetic half of _structure_metrics, over an already-extracted
+    trafilatura XML string - split out so it can be unit-tested against a
+    hand-built XML fixture, independent of trafilatura's own content-quality/
+    boilerplate heuristics (which are a third-party concern, not this repo's)."""
+    try:
+        main = etree.fromstring(xml.encode("utf-8")).find(".//main")
+    except Exception:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+    if main is None:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+
+    total_words = _el_word_count(main)
+    if total_words == 0:
+        return dict(_EMPTY_STRUCTURE_METRICS)
+
+    heading_levels = {h.get("rend") for h in main.iter("head")
+                       if h.get("rend") and _HEADING_LEVEL.match(h.get("rend"))}
+
+    structured_words = sum(_el_word_count(el) for tag in ("list", "table", "quote")
+                            for el in main.iter(tag))
+    emphasis_words = sum(_el_word_count(el) for el in main.iter("hi"))
+
+    para_lengths = [n for n in (_el_word_count(p) for p in main.iter("p")) if n > 0]
+    paragraph_conformance = (
+        round(100 * sum(1 for n in para_lengths if 150 <= n <= 300) / len(para_lengths))
+        if para_lengths else None
+    )
+
+    page_domain = _root_domain(_domain_of(final_url))
+    internal, external = 0, 0
+    for ref in main.iter("ref"):
+        target = ref.get("target") or ""
+        if not target or target.startswith(("mailto:", "tel:", "javascript:")):
+            continue
+        link_domain = _root_domain(_domain_of(target))
+        if not link_domain:
+            continue
+        internal += 1 if link_domain == page_domain else 0
+        external += 0 if link_domain == page_domain else 1
+    total_links = internal + external
+
+    return {
+        "internal_linking_density": round(100 * internal / total_links) if total_links else None,
+        "heading_hierarchy_depth": len(heading_levels),
+        "structured_content_ratio": round(100 * structured_words / total_words),
+        "paragraph_length_conformance": paragraph_conformance,
+        "emphasis_density": round(100 * emphasis_words / total_words),
+    }
+
+
+_QUERY_STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "can", "do", "does",
+    "for", "from", "how", "if", "in", "into", "is", "it", "of", "on", "or",
+    "that", "the", "this", "to", "was", "what", "when", "where", "which",
+    "who", "why", "will", "with", "you", "your", "i", "my", "me", "we",
+    "our", "should", "would", "could", "did", "have", "has", "had",
+}
+
+
+def query_term_coverage(question, text):
+    """Share of the tracked question's significant (non-stopword) terms that
+    appear verbatim (word-boundary, case-insensitive) in `text`
+    (geo_features.json id: query_term_coverage). Question-specific, so - unlike
+    the other ratio metrics - this is computed at scorecard time from cached
+    content, not baked into the per-URL page_facts cache row (one page can
+    serve many questions). None when there's no question/text or no
+    significant terms to check."""
+    if not question or not text:
+        return None
+    terms = {t for t in re.findall(r"[a-z0-9]+", question.lower())
+             if t not in _QUERY_STOPWORDS and len(t) > 2}
+    if not terms:
+        return None
+    text_lower = text.lower()
+    present = sum(1 for t in terms if re.search(r"\b" + re.escape(t) + r"\b", text_lower))
+    return round(100 * present / len(terms))
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Page classification (plan taxonomy)
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -563,6 +706,25 @@ def _is_stale_failure(facts):
     return age.days >= _FAILURE_RETRY_DAYS
 
 
+_STRUCTURAL_METRIC_KEYS = (
+    "internal_linking_density", "heading_hierarchy_depth", "structured_content_ratio",
+    "paragraph_length_conformance", "emphasis_density",
+)
+
+
+def _missing_structural_metrics(facts):
+    """True for a status='ok' row cached before the geo_features.json 'ratio'
+    metrics existed. Unlike a deferred LLM tiebreak, these can't be backfilled
+    from the cached text alone - internal-link density, list/table ratios etc.
+    need the raw HTML, which isn't cached - so such a row must be treated as a
+    cache miss and refetched, not returned as-is with the new keys silently
+    absent (which would read as "unmeasurable" downstream, not "not yet
+    computed")."""
+    if facts.get("status") != "ok":
+        return False
+    return not any(k in (facts.get("features") or {}) for k in _STRUCTURAL_METRIC_KEYS)
+
+
 def _upgrade_deferred(facts, _cache=None):
     """
     Run the LLM tiebreak a defer_llm populate skipped, reusing the cached
@@ -618,7 +780,7 @@ def get_page_facts(url, force=False, defer_llm=False, _cache=None):
     url = normalize_url(url)
     if not force:
         cached = _cache.get(url) if _cache is not None else get_cached_fact(url)
-        if cached is not None and not _is_stale_failure(cached):
+        if cached is not None and not _is_stale_failure(cached) and not _missing_structural_metrics(cached):
             if not defer_llm and cached.get("page_type_source") == "deferred":
                 return _upgrade_deferred(cached, _cache)
             return cached
@@ -657,8 +819,9 @@ def get_page_facts(url, force=False, defer_llm=False, _cache=None):
         "content_excerpt": text[:_EXCERPT_CHARS],
         "brand_mentions": detect_brand_mentions(text, brands),
         "qc_mentioned": any(tok in text.lower().replace(" ", "") for tok in QC_DOMAIN_TOKENS)
-                        or bool(re.search(r"\bQC (Career School|Pet Studies|Event Planning|Design School|Makeup Academy)\b", text, re.I)),
-        "features": _deterministic_features(structure, text),
+                        or bool(_QC_MENTION_RE.search(text)),
+        "features": {**_deterministic_features(structure, text),
+                     **_structure_metrics(raw_html, final_url)},
     })
 
     if domain_type == "competitor":
@@ -797,7 +960,7 @@ def page_genre(facts):
     return None
 
 
-def _winner_genre(facts):
+def winner_genre(facts):
     """Genre of one cited page: format-implied types first, content signals for
     ownership types, URL hints for pages that blocked the fetch. Unread
     competitor pages with no URL hint default to commercial (a rival's cited
@@ -828,7 +991,7 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
     qc_genre = page_genre(qc_facts)
     if not qc_genre:
         return None
-    genres = [g for g in (_winner_genre(f) for f in winner_facts) if g]
+    genres = [g for g in (winner_genre(f) for f in winner_facts) if g]
     if len(genres) < min_classified:
         return None
     dominant = max(set(genres), key=genres.count)
@@ -844,11 +1007,140 @@ def genre_gap(qc_facts, winner_facts, min_classified=3):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Content FORMAT (how_to / long_form / listicle / landing) - a refinement of
+# genre for the BUILD branch's prose. Two pages can share genre="informational"
+# (a how-to guide and a long-form career explainer) while being different
+# formats to actually build - genre can't see that, format can. Buckets nest
+# inside the existing genre split (how_to/long_form -> informational;
+# listicle/landing -> commercial) so FORMAT_TO_GENRE recovers the exact old
+# genre value - target_genre (which gates GEO-feature applicability in
+# scorecard.py) is unaffected by this refinement.
+#
+# "comparison" and "alternatives" were dropped from the original 6-bucket
+# proposal: a calibration pass over the 27 live losing questions' cited
+# winners never classified a single one into either bucket (this niche's
+# competitive content just doesn't produce them at meaningful volume) - two
+# structurally-empty buckets would only have made the plurality easier to
+# win by default in the remaining four.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FORMAT_TO_GENRE = {
+    "how_to":    "informational",
+    "long_form": "informational",
+    "listicle":  "commercial",
+    "landing":   "commercial",
+}
+
+_HOWTO_URL_HINT = re.compile(r"how[\s-]to", re.I)
+
+
+def _is_howto_signal(facts):
+    f = facts.get("features") or {}
+    return (bool(_HOWTO_TITLE.search(facts.get("title") or ""))
+            or "HowTo" in (facts.get("schema_types") or [])
+            or (f.get("question_headings") or 0) >= 3)
+
+
+def page_format(facts):
+    """
+    how_to | long_form | listicle | landing for a FETCHED page. Roundup/
+    directory fold straight to listicle AHEAD of the genre vote (their genre
+    was already pinned "commercial" by PAGE_TYPE_GENRE for an unrelated
+    reason - buying intent, not format - so reusing page_genre here would
+    wrongly merge them with landing pages). Everything else defers to
+    page_genre and only splits its "informational" verdict into how_to vs
+    long_form using the same how-to signals page_genre already voted with.
+    None when unread or genre itself is ambiguous - never guess.
+    """
+    if facts.get("status") != "ok":
+        return None
+    page_type = facts.get("page_type")
+    if page_type in ("roundup", "directory"):
+        return "listicle"
+    if page_type in ("association", "government"):
+        return "long_form"
+    genre = page_genre(facts)
+    if genre is None:
+        return None
+    if genre == "commercial":
+        return "landing"
+    return "how_to" if _is_howto_signal(facts) else "long_form"
+
+
+def winner_format(facts):
+    """Format of one cited page - mirrors winner_genre's fallback ladder
+    (format-implied page_types first, content signals via page_format for
+    ownership types, URL hints for pages that blocked the fetch) so a 403'd
+    page still votes instead of silently abstaining. An unread competitor
+    page with no format-specific URL hint defaults to landing, same default
+    winner_genre uses (a rival's cited page is overwhelmingly its sales
+    page)."""
+    page_type = facts.get("page_type")
+    url = facts.get("final_url") or facts.get("url") or ""
+    if page_type in ("roundup", "directory"):
+        return "listicle"
+    if page_type in ("association", "government"):
+        return "long_form"
+    if page_type in ("community", "video"):
+        return None
+    fmt = page_format(facts)
+    if fmt:
+        return fmt
+    url_genre = _url_genre(url)
+    if url_genre == "commercial":
+        return "landing"
+    if url_genre == "informational":
+        return "how_to" if _HOWTO_URL_HINT.search(url) else "long_form"
+    if page_type == "competitor":
+        return "landing"
+    return None
+
+
+# Calibrated against the router's real losing-question winner sets (27
+# questions, CANDIDATE_POOL=20 winners each): margin, not floor, turned out to
+# be the binding constraint - across floor 2-4 the pass rate barely moved once
+# margin was fixed at 2, so the floor mainly exists to keep a lone winner or a
+# 2-0 split from counting as a plurality, not to set the real bar.
+_FORMAT_FLOOR = 3
+_FORMAT_MARGIN = 2
+
+
+def format_gap(qc_facts, winner_facts):
+    """
+    The "have a page, wrong FORMAT" detector - format_gap's plurality-based
+    replacement for genre_gap's fixed 60%-share bar. Splitting genre into 4
+    format buckets dilutes any fixed-percentage dominance bar (more buckets
+    to split votes across, so a real signal can end up under 60% just from
+    fragmentation) - the guard here is a raw PLURALITY instead: the leading
+    format must clear _FORMAT_FLOOR classified winners AND beat the
+    runner-up by _FORMAT_MARGIN. Returns None (insufficient signal) rather
+    than asserting a mismatch on a near-tied vote - ambiguity never asserts.
+    """
+    qc_format = page_format(qc_facts)
+    if not qc_format:
+        return None
+    formats = [f for f in (winner_format(wf) for wf in winner_facts) if f]
+    if len(formats) < _FORMAT_FLOOR:
+        return None
+    ranked = Counter(formats).most_common()
+    dominant, top_count = ranked[0]
+    second_count = ranked[1][1] if len(ranked) > 1 else 0
+    if top_count < _FORMAT_FLOOR or (top_count - second_count) < _FORMAT_MARGIN or dominant == qc_format:
+        return None
+    return {
+        "qc_format":            qc_format,
+        "winner_format":        dominant,
+        "winners_with_format":  top_count,
+        "winners_classified":   len(formats),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Source-type rollup (question-router plan §5.2) - who OWNS the winning slot
 # ─────────────────────────────────────────────────────────────────────────────
 #
 # A router-level layer over page_type - no new page_type values (so
-# _COMPARABLE_TYPES, PAGE_TYPE_ACTIONS and the genre maps are untouched).
+# _COMPARABLE_TYPES and the genre maps are untouched).
 # Domain rules run first because a review platform like coursera.org would
 # otherwise read as "competitor" via brand-token match; then the existing
 # page_type maps onto ownability buckets:
@@ -924,6 +1216,23 @@ def _registry_source_type(domain):
     return _REGISTRY_SOURCE_BUCKETS.get(registry_type)
 
 
+# The registry answers "is this ORG a rival" (domain-level default); whether
+# THIS PAGE is the org's own sales content or a neutral multi-provider
+# comparison is a page-level question page_type already answers (LLM-verified
+# roundup/directory classification) - a competitor's content-marketing "best
+# X courses" roundup naming several OTHER schools is not the same slot as
+# their own course page, even though both live on the same domain. Threshold
+# deliberately generous (>=3 distinct brand_mentions keys): a competitor's own
+# single-product page can still self-mention under 1-2 name variants ("Wedding
+# Academy" / "V Wedding Academy") without being a genuine comparison.
+_MIN_ROUNDUP_BRANDS = 3
+
+
+def _is_multi_provider_roundup(facts):
+    return (facts.get("page_type") in ("roundup", "directory")
+            and len(facts.get("brand_mentions") or {}) >= _MIN_ROUNDUP_BRANDS)
+
+
 def source_type(facts):
     """Ownability bucket for one cited page: ugc | review | reference |
     certifying_body | editorial | competitor | other. Domain rules override
@@ -935,7 +1244,12 @@ def source_type(facts):
     a domain owned by a registry-typed brand buckets by that type (competitor/
     platform/certifying_body pin the bucket; not_actionable vetoes only a
     competitor verdict, so a stale competitor stamp on a job board's page
-    abstains instead of swinging the vote).
+    abstains instead of swinging the vote) - EXCEPT a competitor pin on a page
+    that's itself a multi-provider roundup/directory (_is_multi_provider_roundup):
+    the registry says the ORG is a rival, but a "best X courses" comparison
+    page naming several OTHER schools is a different slot than that rival's
+    own course page, and page_type (LLM-verified) already knows which one this
+    is. Falls through to the page_type-based mapping below in that case.
 
     A page we FAILED to read whose domain matched no rule carries the
     "editorial" page_type as a fallback guess, not a classification - it
@@ -953,7 +1267,8 @@ def source_type(facts):
     if subpath:
         return subpath
     registry_bucket = _registry_source_type(domain)
-    if registry_bucket is not None:
+    if registry_bucket is not None and not (
+            registry_bucket == "competitor" and _is_multi_provider_roundup(facts)):
         return registry_bucket
     root = _root_domain(domain)
     if root in _REVIEW_DOMAINS:
@@ -985,25 +1300,7 @@ def source_votes(winner_facts):
     return votes
 
 
-def dominant_source_type(winner_facts, threshold=SOURCE_TYPE_DOMINANCE):
-    """
-    Citation-weighted dominant bucket over a question's cited winners, or
-    (None, share) when nothing clears `threshold`. Single-stage flat vote -
-    kept for reports/diagnostics; the router uses the two-stage vote over
-    source_votes() (ownable vs non-ownable first, §5.2).
-    """
-    votes = source_votes(winner_facts)
-    total = sum(votes.values())
-    if not total:
-        return None, 0.0
-    bucket, weight = max(votes.items(), key=lambda kv: kv[1])
-    share = round(weight / total, 2)
-    if share < threshold:
-        return None, share
-    return bucket, share
-
-
-# Which QC school a QC-owned URL belongs to (shared by tab1/tab2 rec builders).
+# Which QC school a QC-owned URL belongs to (shared by the rec builders).
 SCHOOL_BY_DOMAIN_TOKEN = {
     "qcpetstudies":    "QC Pet Studies",
     "qceventplanning": "QC Event Planning",
