@@ -153,6 +153,41 @@ p, h1, h2, h3, h4 {
   margin: 0;
 }
 
+.metric-value-tip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dotted var(--border-default);
+}
+
+.metric-value-tip .metric-tip-popup {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: 220px;
+  background: var(--surface-primary);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 10px 12px;
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  z-index: 20;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  pointer-events: none;
+}
+
+.metric-value-tip:hover .metric-tip-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

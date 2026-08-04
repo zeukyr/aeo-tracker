@@ -21,11 +21,18 @@ function DiffBadge({ diff }) {
   );
 }
 
-function MetricCard({ label, value, diff, detail, highlight }) {
+function MetricCard({ label, value, diff, detail, highlight, tooltip }) {
   return (
     <div className={`metric-card ${highlight ? "metric-card--highlight" : ""}`}>
       <p className="metric-label">{label}</p>
-      <p className="metric-value">{value}</p>
+      <p className="metric-value">
+        {tooltip ? (
+          <span className="metric-value-tip">
+            {value}
+            <span className="metric-tip-popup">{tooltip}</span>
+          </span>
+        ) : value}
+      </p>
       {detail && <p className="metric-detail">{detail}</p>}
       <DiffBadge diff={diff} />
     </div>
@@ -276,8 +283,14 @@ function Overview() {
           value={`${summary.mention_rate}%`}
           detail={summary.mention_total ? `${summary.mention_count}/${summary.mention_total} responses` : null}
           diff={summary.mention_rate_diff}
+          tooltip="% of tracked AI responses where QC is mentioned by name."
         />
-        <MetricCard label="Visibility score"   value={summary.visibility_score ?? "--"}                    diff={summary.visibility_score_diff} />
+        <MetricCard
+          label="Visibility score"
+          value={summary.visibility_score ?? "--"}
+          diff={summary.visibility_score_diff}
+          tooltip="Composite score: mention rate (40%) + rank score (45%) + citation quality (15%)."
+        />
         <MetricCard
           label="Positive sentiment"
           value={`${summary.positive_sentiment_rate}%`}
@@ -285,9 +298,20 @@ function Overview() {
             ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative${summary.sentiment_score != null ? ` · score ${summary.sentiment_score > 0 ? "+" : ""}${summary.sentiment_score}` : ""}`
             : null}
           diff={summary.positive_sentiment_diff}
+          tooltip="% of sentiment-analyzed responses where the AI's tone toward QC is classified positive (vs. neutral or negative)."
         />
-        <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
-        <MetricCard label="Share of voice"     value={summary.sov ? `${summary.sov}%` : "--"} diff={summary.sov_diff} />
+        <MetricCard
+          label="Citation rate"
+          value={summary.citation_rate ? `${summary.citation_rate}%` : "--"}
+          diff={summary.citation_rate_diff}
+          tooltip="% of responses where a QC-owned page is cited as a source."
+        />
+        <MetricCard
+          label="Share of voice"
+          value={summary.sov ? `${summary.sov}%` : "--"}
+          diff={summary.sov_diff}
+          tooltip="QC's mentions as a % of all brand mentions (QC + competitors) across responses."
+        />
         <MetricCard
           label="Average rank"
           value={summary.avg_rank ? (
@@ -300,6 +324,7 @@ function Overview() {
           ) : "--"}
           diff={summary.avg_rank_diff}
           detail={summary.avg_rank_score != null ? `normalized: ${summary.avg_rank_score}/100` : undefined}
+          tooltip="Average position QC appears at among all businesses listed, when mentioned. /x shows the average field size."
         />
       </div>
 
