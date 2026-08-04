@@ -410,7 +410,7 @@ function Overview() {
         />
 
         {citationsTab === "about" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
                 <p className="panel-title">Sources used when AI answers questions about QC</p>
@@ -421,7 +421,8 @@ function Overview() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               <div>
-                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 10 }}>QC owned</p>
+                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 4 }}>QC owned</p>
+                <p style={{ fontSize: 11, color: "#9b9b9b", marginBottom: 10 }}>QC's own pages the AI cites when discussing its legitimacy or reputation</p>
                 <CitationList data={sentimentFiltered.qc} color="#378add" emptyMsg="No QC-owned sources found." />
               </div>
               <div>
@@ -434,7 +435,7 @@ function Overview() {
         )}
 
         {citationsTab === "discovery" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
               <div>
                 <p className="panel-title">Sources used when AI recommends courses generally</p>
@@ -445,7 +446,8 @@ function Overview() {
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
               <div>
-                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 10 }}>QC owned</p>
+                <p style={{ fontSize: 12, fontWeight: 500, color: "#6b6b6b", marginBottom: 4 }}>QC owned</p>
+                <p style={{ fontSize: 11, color: "#9b9b9b", marginBottom: 10 }}>QC's own course pages the AI cites when recommending programs</p>
                 <CitationList data={mentionFiltered.qc} color="#378add" emptyMsg="No QC-owned sources found." />
               </div>
               <div>
