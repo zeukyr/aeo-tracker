@@ -5,6 +5,7 @@ import {
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 import { TagList } from "../components/TagList";
+import { SentimentTrendChart } from "../components/SentimentTrendChart";
 import { SchoolFilter, CitationList, TabBar, filterData } from "../components/CitationWidgets";
 
 function DiffBadge({ diff }) {
@@ -170,15 +171,25 @@ function MentionChart({ data }) {
 }
 
 function SentimentScoreChart({ data }) {
+  // linearGradient with default objectBoundingBox units scales to the rendered
+  // line's own min/max, not the fixed -50..50 axis domain — so the split point
+  // has to be computed from the data's actual range to land exactly on zero.
+  const scores = data.map((d) => d.score).filter((v) => v != null);
+  const max = scores.length ? Math.max(...scores) : 0;
+  const min = scores.length ? Math.min(...scores) : 0;
+  const zeroOffsetPct = max === min
+    ? (max >= 0 ? 100 : 0)
+    : Math.min(100, Math.max(0, (max / (max - min)) * 100));
+
   return (
     <ResponsiveContainer width="100%" height={220}>
       <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
         <defs>
           <linearGradient id="sentimentScoreSplit" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stopColor="#3b6d11" />
-            <stop offset="50%"  stopColor="#3b6d11" />
-            <stop offset="50%"  stopColor="#a32d2d" />
-            <stop offset="100%" stopColor="#a32d2d" />
+            <stop offset="0%"                    stopColor="#3b6d11" />
+            <stop offset={`${zeroOffsetPct}%`}   stopColor="#3b6d11" />
+            <stop offset={`${zeroOffsetPct}%`}   stopColor="#a32d2d" />
+            <stop offset="100%"                  stopColor="#a32d2d" />
           </linearGradient>
         </defs>
         <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
@@ -199,6 +210,7 @@ function Overview() {
   const [positives, setPositives] = useState([]);
   const [concerns, setConcerns] = useState([]);
   const [sentimentScoreTrend, setSentimentScoreTrend] = useState([]);
+  const [sentimentDistribution, setSentimentDistribution] = useState([]);
   const [mentionCitations, setMentionCitations] = useState([]);
   const [sentimentCitations, setSentimentCitations] = useState([]);
   const [mentionSchool, setMentionSchool] = useState("All");
@@ -220,16 +232,18 @@ function Overview() {
       fetch(`${API_BASE_URL}/api/top-positives?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/top-concerns?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/sentiment-score-trend?${params}`).then((r) => r.json()),
+      fetch(`${API_BASE_URL}/api/sentiment-distribution?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/citations-by-school?${params}`).then((r) => r.json()),
       fetch(`${API_BASE_URL}/api/sentiment-citations?${params}`).then((r) => r.json()),
     ])
-      .then(([mentionData, summaryData, rankingData, positivesData, concernsData, scoreTrendData, mentionCitationsData, sentimentCitationsData]) => {
+      .then(([mentionData, summaryData, rankingData, positivesData, concernsData, scoreTrendData, distributionData, mentionCitationsData, sentimentCitationsData]) => {
         setMentionData(mentionData);
         setSummary(summaryData);
         setCompetitorRanking(rankingData);
         setPositives(positivesData);
         setConcerns(concernsData);
         setSentimentScoreTrend(scoreTrendData);
+        setSentimentDistribution(distributionData);
         setMentionCitations(mentionCitationsData);
         setSentimentCitations(sentimentCitationsData);
       })
@@ -336,6 +350,12 @@ function Overview() {
           <p className="panel-title">Sentiment score over time</p>
           <p className="panel-subtitle">Weighted score from -50 to 50, based on sentiment, competitor comparisons, and concerns/positives raised</p>
           <SentimentScoreChart data={sentimentScoreTrend} />
+
+          <div style={{ marginTop: 16, paddingTop: 16, borderTop: "0.5px solid rgba(0,0,0,0.08)" }}>
+            <p className="panel-title">Sentiment breakdown</p>
+            <p className="panel-subtitle">Positive, neutral, and negative mention share over time</p>
+            <SentimentTrendChart data={sentimentDistribution} />
+          </div>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
