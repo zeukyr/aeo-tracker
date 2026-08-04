@@ -31,14 +31,16 @@ never silently dropped from the denominator.
 
 import os
 import json
+import re
+import statistics
 
 from openai import OpenAI
 
 from src.logger import logger
 from api.queries.cited_urls import get_topic_cited_urls
 from api.queries.page_facts import (
-    get_pages_facts, get_page_facts, page_genre, winner_genre, school_for_url, query_term_coverage,
-    source_type,
+    get_pages_facts, get_page_facts, page_genre, winner_genre, winner_format, school_for_url,
+    query_term_coverage, source_type,
 )
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -291,6 +293,25 @@ def _prevalence_label(present, total):
     return "most" if frac >= _PREVALENCE_MOST else ("some" if frac >= 0.3 else "few")
 
 
+def _comparable_target_winners(winner_facts, target_genre, min_winners):
+    """
+    Shared winner-set resolution for BUILD-branch analysis (checklist + page
+    plan): comparable page types, genre-stratified to winners that share the
+    KIND of page being built when enough of them exist (falls back to the
+    full comparable pool otherwise - never asserts a stratum that isn't
+    there), sorted by citation weight. [] below min_winners - a builder needs
+    a real sample to name required features, same bar the fix side uses.
+    """
+    comparable = [f for f in (winner_facts or [])
+                  if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
+    if target_genre:
+        matched = [f for f in comparable if winner_genre(f) == target_genre]
+        if len(matched) >= min_winners:
+            comparable = matched
+    comparable.sort(key=lambda f: -(f.get("citation_count") or 0))
+    return comparable if len(comparable) >= min_winners else []
+
+
 def build_winner_checklist(winner_facts, question, target_genre=None, min_winners=MIN_WINNERS):
     """
     For a BUILD rec (no existing QC page to score against): which
@@ -311,15 +332,9 @@ def build_winner_checklist(winner_facts, question, target_genre=None, min_winner
     a real sample to name required features, same bar the fix side uses.
     """
     features = _load_features()
-    comparable = [f for f in (winner_facts or [])
-                  if f.get("status") == "ok" and f.get("page_type") in _COMPARABLE_TYPES]
-    if target_genre:
-        matched = [f for f in comparable if winner_genre(f) == target_genre]
-        if len(matched) >= min_winners:
-            comparable = matched
-    comparable.sort(key=lambda f: -(f.get("citation_count") or 0))
+    comparable = _comparable_target_winners(winner_facts, target_genre, min_winners)
     n = len(comparable)
-    if n < min_winners:
+    if n == 0:
         return []
 
     present = [_page_features(f, question, features) for f in comparable]
@@ -341,6 +356,223 @@ def build_winner_checklist(winner_facts, question, target_genre=None, min_winner
     _weight_rank = {"high": 2, "medium": 1, "low": 0}
     rows.sort(key=lambda r: (-_weight_rank[r["geo_weight"]], -r["winners_pct"]))
     return rows
+
+
+# Ordered section slots per target_format (page_facts.py's winner_format()
+# buckets: how_to/long_form/listicle/landing). Each slot's checklist_ids are
+# tried in order against build_winner_checklist's output - the first id that
+# clears the prevalence bar names the section as winner-backed; none clearing
+# falls back to the slot's static `template` sentence. First-draft skeleton -
+# section order reflects where each element typically appears on a real page
+# of that format, not a ranking.
+#
+# "Comparison table"/"comparison framing" on listicle will usually render via
+# its template, not the checklist: FORMAT_TO_GENRE maps listicle to
+# "commercial", and _INAPPLICABLE_ON_COMMERCIAL drops comparison_table/
+# comparison_structure from the checklist on commercial genre (line ~93)
+# - pre-existing scorecard behavior, not a bug in this table.
+#
+# heading_hint: a compiled regex used to pull a REAL example heading for this
+# slot from a cited winner's own page_facts.headings (see
+# _match_example_heading) - keyword matching, not semantic understanding, so
+# it can occasionally grab a heading that uses the right word out of context.
+# Same class of tradeoff as the checklist/format templates themselves: a
+# useful heuristic, not a guarantee. Shared regex objects are reused across
+# slots for the same concept (e.g. "Requirements / prerequisites" and
+# "Certification / pathway" both want a certification-ish heading).
+#
+# No trailing \b on the truncated stems (certif, licens, qualif, accredit,
+# earn, employ) - they're deliberately prefixes meant to also match
+# "certified"/"certification"/"earning"/"employment" etc; a closing \b would
+# require the stem to be a complete word and silently miss every inflected
+# form (a real, actually-occurring miss: "Becoming a Certified Dog Trainer"
+# needs "certif" to match inside "Certified", where there's no boundary
+# between the "f" and the "i"). The leading \b still anchors to a word start,
+# so this can't match mid-word inside an unrelated token.
+_HINT_DIRECT_ANSWER = re.compile(r"\b(what is|what does|overview|introduction|definition)\b", re.I)
+_HINT_STEPS = re.compile(r"\b(step|steps|how to|process|path|getting started)\b", re.I)
+_HINT_REQUIREMENTS = re.compile(r"\b(requirement|certif|licens|prerequisite|qualif|accredit)", re.I)
+_HINT_OUTCOMES = re.compile(r"\b(salary|career|job|outcome|earn|pay|income|employ)", re.I)
+_HINT_FAQ = re.compile(r"\?\s*$|^(how|what|why|can|do|does|is|are|should|where|when|which)\b", re.I)
+_HINT_OVERVIEW = re.compile(r"\b(overview|guide|everything|what you need to know)\b", re.I)
+_HINT_EVIDENCE = re.compile(r"\b(research|studies|data|statistics|according to)\b", re.I)
+_HINT_AUTHOR = re.compile(r"\b(about the author|written by|expert|credential)\b", re.I)
+_HINT_CRITERIA = re.compile(r"\b(how we (chose|ranked)|criteria|methodology|what to look for)\b", re.I)
+_HINT_COMPARISON = re.compile(r"\b(compar\w+|\bvs\b|side.by.side)\b", re.I)
+_HINT_PROS_CONS = re.compile(r"\b(pros|cons|advantages|disadvantages)\b", re.I)
+_HINT_COST = re.compile(r"\b(cost|price|tuition|fee|how much)", re.I)
+_HINT_CURRICULUM = re.compile(r"\b(curriculum|what.?s included|course content|syllabus)\b", re.I)
+_HINT_PROOF = re.compile(r"\b(accredited|guarantee|rating|certified by|award)", re.I)
+
+_FORMAT_SECTION_SKELETONS = {
+    "how_to": [
+        {"title": "Direct answer up front", "checklist_ids": ["direct_answer_first"],
+         "heading_hint": _HINT_DIRECT_ANSWER,
+         "template": "Answer the core question in the first 1-2 sentences, before any steps."},
+        {"title": "Step-by-step process", "checklist_ids": [], "heading_hint": _HINT_STEPS,
+         "template": "Numbered steps covering the full path, in the order someone would actually complete them."},
+        {"title": "Requirements / prerequisites", "checklist_ids": ["certification_pathway"],
+         "heading_hint": _HINT_REQUIREMENTS,
+         "template": "Certification, licensing, or prerequisite requirements along the way."},
+        {"title": "Career outcomes", "checklist_ids": ["career_outcomes"], "heading_hint": _HINT_OUTCOMES,
+         "template": "What this leads to: salary range, job titles, employment prospects."},
+        {"title": "FAQ / common questions", "checklist_ids": ["faq_section", "question_headings"],
+         "heading_hint": _HINT_FAQ,
+         "template": "A visible Q&A section answering the related questions people ask."},
+    ],
+    "long_form": [
+        {"title": "Direct answer up front", "checklist_ids": ["direct_answer_first"],
+         "heading_hint": _HINT_DIRECT_ANSWER,
+         "template": "Answer the core question in the first 1-2 sentences, before any background."},
+        {"title": "Comprehensive overview", "checklist_ids": ["comprehensiveness"],
+         "heading_hint": _HINT_OVERVIEW,
+         "template": "Fully answer the topic end-to-end - requirements, process, costs, outcomes."},
+        {"title": "Certification / pathway", "checklist_ids": ["certification_pathway"],
+         "heading_hint": _HINT_REQUIREMENTS,
+         "template": "Certification requirements, professional bodies, and the path into the career."},
+        {"title": "Career outcomes", "checklist_ids": ["career_outcomes"], "heading_hint": _HINT_OUTCOMES,
+         "template": "Concrete outcomes: salary ranges, job titles, employment prospects."},
+        {"title": "Evidence & primary sources", "checklist_ids": ["evidence_density", "primary_sources"],
+         "heading_hint": _HINT_EVIDENCE,
+         "template": "Statistics, quotations, or references to professional bodies and government data."},
+        {"title": "Author / expertise byline", "checklist_ids": ["author_expertise"],
+         "heading_hint": _HINT_AUTHOR,
+         "template": "A named author with stated credentials or first-hand experience."},
+        {"title": "FAQ / common questions", "checklist_ids": ["faq_section", "question_headings"],
+         "heading_hint": _HINT_FAQ,
+         "template": "A visible Q&A section answering the related questions people ask."},
+    ],
+    "listicle": [
+        {"title": "Selection criteria intro", "checklist_ids": ["direct_answer_first"],
+         "heading_hint": _HINT_CRITERIA,
+         "template": "State up front what's being ranked/compared and on what basis."},
+        {"title": "Comparison table", "checklist_ids": ["comparison_table", "comparison_structure"],
+         "heading_hint": _HINT_COMPARISON,
+         "template": "A table or side-by-side comparison of the options, not just prose."},
+        {"title": "Ranked entries with pros/cons", "checklist_ids": ["pros_cons"],
+         "heading_hint": _HINT_PROS_CONS,
+         "template": "Each option's advantages/drawbacks laid out explicitly."},
+        {"title": "Tuition / cost per option", "checklist_ids": ["tuition_pricing"], "heading_hint": _HINT_COST,
+         "template": "Actual costs stated per option, not \"contact us for pricing\"."},
+        {"title": "FAQ / common questions", "checklist_ids": ["faq_section", "question_headings"],
+         "heading_hint": _HINT_FAQ,
+         "template": "A visible Q&A section answering the related questions people ask."},
+    ],
+    "landing": [
+        {"title": "Direct answer / value proposition", "checklist_ids": ["direct_answer_first"],
+         "heading_hint": _HINT_DIRECT_ANSWER,
+         "template": "State plainly what the program is and who it's for, before any pitch."},
+        {"title": "Curriculum / what's included", "checklist_ids": ["comprehensiveness"],
+         "heading_hint": _HINT_CURRICULUM,
+         "template": "What the program actually covers, end-to-end."},
+        {"title": "Tuition / cost breakdown", "checklist_ids": ["tuition_pricing"], "heading_hint": _HINT_COST,
+         "template": "Actual costs stated - tuition, fees, payment plans."},
+        {"title": "Career outcomes", "checklist_ids": ["career_outcomes"], "heading_hint": _HINT_OUTCOMES,
+         "template": "Concrete outcomes: salary ranges, job titles, employment prospects."},
+        {"title": "Justification assets (proof points)", "checklist_ids": ["justification_assets"],
+         "heading_hint": _HINT_PROOF,
+         "template": "Short, quotable value propositions (accreditation, guarantees, ratings)."},
+        {"title": "FAQ / common questions", "checklist_ids": ["faq_section", "question_headings"],
+         "heading_hint": _HINT_FAQ,
+         "template": "A visible Q&A section answering the related questions people ask."},
+    ],
+}
+
+
+_MAX_EXAMPLE_HEADING_LEN = 90  # longer strings are unlikely to be a real subheading
+
+
+def _match_example_heading(slot, comparable, used):
+    """
+    First (winner-url, heading) pair matching this slot's heading_hint, from
+    the citation-sorted `comparable` pool, not already claimed by an earlier
+    slot in the same build_page_plan call (`used`) - so two sections never
+    quote the same heading. None when the slot has no hint or nothing on any
+    comparable winner's page matches it.
+    """
+    hint = slot.get("heading_hint")
+    if not hint:
+        return None
+    for f in comparable:
+        for h in (f.get("headings") or []):
+            if not h or len(h) > _MAX_EXAMPLE_HEADING_LEN or (f["url"], h) in used:
+                continue
+            if hint.search(h):
+                used.add((f["url"], h))
+                return {"heading": h, "domain": f.get("domain")}
+    return None
+
+
+def build_page_plan(winner_facts, question, target_format, target_genre=None, min_winners=MIN_WINNERS):
+    """
+    Deterministic, format-templated page plan for a BUILD rec - no new LLM
+    call. Reuses build_winner_checklist's own output for section content
+    (matching each section slot's checklist_ids against it) and the same
+    comparable-winner sample (_comparable_target_winners) for the word-count
+    target, so both are drawn from the exact same vetted sample, not
+    separately-filtered pools.
+
+    Each section also gets a real example heading when one of the comparable
+    winners' cached page_facts.headings matches the slot's heading_hint
+    (_match_example_heading) - keyword extraction, not an LLM, so it's
+    heuristic (can occasionally match a heading out of context) but free and
+    deterministic. When found, it's folded INTO the section's existing
+    `detail` text (quote + domain, plus the prevalence stat when the slot is
+    also checklist-backed) rather than added as a separate field to render -
+    a section never gets taller for having a real example, just more useful.
+
+    None when target_format is unrecognized, or too few comparable winners
+    exist (same min_winners gate as build_winner_checklist) - callers then
+    fall back to the existing checklist-only content_brief.
+    """
+    skeleton = _FORMAT_SECTION_SKELETONS.get(target_format)
+    if not skeleton:
+        return None
+    comparable = _comparable_target_winners(winner_facts, target_genre, min_winners)
+    if not comparable:
+        return None
+
+    checklist = build_winner_checklist(winner_facts, question, target_genre=target_genre, min_winners=min_winners)
+    checklist_by_id = {r["id"]: r for r in checklist}
+
+    used_headings = set()
+    sections = []
+    for slot in skeleton:
+        row = next((checklist_by_id[fid] for fid in slot["checklist_ids"] if fid in checklist_by_id), None)
+        example = _match_example_heading(slot, comparable, used_headings)
+        if row:
+            base = f"{row['winners_pct']}% of cited pages have it"
+            detail = f'"{example["heading"]}" ({example["domain"]}) — {base}' if example else base
+            section = {"title": slot["title"], "source": "checklist", "detail": detail,
+                       "geo_weight": row["geo_weight"]}
+        else:
+            detail = f'"{example["heading"]}" ({example["domain"]})' if example else slot["template"]
+            section = {"title": slot["title"], "source": "template", "detail": detail}
+        if example:
+            section["example"] = example
+        sections.append(section)
+
+    # median, not mean - robust to one outlier winner (a single much-longer
+    # explainer next to a cluster of shorter pages shouldn't drag the target).
+    word_counts = [f["word_count"] for f in comparable
+                   if isinstance(f.get("word_count"), int) and f["word_count"] > 0]
+    word_count_target = ({"value": round(statistics.median(word_counts)),
+                           "based_on_n_winners": len(word_counts)}
+                          if len(word_counts) >= min_winners else None)
+
+    # Format-flat: these are absolute literature targets (geo_features.json),
+    # not winner-relative, so they don't vary by target_format and aren't
+    # nested per-section. fix_above is intentionally not surfaced - there's
+    # no existing page to be "too high" on; a build target only needs a floor
+    # to aim for.
+    structure_targets = [
+        {"id": f["id"], "label": f["label"], "unit": f["unit"],
+         "target_min": f["target_min"], "target_max": f["target_max"], "guidance": f.get("fix_below")}
+        for f in _load_features() if f["detection"] == "ratio"
+    ]
+
+    return {"format": target_format, "sections": sections,
+            "word_count_target": word_count_target, "structure_targets": structure_targets}
 
 
 def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
@@ -469,7 +701,7 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
         "winners": [
             {"url": f["url"], "domain": f.get("domain"), "page_type": f.get("page_type"),
              "citation_count": f.get("citation_count") or 0, "source_type": source_type(f),
-             "genre": winner_genres[i]}
+             "genre": winner_genres[i], "format": winner_format(f)}
             for i, f in enumerate(winner_facts)
         ],
         "winners_total": n,

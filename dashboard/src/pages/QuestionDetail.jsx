@@ -5,12 +5,20 @@ import { useFilter } from "../context/useFilter";
 import PromptMetricsPanel from "../components/PromptMetricsPanel";
 import ResponseDrawer from "../components/ResponseDrawer";
 import { recTriageMessage } from "../lib/recTriage";
+import { formatLabel } from "../lib/recview";
+import { FormatMeter } from "../components/ShareMeter";
 
 function QuestionCitationsTable({ citations }) {
   return (
     <div className="card question-evidence">
       <p className="panel-title">Cited URLs</p>
       <p className="panel-subtitle">All cited URLs for this question, with cached page facts only.</p>
+      <p className="question-evidence__legend">
+        source_type is who owns the page (a rival, a neutral editorial page, a forum, a reference
+        site) — it decides whether QC can compete for the slot. format is what kind of page it is
+        (how-to guide, blog, listicle, landing page) — it decides what QC should build.
+      </p>
+      <FormatMeter pages={citations} />
       <div className="question-evidence__table-wrap">
         <table className="question-evidence__table">
           <thead>
@@ -19,6 +27,7 @@ function QuestionCitationsTable({ citations }) {
               <th className="num">Count</th>
               <th>page_type</th>
               <th>source_type</th>
+              <th>format</th>
               <th>fetch status</th>
             </tr>
           </thead>
@@ -33,16 +42,124 @@ function QuestionCitationsTable({ citations }) {
                 <td className="num">{c.citation_count}</td>
                 <td>{c.page_type ?? "—"}</td>
                 <td>{c.source_type ?? "—"}</td>
+                <td>{c.format ? formatLabel(c.format) : "—"}</td>
                 <td>{c.fetch_status ?? "—"}</td>
               </tr>
             )) : (
               <tr>
-                <td colSpan={5} className="state-empty">No cited URLs yet.</td>
+                <td colSpan={6} className="state-empty">No cited URLs yet.</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+// Lets a person correct the sitemap matcher's pick directly on the question
+// page (rather than only in a rec card, since the match also drives the
+// "QC matched page" reading here) - the matcher is a text-similarity proxy
+// for "does QC have the right page," and is wrong or silent often enough
+// that a reviewer should be able to just say so. Saving re-generates the
+// question's plan immediately (see PUT .../qc-url-override) instead of
+// waiting for the normal 30-day cooldown.
+function QcMatchedPageCard({ questionId, matched, onCorrected }) {
+  const [editing, setEditing] = useState(false);
+  const [url, setUrl] = useState("");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+
+  const startEdit = () => {
+    setUrl(matched?.url ?? "");
+    setNote("");
+    setError(null);
+    setEditing(true);
+  };
+
+  const save = (method, body) => {
+    setBusy(true);
+    setError(null);
+    fetch(`${API_BASE_URL}/api/questions/${questionId}/qc-url-override`, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined,
+    })
+      .then((r) => { if (!r.ok) throw new Error(`Server error ${r.status}`); return r.json(); })
+      .then((res) => {
+        setBusy(false);
+        setEditing(false);
+        onCorrected(res);
+      })
+      .catch((err) => {
+        setBusy(false);
+        setError(`Couldn't save: ${err.message}`);
+      });
+  };
+
+  return (
+    <div className="card question-view__matched">
+      <p className="panel-title">QC matched page</p>
+      {matched?.url ? (
+        <div className="question-view__matched-body">
+          <a href={matched.url} target="_blank" rel="noreferrer" className="question-view__matched-url">
+            {matched.url}
+          </a>
+          <p className="question-view__matched-meta">
+            page_type: {matched.page_type ?? "—"} · fetch status: {matched.fetch_status ?? "—"}
+            {matched.override ? " · manually corrected" : ""}
+          </p>
+        </div>
+      ) : (
+        <p className="state-empty">No QC page matched yet.</p>
+      )}
+
+      {!editing && (
+        <div className="question-view__matched-actions">
+          <button className="btn btn--ghost" onClick={startEdit} disabled={busy}>
+            This isn&rsquo;t right
+          </button>
+          {matched?.override && (
+            <button className="btn btn--ghost" onClick={() => save("DELETE")} disabled={busy}>
+              Undo correction
+            </button>
+          )}
+        </div>
+      )}
+
+      {editing && (
+        <div className="question-view__matched-form">
+          <input
+            type="url"
+            className="question-view__matched-input"
+            placeholder="The actual QC page URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            autoFocus
+          />
+          <input
+            type="text"
+            className="question-view__matched-input"
+            placeholder="Note (optional)"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+          <div className="rc-track__actions">
+            <button
+              className="btn btn--primary"
+              onClick={() => save("PUT", { qc_url: url.trim(), note: note.trim() || null })}
+              disabled={busy || !url.trim()}
+            >
+              {busy ? "Saving…" : "Save correction"}
+            </button>
+            <button className="btn btn--ghost" onClick={() => setEditing(false)} disabled={busy}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      {error && <p className="question-view__rec-message question-view__rec-message--error">{error}</p>}
     </div>
   );
 }
@@ -139,24 +256,47 @@ export default function QuestionDetail() {
   const fetchKey = `${promptId}|${days ?? ""}`;
   const [result, setResult] = useState(null);
   const [drawer, setDrawer] = useState({ open: false, engine: null, promptText: null, promptId: null });
+  // Bumped after a QC-page correction so QuestionRecButton (keyed on it below)
+  // remounts and re-fetches recommendation-status instead of showing the
+  // stale pre-correction gate.
+  const [recNonce, setRecNonce] = useState(0);
 
-  useEffect(() => {
-    let cancelled = false;
+  // cancelled=true is checked by the mount/param-change effect only - a
+  // manual reload() (post-correction) always wants to land, even mid-unmount.
+  const loadDetail = (cancelledRef) => {
     const params = new URLSearchParams();
     if (days) params.append("days", days);
-
-    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}?${params}`)
+    return fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}?${params}`)
       .then((r) => {
         if (!r.ok) throw new Error(`Server error ${r.status}`);
         return r.json();
       })
-      .then((data) => { if (!cancelled) setResult({ key: fetchKey, detail: data }); })
-      .catch((err) => { if (!cancelled) setResult({ key: fetchKey, error: err.message }); });
-    return () => { cancelled = true; };
+      .then((data) => { if (!cancelledRef?.current) setResult({ key: fetchKey, detail: data }); })
+      .catch((err) => { if (!cancelledRef?.current) setResult({ key: fetchKey, error: err.message }); });
+  };
+
+  useEffect(() => {
+    const cancelledRef = { current: false };
+    loadDetail(cancelledRef);
+    return () => { cancelledRef.current = true; };
   }, [promptId, days, fetchKey]);
 
   const detail = result?.key === fetchKey ? result.detail : null;
   const error = result?.key === fetchKey ? result.error : null;
+
+  // qc-url-override save/clear regenerates the question's plan server-side
+  // (see PUT/DELETE .../qc-url-override) - re-read the matched page and force
+  // the rec-status button to re-check, then jump straight to the plan when a
+  // new one actually came out of it (mirrors QuestionRecButton's own
+  // generate -> onOpenPlan flow).
+  const handleCorrected = (res) => {
+    loadDetail();
+    setRecNonce((n) => n + 1);
+    const recs = res?.recommendations ?? (res?.recommendation ? [res.recommendation] : []);
+    if (recs.length > 0) {
+      navigate(`/prompts/${promptId}/plan`);
+    }
+  };
 
   if (error) {
     return <div className="card question-view"><p className="state-msg state-msg--error">Error: {error}</p></div>;
@@ -180,7 +320,7 @@ export default function QuestionDetail() {
           <p className="panel-subtitle">{detail.topic ?? "Uncategorized"}{detail.school ? ` · ${detail.school}` : ""}{detail.question_type ? ` · ${detail.question_type}` : ""}</p>
         </div>
         <QuestionRecButton
-          key={detail.question_id}
+          key={`${detail.question_id}-${recNonce}`}
           questionId={detail.question_id}
           onOpenPlan={() => navigate(`/prompts/${detail.question_id}/plan`)}
         />
@@ -196,17 +336,12 @@ export default function QuestionDetail() {
           />
         </div>
 
-        <div className="card question-view__matched">
-          <p className="panel-title">QC matched page</p>
-          {matched?.url ? (
-            <div className="question-view__matched-body">
-              <a href={matched.url} target="_blank" rel="noreferrer" className="question-view__matched-url">{matched.url}</a>
-              <p className="question-view__matched-meta">page_type: {matched.page_type ?? "—"} · fetch status: {matched.fetch_status ?? "—"}</p>
-            </div>
-          ) : (
-            <p className="state-empty">No QC page matched yet.</p>
-          )}
-        </div>
+        <QcMatchedPageCard
+          key={detail.question_id}
+          questionId={detail.question_id}
+          matched={matched}
+          onCorrected={handleCorrected}
+        />
 
         <QuestionCitationsTable citations={evidence.citations || []} />
       </div>

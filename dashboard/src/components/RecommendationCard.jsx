@@ -7,6 +7,7 @@ import RecCitations from "./rec/RecCitations";
 import FixDiffModule from "./rec/FixDiffModule";
 import TargetDossier from "./rec/TargetDossier";
 import ContentBrief from "./rec/ContentBrief";
+import PagePlan from "./rec/PagePlan";
 import { VARIANTS, BADGE_ICONS } from "./rec/variantMeta";
 
 const EFFORT_DOTS = { S: 1, M: 2, L: 3 };
@@ -559,7 +560,12 @@ export default function RecommendationCard({ rec, isPopoverOpen, onAccept, onOpe
               <>
                 {router.content_brief ? (
                   <>
-                    <ContentBrief brief={router.content_brief} />
+                    <ContentBrief brief={router.content_brief} hideStructure={!!router.page_plan} />
+                    {router.page_plan && (
+                      <div className="rc-module">
+                        <PagePlan plan={router.page_plan} />
+                      </div>
+                    )}
                     <div className="rc-module">
                       <RecCitations router={router} />
                     </div>

@@ -16,7 +16,7 @@ const FORMAT_CHECKLIST = (heading) => [
   <><b>Tone</b> — no marketing adjectives</>,
 ];
 
-export default function ContentBrief({ brief }) {
+export default function ContentBrief({ brief, hideStructure = false }) {
   if (!brief) return null;
   const { heading, outline, evidence_quotes: quotes } = brief;
 
@@ -49,31 +49,33 @@ export default function ContentBrief({ brief }) {
           </div>
         )}
 
-        <div className="rc-brief__section">
-          <span className="rc-brief__eyebrow">Suggested structure</span>
-          {outline?.length ? (
-            <div className="rc-trail">
-              {outline.map((o, i) => (
-                <div className="rc-step" key={o.title}>
-                  <span className="rc-step__n">{i + 1}</span>
-                  <div className="rc-step__body">
-                    <p className="rc-step__title">{o.title}</p>
-                    <p className="rc-step__fact">{o.detail}</p>
-                    {o.confirm_with_qc && (
-                      <span className="rc-brief__confirm">⚠ confirm with QC before publishing</span>
-                    )}
+        {!hideStructure && (
+          <div className="rc-brief__section">
+            <span className="rc-brief__eyebrow">Suggested structure</span>
+            {outline?.length ? (
+              <div className="rc-trail">
+                {outline.map((o, i) => (
+                  <div className="rc-step" key={o.title}>
+                    <span className="rc-step__n">{i + 1}</span>
+                    <div className="rc-step__body">
+                      <p className="rc-step__title">{o.title}</p>
+                      <p className="rc-step__fact">{o.detail}</p>
+                      {o.confirm_with_qc && (
+                        <span className="rc-brief__confirm">⚠ confirm with QC before publishing</span>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="rc-brief__empty">
-              No outline authored for this type yet — start from the format requirements below.
-            </p>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <p className="rc-brief__empty">
+                No outline authored for this type yet — start from the format requirements below.
+              </p>
+            )}
+          </div>
+        )}
 
-        {heading && (
+        {!hideStructure && heading && (
           <div className="rc-brief__section">
             <span className="rc-brief__eyebrow">Format requirements</span>
             <div className="rc-brief__checklist">

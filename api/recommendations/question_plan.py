@@ -132,7 +132,7 @@ def save_question_recommendations(recs, question_id):
     return [str(r) for r in rec_ids]
 
 
-def generate_question_recommendation(question_id, days=None):
+def generate_question_recommendation(question_id, days=None, force=False):
     """
     On-demand generation for one question, gated per question by the same
     30-day cooldown as the batch. Builds the question's full action plan
@@ -145,11 +145,19 @@ def generate_question_recommendation(question_id, days=None):
           router couldn't action it; triage.reason says why
     "recommendation" (singular, the plan's first rec) is kept for callers of
     the one-rec era.
+
+    force=True bypasses ONLY a "cooldown" gate (a live but untouched proposed
+    rec younger than 30 days) - for a deliberate human correction (e.g. fixing
+    the matched QC page via set_qc_url_override) that should take effect
+    immediately rather than wait out the cooldown. It never bypasses
+    "active_rec": committed work (accepted/in_progress/...) is never
+    silently superseded, correction or not - same rule
+    scripts/refresh_fix_recommendation.py already applies to fix recs.
     """
     from api.queries.question_router import build_question_recommendations
 
     status = get_question_recommendation_status(question_id)
-    if not status["can_generate"]:
+    if not status["can_generate"] and not (force and status["blocked_by"] == "cooldown"):
         return {"generated": False, "recommendation": status["recommendation"],
                 "recommendations": status["recommendations"],
                 "triage": None, "blocked_by": status["blocked_by"],

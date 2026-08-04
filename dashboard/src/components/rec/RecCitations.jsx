@@ -1,4 +1,4 @@
-import { bucketColor, bucketLabel, pctLabel, urlLabel } from "../../lib/recview";
+import { bucketColor, bucketLabel, formatLabel, isUnbrandedTopic, pctLabel, urlLabel } from "../../lib/recview";
 import InfoTip from "../InfoTip";
 
 // Ranked "what AI cites" panel. Pass `sc` (the fix card's scorecard) to show
@@ -22,6 +22,18 @@ export default function RecCitations({ router, sc, title }) {
         {title ?? "What AI cites for this question"}
         <InfoTip id="citations_panel" />
       </p>
+      <p className="rc-cites__legend">
+        Type is who owns the page (a rival, a neutral editorial page, a forum, a reference
+        site) — it decides whether QC can compete for the slot. Format is what kind of page it
+        is (how-to guide, blog, listicle, landing page) — it decides what QC should build.
+      </p>
+      {isUnbrandedTopic(router?.topic) && (
+        <p className="rc-cites__scope">
+          &ldquo;{router.topic}&rdquo; is an unbranded category question — engines citing the
+          broader field (training, behavior, general certifications) instead of QC-specific
+          pages is expected here, not a mismatch.
+        </p>
+      )}
       <div className="rc-cites">
         {rows.map((w) => {
           const unread = w.status != null && w.status !== "ok";
@@ -46,6 +58,9 @@ export default function RecCitations({ router, sc, title }) {
               >
                 <i className="rc-dot" style={{ background: bucketColor(w.source_type) }} />
                 {bucketLabel(w.source_type)}
+              </span>
+              <span className="rc-cite__format" title="content format">
+                {formatLabel(w.format)}
               </span>
               <span className="rc-cite__bar">
                 <i style={{ "--w": `${((w.citation_count || 0) / max) * 100}%` }} />

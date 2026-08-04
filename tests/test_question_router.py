@@ -55,6 +55,17 @@ def informational_winner(domain):
                  title="How to Become an X")
 
 
+def howto_guide_with_checklist_signal(domain):
+    """Same how-to guide as informational_winner, but with a deterministic
+    checklist feature (question_headings) present - guarantees build_winner_
+    checklist returns a non-empty row without depending on the semantic/LLM
+    detection pass (which has nothing cached here and would otherwise always
+    resolve False), so target_format/page_plan tests can assert on a real,
+    non-empty checklist deterministically."""
+    return facts(domain, "guide", url=f"https://{domain}/blog/how-to-x",
+                 title="How to Become an X", features={"question_headings": 3})
+
+
 QC_INFORMATIONAL = facts(
     "qcpetstudies.com", "qc_owned",
     url="https://www.qcpetstudies.com/blog/how-to-become-a-dog-groomer",
@@ -82,7 +93,7 @@ def wire(monkeypatch, winners_by_qid, coverage_by_qid=None, qc_facts=None):
     monkeypatch.setattr(qr, "get_pages_facts",
                         lambda urls, **kw: [dict(all_facts[u]) for u in urls])
     monkeypatch.setattr(qr, "diagnose_text_coverage",
-                        lambda text, school=None: (coverage_by_qid or {}).get(
+                        lambda text, school=None, question_id=None: (coverage_by_qid or {}).get(
                             text, {"verdict": "missing_page", "qc_url": None}))
     monkeypatch.setattr(qr, "get_page_facts", lambda url, **kw: qc_facts or {})
 
@@ -419,6 +430,127 @@ def test_single_question_fix_with_empty_scorecard_triages(monkeypatch):
     assert triage["scorecard"]["winners_readable"] == 3
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Secondary ownable signal: competitor/editorial winners present but not
+# dominant - informs earn_indirect's target_genre, and (topic permitting)
+# earns a companion build rec alongside a reach_out primary.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_secondary_ownable_signal_below_share_floor_is_none():
+    facts_list = [commercial_winner(f"rival{i}.com") for i in range(3)]
+    # 3 ownable votes out of 20 total (15%) - below the 25% share floor.
+    assert qr._secondary_ownable_signal(facts_list, ownable_share=0.15, ownable_votes=3) is None
+
+
+def test_secondary_ownable_signal_below_vote_floor_is_none():
+    facts_list = [commercial_winner("rival1.com")]
+    # 30% share clears the floor, but only 1 vote - below the count floor.
+    assert qr._secondary_ownable_signal(facts_list, ownable_share=0.30, ownable_votes=1) is None
+
+
+def test_secondary_ownable_signal_returns_plurality_format():
+    facts_list = [commercial_winner(f"rival{i}.com") for i in range(3)]
+    signal = qr._secondary_ownable_signal(facts_list, ownable_share=0.30, ownable_votes=3)
+    assert signal == {"format": "landing", "genre": "commercial", "n_winners": 3, "n_classified": 3}
+
+
+def test_earn_indirect_infers_genre_from_secondary_ownable_signal(monkeypatch):
+    # reference (wikipedia) dominates non-ownable citations (73%) -> routes
+    # earn_indirect same as the plain wikipedia case - but 3 competitor
+    # "landing" pages also cite here at 27%/9 votes, clearing the secondary
+    # floor: target_genre should come from them instead of staying None.
+    q = question(40, "what is a dog groomer")
+    winners = [
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_1"), 8),
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_2"), 8),
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_3"), 8),
+        (commercial_winner("rival1.com"), 3),
+        (commercial_winner("rival2.com"), 3),
+        (commercial_winner("rival3.com"), 3),
+    ]
+    wire(monkeypatch, {40: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "earn_indirect"
+    assert route["secondary_ownable"] == {
+        "format": "landing", "genre": "commercial", "n_winners": 3, "n_classified": 3}
+
+    rec = qr._build_rec(route, [route])
+    assert "dedicated course/program page" in rec["problem"]
+    assert "matching the format" in rec["action"]
+
+
+def test_earn_indirect_without_secondary_signal_stays_genre_none(monkeypatch):
+    # Same as the existing plain wikipedia case - no competitor/editorial
+    # presence at all, so target_genre has nothing to infer from.
+    q = question(42, "what is a dog groomer")
+    winners = [(facts("en.wikipedia.org", "guide",
+                      url=f"https://en.wikipedia.org/wiki/Dog_{i}"), 8) for i in range(3)]
+    wire(monkeypatch, {42: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["secondary_ownable"] is None
+    rec = qr._build_rec(route, [route])
+    assert "format-classifiable" not in rec["problem"]
+    assert "matching the format" not in rec["action"]
+
+
+def test_reach_out_with_secondary_ownable_gets_companion_build(monkeypatch):
+    # ugc dominates (63%) -> reach_out, but 3 competitor "landing" pages also
+    # cite here at 37%/9 votes - buildable topic, so the on-demand flow should
+    # emit a companion build rec instead of bailing to reach_out_auto_covered.
+    q = question(41, "how do i become an event designer", topic="How to Become")
+    winners = [
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x1"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x2"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x3"), 5),
+        (commercial_winner("rival1.com"), 3),
+        (commercial_winner("rival2.com"), 3),
+        (commercial_winner("rival3.com"), 3),
+    ]
+    wire(monkeypatch, {41: winners})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "reach_out"
+    assert route["secondary_ownable"]["format"] == "landing"
+
+    recs, triage = qr.build_question_recommendations(41)
+    assert triage is None
+    assert recs[0]["detail"]["router"]["branch"] == "secondary_build"
+    assert recs[0]["action_type"] == "content"
+    assert recs[0]["detail"]["question_plan"] == {
+        "question_id": "41", "role": "primary", "emitter": "secondary_build", "source": "on_demand"}
+
+
+def test_reach_out_with_secondary_ownable_but_non_buildable_topic_stays_auto_covered(monkeypatch):
+    # Same secondary signal as above, but a reputation topic can't build its
+    # way to credibility (same rule the main build branch already applies) -
+    # the topic gate must hold here too.
+    q = question(43, "is QC Pet Studies legit", topic="Brand Credibility")
+    winners = [
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x1"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x2"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x3"), 5),
+        (commercial_winner("rival1.com"), 3),
+        (commercial_winner("rival2.com"), 3),
+        (commercial_winner("rival3.com"), 3),
+    ]
+    wire(monkeypatch, {43: winners})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    assert qr.route_question(q)["secondary_ownable"] is not None
+
+    recs, triage = qr.build_question_recommendations(43)
+    assert recs == []
+    assert triage["reason"] == "reach_out_auto_covered"
+
+
 def test_build_card_omits_benchmark_rather_than_falling_back(monkeypatch):
     # All winners are junk for display (video + bare homepage) but a domain-
     # classified competitor homepage still votes -> build fires, benchmark
@@ -437,3 +569,148 @@ def test_build_card_omits_benchmark_rather_than_falling_back(monkeypatch):
     rec = qr._build_rec(route, [route])
     assert "Benchmark" not in rec["action"]
     assert "youtube" not in rec["action"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# target_format / page_plan (deterministic, format-templated BUILD page plan)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_genre_mismatch_target_format_and_page_plan(monkeypatch):
+    q = question(60, "how to become a dog groomer")
+    winners = [(howto_guide_with_checklist_signal(f"guide{i}.com"), 5) for i in range(3)]
+    wire(monkeypatch, {60: winners},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["genre_mismatch"]["winner_format"] == "how_to"
+
+    rec = qr._build_rec(route, [route])
+    assert rec["detail"]["build_checklist"]["target_format"] == "how_to"
+    assert rec["detail"]["router"]["page_plan"]["format"] == "how_to"
+
+
+def test_earn_indirect_page_plan_uses_secondary_format(monkeypatch):
+    # Same fixture as test_earn_indirect_infers_genre_from_secondary_ownable_signal:
+    # 3 competitor "landing" pages clear the secondary-ownable floor alongside
+    # wikipedia's dominance - target_format (and page_plan.format) should come
+    # from that secondary signal.
+    q = question(61, "what is a dog groomer")
+    winners = [
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_1"), 8),
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_2"), 8),
+        (facts("en.wikipedia.org", "guide", url="https://en.wikipedia.org/wiki/Dog_3"), 8),
+        (commercial_winner("rival1.com"), 3),
+        (commercial_winner("rival2.com"), 3),
+        (commercial_winner("rival3.com"), 3),
+    ]
+    wire(monkeypatch, {61: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "earn_indirect"
+
+    rec = qr._build_rec(route, [route])
+    assert rec["detail"]["router"]["page_plan"]["format"] == "landing"
+
+
+def test_earn_indirect_without_secondary_signal_has_no_page_plan(monkeypatch):
+    # No competitor/editorial presence at all - target_format has nothing to
+    # infer from, so no page_plan is attached (build_page_plan needs a format).
+    q = question(62, "what is a dog groomer")
+    winners = [(facts("en.wikipedia.org", "guide",
+                      url=f"https://en.wikipedia.org/wiki/Dog_{i}"), 8) for i in range(3)]
+    wire(monkeypatch, {62: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["secondary_ownable"] is None
+
+    rec = qr._build_rec(route, [route])
+    assert "page_plan" not in rec["detail"]["router"]
+
+
+def test_plain_ownable_win_infers_landing_format(monkeypatch):
+    # No QC page, no genre mismatch to read a format from directly - the
+    # plain bucket-win branch must vote for target_format itself
+    # (_plurality_format over the ownable winners), same as
+    # _secondary_ownable_signal does on the non-dominant side.
+    q = question(63, "best pet grooming certification", topic="Course Discovery")
+    winners = [(commercial_winner(f"rival{i}.com"), 4) for i in range(3)]
+    wire(monkeypatch, {63: winners})
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+    assert route["reason"] == "ownable_no_qc_page"
+
+    rec = qr._build_rec(route, [route])
+    assert rec["detail"]["router"]["page_plan"]["format"] == "landing"
+
+
+def test_insufficient_winners_omits_page_plan_but_keeps_content_brief(monkeypatch):
+    # Same fixture as test_build_card_omits_benchmark_rather_than_falling_back:
+    # only 1 comparable-but-unreadable winner - too few for build_page_plan's
+    # own min_winners gate, so page_plan is absent, but content_brief (which
+    # has no such gate) still renders.
+    q = question(64, "best decor course", topic="Course Discovery")
+    winners = [
+        (facts("rivalschool.com", "competitor", url="https://rivalschool.com",
+               status="fetch_failed"), 5),
+        (facts("youtube.com", "video", status="not_fetched",
+               url="https://youtube.com/watch?v=abc"), 9),
+    ]
+    wire(monkeypatch, {64: winners})
+    route = qr.route_question(q)
+    assert route["branch"] == "build"
+
+    rec = qr._build_rec(route, [route])
+    assert "page_plan" not in rec["detail"]["router"]
+    assert rec["detail"]["router"]["content_brief"]["heading"] == q["question"]
+
+
+def test_secondary_build_rec_gets_page_plan(monkeypatch):
+    # Extends test_reach_out_with_secondary_ownable_gets_companion_build:
+    # the companion build rec should get a page_plan the same way the
+    # primary build branches do.
+    q = question(65, "how do i become an event designer", topic="How to Become")
+    winners = [
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x1"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x2"), 5),
+        (facts("reddit.com", "community", status="not_fetched", url="https://reddit.com/r/x3"), 5),
+        (commercial_winner("rival1.com"), 3),
+        (commercial_winner("rival2.com"), 3),
+        (commercial_winner("rival3.com"), 3),
+    ]
+    wire(monkeypatch, {65: winners})
+    forbid_scorecard(monkeypatch)
+    monkeypatch.setattr(qr, "get_question_stats", lambda qid, days=None: q)
+
+    route = qr.route_question(q)
+    assert route["branch"] == "reach_out"
+    assert route["secondary_ownable"]["format"] == "landing"
+
+    recs, triage = qr.build_question_recommendations(65)
+    assert triage is None
+    rec = recs[0]
+    assert rec["detail"]["router"]["branch"] == "secondary_build"
+    assert rec["detail"]["router"]["page_plan"]["format"] == "landing"
+
+
+def test_content_brief_shape_unchanged_when_page_plan_present(monkeypatch):
+    q = question(66, "how to become a dog groomer")
+    winners = [(howto_guide_with_checklist_signal(f"guide{i}.com"), 5) for i in range(3)]
+    wire(monkeypatch, {66: winners},
+         coverage_by_qid={q["question"]: {"verdict": "have_page",
+                                          "qc_url": QC_COMMERCIAL["url"]}},
+         qc_facts=QC_COMMERCIAL)
+    forbid_scorecard(monkeypatch)
+
+    route = qr.route_question(q)
+    rec = qr._build_rec(route, [route])
+    assert rec["detail"]["router"].get("page_plan") is not None
+    assert set(rec["detail"]["router"]["content_brief"]) == {"heading", "action", "outline"}

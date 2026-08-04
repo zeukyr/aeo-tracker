@@ -15,7 +15,12 @@ Branches (each losing question terminates in exactly one):
   BUILD      ownable winners (editorial/competitor) and QC lacks the page or
              has the wrong KIND of page - buildability-gated by topic; also
              the fallback for known-unownable winners (wikipedia/.gov ->
-             "earn the slot indirectly").
+             "earn the slot indirectly", genre inferred from any secondary
+             ownable presence - see _secondary_ownable_signal). A reach_out-
+             branch question with that same secondary signal additionally
+             gets a companion build rec (on-demand flow only, topic-gated) -
+             the vote picks ONE primary branch, but "also worth building"
+             can be true alongside it.
   REACH OUT  non-ownable winners (ugc/review/reference/certifying_body) with
              a real channel (registry / page affordance / source-type default,
              §5.7), or a reputation question whose ownable winners are
@@ -42,6 +47,7 @@ until the Tab 3 frontend lands, so the cards stay visible in Strategic Growth.
 import os
 import re
 import json
+from collections import Counter
 from urllib.parse import urlsplit
 
 from src.logger import logger
@@ -55,6 +61,7 @@ from api.queries.page_facts import (
     registry_brand_type,
     source_votes,
     inclusion_opportunity,
+    winner_format,
     school_for_url,
     _root_domain,
     SOURCE_TYPE_DOMINANCE,
@@ -67,6 +74,7 @@ from api.queries.scorecard import (
     scorecard_to_recommendation,
     scorecard_triage_reason,
     build_winner_checklist,
+    build_page_plan,
     CANDIDATE_POOL,
 )
 from api.queries.sitemap_coverage import diagnose_text_coverage
@@ -85,6 +93,20 @@ _MAX_QC_SHARE = 0.15          # "losing": QC cited in <= 15% of responses
 # noise, not a verdict - 64% of 3 voters is one page's opinion. Triage as
 # insufficient_voters regardless of share.
 MIN_VOTING_CITATIONS = 4
+
+# A "secondary ownable signal" floor - deliberately BELOW SOURCE_TYPE_DOMINANCE
+# (0.6). The two-stage vote is winner-take-all: whichever side clears 0.6 owns
+# the whole routing decision, and the loser's votes are discarded entirely -
+# so a question that's 65% ugc/reference and 35% competitor/editorial (a real
+# split seen in live data: "How do I become an event designer?" runs 10
+# competitor citations alongside 15 ugc) currently produces a reach-out rec
+# with NO signal that a build opportunity exists too, and an earn_indirect
+# build rec with NO idea what to build (target_genre stayed None even when
+# 6 competitor + 6 editorial pages were sitting right there - "how to become
+# an event planner"). This is that floor: real enough to act on (not 1-2
+# stray citations), without claiming dominance.
+_SECONDARY_OWNABLE_SHARE = 0.25
+_SECONDARY_OWNABLE_MIN_VOTES = 3
 
 _CHANNELS_PATH = os.path.join(os.path.dirname(__file__), "..", "knowledge", "outreach_channels.json")
 
@@ -241,6 +263,53 @@ def triage(q, reason, build_candidate=False, **extra):
             "build_candidate": build_candidate, **extra}
 
 
+def _plurality_format(facts_list):
+    """Plurality winner_format() among a set of facts, or None when none are
+    format-classifiable. Shared by _secondary_ownable_signal (ownable-bucket
+    winners on a non-dominant route) and _build_rec's plain ownable-win
+    branch (ownable winners ARE the dominant bucket there) - same question,
+    same vote."""
+    formats = [f for f in (winner_format(wf) for wf in facts_list) if f]
+    return Counter(formats).most_common(1)[0][0] if formats else None
+
+
+def _secondary_ownable_signal(facts, ownable_share, ownable_votes):
+    """
+    Whether competitor/editorial winners have a REAL presence even when they
+    don't dominate the vote - `_SECONDARY_OWNABLE_SHARE`/`_MIN_VOTES` is a
+    deliberately lower bar than SOURCE_TYPE_DOMINANCE: this isn't "which side
+    wins the routing decision," it's "is there a signal worth acting on
+    alongside whatever wins." None when there isn't (too few ownable votes,
+    or none of them format-classifiable) - never guess.
+
+    When present, returns the PLURALITY format among just those ownable
+    winners (same per-page vote winner_format uses elsewhere) - what QC
+    would build if it acted on this signal - plus counts for evidence text.
+    Deliberately no floor/margin gate here (unlike format_gap's
+    _FORMAT_FLOOR/_FORMAT_MARGIN): the share+count gate above already
+    established this is a real sample, and a secondary signal is "worth
+    naming a format for," not "confident enough to suppress a fix rec."
+    """
+    if ownable_share < _SECONDARY_OWNABLE_SHARE or ownable_votes < _SECONDARY_OWNABLE_MIN_VOTES:
+        return None
+    ownable_facts = [f for f in facts if source_type(f) in OWNABLE_SOURCE_BUCKETS]
+    dominant_format = _plurality_format(ownable_facts)
+    if not dominant_format:
+        return None
+    formats = [f for f in (winner_format(wf) for wf in ownable_facts) if f]
+    return {
+        "format": dominant_format,
+        "genre": FORMAT_TO_GENRE.get(dominant_format),
+        "n_winners": len(ownable_facts),
+        "n_classified": len(formats),
+        # Callers quote this as "X/n_classified are {format}" - must be the
+        # count that actually IS the dominant format, not n_classified itself
+        # (that's "classified at all," which can silently overstate a weak
+        # plurality as if every classified page agreed).
+        "n_dominant": formats.count(dominant_format),
+    }
+
+
 def route_question(q, days=None):
     """
     Classify one losing question's cited winners and pick its branch.
@@ -280,6 +349,7 @@ def route_question(q, days=None):
         "ownable_share": round(ownable / voters, 2) if voters else 0.0,
         "non_ownable_share": round((voters - ownable) / voters, 2) if voters else 0.0,
     }
+    secondary_ownable = _secondary_ownable_signal(facts, vote["ownable_share"], ownable)
 
     def _lead(bucket_names):
         eligible = {b: w for b, w in votes.items() if b in bucket_names and w}
@@ -294,7 +364,8 @@ def route_question(q, days=None):
     if vote["non_ownable_share"] >= SOURCE_TYPE_DOMINANCE:
         bucket = _lead(NON_OWNABLE_SOURCE_BUCKETS)
         common = {"question": q, "winners": facts, "vote": vote,
-                  "dominant": (bucket, vote["non_ownable_share"])}
+                  "dominant": (bucket, vote["non_ownable_share"]),
+                  "secondary_ownable": secondary_ownable}
         feas, target = _bucket_feasibility(facts, bucket)
         if feas["feasibility"] in ("open", "gated"):
             return {"branch": "reach_out", "reason": "non_ownable_winners",
@@ -314,9 +385,10 @@ def route_question(q, days=None):
     # ── stage 1a: ownable field (competitor + editorial vote together) ──
     bucket = _lead(OWNABLE_SOURCE_BUCKETS)
     common = {"question": q, "winners": facts, "vote": vote,
-              "dominant": (bucket, vote["ownable_share"])}
+              "dominant": (bucket, vote["ownable_share"]),
+              "secondary_ownable": secondary_ownable}
 
-    cov = diagnose_text_coverage(q["question"], school=q["school"])
+    cov = diagnose_text_coverage(q["question"], school=q["school"], question_id=q["question_id"])
     qc_url = cov.get("qc_url") if cov.get("verdict") == "have_page" else None
     gm = None
     if qc_url:
@@ -364,7 +436,7 @@ def _winner_summary(facts, limit=5):
     if limit is not None:
         facts = facts[:limit]
     return [{"url": f["url"], "page_type": f.get("page_type"),
-             "source_type": source_type(f),
+             "source_type": source_type(f), "format": winner_format(f),
              "citation_count": f.get("citation_count") or 0} for f in facts]
 
 
@@ -455,6 +527,8 @@ def _router_detail(route, group=None):
         detail["outreach_feasibility"] = route["feasibility"]
     if route.get("genre_mismatch"):
         detail["genre_mismatch"] = route["genre_mismatch"]
+    if route.get("secondary_ownable"):
+        detail["secondary_ownable"] = route["secondary_ownable"]
     return detail
 
 
@@ -474,6 +548,7 @@ def _build_rec(route, group):
     carry independent demand); group size is a priority booster, not a gate."""
     q = route["question"]
     gm = route.get("genre_mismatch")
+    secondary = route.get("secondary_ownable")
     bucket = (route.get("dominant") or (None,))[0]
     card_winners = _card_winners(route)
     evidence = _winners_evidence(q, card_winners)
@@ -485,13 +560,25 @@ def _build_rec(route, group):
     # value regardless of the format refinement (checklist behavior is
     # unaffected by adding format-specific prose below); inferred from the
     # winning bucket otherwise (the "editorial pages win" / "rival pages win"
-    # prose already assumes exactly this mapping).
+    # prose already assumes exactly this mapping). earn_indirect has no QC
+    # page and no dominant ownable bucket to infer from - but if competitor/
+    # editorial winners have a real (if non-dominant) presence anyway
+    # (_secondary_ownable_signal), THEIR format is the best available answer
+    # to "what should this be," rather than declining to say.
+    # target_format mirrors target_genre's derivation one level finer - each
+    # branch already has (or can cheaply vote for) the format, so this never
+    # re-derives genre from format or vice versa: FORMAT_TO_GENRE stays the
+    # single source of truth relating the two.
     if route["reason"] == "earn_indirect":
-        target_genre = None
+        target_genre = secondary["genre"] if secondary else None
+        target_format = secondary["format"] if secondary else None
     elif gm:
         target_genre = FORMAT_TO_GENRE[gm["winner_format"]]
+        target_format = gm["winner_format"]
     else:
         target_genre = "commercial" if bucket == "competitor" else "informational"
+        target_format = _plurality_format(
+            [f for f in (route.get("winners") or []) if source_type(f) in OWNABLE_SOURCE_BUCKETS])
 
     # What the new page needs to actually include - the same checklist
     # machinery that makes Tab 2 fix-cards concrete, run against the winners
@@ -499,24 +586,51 @@ def _build_rec(route, group):
     # wrong kind). [] when too few comparable winners are readable.
     checklist = build_winner_checklist(route.get("winners") or [], q["question"], target_genre=target_genre)
 
+    # Deterministic, format-templated section plan - None when target_format
+    # is unrecognized or too few comparable winners exist (build_page_plan
+    # applies the same min_winners/comparable-type gate build_winner_checklist
+    # does, via the shared _comparable_target_winners helper), in which case
+    # the card falls back to the checklist-only content_brief below.
+    page_plan = build_page_plan(route.get("winners") or [], q["question"], target_format, target_genre=target_genre)
+    if page_plan:
+        page_plan["format_label"] = _FORMAT_LABEL[target_format]
+
+    # action_core is the one-sentence strategy, captured before benchmark/
+    # checklist get appended below - it feeds content_brief.action (the
+    # card's short headline) while `action` keeps growing into the full
+    # backward-compatible string (still used wherever content_brief isn't
+    # rendered, e.g. list rows, exports, the raw-evidence toggle). Splitting
+    # the two is what lets the UI show "strategy sentence + benchmark chips +
+    # numbered checklist" instead of one run-on paragraph with everything
+    # comma-joined into it - see ContentBrief.jsx.
     if route["reason"] == "earn_indirect":
         domain = (route.get("feasibility_target") or {}).get("domain") or "the citing sources"
         problem = (f"'{q['question']}' is answered from reference sources QC cannot own or pitch "
                    f"({domain}); QC is cited in {round(q['qc_share'] * 100)}% of responses.")
-        action = (f"No direct channel to {domain} - publish the authoritative, citable QC content "
-                  f"such sources reference, to earn the slot indirectly.")
+        if secondary:
+            target_label = _FORMAT_LABEL[secondary["format"]]
+            problem += (f" {secondary['n_dominant']}/{secondary['n_classified']} format-classifiable "
+                        f"competitor/editorial pages also cited here are {target_label}.")
+            action_core = (f"No direct channel to {domain} - publish {target_label} answering "
+                      f"'{q['question']}' to earn the slot indirectly, matching the format the "
+                      f"other cited pages use.")
+        else:
+            action_core = (f"No direct channel to {domain} - publish the authoritative, citable QC content "
+                      f"such sources reference, to earn the slot indirectly.")
+        action = action_core
         if benchmark:
             action += f" Benchmark: {benchmark}."
     elif gm:
         target_label = _FORMAT_LABEL[gm["winner_format"]]
         qc_label = _FORMAT_LABEL[gm["qc_format"]]
         if gm["winner_format"] == "landing":
-            action = (f"Build a dedicated course/program page for '{q['question']}' - the existing "
+            action_core = (f"Build a dedicated course/program page for '{q['question']}' - the existing "
                       f"page ({route['qc_url']}) is {qc_label}, a different format than the "
                       f"commercial pages engines cite here. Link the two.")
         else:
-            action = (f"Build {target_label} answering '{q['question']}', separate from the existing "
+            action_core = (f"Build {target_label} answering '{q['question']}', separate from the existing "
                       f"page ({route['qc_url']}) - and link the two. Keep tuning that page separately.")
+        action = action_core
         problem = (f"QC's page for '{q['question']}' ({route['qc_url']}) is {qc_label}, "
                    f"but {gm['winners_with_format']}/{gm['winners_classified']} format-classifiable "
                    f"cited pages are {target_label} - engines reward a format QC doesn't have here.")
@@ -533,13 +647,15 @@ def _build_rec(route, group):
                 for f in card_winners if source_type(f) == "competitor"))
             won = (f"rival providers ({rival_names}) won this query with their own pages"
                    if rival_names else "provider pages win this query")
-            action = f"Create a QC page answering '{q['question']}' - {won}."
+            action_core = f"Create a QC page answering '{q['question']}' - {won}."
+            action = action_core
             if benchmark:
                 action += f" Benchmark depth and coverage against: {benchmark}."
         else:
-            action = (f"Build educational content (a guide/hub, not a sales page) answering "
+            action_core = (f"Build educational content (a guide/hub, not a sales page) answering "
                       f"'{q['question']}' - editorial pages win this query, so a self-serving page "
                       f"won't take the neutral slot.")
+            action = action_core
             if benchmark:
                 action += f" Model it on: {benchmark}."
 
@@ -551,8 +667,24 @@ def _build_rec(route, group):
             f"{r['label']} — {r['winners_present']}/{r['winners_total']} ({r['winners_pct']}%) "
             f"cited pages have it" for r in checklist) + ".")
 
+    # Same {heading, action, outline} shape ContentBrief.jsx already renders
+    # for competitive_content.py/concern_engine.py recs - a numbered checklist
+    # instead of a comma-joined "Must include: ..." clause, and the benchmark
+    # renders separately via BenchmarkModule (which reads router.winners
+    # directly), so neither needs restating in prose here.
+    content_brief = {
+        "heading": q["question"],
+        "action": action_core,
+        "outline": [{"title": r["label"], "detail": f"{r['winners_pct']}% of cited pages have it"}
+                    for r in checklist],
+    }
+
     priority = "high" if len(group) >= 2 else "medium"
     school = q.get("school") or (school_for_url(route.get("qc_url")) if route.get("qc_url") else None)
+    router_detail = _router_detail(route, group)
+    router_detail["content_brief"] = content_brief
+    if page_plan:
+        router_detail["page_plan"] = page_plan
     return {
         "problem": problem,
         "action": action,
@@ -567,8 +699,9 @@ def _build_rec(route, group):
         "expected_magnitude": None,
         "effort": "L",
         "confidence": 0.6 if checklist else 0.55,
-        "detail": {"router": _router_detail(route, group),
-                   **({"build_checklist": {"target_genre": target_genre, "gaps": checklist}} if checklist else {})},
+        "detail": {"router": router_detail,
+                   **({"build_checklist": {"target_genre": target_genre, "target_format": target_format,
+                                            "gaps": checklist}} if checklist else {})},
     }
 
 
@@ -604,6 +737,78 @@ def _reach_out_rec(route, group):
         "effort": "M" if gated else "S",
         "confidence": 0.5 if gated else 0.6,
         "detail": {"router": _router_detail(route, group)},
+    }
+
+
+def _secondary_build_rec(route):
+    """
+    Companion BUILD rec for a reach_out-branch question that ALSO carries a
+    real (non-dominant) ownable presence - see _secondary_ownable_signal.
+    The reach_out branch's own PRIMARY rec is still the sweep's job
+    (reach_out_sweep.py, deliberately cheap/no-LLM); this only fires from the
+    on-demand per-question flow, as a companion alongside it, when the
+    secondary signal clears its own (lower than SOURCE_TYPE_DOMINANCE) floor -
+    "also worth building," not "this is what wins the query." Caller must
+    check route.get("secondary_ownable") is truthy before calling.
+    """
+    q = route["question"]
+    secondary = route["secondary_ownable"]
+    dominant_bucket = (route.get("dominant") or (None,))[0]
+    target_genre = secondary["genre"]
+    target_format = secondary["format"]
+    target_label = _FORMAT_LABEL[target_format]
+    card_winners = _card_winners(route)
+    benchmark = ", ".join(w["url"] for w in _winner_summary(card_winners, limit=2))
+
+    checklist = build_winner_checklist(route.get("winners") or [], q["question"], target_genre=target_genre)
+    page_plan = build_page_plan(route.get("winners") or [], q["question"], target_format, target_genre=target_genre)
+    if page_plan:
+        page_plan["format_label"] = target_label
+
+    problem = (f"'{q['question']}' is mostly answered from {dominant_bucket} sources QC can't own, "
+               f"but {secondary['n_dominant']}/{secondary['n_classified']} format-classifiable "
+               f"competitor/editorial pages also cited here are {target_label} - a slot QC could "
+               f"compete for directly.")
+    action_core = f"Build {target_label} answering '{q['question']}', matching the format those pages use."
+    action = action_core
+    if benchmark:
+        action += f" Benchmark: {benchmark}."
+    if checklist:
+        must_include = ", ".join(
+            f"{r['label'].lower()} ({r['winners_pct']}% of cited pages have it)" for r in checklist[:5])
+        action += f" Must include: {must_include}."
+
+    evidence = (_winners_evidence(q, card_winners) +
+                f" {secondary['n_dominant']}/{secondary['n_classified']} classifiable competitor/"
+                f"editorial cited pages are {secondary['format']}.")
+
+    router_detail = {**_router_detail(route), "branch": "secondary_build"}
+    router_detail["content_brief"] = {
+        "heading": q["question"],
+        "action": action_core,
+        "outline": [{"title": r["label"], "detail": f"{r['winners_pct']}% of cited pages have it"}
+                    for r in checklist],
+    }
+    if page_plan:
+        router_detail["page_plan"] = page_plan
+
+    return {
+        "problem": problem,
+        "action": action,
+        "priority": "medium",
+        "school": q.get("school"),
+        "evidence": evidence,
+        "action_type": "content",
+        "target": q["question"],
+        "segment": _segment_for(q),
+        "metric_impact": "citation_rate",
+        "expected_direction": 1,
+        "expected_magnitude": None,
+        "effort": "L",
+        "confidence": 0.5,
+        "detail": {"router": router_detail,
+                   **({"build_checklist": {"target_genre": target_genre, "target_format": target_format,
+                                            "gaps": checklist}} if checklist else {})},
     }
 
 
@@ -885,7 +1090,13 @@ def build_question_recommendations(question_id, days=None):
     + inclusion + community fan-out for EVERY losing question (regardless of
     its own branch) is the auto sweep's job now (reach_out_sweep.py, run on
     the same "refresh signal recommendations" action) - this manual,
-    cooldown-gated per-question flow only ever produces build/fix.
+    cooldown-gated per-question flow only ever produces build/fix. The one
+    exception: a reach_out-branch question that ALSO clears
+    _secondary_ownable_signal's floor (competitor/editorial winners present,
+    just not dominant) gets a companion build rec here - the reach_out
+    primary itself still doesn't come from this flow, but "also worth
+    building" is exactly this flow's territory (LLM-backed prose, topic-
+    gated), not the sweep's.
     """
     q = get_question_stats(question_id, days)
     if q is None:
@@ -893,7 +1104,8 @@ def build_question_recommendations(question_id, days=None):
     route = route_question(q, days)
     if route["branch"] == "triage":
         return [], _triage_entry(route)
-    if route["branch"] == "reach_out":
+    secondary = route.get("secondary_ownable")
+    if route["branch"] == "reach_out" and not (secondary and q["topic"] in BUILDABLE_TOPICS):
         entry = _triage_entry(route)
         entry["reason"] = "reach_out_auto_covered"
         return [], entry
@@ -924,6 +1136,11 @@ def build_question_recommendations(question_id, days=None):
             logger.warning(f"On-demand fix branch failed for {route['qc_url']}: {e}")
         if primary is not None:
             primary["detail"]["router"] = _router_detail(route)
+    elif route["branch"] == "reach_out":
+        # secondary ownable signal cleared its floor and the topic is
+        # buildable - a companion build rec alongside the (sweep-owned)
+        # reach_out primary, which this on-demand flow still doesn't produce.
+        primary = _secondary_build_rec(route)
     else:
         primary = _build_rec(route, [route])
 

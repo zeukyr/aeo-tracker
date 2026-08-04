@@ -27,6 +27,7 @@ from api.queries import (
     get_reddit_targets,
     set_reddit_thread_status,
     get_losing_questions,
+    set_qc_url_override,
 )
 
 from api.recommendations import (
@@ -223,6 +224,22 @@ def question_recommendations(question_id: str):
 @app.post("/api/questions/{question_id}/recommendation")
 def question_recommendation(question_id: str, days: int = None):
     return generate_question_recommendation(question_id, days)
+
+@app.put("/api/questions/{question_id}/qc-url-override")
+def set_question_qc_url_override(question_id: str, qc_url: str = Body(...), note: str = Body(None)):
+    """A human correction of the matched QC page for this question - takes
+    priority over the sitemap matcher from now on. Immediately regenerates
+    the question's plan (bypassing the cooldown, not an active/committed rec)
+    so the correction is reflected right away instead of on the next
+    30-day cycle."""
+    set_qc_url_override(question_id, qc_url, note)
+    return generate_question_recommendation(question_id, force=True)
+
+@app.delete("/api/questions/{question_id}/qc-url-override")
+def clear_question_qc_url_override(question_id: str):
+    """Revert to the sitemap matcher's own verdict for this question."""
+    set_qc_url_override(question_id, None)
+    return generate_question_recommendation(question_id, force=True)
 
 
 @app.get("/api/topics-over-time")

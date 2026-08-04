@@ -75,7 +75,7 @@ _MAX_CHILD_SITEMAPS = 15
 _STOPWORDS = {
     # function words
     "a", "an", "and", "or", "the", "of", "to", "for", "in", "on", "with", "your",
-    "my", "me", "how", "what", "why", "who", "which", "is", "are", "do", "does",
+    "my", "me", "how", "what", "why", "who", "which", "where", "is", "are", "do", "does",
     "can", "should", "you", "it", "as", "at", "by", "from", "about",
     # intent verbs / phrasing that wrap the real subject
     "become", "becoming", "get", "getting", "start", "starting", "want", "need",
@@ -90,8 +90,19 @@ _STOPWORDS = {
 # questions and slugs; the roots only need to agree with each other.
 _SUFFIXES = ("ational", "ations", "ation", "ings", "ing", "ers", "er", "ies", "ied", "es", "al", "s")
 
+# Words where blindly stripping a suffix collapses onto an unrelated real
+# word, not a genuine morphological root - "career"/"careers" losing "-er"/
+# "-ers" lands on "care" (nurture/attention), a different concept entirely.
+# That collision let QC's own qccareerschool.com/careers page (internal
+# hiring, unrelated to any student topic) score as a candidate match for any
+# "career(s)" question. Checked before the generic suffix rules so these
+# words keep their own distinct root instead.
+_STEM_EXCEPTIONS = {"career": "career", "careers": "career"}
+
 
 def _stem(word):
+    if word in _STEM_EXCEPTIONS:
+        return _STEM_EXCEPTIONS[word]
     for suf in _SUFFIXES:
         if word.endswith(suf) and len(word) - len(suf) >= 3:
             return word[: -len(suf)]
@@ -295,7 +306,7 @@ def _best_page(q_tokens, pages, df, n_slugs):
 _CONTENT_STOPWORDS = {
     "a", "an", "and", "or", "the", "of", "to", "for", "in", "on", "with",
     "your", "my", "me", "is", "are", "do", "does", "can", "should", "you",
-    "it", "as", "at", "by", "from", "about", "qc",
+    "it", "as", "at", "by", "from", "about", "qc", "where",
 }
 
 _RERANK_FLOOR = 0.35   # slug score needed to be worth a content look
@@ -373,10 +384,15 @@ def _best_page_content(intent_text, pages, df, n_slugs):
         facts = facts_by.get(url) or {}
         title = _title_score(intent_tokens, q_tokens, facts)
         informational = 1 if page_genre(facts) == "informational" else 0
-        ranked.append((round(title, 2), informational, cov, prec, url))
+        # cov ranks ahead of the informational nudge: "on ties" means titles
+        # that tie, not slug matches that also tie. An oblique page (low slug
+        # precision) with a same-scoring title must not outrank an exact-slug
+        # page just for being informational-genre - that flag only decides
+        # between candidates that are ALSO comparably on-topic by slug.
+        ranked.append((round(title, 2), cov, informational, prec, url))
     ranked.sort(reverse=True)
 
-    title, _info, cov, prec, url = ranked[0]
+    title, cov, _info, prec, url = ranked[0]
     if title < _TITLE_FLOOR:
         return slug_url, slug_cov, slug_prec
     return url, max(cov, title), prec
@@ -500,25 +516,71 @@ def diagnose_coverage(segment, school=None):
     }
 
 
-def diagnose_text_coverage(text, school=None):
+# ─────────────────────────────────────────────────────────────────────────────
+# Human override (migrations/009_question_qc_url_override.sql)
+#
+# The slug/title matcher above is a proxy for "does QC have the right page" -
+# useful when nobody's looked, wrong often enough (wrong pick, or a real page
+# missed entirely) that a person reviewing a question should be able to just
+# say so directly. Keyed on question_id, not question text, since that's the
+# stable identity both callers below (route_question, get_prompt_detail) key
+# their own reads on.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def get_qc_url_override(question_id):
+    """The human-set qc_url for this question, or None if never set/cleared."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT qc_url_override FROM questions WHERE id = %s", (question_id,))
+            row = cur.fetchone()
+    return row[0] if row and row[0] else None
+
+
+def set_qc_url_override(question_id, qc_url, note=None):
+    """Set (qc_url truthy) or clear (qc_url falsy) the override for one question."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                UPDATE questions
+                SET qc_url_override = %s,
+                    qc_url_override_note = %s,
+                    qc_url_override_at = CASE WHEN %s::text IS NULL THEN NULL ELSE now() END
+                WHERE id = %s
+            """, (qc_url or None, note if qc_url else None, qc_url or None, question_id))
+        conn.commit()
+
+
+def diagnose_text_coverage(text, school=None, question_id=None):
     """
     Binary coverage for ONE specific intent string (a recommendation's target
     or query), used to set action_type deterministically: does QC already have
     a page for THIS exact thing? Unlike diagnose_coverage, this doesn't read a
     segment's questions - it matches the string you give it, so a rec targeting
     "dog behavior specialist" is judged on that, not on its "How to Become"
-    bucket. Returns {verdict: have_page | missing_page | unknown, qc_url, score}.
+    bucket. Returns {verdict: have_page | missing_page | unknown, qc_url, score,
+    override}.
+
+    question_id, when given, is checked against a human override FIRST - it
+    wins outright over the matcher (verdict "have_page", score None), since a
+    person reviewing the question directly said what the right page is (or
+    that QC has none). Callers that don't have a question_id (or pass a rec's
+    free-text target, which isn't one) just get the matcher's verdict, as
+    before.
     """
+    if question_id:
+        override = get_qc_url_override(question_id)
+        if override:
+            return {"verdict": "have_page", "qc_url": override, "score": None, "override": True}
     cache = load_sitemap_cache()
     q_tokens = _tokens(text or "")
     if cache is None or not q_tokens:
-        return {"verdict": "unknown", "qc_url": None, "score": None}
+        return {"verdict": "unknown", "qc_url": None, "score": None, "override": False}
     pages = _pages_for_school(cache, school)
     df = _slug_df([toks for _u, toks in pages])
     url, coverage, _p = _best_page_content(text, pages, df, max(len(pages), 1))
     if url and coverage >= _MATCH_THRESHOLD:
-        return {"verdict": "have_page", "qc_url": url, "score": round(coverage, 2)}
-    return {"verdict": "missing_page", "qc_url": None, "score": round(coverage, 2)}
+        return {"verdict": "have_page", "qc_url": url, "score": round(coverage, 2), "override": False}
+    return {"verdict": "missing_page", "qc_url": None, "score": round(coverage, 2), "override": False}
 
 
 if __name__ == "__main__":

@@ -25,6 +25,7 @@ from api.queries.cited_urls import get_reddit_targets, set_reddit_thread_status
 from api.queries.summary import get_summary
 from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses
 from api.queries.question_router import get_losing_questions
+from api.queries.sitemap_coverage import get_qc_url_override, set_qc_url_override
 from api.queries.recommendation_signals import (
     get_momentum,
     get_weakest_engines,

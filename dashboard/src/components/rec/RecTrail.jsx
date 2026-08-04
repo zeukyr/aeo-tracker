@@ -1,4 +1,5 @@
-import { bucketColor, bucketLabel, domainOf, pctLabel } from "../../lib/recview";
+import { bucketLabel, domainOf, pctLabel } from "../../lib/recview";
+import { VoteMeter, FormatMeter } from "../ShareMeter";
 import InfoTip from "../InfoTip";
 
 // The router's decision path as a numbered stepper — every step carries the
@@ -8,38 +9,6 @@ import InfoTip from "../InfoTip";
 function Check({ pass, gated, children }) {
   const cls = gated ? "rc-check--gated" : pass ? "rc-check--pass" : "rc-check--fail";
   return <span className={`rc-check ${cls}`}>{children}</span>;
-}
-
-// 100%-stacked vote-share meter with the 60% dominance bar drawn on it.
-function VoteMeter({ vote }) {
-  const buckets = Object.entries(vote?.buckets || {}).sort((a, b) => b[1] - a[1]);
-  const voters = vote?.voters || buckets.reduce((s, [, n]) => s + n, 0);
-  if (!voters || buckets.length === 0) return null;
-  return (
-    <div>
-      <div className="rc-anchor">
-        <span className="rc-anchor__label" style={{ left: "60%" }}>60% bar</span>
-        <div
-          className="rc-meter"
-          role="img"
-          aria-label={`Vote: ${buckets.map(([b, n]) => `${bucketLabel(b)} ${n}`).join(", ")}`}
-        >
-          {buckets.map(([b, n]) => (
-            <i key={b} style={{ width: `${(n / voters) * 100}%`, background: bucketColor(b) }} />
-          ))}
-        </div>
-        <span className="rc-anchor__tick" style={{ left: "60%" }} />
-      </div>
-      <div className="rc-meter-legend">
-        {buckets.map(([b, n]) => (
-          <span key={b}>
-            <i className="rc-dot" style={{ background: bucketColor(b) }} />
-            {bucketLabel(b)} {n}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 function losingStep(router, extra) {
@@ -55,11 +24,15 @@ function losingStep(router, extra) {
   };
 }
 
-function voteStep(router, vote) {
+// `winners` is optional - only fix/build steps that already show a separate
+// format step elsewhere (fixSteps' Genre check, buildSteps' Coverage check)
+// omit it here to avoid showing the same format chart twice on one card.
+function voteStep(router, vote, winners) {
   return {
     title: "Dominance vote",
     info: "dominance_vote",
     meter: vote,
+    formatMeter: winners,
     fact: (
       <>
         {bucketLabel(router.dominant_source)} <b>{pctLabel(router.dominant_share)}</b>{" "}
@@ -109,6 +82,7 @@ function fixSteps(rec) {
           <Check pass>fixable</Check>
         </>
       ),
+      formatMeter: router.winners,
     },
   ];
   if (sc) {
@@ -168,7 +142,7 @@ function reachSteps(rec) {
 
   const steps = [
     losingStep(router),
-    voteStep(router, vote),
+    voteStep(router, vote, router.winners),
     slotOwnable
       ? {
           title: "Ownable check",
@@ -266,8 +240,15 @@ function buildSteps(rec) {
           classifiable winners are <b>{gm.winner_format}</b> · <Check pass={false}>format mismatch</Check>
         </>
       ),
+      formatMeter: router.winners,
     });
   } else if (router.reason === "earn_indirect") {
+    // The card's own text (and secondary_ownable) only claims a format for
+    // the competitor/editorial subset of winners - charting the full winner
+    // pool here (mostly non-ownable reference/gov pages) would show a
+    // different, unrelated mix next to a number that isn't about them.
+    const ownableWinners = (router.winners || [])
+      .filter((w) => w.source_type === "competitor" || w.source_type === "editorial");
     steps.push({
       title: "Coverage check",
       info: "coverage_check",
@@ -275,14 +256,22 @@ function buildSteps(rec) {
         <>
           Winners are reference sources with no direct channel — earn the citation indirectly ·{" "}
           <Check gated>indirect</Check>
+          {router.secondary_ownable && (
+            <>
+              {" "}· <b>{router.secondary_ownable.n_dominant}/{router.secondary_ownable.n_classified}</b>{" "}
+              competitor/editorial winners are {router.secondary_ownable.format}
+            </>
+          )}
         </>
       ),
+      formatMeter: ownableWinners,
     });
   } else {
     steps.push({
       title: "Coverage check",
       info: "coverage_check",
       fact: <>No QC page answers this query · <Check pass={false}>no coverage</Check></>,
+      formatMeter: router.winners,
     });
   }
   steps.push({
@@ -324,6 +313,7 @@ function patternSteps(rec) {
       title: "Dominance vote",
       info: "dominance_vote",
       meter: router.vote,
+      formatMeter: router.winners,
       fact: (
         <>
           {bucketLabel(router.dominant_source)} <b>{pctLabel(router.vote.non_ownable_share)}</b> of
@@ -391,6 +381,7 @@ export default function RecTrail({ rec, variant }) {
             </p>
             {s.fact && <p className="rc-step__fact">{s.fact}</p>}
             {s.meter && <VoteMeter vote={s.meter} />}
+            {s.formatMeter && <FormatMeter pages={s.formatMeter} />}
           </div>
         </div>
       ))}

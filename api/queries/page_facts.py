@@ -1047,23 +1047,26 @@ def page_format(facts):
     directory fold straight to listicle AHEAD of the genre vote (their genre
     was already pinned "commercial" by PAGE_TYPE_GENRE for an unrelated
     reason - buying intent, not format - so reusing page_genre here would
-    wrongly merge them with landing pages). Everything else defers to
-    page_genre and only splits its "informational" verdict into how_to vs
-    long_form using the same how-to signals page_genre already voted with.
-    None when unread or genre itself is ambiguous - never guess.
+    wrongly merge them with landing pages). Association/government are
+    likewise pinned "informational" by PAGE_TYPE_GENRE (never commercial), so
+    they skip the genre vote too, but - unlike roundup/directory - still need
+    the how_to/long_form split below: an industry body's page can be a how-to
+    resource, not just long-form. Everything else defers to page_genre and
+    only splits its "informational" verdict into how_to vs long_form using
+    the same how-to signals page_genre already voted with. None when unread
+    or genre itself is ambiguous - never guess.
     """
     if facts.get("status") != "ok":
         return None
     page_type = facts.get("page_type")
     if page_type in ("roundup", "directory"):
         return "listicle"
-    if page_type in ("association", "government"):
-        return "long_form"
-    genre = page_genre(facts)
-    if genre is None:
-        return None
-    if genre == "commercial":
-        return "landing"
+    if page_type not in ("association", "government"):
+        genre = page_genre(facts)
+        if genre is None:
+            return None
+        if genre == "commercial":
+            return "landing"
     return "how_to" if _is_howto_signal(facts) else "long_form"
 
 
@@ -1080,7 +1083,7 @@ def winner_format(facts):
     if page_type in ("roundup", "directory"):
         return "listicle"
     if page_type in ("association", "government"):
-        return "long_form"
+        return "how_to" if _is_howto_signal(facts) else "long_form"
     if page_type in ("community", "video"):
         return None
     fmt = page_format(facts)

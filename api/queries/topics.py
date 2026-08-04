@@ -1,7 +1,7 @@
 from api.db import get_connection, _date_filter
 from collections import defaultdict
 
-from api.queries.page_facts import get_cached_facts, source_type, school_for_url
+from api.queries.page_facts import get_cached_facts, source_type, winner_format, school_for_url
 from api.queries.sitemap_coverage import diagnose_text_coverage
 from src.parsing.urls import merge_url_counts, normalize_url
 
@@ -659,10 +659,11 @@ def get_prompt_detail(prompt_id: str, days=None):
             "citation_count": row["count"],
             "page_type": facts.get("page_type") if facts else None,
             "source_type": source_type(facts) if facts else None,
+            "format": winner_format(facts) if facts else None,
             "fetch_status": facts.get("status") if facts else "not_cached",
         })
 
-    coverage = diagnose_text_coverage(question, school=school)
+    coverage = diagnose_text_coverage(question, school=school, question_id=prompt_id)
     matched_page = None
     if coverage.get("qc_url"):
         matched_facts = get_cached_facts([coverage["qc_url"]]).get(coverage["qc_url"])
@@ -670,6 +671,7 @@ def get_prompt_detail(prompt_id: str, days=None):
             "url": coverage["qc_url"],
             "page_type": matched_facts.get("page_type") if matched_facts else None,
             "fetch_status": matched_facts.get("status") if matched_facts else "not_cached",
+            "override": coverage.get("override", False),
         }
 
     return {

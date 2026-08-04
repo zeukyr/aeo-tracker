@@ -71,7 +71,7 @@ export const METRIC_INFO = {
   },
   citations_panel: {
     label: "What AI cites",
-    text: "Each row is a page AI engines cited when answering this question; the count is how many times it appeared across all tracked responses in the period. Dimmed rows could not be classified and do not vote.",
+    text: "Each row is a page AI engines cited when answering this question; the count is how many times it appeared across all tracked responses in the period. Dimmed rows could not be classified and do not vote. Type and format are independent reads of the same page — see the note above the list.",
   },
   feature_diff_table: {
     label: "Feature diff columns",
@@ -104,6 +104,10 @@ export const METRIC_INFO = {
   content_brief: {
     label: "Content brief",
     text: "The action text restructured into sections: the strategy, a page heading phrased as the actual question engines are asked, a suggested outline when one has been authored for this type, and the citability format every content rec shares. Facts the taxonomy doesn't already verify are flagged to confirm with QC, never invented.",
+  },
+  page_plan: {
+    label: "Page plan",
+    text: "A deterministic, format-templated plan for the page to build — no LLM invention. Sections come from a fixed skeleton for the target format (how-to, blog/long-form, listicle, or landing), each backed by a GEO-feature checklist finding when enough cited pages share it, or a generic placeholder when none do. When a section's quote-marked text appears, it's a real heading pulled from one of the cited pages (attributed by domain), matched by keyword — not written or invented. The word-count target is the median length of the comparable cited pages; the structure targets (heading depth, internal-linking share, etc.) are fixed literature-backed ranges, not measured from any single page.",
   },
   reddit_spotlight: {
     label: "Reddit spotlight",
