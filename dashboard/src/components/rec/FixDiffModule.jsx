@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react";
 import InfoTip from "../InfoTip";
+import { urlLabel } from "../../lib/recview";
 
 // Feature-diff matrix for fix cards: rows from detail.scorecard.features,
 // gap rows (recommend=true) first and flagged. Prevalence renders as a dot
@@ -27,6 +28,25 @@ function PrevDots({ present, total }) {
 // Formats a ratio feature's value/target for display ("17%" / "3 levels").
 function fmtMetric(value, unit) {
   return unit === "pct" ? `${value}%` : `${value} level${value === 1 ? "" : "s"}`;
+}
+
+// A "top_competitor" gap is backed by exactly one named page, not a
+// fraction of the winner field - shown as a link + tag instead of
+// PrevDots, so the reader always knows exactly which page to go look at.
+function NamedEvidence({ url, domain }) {
+  return (
+    <span className="rc-named">
+      <span className="rc-named__dot" aria-hidden="true" />
+      {url ? (
+        <a className="rc-named__domain" href={url} target="_blank" rel="noreferrer">
+          {urlLabel(url)}
+        </a>
+      ) : (
+        <span className="rc-named__domain">{domain || "unknown domain"}</span>
+      )}
+      <span className="rc-named__tag">top-cited</span>
+    </span>
+  );
 }
 
 function MetricRows({ metricRows }) {
@@ -122,7 +142,7 @@ export default function FixDiffModule({ sc }) {
       <div className="rc-diff-scroll">
         <table className="rc-diff">
           <thead>
-            <tr><th>Feature</th><th>GEO</th><th>Cited pages</th><th>QC</th><th></th></tr>
+            <tr><th>Feature</th><th>GEO</th><th>Evidence</th><th>QC</th><th></th></tr>
           </thead>
           <tbody>
             {rows.map((f) => (
@@ -130,8 +150,14 @@ export default function FixDiffModule({ sc }) {
                 <td>{f.label}</td>
                 <td><span className={`rc-geo rc-geo--${f.geo_weight}`}>{f.geo_weight}</span></td>
                 <td>
-                  <PrevDots present={f.winners_present} total={f.winners_total} />
-                  <span className="rc-frac">{f.winners_present}/{f.winners_total}</span>
+                  {f.evidence_basis === "top_competitor" ? (
+                    <NamedEvidence url={f.top_url} domain={f.top_domain} />
+                  ) : (
+                    <>
+                      <PrevDots present={f.winners_present} total={f.winners_total} />
+                      <span className="rc-frac">{f.winners_present}/{f.winners_total}</span>
+                    </>
+                  )}
                 </td>
                 <td>
                   <span className={f.qc_has ? "rc-mark rc-mark--yes" : "rc-mark rc-mark--no"}>

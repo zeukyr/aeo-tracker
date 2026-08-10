@@ -18,15 +18,25 @@ Plus one emergent-pattern LLM call: what do the cited pages share that QC
 lacks, beyond the fixed checklist.
 
 Recommend rule (geo_weight is a veto floor, not a ranker): a feature is
-recommended when it is present in MOST cited pages, QC lacks it, and its
-geo_weight is not "low".
+recommended when EITHER (a) it is present in MOST cited pages ("consensus"),
+OR (b) it is a "high" geo_weight feature present on the single most-cited
+("top") comparable winner ("top_competitor") - a majority vote is rarely
+reachable with the 3-5 readable winners a typical topic has, so requiring it
+for every feature left most topics with nothing to recommend even when the
+single strongest competitor clearly out-executes QC. The top-competitor path
+is deliberately restricted to "high" weight only: single-instance evidence
+is trustworthy enough to act on for the highest-confidence features, but not
+for medium/low ones, which still require real cross-winner agreement. Either
+way QC must lack the feature and geo_weight must not be "low".
 
-The rec is EVIDENCE-GRADED, not binary: checklist gaps that clear the bar
-over a sufficient winner sample are tier "high"; thin samples, sub-threshold
-gaps and the emergent LLM pattern are tier "low" (still surfaced, clearly
-labelled). None is reserved for the three genuinely empty states named by
-scorecard_triage_reason. Unreadable cited winners are disclosed on the card,
-never silently dropped from the denominator.
+The rec is EVIDENCE-GRADED, not binary: checklist gaps that clear the
+consensus bar over a sufficient winner sample are tier "high"; a gap backed
+only by the single top-cited competitor is tier "named" (concrete and real,
+but single-instance); thin samples, sub-threshold gaps and the emergent LLM
+pattern are tier "low" (still surfaced, clearly labelled). None is reserved
+for the three genuinely empty states named by scorecard_triage_reason.
+Unreadable cited winners are disclosed on the card, never silently dropped
+from the denominator.
 """
 
 import os
@@ -635,6 +645,11 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
     genre_stratified = qc_genre is not None and len(genre_matched_idx) >= MIN_WINNERS
     strat_idx = genre_matched_idx if genre_stratified else range(len(winner_facts))
     strat_present = [winner_present[i] for i in strat_idx]
+    # Aligned with strat_present - winner_facts is sorted by citation count
+    # descending (above), so strat_winners[0] is the single most-cited
+    # comparable winner for this question, used by the top-competitor
+    # recommend path below.
+    strat_winners = [winner_facts[i] for i in strat_idx]
     n_strat = len(strat_present)
 
     rows = []
@@ -666,7 +681,24 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
         qc_has = bool(qc_present.get(feat["id"]))
         prevalence = _prevalence_label(wp, n_strat)
         weight = _effective_geo_weight(feat, qc_genre)
-        recommend = (prevalence == "most") and (not qc_has) and (weight != "low")
+        # Single-competitor path: a "high" geo_weight feature the single
+        # most-cited comparable winner has is real, named, actionable
+        # evidence even when it isn't shared by most of the (typically thin,
+        # 3-5-page) winner sample - see module docstring. Restricted to
+        # "high" weight so medium/low features still require real
+        # cross-winner agreement rather than one page's idiosyncrasy.
+        top_has = bool(strat_present) and bool(strat_present[0].get(feat["id"]))
+        top_competitor_eligible = top_has and weight == "high"
+        recommend = (prevalence == "most" or top_competitor_eligible) and (not qc_has) and (weight != "low")
+        evidence_basis = top_domain = top_url = None
+        if recommend:
+            if prevalence == "most":
+                evidence_basis = "consensus"
+            else:
+                evidence_basis = "top_competitor"
+                top_winner = strat_winners[0]
+                top_domain = top_winner.get("domain")
+                top_url = top_winner.get("url")
         rows.append({
             "id": feat["id"],
             "label": feat["label"],
@@ -677,6 +709,9 @@ def build_scorecard(topic, qc_url, question=None, days=None, winner_facts=None):
             "prevalence": prevalence,
             "qc_has": qc_has,
             "recommend": recommend,
+            "evidence_basis": evidence_basis,
+            "top_domain": top_domain,
+            "top_url": top_url,
         })
 
     insight, emergent_edit = (
@@ -792,11 +827,16 @@ def scorecard_to_recommendation(sc):
     in `detail` for the frontend card.
 
     detail.evidence_tier:
-      high - >= MIN_WINNERS readable winners AND at least one checklist
-             feature most of them share that QC lacks (the verified gap).
-      low  - a real but weaker signal: checklist gaps over a thin winner
-             sample, sub-threshold gaps (some-but-not-most readable winners
-             have a feature QC lacks), and/or the emergent LLM pattern.
+      high  - >= MIN_WINNERS readable winners AND at least one checklist
+              feature most of them share that QC lacks (the verified gap).
+      named - at least one checklist gap, but every one of them is backed
+              only by the single most-cited winner (evidence_basis
+              "top_competitor"), not by cross-winner consensus - concrete
+              and real, but single-instance evidence.
+      low   - a real but weaker signal: thin-sample consensus gaps that
+              never reach MIN_WINNERS, sub-threshold gaps (some-but-not-most
+              readable winners have a feature QC lacks), and/or the emergent
+              LLM pattern.
     detail.evidence_grade keeps checklist gaps, sub-threshold gaps and the
     emergent insight structurally separate - they have different reliability
     and the UI labels them differently.
@@ -828,7 +868,19 @@ def scorecard_to_recommendation(sc):
     if not rec_feats and not partial and not has_emergent and not metric_gaps:
         return None   # true feature parity / insufficient winners - scorecard_triage_reason says which
 
-    tier = "high" if (rec_feats and sc.get("sufficient")) else "low"
+    # Three-way, not binary: a card only earns "high" when a real majority of
+    # a sufficient sample agrees (has_consensus_feat AND sc["sufficient"]);
+    # "named" is a real, concrete gap but backed by a single named page only;
+    # "low" covers everything weaker (thin-sample consensus that never
+    # reached MIN_WINNERS, sub-threshold gaps, the emergent pattern alone).
+    has_consensus_feat = any(r.get("evidence_basis") == "consensus" for r in rec_feats)
+    has_named_feat = any(r.get("evidence_basis") == "top_competitor" for r in rec_feats)
+    if has_consensus_feat and sc.get("sufficient"):
+        tier = "high"
+    elif has_named_feat:
+        tier = "named"
+    else:
+        tier = "low"
     coverage = _coverage_note(sc)
 
     problem_parts, action_parts, evidence_parts = [], [], []
@@ -846,10 +898,13 @@ def scorecard_to_recommendation(sc):
         )
         action_parts.extend(sc["suggested_edits"][:5] or [f"Add: {labels}"])
         evidence_parts.extend(
-            f"{r['label']} — {_frac(r)} cited pages have it, QC does not"
+            f"{r['label']} — the top-cited page for this question "
+            f"({r.get('top_domain') or 'unknown domain'}) has it, QC does not"
+            if r.get("evidence_basis") == "top_competitor"
+            else f"{r['label']} — {_frac(r)} cited pages have it, QC does not"
             for r in rec_feats
         )
-        confidence = 0.7 if tier == "high" else 0.45
+        confidence = {"high": 0.7, "named": 0.55}.get(tier, 0.45)
         priority = "high" if any(r["geo_weight"] == "high" for r in rec_feats) else "medium"
     elif sufficient_winners:
         problem_parts.append(
@@ -974,7 +1029,8 @@ def scorecard_to_recommendation(sc):
                 "winners_unreadable": sc.get("winners_unreadable") or [],
                 "checklist_gaps": [
                     {k: r[k] for k in ("id", "label", "geo_weight",
-                                       "winners_present", "winners_total", "winners_pct")}
+                                       "winners_present", "winners_total", "winners_pct",
+                                       "evidence_basis", "top_domain", "top_url")}
                     for r in rec_feats
                 ],
                 "partial_gaps": [

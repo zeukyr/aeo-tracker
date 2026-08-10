@@ -11,15 +11,31 @@ no DB, no LLM.
 import api.queries.scorecard as ts
 
 
-def _feat(fid, qc_has, wp, n, weight="medium"):
+def _feat(fid, qc_has, wp, n, weight="medium", top_has=False, top_domain="pennfoster.edu"):
     frac = wp / n if n else 0
     prevalence = "most" if frac >= 0.6 else ("some" if frac >= 0.3 else "few")
+    # Mirrors build_scorecard's own recommend rule: consensus (majority of a
+    # sample) OR a single named top-cited winner, the latter restricted to
+    # "high" geo_weight features only.
+    top_competitor_eligible = top_has and weight == "high"
+    recommend = (prevalence == "most" or top_competitor_eligible) and not qc_has and weight != "low"
+    evidence_basis = top_domain_out = top_url_out = None
+    if recommend:
+        if prevalence == "most":
+            evidence_basis = "consensus"
+        else:
+            evidence_basis = "top_competitor"
+            top_domain_out = top_domain
+            top_url_out = f"https://{top_domain}"
     return {
         "id": fid, "label": fid.replace("_", " "), "geo_weight": weight,
         "winners_present": wp, "winners_total": n,
         "winners_pct": round(100 * wp / n) if n else None,
         "prevalence": prevalence, "qc_has": qc_has,
-        "recommend": prevalence == "most" and not qc_has and weight != "low",
+        "recommend": recommend,
+        "evidence_basis": evidence_basis,
+        "top_domain": top_domain_out,
+        "top_url": top_url_out,
     }
 
 
@@ -78,6 +94,61 @@ def test_gap_over_thin_sample_is_low_tier_not_dropped():
     assert rec is not None
     assert rec["detail"]["evidence_tier"] == "low"
     assert rec["confidence"] == 0.45
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Single-top-competitor evidence: a "high" geo_weight feature the single
+# most-cited winner has, even without majority agreement across a (typically
+# thin) winner sample. Tier "named" - real and concrete, but single-instance,
+# so kept below "high" (real consensus) and above "low" (no named page at
+# all). Restricted to "high" weight - medium/low still require consensus.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_named_competitor_gap_on_high_weight_feature_is_named_tier():
+    # A thin, 2-winner field can never hit majority consensus, but the single
+    # top-cited winner clearly has a high-weight feature QC lacks - this must
+    # surface as a concrete, named finding instead of reading as false parity.
+    sc = _sc([_feat("evidence_density", qc_has=False, wp=1, n=2, weight="high",
+                     top_has=True, top_domain="insurancecanopy.com")], n=2)
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert rec["detail"]["evidence_tier"] == "named"
+    assert rec["confidence"] == 0.55
+    assert "insurancecanopy.com" in rec["evidence"]
+    assert "the top-cited page for this question" in rec["evidence"]
+    grade = rec["detail"]["evidence_grade"]
+    assert grade["checklist_gaps"][0]["evidence_basis"] == "top_competitor"
+    assert grade["checklist_gaps"][0]["top_domain"] == "insurancecanopy.com"
+
+
+def test_medium_weight_single_competitor_gap_still_requires_consensus():
+    # Same single-top-winner-has-it shape as above, but "medium" weight - the
+    # looser single-competitor trigger is restricted to "high" weight only,
+    # so this must still require real cross-winner consensus and fall back
+    # to a partial (sub-threshold) gap, not a checklist recommend.
+    sc = _sc([_feat("pros_cons", qc_has=False, wp=1, n=2, weight="medium", top_has=True)], n=2)
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert rec["detail"]["evidence_tier"] == "low"
+    grade = rec["detail"]["evidence_grade"]
+    assert grade["checklist_gaps"] == []
+    assert [g["id"] for g in grade["partial_gaps"]] == ["pros_cons"]
+
+
+def test_mixed_consensus_and_named_gaps_stays_high_tier():
+    # One real consensus gap anywhere on the card keeps the card "high" -
+    # the named gap alongside it is additional evidence, not a downgrade.
+    sc = _sc([
+        _feat("career_outcomes", qc_has=False, wp=3, n=4, weight="high"),
+        _feat("neutral_tone", qc_has=False, wp=1, n=4, weight="high",
+              top_has=True, top_domain="pennfoster.edu"),
+    ])
+    rec = ts.scorecard_to_recommendation(sc)
+    assert rec is not None
+    assert rec["detail"]["evidence_tier"] == "high"
+    assert rec["confidence"] == 0.7
+    basis_by_id = {g["id"]: g["evidence_basis"] for g in rec["detail"]["evidence_grade"]["checklist_gaps"]}
+    assert basis_by_id == {"career_outcomes": "consensus", "neutral_tone": "top_competitor"}
 
 
 def test_subthreshold_gaps_and_emergent_produce_low_tier_card():

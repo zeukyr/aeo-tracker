@@ -6,6 +6,7 @@ import Competitors from "./tabs/Competitors";
 import Citations from "./tabs/Citations";
 import Prompts from "./tabs/Prompts";
 import Recommendations from "./tabs/Recommendations";
+import SiteAudit from "./tabs/SiteAudit";
 import BlogIdeas from "./tabs/BlogIdeas";
 import BlogIdeaDetail from "./pages/BlogIdeaDetail";
 import BlogPersonas from "./pages/BlogPersonas";
@@ -26,6 +27,7 @@ const TABS = [
   { label: "Citations", path: "/citations" },
   { label: "Prompts", path: "/prompts" },
   { label: "Recommendations", path: "/recommendations" },
+  { label: "Site Audit", path: "/site-audit" },
   { label: "Blog Ideas", path: "/blog-ideas" },
 ];
 
@@ -88,6 +90,7 @@ function App() {
         <Route path="/prompts/:promptId/plan" element={<QuestionPlan />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/recommendations/:recId" element={<RecommendationDetail />} />
+        <Route path="/site-audit" element={<SiteAudit />} />
         <Route path="/blog-ideas" element={<BlogIdeas />} />
         <Route path="/blog-ideas/personas" element={<BlogPersonas />} />
         <Route path="/blog-ideas/:ideaId" element={<BlogIdeaDetail />} />

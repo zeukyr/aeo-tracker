@@ -13,6 +13,24 @@ import { VARIANTS, BADGE_ICONS } from "./rec/variantMeta";
 const EFFORT_DOTS = { S: 1, M: 2, L: 3 };
 const EFFORT_LABELS = { S: "Small effort", M: "Medium effort", L: "Large effort" };
 
+// Three-way evidence tier for fix cards - "named" sits between a real
+// cross-winner consensus and a merely weak/sub-threshold signal: concrete
+// and backed by one real named page, just not a majority.
+const EVIDENCE_TIER = {
+  high: {
+    label: "verified gap", cls: "chip--open",
+    title: "Verified structural gap: most analyzed cited pages share a feature QC's page lacks.",
+  },
+  named: {
+    label: "named gap", cls: "chip--tier-named",
+    title: "Concrete gap: the single most-cited page for this question has a high-impact feature QC's page lacks — real, but single-page evidence, not a cross-winner majority.",
+  },
+  low: {
+    label: "weak signal", cls: "chip--gated",
+    title: "Weaker signal: thin winner sample, sub-threshold gaps, or an LLM-observed pattern — a lead, not a verified gap.",
+  },
+};
+
 function addDays(iso, days) {
   const d = new Date(iso);
   d.setDate(d.getDate() + days);
@@ -271,12 +289,10 @@ function VerdictBand({ rec, variant, onOpenDetail, onTogglePin }) {
           <div className="rc-meta__item">
             <span className="rc-meta__label">Evidence<InfoTip id="evidence_tier" /></span>
             <span
-              className={`chip ${tier === "high" ? "chip--open" : "chip--gated"}`}
-              title={tier === "high"
-                ? "Verified structural gap: most analyzed cited pages share a feature QC's page lacks."
-                : "Weaker signal: thin winner sample, sub-threshold gaps, or an LLM-observed pattern — a lead, not a verified gap."}
+              className={`chip ${(EVIDENCE_TIER[tier] ?? EVIDENCE_TIER.low).cls}`}
+              title={(EVIDENCE_TIER[tier] ?? EVIDENCE_TIER.low).title}
             >
-              {tier === "high" ? "verified gap" : "weak signal"}
+              {(EVIDENCE_TIER[tier] ?? EVIDENCE_TIER.low).label}
             </span>
           </div>
         )}

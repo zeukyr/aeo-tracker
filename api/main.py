@@ -30,6 +30,7 @@ from api.queries import (
     set_reddit_thread_status,
     get_losing_questions,
     set_qc_url_override,
+    run_site_audit,
 )
 
 from api.recommendations import (
@@ -121,6 +122,14 @@ def top_competitors_by_school(days: int = None, school: str = None):
 @app.get("/api/competitor-win-rate")
 def competitor_win_rate(days: int = None, school: str = None):
     return get_competitor_win_rate(days, school)
+
+@app.get("/api/site-audit")
+def site_audit(school: str = None, refresh: bool = False):
+    """Site-wide structural/schema audit of QC's own pages - the cheap,
+    LLM-free counterpart to the per-question fix-branch scorecard. See
+    api/queries/site_audit.py. `refresh=true` bypasses the page_facts cache
+    and re-fetches every page's HTML."""
+    return run_site_audit(school, force=refresh)
 
 
 @app.get("/api/qc-citations")
