@@ -1,6 +1,8 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import Body
+from fastapi import Body, File
+
+from api.recommendations.blog_persona_extract import UnsupportedFileType, extract_text
 
 from api.queries import (
     get_mention_rate_by_engine,
@@ -43,6 +45,16 @@ from api.recommendations import (
     get_question_recommendation_status,
     generate_question_recommendation,
     get_question_recommendations,
+    generate_blog_ideas,
+    generate_blog_ideas_from_persona,
+    generate_full_post,
+    get_all_personas,
+    get_blog_idea,
+    get_blog_idea_candidates,
+    get_blog_idea_generation_status,
+    get_blog_ideas,
+    save_persona,
+    update_blog_idea_status,
 )
 
 app = FastAPI()
@@ -211,6 +223,118 @@ def patch_recommendation_status(
     if is_pinned is not None:
         set_recommendation_pinned(rec_id, is_pinned)
     return {"updated": True}
+
+@app.get("/api/blog-personas")
+def list_blog_personas():
+    """Every saved buyer-persona/testimonials/stats blob, one per school -
+    powers the editor on the Blog Ideas tab, used before generation rather
+    than a hardcoded knowledge file (see migrations/013_blog_personas.sql)."""
+    return get_all_personas()
+
+@app.post("/api/blog-personas/extract")
+async def extract_blog_persona_file(file: UploadFile = File(...)):
+    """Plain-text extraction for the persona editor's file-upload option
+    (pages/BlogPersonas.jsx) - lets a person upload their existing .md/.txt
+    persona or testimonial doc, or .xlsx survey export, straight into a
+    field's box instead of retyping or copy-pasting it."""
+    raw = await file.read()
+    try:
+        text = extract_text(file.filename, raw)
+    except UnsupportedFileType as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    if not text:
+        raise HTTPException(status_code=400, detail="No text could be extracted from this file.")
+    return {"text": text}
+
+@app.put("/api/blog-personas")
+def put_blog_persona(
+    school: str = Body(None),
+    buyer_persona: str = Body(None),
+    stats: str = Body(None),
+    testimonials: str = Body(None),
+):
+    """Upserts the persona for one school, one category at a time or all
+    three together. Blank/whitespace in all three clears the row (deletes
+    it) - same endpoint handles both save and clear."""
+    return save_persona(school, buyer_persona, stats, testimonials)
+
+@app.get("/api/blog-ideas")
+def list_blog_ideas():
+    return get_blog_ideas()
+
+@app.get("/api/blog-ideas/generation-status")
+def blog_ideas_generation_status():
+    return get_blog_idea_generation_status()
+
+@app.get("/api/blog-ideas/candidates")
+def blog_idea_candidates(days: int = None):
+    """Live, largest-first list of uncovered (topic, school) pairs for the picker."""
+    return get_blog_idea_candidates(days)
+
+@app.post("/api/blog-ideas/generate")
+def post_generate_blog_ideas(
+    days: int = None,
+    force: bool = False,
+    selections: list[dict] = Body(None),
+):
+    """selections: [{"topic": str, "school": str | None}, ...] - a (topic,
+    school) pair isn't representable as repeated query params, so this takes
+    a JSON body instead of the query-param list other picker endpoints use."""
+    status = get_blog_idea_generation_status()
+    if not status["can_generate"] and not force:
+        raise HTTPException(status_code=429, detail={
+            "message": "Blog ideas were generated recently; cooldown still active.",
+            **status,
+        })
+    return generate_blog_ideas(days, selections)
+
+@app.post("/api/blog-ideas/generate-from-persona")
+def post_generate_blog_ideas_from_persona(school: str = Body(None, embed=True), force: bool = False):
+    """Second ideation path: topics mined from one school's saved persona
+    data alone, not the tracked-query bank (see
+    generate_blog_ideas_from_persona's docstring). Shares the same
+    table-wide cooldown gate as /generate above."""
+    status = get_blog_idea_generation_status()
+    if not status["can_generate"] and not force:
+        raise HTTPException(status_code=429, detail={
+            "message": "Blog ideas were generated recently; cooldown still active.",
+            **status,
+        })
+    result = generate_blog_ideas_from_persona(school)
+    if not result["generated"]:
+        raise HTTPException(status_code=422, detail={
+            "message": "Couldn't generate topics from this school's persona data.",
+            **result,
+        })
+    return result
+
+@app.get("/api/blog-ideas/{idea_id}")
+def single_blog_idea(idea_id: str):
+    idea = get_blog_idea(idea_id)
+    if idea is None:
+        raise HTTPException(status_code=404, detail="Blog idea not found")
+    return idea
+
+@app.patch("/api/blog-ideas/{idea_id}")
+def patch_blog_idea_status(idea_id: str, status: str = Body(...)):
+    try:
+        update_blog_idea_status(idea_id, status)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"updated": True}
+
+@app.post("/api/blog-ideas/{idea_id}/draft")
+def post_generate_full_post(idea_id: str):
+    """On-demand full-post draft for one cluster idea - not cooldown-gated
+    like the batch idea generation, since it's already a deliberate
+    per-idea human action, not a sweep."""
+    result = generate_full_post(idea_id)
+    if not result["generated"]:
+        raise HTTPException(status_code=422, detail={
+            "message": "Couldn't generate a full post for this idea.",
+            "reason": result.get("reason"),
+        })
+    return result
 
 @app.get("/api/questions/{question_id}/recommendation-status")
 def question_recommendation_status(question_id: str):

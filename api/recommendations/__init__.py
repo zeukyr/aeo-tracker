@@ -9,6 +9,20 @@ The implementation is grouped by responsibility:
 """
 
 from api.recommendations.generation import generate_recommendations
+from api.recommendations.blog_ideas import (
+    generate_blog_ideas,
+    generate_blog_ideas_from_persona,
+    generate_full_post,
+    get_blog_idea,
+    get_blog_idea_candidates,
+    get_blog_idea_generation_status,
+    get_blog_ideas,
+    update_blog_idea_status,
+)
+from api.recommendations.blog_personas import (
+    get_all_personas,
+    save_persona,
+)
 from api.recommendations.question_plan import (
     generate_question_recommendation,
     get_question_recommendation_status,
@@ -29,6 +43,16 @@ from api.recommendations.store import (
 
 __all__ = [
     "generate_recommendations",
+    "generate_blog_ideas",
+    "generate_blog_ideas_from_persona",
+    "generate_full_post",
+    "get_all_personas",
+    "get_blog_idea",
+    "get_blog_idea_candidates",
+    "get_blog_idea_generation_status",
+    "get_blog_ideas",
+    "save_persona",
+    "update_blog_idea_status",
     "generate_question_recommendation",
     "generate_reach_out_sweep",
     "get_generation_status",

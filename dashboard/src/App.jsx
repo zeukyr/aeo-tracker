@@ -6,6 +6,9 @@ import Competitors from "./tabs/Competitors";
 import Citations from "./tabs/Citations";
 import Prompts from "./tabs/Prompts";
 import Recommendations from "./tabs/Recommendations";
+import BlogIdeas from "./tabs/BlogIdeas";
+import BlogIdeaDetail from "./pages/BlogIdeaDetail";
+import BlogPersonas from "./pages/BlogPersonas";
 import QuestionDetail from "./pages/QuestionDetail";
 import QuestionPlan from "./pages/QuestionPlan";
 import RecommendationDetail from "./pages/RecommendationDetail";
@@ -23,6 +26,7 @@ const TABS = [
   { label: "Citations", path: "/citations" },
   { label: "Prompts", path: "/prompts" },
   { label: "Recommendations", path: "/recommendations" },
+  { label: "Blog Ideas", path: "/blog-ideas" },
 ];
 
 function App() {
@@ -84,6 +88,9 @@ function App() {
         <Route path="/prompts/:promptId/plan" element={<QuestionPlan />} />
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/recommendations/:recId" element={<RecommendationDetail />} />
+        <Route path="/blog-ideas" element={<BlogIdeas />} />
+        <Route path="/blog-ideas/personas" element={<BlogPersonas />} />
+        <Route path="/blog-ideas/:ideaId" element={<BlogIdeaDetail />} />
         <Route path="*" element={<Navigate to="/overview" replace />} />
       </Routes>
     </div>
