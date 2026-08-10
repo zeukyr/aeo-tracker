@@ -4,7 +4,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { API_BASE_URL } from "../config";
 import { formatDate } from "../lib/format";
-import { ANGLE_LABELS, schoolLabel } from "../lib/blogIdeas";
+import { ANGLE_LABELS, PRIORITY_LABELS, schoolLabel } from "../lib/blogIdeas";
 
 // Slug for the downloaded filename - lowercase, non-alphanumeric runs
 // collapsed to a single hyphen, trimmed, capped so it never turns into an
@@ -87,9 +87,157 @@ function FullPostDraft({ body, title, generating, error, onGenerate }) {
   );
 }
 
+// Priority | Type | Status info row, directly under the title - mirrors a
+// commercial AEO tool's article-detail header, but Priority is computed
+// deterministically from real target-query volume/weakness
+// (blog_ideas.py's _compute_priority), never LLM-assigned, and Status
+// reuses the same idea/drafted/published lifecycle the list view's dropdown
+// already edits (no new "approved" state - see BlogIdeaDetail's history:
+// deliberately not adding a gate in front of the existing status control).
+function InfoBar({ priority, angle, status, onStatusChange }) {
+  return (
+    <div className="bi-infobar">
+      {priority && (
+        <div className="bi-infobar__item">
+          <span className="bi-infobar__label">Priority</span>
+          <span className={`priority-pill priority-pill--${priority}`}>
+            {PRIORITY_LABELS[priority] ?? priority}
+          </span>
+        </div>
+      )}
+      {angle && (
+        <div className="bi-infobar__item">
+          <span className="bi-infobar__label">Type</span>
+          <span className="angle-tag">{ANGLE_LABELS[angle] ?? angle}</span>
+        </div>
+      )}
+      <div className="bi-infobar__item">
+        <span className="bi-infobar__label">Status</span>
+        <select
+          className={`priority-pill priority-pill--${status}`}
+          style={{ border: "none", fontFamily: "inherit", cursor: "pointer" }}
+          value={status}
+          onChange={(e) => onStatusChange(e.target.value)}
+        >
+          <option value="idea">Idea</option>
+          <option value="drafted">Drafted</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+
+// Small colored ring + percentage, same "how often QC is cited" number the
+// list-view targets already carried as plain text - just given the same
+// glanceable ring treatment a commercial AEO dashboard uses for visibility.
+// Thresholds match blog_ideas.py's own _compute_priority breakpoints
+// (0.15 / 0.35) so the color language stays consistent front-to-back.
+function VisibilityRing({ pct, size = 30 }) {
+  const radius = (size - 4) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - Math.max(0, Math.min(100, pct)) / 100);
+  const color = pct < 15 ? "#a32d2d" : pct < 35 ? "#ba7517" : "#3b6d11";
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0 }} aria-hidden="true">
+      <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#edecea" strokeWidth="3" />
+      <circle
+        cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color} strokeWidth="3"
+        strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+      />
+      <text x="50%" y="52%" textAnchor="middle" dominantBaseline="middle" fontSize="9" fontWeight="700" fill="#111" fontFamily="ui-monospace, monospace">
+        {Math.round(pct)}
+      </text>
+    </svg>
+  );
+}
+
+// A keyword chip's difficulty/volume come from real data (blog_ideas.py's
+// _normalize_keywords): "difficulty" is QC's own average citation share
+// across this idea's target queries (low share = harder/more valuable
+// gap), "tracked" is a real count of tracked AI-search queries this idea
+// targets - never a fabricated external search-volume/difficulty number,
+// since we have no such data source (see module note in blog_ideas.py).
+const _DIFFICULTY_COLOR = {
+  high:   { bg: "#fcebeb", text: "#a32d2d" },
+  medium: { bg: "#fbf0de", text: "#ba7517" },
+  low:    { bg: "#eaf3de", text: "#3b6d11" },
+};
+
+function KeywordChip({ phrase, tracked_queries: tracked, difficulty }) {
+  const c = _DIFFICULTY_COLOR[difficulty];
+  return (
+    <div className="bi-keyword">
+      <span className="bi-keyword__phrase">{phrase}</span>
+      <span className="bi-keyword__stats">
+        {c && (
+          <span className="bi-keyword__difficulty" style={{ background: c.bg, color: c.text }}>
+            {difficulty} difficulty
+          </span>
+        )}
+        <span className="bi-keyword__tracked">{tracked} tracked quer{tracked === 1 ? "y" : "ies"}</span>
+      </span>
+    </div>
+  );
+}
+
+// The screenshot-matching brief: description, rationale, keywords, and the
+// prompts this idea addresses - everything a human needs to decide whether
+// this idea is worth a full-post LLM call, before ever opening the outline
+// below. All of it (except the LLM-authored description/keyword phrases
+// themselves) is derived from real tracked-query data, never invented.
+function ArticleBrief({ outline }) {
+  if (!outline) return null;
+  const { description, why_this_article: rationale, keywords, targets } = outline;
+
+  return (
+    <>
+      {description && (
+        <div className="rc-brief__section">
+          <span className="rc-brief__eyebrow">Description</span>
+          <p className="bi-prose">{description}</p>
+        </div>
+      )}
+      {rationale && (
+        <div className="rc-brief__section">
+          <span className="rc-brief__eyebrow">Why this article?</span>
+          <p className="bi-prose">{rationale}</p>
+        </div>
+      )}
+      {keywords?.length > 0 && (
+        <div className="rc-brief__section">
+          <span className="rc-brief__eyebrow">Keywords</span>
+          <div className="bi-keyword-list">
+            {keywords.map((k) => <KeywordChip key={k.phrase} {...k} />)}
+          </div>
+        </div>
+      )}
+      {targets?.length > 0 && (
+        <div className="rc-brief__section">
+          <span className="rc-brief__eyebrow">Addressed Prompts</span>
+          <div className="bi-prompt-list">
+            {targets.map((t) => (
+              <div className="bi-prompt-row" key={t.question_id}>
+                <VisibilityRing pct={t.qc_share * 100} />
+                <span className="qtext">"{t.text}"</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// The existing GEO content-outline fields (H2 heading, extractable answer
+// block, body points, comparison structure) that feed
+// _build_full_post_prompt - kept as their own section below the brief
+// above, rather than removed, since they're still the real input to
+// "Generate full post".
 function IdeaOutline({ outline }) {
   if (!outline) return null;
-  const { heading, extractable_block: block, body_points: points, comparison, targets } = outline;
+  const { heading, extractable_block: block, body_points: points, comparison } = outline;
   const wordCount = block ? block.trim().split(/\s+/).length : 0;
 
   return (
@@ -122,19 +270,6 @@ function IdeaOutline({ outline }) {
         <div className="rc-brief__section">
           <span className="rc-brief__eyebrow">Comparison structure</span>
           <div className="comparison-box"><span className="vs">VS</span> {comparison.vs}</div>
-        </div>
-      )}
-      {targets?.length > 0 && (
-        <div className="rc-brief__section">
-          <span className="rc-brief__eyebrow">Targets (from the tracked-query bank)</span>
-          <div className="target-list">
-            {targets.map((t) => (
-              <div className="target-row" key={t.question_id}>
-                <span className="qshare">{Math.round(t.qc_share * 100)}% QC</span>
-                <span className="qtext">"{t.text}"</span>
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </>
@@ -219,25 +354,21 @@ export default function BlogIdeaDetail() {
         ) : (
           <div className="card">
             <div className="rc-brief__section" style={{ marginBottom: 4 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-                <p className="panel-title" style={{ marginBottom: 0 }}>{idea.title}</p>
-                <span className="cluster-chips">
-                  <span className="angle-tag">{ANGLE_LABELS[idea.angle] ?? idea.angle}</span>
-                  <select
-                    className={`priority-pill priority-pill--${idea.status}`}
-                    style={{ border: "none", fontFamily: "inherit", cursor: "pointer" }}
-                    value={idea.status}
-                    onChange={(e) => handleStatusChange(e.target.value)}
-                  >
-                    <option value="idea">Idea</option>
-                    <option value="drafted">Drafted</option>
-                    <option value="published">Published</option>
-                  </select>
-                </span>
-              </div>
+              <p className="panel-title" style={{ marginBottom: 10 }}>{idea.title}</p>
+              <InfoBar
+                priority={idea.priority}
+                angle={idea.angle}
+                status={idea.status}
+                onStatusChange={handleStatusChange}
+              />
             </div>
 
             <div className="rc-brief">
+              <ArticleBrief outline={idea.outline} />
+
+              <p className="rc-brief__eyebrow" style={{ marginTop: 4 }}>Content outline</p>
+              <IdeaOutline outline={idea.outline} />
+
               <FullPostDraft
                 body={idea.body}
                 title={idea.title}
@@ -245,7 +376,6 @@ export default function BlogIdeaDetail() {
                 error={draftError}
                 onGenerate={handleGenerateFullPost}
               />
-              <IdeaOutline outline={idea.outline} />
             </div>
           </div>
         )

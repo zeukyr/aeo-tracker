@@ -47,7 +47,6 @@ from api.recommendations import (
     generate_question_recommendation,
     get_question_recommendations,
     generate_blog_ideas,
-    generate_blog_ideas_from_persona,
     generate_full_post,
     get_all_personas,
     get_blog_idea,
@@ -281,41 +280,17 @@ def blog_idea_candidates(days: int = None):
     return get_blog_idea_candidates(days)
 
 @app.post("/api/blog-ideas/generate")
-def post_generate_blog_ideas(
-    days: int = None,
-    force: bool = False,
-    selections: list[dict] = Body(None),
-):
-    """selections: [{"topic": str, "school": str | None}, ...] - a (topic,
-    school) pair isn't representable as repeated query params, so this takes
-    a JSON body instead of the query-param list other picker endpoints use."""
+def post_generate_blog_ideas(days: int = None, force: bool = False):
+    """Single, fully automatic ideation entry point - see
+    generate_blog_ideas's docstring for how it picks between the tracked-
+    query bank and the persona fallback per school."""
     status = get_blog_idea_generation_status()
     if not status["can_generate"] and not force:
         raise HTTPException(status_code=429, detail={
             "message": "Blog ideas were generated recently; cooldown still active.",
             **status,
         })
-    return generate_blog_ideas(days, selections)
-
-@app.post("/api/blog-ideas/generate-from-persona")
-def post_generate_blog_ideas_from_persona(school: str = Body(None, embed=True), force: bool = False):
-    """Second ideation path: topics mined from one school's saved persona
-    data alone, not the tracked-query bank (see
-    generate_blog_ideas_from_persona's docstring). Shares the same
-    table-wide cooldown gate as /generate above."""
-    status = get_blog_idea_generation_status()
-    if not status["can_generate"] and not force:
-        raise HTTPException(status_code=429, detail={
-            "message": "Blog ideas were generated recently; cooldown still active.",
-            **status,
-        })
-    result = generate_blog_ideas_from_persona(school)
-    if not result["generated"]:
-        raise HTTPException(status_code=422, detail={
-            "message": "Couldn't generate topics from this school's persona data.",
-            **result,
-        })
-    return result
+    return generate_blog_ideas(days)
 
 @app.get("/api/blog-ideas/{idea_id}")
 def single_blog_idea(idea_id: str):

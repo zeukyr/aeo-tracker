@@ -39,6 +39,17 @@ themselves - for surfacing a topic the persona data clearly calls for but
 that no tracked AI-engine query happens to cover yet. Saved to the same
 table with source='persona' and empty target_query_ids (see
 migrations/015_blog_ideas_source.sql).
+
+generate_blog_ideas() is the single entry point the dashboard calls (one
+"Generate ideas" button, no human picks a mode or a specific topic anymore):
+it auto-picks the largest uncovered query-bank groups - "largest" already
+means both "commonly asked" (many distinct tracked queries) and, since the
+group is sorted internally weakest-QC-share-first, "an area QC is weak in" -
+so one ranking captures both signals a human used to have to choose between.
+Any school with saved persona data that has no pending query-bank groups
+left this run automatically falls back to the persona path instead, so a
+thin tracked-query bank for a school never blocks that school from getting
+new ideas. See _MAX_GROUPS_PER_RUN / _MAX_PERSONA_FALLBACK_SCHOOLS_PER_RUN.
 """
 
 import json
@@ -53,7 +64,7 @@ from psycopg2.extras import Json
 
 from api.db import get_connection
 from api.queries.question_router import get_losing_questions
-from api.recommendations.blog_personas import get_persona
+from api.recommendations.blog_personas import get_all_personas, get_persona
 from api.recommendations.store import GENERATION_COOLDOWN_DAYS
 from src.logger import logger
 
@@ -79,6 +90,12 @@ _MAX_QUERIES_PER_PROMPT = 12
 # has no query-bank size to naturally cap it against, since it's mining one
 # school's persona text rather than iterating groups.
 _MAX_PERSONA_TOPICS_PER_RUN = 3
+# Bounds how many schools generate_blog_ideas() mines persona data for in one
+# run - persona-mining runs alongside the query-bank picks every run (not
+# only when a school's tracked-query bank is empty), rotated by how long
+# it's been since a school was last persona-mined, so it stays small and
+# spends fairly across schools rather than exhausting a whole run on one.
+_MAX_PERSONA_SCHOOLS_PER_RUN = 2
 
 
 @lru_cache(maxsize=None)
@@ -139,9 +156,13 @@ def _covered_topic_school_pairs():
 
 
 def get_blog_idea_candidates(days=None):
-    """Live, largest-first list of (topic, school) pairs not yet covered by
-    a pillar - the picker a human checks off to generate ideas for, same
-    shape/spirit as question_router's get_losing_questions candidates."""
+    """Live, weakest-QC-share-first list of (topic, school) pairs not yet
+    covered by a pillar - same priority order generate_blog_ideas() actually
+    picks from, so this is what the dashboard's "N opportunities identified"
+    count reflects. Ranked by weakness (real QC citation data), not group
+    size: how many distinct query phrasings we happen to track for a topic
+    isn't a real demand signal, so it's reported here but never drives
+    priority."""
     groups = _group_query_bank(days)
     covered = _covered_topic_school_pairs()
     pending = {k: qs for k, qs in groups.items() if k not in covered}
@@ -154,7 +175,7 @@ def get_blog_idea_candidates(days=None):
             # weakest query in this group - free, no extra query.
             "weakest_qc_share": queries[0]["qc_share"],
         }
-        for (topic, school), queries in sorted(pending.items(), key=lambda kv: -len(kv[1]))
+        for (topic, school), queries in sorted(pending.items(), key=lambda kv: kv[1][0]["qc_share"])
     ]
 
 
@@ -230,6 +251,14 @@ body_points capturing what the 150-300 word full paragraph would cover
 (bullet form here, not prose), and comparison.enabled true only when a real
 "X vs Y" framing applies to that idea.
 
+Each cluster idea also needs a `description` (1-2 plain-language sentences
+summarizing what the article covers and who it's for - reader-facing
+editorial copy, distinct from the outline's `extractable_block`, which is
+the GEO-facing quotable answer) and `keywords` (2-4 short, 2-5 word
+search-style phrases a reader might type, drawn from the heading/topic -
+phrases only, never invent a search-volume or difficulty number for them;
+those are computed separately from real tracked-query data, not authored).
+
 === MULTI-BLOG PILLAR STRATEGY ===
 {_load_doc("blog_pillar_strategy.md")}
 
@@ -243,6 +272,8 @@ Return JSON exactly in this shape:
   "cluster_ideas": [
     {{
       "title": "...",
+      "description": "...",
+      "keywords": ["...", "..."],
       "angle": "one of: {angle_list}",
       "target_query_ids": ["..."],
       "outline": {{
@@ -305,6 +336,12 @@ body_points capturing what the 150-300 word full paragraph would cover
 (bullet form here, not prose), and comparison.enabled true only when a real
 "X vs Y" framing applies to that idea.
 
+Each cluster idea also needs a `description` (1-2 plain-language sentences
+summarizing what the article covers and who it's for) and `keywords` (2-4
+short, 2-5 word search-style phrases a reader might type, drawn from the
+heading/topic - phrases only, never invent a search-volume or difficulty
+number for them).
+
 === MULTI-BLOG PILLAR STRATEGY ===
 {_load_doc("blog_pillar_strategy.md")}
 
@@ -320,6 +357,8 @@ Return JSON exactly in this shape:
       "cluster_ideas": [
         {{
           "title": "...",
+          "description": "...",
+          "keywords": ["...", "..."],
           "angle": "one of: {angle_list}",
           "outline": {{
             "heading": "...",
@@ -362,6 +401,68 @@ def _call_llm_persona(school, persona, existing_topics):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Priority / rationale / keyword stats - deterministic, never LLM-assigned.
+# Built entirely from each idea's own validated target queries (real
+# question_id/qc_share pairs already resolved above), matching this
+# package's evidence-grounded ethos: the LLM writes the reader-facing prose
+# (title, description, keyword phrases), but every NUMBER or claim of
+# volume/weakness/priority comes from data we actually have. In particular,
+# we have no external SEO search-volume or keyword-difficulty data source -
+# fabricating one would misrepresent it as real, so keyword "difficulty" is
+# derived from QC's own real citation share instead, and "volume" is the
+# real count of tracked AI-search queries this idea targets, never a
+# fabricated "N,NNN/mo" figure.
+# ─────────────────────────────────────────────────────────────────────────────
+
+_MAX_KEYWORDS = 4
+
+
+def _compute_priority(targets):
+    """High/medium/low, from real target-query volume and weakness (same
+    "volume x weakness" spirit as api/recommendations/prioritization.py's
+    evidence-based ranking) - never LLM-assigned. Persona-sourced ideas
+    (targets=[]) have no query-bank signal to grade on, so they default to
+    "medium" rather than a fabricated high/low."""
+    if not targets:
+        return "medium"
+    avg_share = sum(t["qc_share"] for t in targets) / len(targets)
+    if len(targets) >= 3 or avg_share <= 0.15:
+        return "high"
+    if len(targets) >= 2 or avg_share <= 0.35:
+        return "medium"
+    return "low"
+
+
+def _why_this_article(topic, school, targets):
+    """One sentence naming the real evidence behind this idea - built from
+    already-validated target-query data, never LLM-authored prose."""
+    label = topic or "this topic"
+    if not targets:
+        return (f"Sourced from {school or 'General'}'s buyer-persona data - no tracked AI-engine "
+                f"query covers {label} yet, but the persona data points to real reader demand.")
+    n = len(targets)
+    weakest = min(targets, key=lambda t: t["qc_share"])
+    avg_pct = round(100 * sum(t["qc_share"] for t in targets) / n)
+    return (f"Targets {n} tracked quer{'y' if n == 1 else 'ies'} AI engines answer about {label} - "
+            f"QC is cited only {avg_pct}% of the time on average "
+            f"(as low as {round(weakest['qc_share'] * 100)}% on \"{weakest['text']}\").")
+
+
+def _normalize_keywords(raw_keywords, targets):
+    """LLM-authored short phrases (text only, capped at _MAX_KEYWORDS), each
+    annotated with real stats derived from this idea's own targets rather
+    than a fabricated external number - see module-section note above."""
+    phrases = [p.strip() for p in (raw_keywords or []) if isinstance(p, str) and p.strip()][:_MAX_KEYWORDS]
+    if not phrases:
+        return []
+    difficulty = None
+    if targets:
+        avg_share = sum(t["qc_share"] for t in targets) / len(targets)
+        difficulty = "high" if avg_share <= 0.15 else "medium" if avg_share <= 0.35 else "low"
+    return [{"phrase": p, "tracked_queries": len(targets), "difficulty": difficulty} for p in phrases]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Validation: never trust an LLM-invented angle or query id
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -385,18 +486,19 @@ def _normalize_outline(raw):
     }
 
 
-def _normalize_cluster_idea(raw, queries_by_id):
+def _normalize_cluster_idea(raw, queries_by_id, topic, school):
     """queries_by_id: {str(question_id): query_dict} for this group's bank -
     used both to validate target_query_ids (never trust an id the model
     invents) and to resolve display text/qc_share for the UI (never trust
     the LLM's own echo of the query text either)."""
     title = (raw.get("title") or "").strip()
+    description = (raw.get("description") or "").strip()
     angle = raw.get("angle")
     target_query_ids = [str(qid) for qid in (raw.get("target_query_ids") or []) if str(qid) in queries_by_id]
     outline = _normalize_outline(raw.get("outline"))
-    if not title or angle not in ANGLE_VOCAB or not target_query_ids or outline is None:
+    if not title or not description or angle not in ANGLE_VOCAB or not target_query_ids or outline is None:
         return None
-    outline["targets"] = [
+    targets = [
         {
             "question_id": qid,
             "text": queries_by_id[qid]["question"],
@@ -404,15 +506,20 @@ def _normalize_cluster_idea(raw, queries_by_id):
         }
         for qid in target_query_ids
     ]
+    outline["targets"] = targets
+    outline["description"] = description
+    outline["keywords"] = _normalize_keywords(raw.get("keywords"), targets)
+    outline["why_this_article"] = _why_this_article(topic, school, targets)
     return {
         "title": title,
         "angle": angle,
         "target_query_ids": target_query_ids,
         "outline": outline,
+        "priority": _compute_priority(targets),
     }
 
 
-def _normalize_response(raw, queries_by_id):
+def _normalize_response(raw, queries_by_id, topic, school):
     """None on any structural failure - a group is saved all-or-nothing,
     never a pillar with zero surviving cluster ideas under it."""
     if not isinstance(raw, dict):
@@ -422,14 +529,14 @@ def _normalize_response(raw, queries_by_id):
         return None
     cluster_ideas = [
         idea for raw_idea in (raw.get("cluster_ideas") or [])
-        if (idea := _normalize_cluster_idea(raw_idea, queries_by_id)) is not None
+        if (idea := _normalize_cluster_idea(raw_idea, queries_by_id, topic, school)) is not None
     ]
     if not cluster_ideas:
         return None
     return {"pillar_title": pillar_title, "cluster_ideas": cluster_ideas}
 
 
-def _normalize_persona_cluster_idea(raw):
+def _normalize_persona_cluster_idea(raw, topic, school):
     """Same shape as _normalize_cluster_idea minus target_query_ids - a
     persona-sourced idea has no tracked-query bank to validate ids against,
     so it's stored with an empty list instead (outline.targets stays empty,
@@ -438,15 +545,22 @@ def _normalize_persona_cluster_idea(raw):
     if not isinstance(raw, dict):
         return None
     title = (raw.get("title") or "").strip()
+    description = (raw.get("description") or "").strip()
     angle = raw.get("angle")
     outline = _normalize_outline(raw.get("outline"))
-    if not title or angle not in ANGLE_VOCAB or outline is None:
+    if not title or not description or angle not in ANGLE_VOCAB or outline is None:
         return None
     outline["targets"] = []
-    return {"title": title, "angle": angle, "target_query_ids": [], "outline": outline}
+    outline["description"] = description
+    outline["keywords"] = _normalize_keywords(raw.get("keywords"), [])
+    outline["why_this_article"] = _why_this_article(topic, school, [])
+    return {
+        "title": title, "angle": angle, "target_query_ids": [], "outline": outline,
+        "priority": _compute_priority([]),
+    }
 
 
-def _normalize_persona_response(raw):
+def _normalize_persona_response(raw, school):
     """A list of {"topic", "pillar_title", "cluster_ideas"} groups (0 or
     more survive) rather than _normalize_response's single group - one
     persona call proposes several topics at once. None only if the response
@@ -464,7 +578,7 @@ def _normalize_persona_response(raw):
             continue
         cluster_ideas = [
             idea for raw_idea in (raw_topic.get("cluster_ideas") or [])
-            if (idea := _normalize_persona_cluster_idea(raw_idea)) is not None
+            if (idea := _normalize_persona_cluster_idea(raw_idea, topic, school)) is not None
         ]
         if not cluster_ideas:
             continue
@@ -487,11 +601,11 @@ def _save_group_idea(cur, batch_id, topic, school, idea, source="query_bank"):
 
     for cluster in idea["cluster_ideas"]:
         cur.execute("""
-            INSERT INTO blog_ideas (batch_id, cluster_role, parent_id, topic, school, title, angle, target_query_ids, outline, source)
-            VALUES (%s, 'cluster', %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO blog_ideas (batch_id, cluster_role, parent_id, topic, school, title, angle, target_query_ids, outline, source, priority)
+            VALUES (%s, 'cluster', %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             batch_id, pillar_id, topic, school, cluster["title"], cluster["angle"],
-            Json(cluster["target_query_ids"]), Json(cluster["outline"]), source,
+            Json(cluster["target_query_ids"]), Json(cluster["outline"]), source, cluster["priority"],
         ))
     return pillar_id
 
@@ -510,59 +624,100 @@ def _existing_topics_for_school(school):
             return [r[0] for r in cur.fetchall()]
 
 
-def generate_blog_ideas(days=None, selections=None):
-    """Generate pillar/cluster ideas for the given (topic, school) selections
-    (from the picker - dashboard/src/tabs/BlogIdeas.jsx, mirroring
-    CandidateQuestionPicker's check-off-then-generate flow). Selections
-    already covered or no longer pending (bank refreshed since the picker
-    loaded) are silently dropped rather than erroring, since a human just
-    made this exact selection.
+def _last_persona_generated_at_by_school():
+    """{school: most recent generated_at} over persona-sourced pillars only
+    - used to rotate generate_blog_ideas()'s persona pass fairly across
+    schools (never-mined and longest-since-mined schools go first) instead
+    of always hitting the same one or two."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT school, MAX(generated_at) FROM blog_ideas
+                WHERE cluster_role = 'pillar' AND source = 'persona'
+                GROUP BY school
+            """)
+            return {r[0]: r[1] for r in cur.fetchall()}
 
-    `selections=None` falls back to auto-picking the largest
-    _MAX_GROUPS_PER_RUN uncovered groups - kept for API callers that don't
-    want to pick.
 
-    Never raises for a single group's LLM failure - that group is just
-    skipped and left for the next run."""
+def generate_blog_ideas(days=None):
+    """The dashboard's single "Generate ideas" entry point
+    (dashboard/src/tabs/BlogIdeas.jsx) - fully automatic, no human picks a
+    (topic, school) pair or a generation mode, and no either/or between the
+    tracked-query bank and persona data - both run every call:
+
+      1. Auto-picks the weakest _MAX_GROUPS_PER_RUN uncovered (topic,
+         school) groups from the tracked-query bank, ranked by QC's real
+         citation share on each group's weakest query. Deliberately NOT
+         ranked by group size (how many distinct query phrasings we happen
+         to track for a topic) - that's an artifact of what got tracked, not
+         a real demand signal, so it's reported (n_queries) but never used
+         to prioritize.
+      2. Independently, mines persona data for up to
+         _MAX_PERSONA_SCHOOLS_PER_RUN schools with saved persona data,
+         rotated by how long it's been since each was last persona-mined
+         (never-mined schools first) - this runs alongside step 1 regardless
+         of whether a school also got a query-bank pick this call, so a
+         school's ideas can come from both sources in the same run rather
+         than one path blocking the other.
+
+    Never raises for a single group/school's LLM failure - it's just
+    skipped and left for a later run."""
     groups = _group_query_bank(days)
     covered = _covered_topic_school_pairs()
     pending = {k: qs for k, qs in groups.items() if k not in covered}
-
-    if selections is not None:
-        wanted = {(s.get("topic"), s.get("school")) for s in selections}
-        groups_this_run = [k for k in wanted if k in pending]
-    else:
-        groups_this_run = sorted(pending, key=lambda k: -len(pending[k]))[:_MAX_GROUPS_PER_RUN]
-
-    if not groups_this_run:
-        return {"generated": False, "reason": "no_new_topics", "pillars": 0, "cluster_ideas": 0}
+    groups_this_run = sorted(pending, key=lambda k: pending[k][0]["qc_share"])[:_MAX_GROUPS_PER_RUN]
 
     batch_id = str(uuid.uuid4())
     pillars_saved, clusters_saved, skipped, succeeded = 0, 0, [], []
 
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            for topic, school in groups_this_run:
-                queries = pending[(topic, school)]
-                queries_by_id = {str(q["question_id"]): q for q in queries}
-                raw = _call_llm(topic, school, queries)
-                idea = _normalize_response(raw, queries_by_id) if raw is not None else None
-                if idea is None:
-                    skipped.append({"topic": topic, "school": school})
-                    continue
-                _save_group_idea(cur, batch_id, topic, school, idea)
-                succeeded.append({"topic": topic, "school": school})
-                pillars_saved += 1
-                clusters_saved += len(idea["cluster_ideas"])
-        conn.commit()
+    if groups_this_run:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                for topic, school in groups_this_run:
+                    queries = pending[(topic, school)]
+                    queries_by_id = {str(q["question_id"]): q for q in queries}
+                    raw = _call_llm(topic, school, queries)
+                    idea = _normalize_response(raw, queries_by_id, topic, school) if raw is not None else None
+                    if idea is None:
+                        skipped.append({"topic": topic, "school": school})
+                        continue
+                    _save_group_idea(cur, batch_id, topic, school, idea)
+                    succeeded.append({"topic": topic, "school": school})
+                    pillars_saved += 1
+                    clusters_saved += len(idea["cluster_ideas"])
+            conn.commit()
+
+    # Persona pass: independent of the query-bank picks above - rotated by
+    # how long it's been since each school was last persona-mined (never
+    # -mined schools sort first), so it's a fair rotation, not a fallback
+    # gated on the query-bank being empty for that school.
+    last_mined = _last_persona_generated_at_by_school()
+    persona_candidate_schools = sorted(
+        (p["school"] for p in get_all_personas()),
+        key=lambda school: (1, last_mined[school]) if school in last_mined else (0,),
+    )
+
+    persona_pillars = persona_clusters = 0
+    persona_topics = []
+    for school in persona_candidate_schools[:_MAX_PERSONA_SCHOOLS_PER_RUN]:
+        result = generate_blog_ideas_from_persona(school)
+        if result["generated"]:
+            persona_pillars += result["pillars"]
+            persona_clusters += result["cluster_ideas"]
+            persona_topics.append({"school": school, "topics": result["topics"]})
+
+    if not succeeded and not persona_topics:
+        return {"generated": False, "reason": "no_new_topics", "pillars": 0, "cluster_ideas": 0,
+                "topics": [], "skipped_topics": skipped, "persona_topics": []}
 
     return {
-        "generated": pillars_saved > 0,
+        "generated": True,
         "batch_id": batch_id,
-        "pillars": pillars_saved,
-        "cluster_ideas": clusters_saved,
+        "pillars": pillars_saved + persona_pillars,
+        "cluster_ideas": clusters_saved + persona_clusters,
         "topics": succeeded,
         "skipped_topics": skipped,
+        "persona_topics": persona_topics,
     }
 
 
@@ -585,7 +740,7 @@ def generate_blog_ideas_from_persona(school):
 
     existing_topics = _existing_topics_for_school(school)
     raw = _call_llm_persona(school, persona, existing_topics)
-    topics = _normalize_persona_response(raw) if raw is not None else None
+    topics = _normalize_persona_response(raw, school) if raw is not None else None
     if not topics:
         return {"generated": False, "reason": "generation_failed", "pillars": 0, "cluster_ideas": 0}
 
@@ -635,7 +790,7 @@ def get_blog_idea_generation_status(cooldown_days=GENERATION_COOLDOWN_DAYS):
 
 _SELECT = """
     SELECT id, batch_id, cluster_role, parent_id, topic, school, title, angle,
-           target_query_ids, outline, status, generated_at, body, source
+           target_query_ids, outline, status, generated_at, body, source, priority
     FROM blog_ideas
 """
 
@@ -656,6 +811,7 @@ def _idea_dict(r):
         "generated_at": str(r[11]),
         "body": r[12],
         "source": r[13],
+        "priority": r[14],
     }
 
 

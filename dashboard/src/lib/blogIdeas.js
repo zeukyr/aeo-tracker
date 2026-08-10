@@ -3,15 +3,21 @@
 // don't drift on angle labels or the (topic, school) composite-key format.
 
 export const ANGLE_LABELS = {
-  definition: "definition",
-  how_to: "how_to",
-  comparison: "comparison",
-  case_study: "case_study",
-  faq: "faq",
-  advanced_technique: "advanced_technique",
-  tool_framework: "tool_framework",
-  benchmark: "benchmark",
+  definition: "Definition / Explainer",
+  how_to: "How-To Guide",
+  comparison: "Comparison",
+  case_study: "Case Study",
+  faq: "FAQ",
+  advanced_technique: "Advanced Technique",
+  tool_framework: "Tool / Framework Guide",
+  benchmark: "Benchmark",
 };
+
+// "high"/"medium"/"low" -> the same label/color vocabulary priority-pill
+// already uses elsewhere (dashboard/src/index.css) - blog_ideas.py computes
+// this deterministically from real target-query volume/weakness, never an
+// LLM-assigned label.
+export const PRIORITY_LABELS = { high: "High", medium: "Medium", low: "Low" };
 
 export const schoolLabel = (school) => school ?? "General";
 
@@ -20,14 +26,3 @@ export const schoolLabel = (school) => school ?? "General";
 // candidate rows use the raw DB value (null for General). Keep the
 // translation in one place so the editor and the "persona data" chip agree.
 export const apiSchool = (uiSchool) => (uiSchool === "General" ? null : uiSchool);
-
-// Candidate rows are keyed by (topic, school) since topic alone isn't a
-// unique group anymore (see migrations/011_blog_ideas_school.sql).
-export const keyOf = (topic, school) => `${topic}||${school ?? ""}`;
-
-export const parseKey = (key) => {
-  const idx = key.indexOf("||");
-  const topic = key.slice(0, idx);
-  const rawSchool = key.slice(idx + 2);
-  return { topic, school: rawSchool === "" ? null : rawSchool };
-};

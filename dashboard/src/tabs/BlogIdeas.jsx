@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config";
 import { useFilter } from "../context/useFilter";
 import { formatDate } from "../lib/format";
-import { ANGLE_LABELS, schoolLabel, keyOf, parseKey } from "../lib/blogIdeas";
+import { ANGLE_LABELS, schoolLabel } from "../lib/blogIdeas";
 
 // Summary card linking out to the persona editor's own page
 // (/blog-ideas/personas, pages/BlogPersonas.jsx) rather than inlining the
@@ -25,58 +25,124 @@ function PersonaSummary({ personas, onManage }) {
   );
 }
 
-// Second ideation entry point, alongside TopicCandidatePicker below: instead
-// of picking a (topic, school) pair off the tracked-query bank, pick a
-// school with saved persona data and let the model mine that data directly
-// for topics no tracked query has surfaced yet. Only schools that actually
-// have a saved persona are selectable - generation would just fail
-// (reason: "no_persona") for any other school.
-function PersonaTopicGenerator({ personas, onGenerate, generating, result, genStatus }) {
-  // No default-selection effect: the fallback to personas[0] is computed
-  // inline below instead, so an unset/stale `school` (e.g. the previously
-  // selected school's persona got cleared) self-corrects on every render
-  // without a setState-in-effect render cascade.
-  const [school, setSchool] = useState(null);
+function AgentAvatar() {
+  return (
+    <span style={{
+      width: 26, height: 26, borderRadius: "50%", background: "#e6f1fb", color: "#185fa5",
+      display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 13,
+    }}>
+      ✦
+    </span>
+  );
+}
+
+function AssistantBubble({ children }) {
+  return (
+    <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+      <AgentAvatar />
+      <div style={{ background: "#f7f7f5", borderRadius: 12, padding: "10px 14px", fontSize: 13, color: "#111", lineHeight: 1.55, maxWidth: 560 }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function ChecklistRow({ children }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#fff", border: "0.5px solid rgba(0,0,0,0.10)", borderRadius: 10, padding: "9px 14px", fontSize: 13 }}>
+      <span style={{ width: 18, height: 18, borderRadius: "50%", background: "#eaf3de", color: "#3b6d11", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, flexShrink: 0 }}>✓</span>
+      <span>{children}</span>
+    </div>
+  );
+}
+
+// Single generation entry point - replaces the old picker (pick a topic/
+// school pair) + separate "generate from persona" button with one flow: the
+// backend (generate_blog_ideas) auto-picks the highest-yield/weakest
+// tracked-query groups and automatically falls back to persona-mined topics
+// for any school whose tracked-query bank is thin. This panel only narrates
+// what happened - it never asks a human to choose a mode or a topic.
+function ContentAgentPanel({ candidates, personas, onGenerate, generating, result, error, genStatus }) {
   const canGenerate = genStatus?.can_generate ?? true;
   const nextDate = genStatus?.next_available_at ? formatDate(genStatus.next_available_at) : null;
-
-  if (!personas.length) return null;
-
-  const selectedSchool = personas.some((p) => p.school === school) ? school : personas[0].school;
+  const totalPendingQueries = candidates.reduce((sum, c) => sum + c.n_queries, 0);
+  const buttonLabel = !canGenerate ? `Locked until ${nextDate}` : generating ? "Generating…" : "✦ Generate blog ideas";
 
   return (
-    <section className="card" style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 10 }}>
+    <section className="card" style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 14 }}>
       <div>
-        <p className="panel-title" style={{ marginBottom: 2 }}>Generate topics from persona data</p>
+        <p className="panel-title" style={{ marginBottom: 2 }}>Content Agent</p>
         <p className="panel-subtitle" style={{ margin: 0 }}>
-          Mine a school's buyer persona, stats, and testimonials directly for new topics — no tracked query required.
+          Finds the tracked queries QC is weakest on{personas.length > 0 ? " and mines persona data on rotation" : ""} — one button, no mode to pick.
         </p>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-        <select
-          className="text-sm border border-gray-200 rounded px-3 py-1.5"
-          value={selectedSchool ?? ""}
-          disabled={generating}
-          onChange={(e) => setSchool(e.target.value === "" ? null : e.target.value)}
-        >
-          {personas.map((p) => (
-            <option key={p.school ?? ""} value={p.school ?? ""}>
-              {schoolLabel(p.school)}
-            </option>
-          ))}
-        </select>
-        <button
-          className="btn btn--primary"
-          onClick={() => onGenerate(selectedSchool)}
-          disabled={generating || !canGenerate}
-          title={!canGenerate ? `Available again ${nextDate}` : undefined}
-        >
-          {generating ? "Generating…" : !canGenerate ? `Locked until ${nextDate}` : "Generate topics"}
+
+      <AssistantBubble>
+        I rank your tracked AI-search queries by how rarely QC is actually cited — not by how many phrasings we
+        happen to track, which isn't a real demand signal — and draft pillar + cluster ideas for the weakest
+        ones{personas.length > 0 ? ". Each run also mines persona data for a couple of schools on rotation, alongside those picks rather than only when the tracked-query bank runs dry" : ""}.
+      </AssistantBubble>
+
+      {!result && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <button className="btn btn--primary" onClick={onGenerate} disabled={generating || !canGenerate} title={!canGenerate ? `Available again ${nextDate}` : undefined}>
+            {buttonLabel}
+          </button>
+          <span style={{ fontSize: 12, color: "#6b6b6b" }}>
+            {candidates.length > 0
+              ? `${candidates.length} uncovered topic/school pair${candidates.length === 1 ? "" : "s"} identified (${totalPendingQueries} tracked queries)`
+              : personas.length > 0
+                ? "No uncovered tracked-query topics left — will mine persona data instead"
+                : "Nothing to generate from yet — add tracked queries or persona data first"}
+          </span>
+        </div>
+      )}
+
+      {error && <p className="state-msg state-msg--error">{error}</p>}
+
+      {result && (
+        result.generated ? (
+          <>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <ChecklistRow>
+                Identified {result.identifiedCount} uncovered topic/school pair{result.identifiedCount === 1 ? "" : "s"}
+              </ChecklistRow>
+              <ChecklistRow>
+                Created {result.pillars} pillar idea{result.pillars === 1 ? "" : "s"} + {result.cluster_ideas} cluster idea{result.cluster_ideas === 1 ? "" : "s"}
+              </ChecklistRow>
+              <ChecklistRow>Saved to your idea backlog below</ChecklistRow>
+            </div>
+            <AssistantBubble>
+              <p style={{ margin: "0 0 6px", fontWeight: 600 }}>
+                {result.pillars} new pillar topic{result.pillars === 1 ? "" : "s"}:
+              </p>
+              <ol style={{ margin: 0, paddingLeft: 18 }}>
+                {result.topics.map((t) => (
+                  <li key={`bank-${t.topic}-${t.school}`}><b>{t.topic}</b> — {schoolLabel(t.school)} (tracked-query bank)</li>
+                ))}
+                {result.persona_topics.flatMap((p) =>
+                  p.topics.map((topic) => (
+                    <li key={`persona-${p.school}-${topic}`}><b>{topic}</b> — {schoolLabel(p.school)} (mined from persona data)</li>
+                  ))
+                )}
+              </ol>
+              <p style={{ margin: "8px 0 0", color: "#6b6b6b" }}>
+                Click any pillar below to review the outline, then generate a full post for whichever cluster ideas are worth the LLM call.
+              </p>
+            </AssistantBubble>
+          </>
+        ) : (
+          <AssistantBubble>
+            Nothing new to generate right now — every tracked topic and persona-backed school already has an idea.
+          </AssistantBubble>
+        )
+      )}
+
+      {result && (
+        <button className="btn btn--ghost" onClick={onGenerate} disabled={generating || !canGenerate} title={!canGenerate ? `Available again ${nextDate}` : undefined} style={{ alignSelf: "flex-start" }}>
+          {!canGenerate ? `Locked until ${nextDate}` : generating ? "Generating…" : "Run again"}
         </button>
-        {result && (
-          <span className={`candidate-row__result candidate-row__result--${result.status}`}>{result.message}</span>
-        )}
-      </div>
+      )}
     </section>
   );
 }
@@ -120,83 +186,6 @@ function GenerationHeader({ candidates, pillarCount, clusterCount, coveredQueryC
         </div>
       </div>
     </>
-  );
-}
-
-// Checklist of (topic, school) pairs not yet covered by a pillar - a human
-// checks off which ones to spend an LLM call on, then fires them in one
-// request. Same structural pattern as Recommendations.jsx's
-// CandidateQuestionPicker (checkbox rows -> selected count -> one generate
-// button -> per-row result), reusing its generic .candidate-panel__*/
-// .candidate-row__* CSS, which was never blog-specific.
-function TopicCandidatePicker({ candidates, selected, onToggle, onGenerate, generating, rowResults, genStatus, personaSchools }) {
-  const [open, setOpen] = useState(true);
-  if (!candidates.length) return null;
-  const selectedCount = selected.size;
-  const canGenerate = genStatus?.can_generate ?? true;
-  const nextDate = genStatus?.next_available_at ? formatDate(genStatus.next_available_at) : null;
-
-  return (
-    <section className="candidate-panel">
-      <div className="candidate-panel__head">
-        <button className="candidate-panel__toggle" onClick={() => setOpen(!open)}>
-          <span>{open ? "▾" : "▸"} Select topic/school pairs to generate blog ideas for — {candidates.length} uncovered</span>
-        </button>
-      </div>
-      {open && (
-        <>
-          <div className="candidate-panel__list">
-            {candidates.map((c, i) => {
-              const key = keyOf(c.topic, c.school);
-              const result = rowResults[key];
-              const busy = generating && result?.status === "generating";
-              return (
-                <label className="candidate-row" key={key}>
-                  <input
-                    type="checkbox"
-                    checked={selected.has(key)}
-                    disabled={generating}
-                    onChange={() => onToggle(key)}
-                  />
-                  <span className="candidate-row__rank">#{i + 1}</span>
-                  <div className="candidate-row__body">
-                    <p className="candidate-row__question">
-                      {c.topic} — {schoolLabel(c.school)}
-                      {personaSchools.has(c.school) && <span className="chip chip--segment" style={{ marginLeft: 6 }}>persona data</span>}
-                    </p>
-                    <p className="candidate-row__meta">
-                      {c.n_queries} tracked queries · weakest {Math.round(c.weakest_qc_share * 100)}% QC cited
-                    </p>
-                    {result && (
-                      <p className={`candidate-row__result candidate-row__result--${result.status}`}>
-                        {busy ? "Generating…" : result.message}
-                      </p>
-                    )}
-                  </div>
-                </label>
-              );
-            })}
-          </div>
-          <div className="candidate-panel__actions">
-            <span className="candidate-panel__count">{selectedCount} selected</span>
-            <button
-              className="btn btn--primary"
-              onClick={onGenerate}
-              disabled={selectedCount === 0 || generating || !canGenerate}
-              title={!canGenerate ? `Available again ${nextDate}` : undefined}
-            >
-              {generating
-                ? "Generating…"
-                : !canGenerate
-                  ? `Locked until ${nextDate}`
-                  : selectedCount > 0
-                    ? `Generate ideas for ${selectedCount} selected`
-                    : "Select topics to generate"}
-            </button>
-          </div>
-        </>
-      )}
-    </section>
   );
 }
 
@@ -272,13 +261,11 @@ function BlogIdeas() {
   const [genStatus, setGenStatus] = useState(null);
   const [candidates, setCandidates] = useState([]);
   const [error, setError] = useState(null);
-  const [selected, setSelected] = useState(() => new Set());
-  const [generatingSelected, setGeneratingSelected] = useState(false);
-  const [rowResults, setRowResults] = useState({});
   const [openPillars, setOpenPillars] = useState(() => new Set());
   const [personas, setPersonas] = useState([]);
-  const [generatingPersona, setGeneratingPersona] = useState(false);
-  const [personaGenResult, setPersonaGenResult] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [genResult, setGenResult] = useState(null);
+  const [genError, setGenError] = useState(null);
 
   const loading = ideas === null && error === null;
 
@@ -319,94 +306,32 @@ function BlogIdeas() {
     loadCandidates();
   }, [days]);
 
-  const personaSchools = new Set(personas.map((p) => p.school));
-
-  const toggleSelected = (key) => {
-    setSelected((prev) => {
-      const next = new Set(prev);
-      next.has(key) ? next.delete(key) : next.add(key);
-      return next;
-    });
-  };
-
-  const handleGenerateSelected = () => {
-    const keys = Array.from(selected);
-    if (!keys.length) return;
-    setGeneratingSelected(true);
-    setRowResults((prev) => {
-      const next = { ...prev };
-      keys.forEach((k) => { next[k] = { status: "generating" }; });
-      return next;
-    });
+  const handleGenerate = () => {
+    setGenerating(true);
+    setGenError(null);
+    // Captured before the request fires, since a successful run immediately
+    // shrinks the live candidate list (loadCandidates() below) - the
+    // narration should report what was true when the agent started, not
+    // the post-generation count.
+    const identifiedCount = candidates.length;
 
     const params = new URLSearchParams();
     if (days) params.append("days", days);
-    const selections = keys.map(parseKey);
 
-    fetch(`${API_BASE_URL}/api/blog-ideas/generate?${params}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ selections }),
-    })
+    fetch(`${API_BASE_URL}/api/blog-ideas/generate?${params}`, { method: "POST" })
       .then((r) => {
         if (!r.ok) return r.json().then((body) => { throw new Error(body?.detail?.message || "Generation failed"); });
         return r.json();
       })
       .then((result) => {
-        const succeededKeys = new Set((result.topics ?? []).map((s) => keyOf(s.topic, s.school)));
-        const skippedKeys = new Set((result.skipped_topics ?? []).map((s) => keyOf(s.topic, s.school)));
-        setRowResults((prev) => {
-          const next = { ...prev };
-          keys.forEach((k) => {
-            if (succeededKeys.has(k)) {
-              next[k] = { status: "success", message: "Generated." };
-            } else if (skippedKeys.has(k)) {
-              next[k] = { status: "error", message: "Couldn't generate a usable idea for this pair — try again later." };
-            } else {
-              next[k] = { status: "error", message: "Not generated — already covered or the bank changed." };
-            }
-          });
-          return next;
-        });
-        setGeneratingSelected(false);
-        setSelected(new Set());
+        setGenResult({ ...result, identifiedCount });
+        setGenerating(false);
         loadIdeas();
         loadCandidates();
       })
       .catch((err) => {
-        setRowResults((prev) => {
-          const next = { ...prev };
-          keys.forEach((k) => { next[k] = { status: "error", message: err.message }; });
-          return next;
-        });
-        setGeneratingSelected(false);
-      });
-  };
-
-  const handleGeneratePersona = (school) => {
-    setGeneratingPersona(true);
-    setPersonaGenResult(null);
-    fetch(`${API_BASE_URL}/api/blog-ideas/generate-from-persona`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ school }),
-    })
-      .then((r) => {
-        if (!r.ok) return r.json().then((body) => { throw new Error(body?.detail?.message || "Generation failed"); });
-        return r.json();
-      })
-      .then((result) => {
-        const topicList = (result.topics ?? []).join(", ");
-        setPersonaGenResult({
-          status: "success",
-          message: `Generated ${result.pillars} topic${result.pillars === 1 ? "" : "s"}${topicList ? `: ${topicList}` : ""}.`,
-        });
-        setGeneratingPersona(false);
-        loadIdeas();
-      })
-      .catch((err) => {
-        setPersonaGenResult({ status: "error", message: err.message });
-        setGeneratingPersona(false);
+        setGenError(err.message);
+        setGenerating(false);
       });
   };
 
@@ -453,28 +378,19 @@ function BlogIdeas() {
 
       <PersonaSummary personas={personas} onManage={() => navigate("/blog-ideas/personas")} />
 
-      <PersonaTopicGenerator
-        personas={personas}
-        onGenerate={handleGeneratePersona}
-        generating={generatingPersona}
-        result={personaGenResult}
-        genStatus={genStatus}
-      />
-
-      <TopicCandidatePicker
+      <ContentAgentPanel
         candidates={candidates}
-        selected={selected}
-        onToggle={toggleSelected}
-        onGenerate={handleGenerateSelected}
-        generating={generatingSelected}
-        rowResults={rowResults}
+        personas={personas}
+        onGenerate={handleGenerate}
+        generating={generating}
+        result={genResult}
+        error={genError}
         genStatus={genStatus}
-        personaSchools={personaSchools}
       />
 
       {pillars.length === 0 ? (
         <p className="state-empty">
-          No blog ideas yet — select topic/school pairs above and generate a pillar/cluster plan from your tracked-query bank.
+          No blog ideas yet — click "Generate blog ideas" above to create your first pillar/cluster plan.
         </p>
       ) : (
         <div className="pillar-list">

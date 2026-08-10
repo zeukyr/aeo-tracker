@@ -11,7 +11,6 @@ The implementation is grouped by responsibility:
 from api.recommendations.generation import generate_recommendations
 from api.recommendations.blog_ideas import (
     generate_blog_ideas,
-    generate_blog_ideas_from_persona,
     generate_full_post,
     get_blog_idea,
     get_blog_idea_candidates,
@@ -44,7 +43,6 @@ from api.recommendations.store import (
 __all__ = [
     "generate_recommendations",
     "generate_blog_ideas",
-    "generate_blog_ideas_from_persona",
     "generate_full_post",
     "get_all_personas",
     "get_blog_idea",
