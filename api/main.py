@@ -12,7 +12,10 @@ from api.queries import (
     get_top_positives,
     get_top_concerns,
     get_top_competitors_by_school,
+    get_competitor_citations,
+    get_competitor_stats,
     get_citations,
+    get_citation_prompts,
     get_summary,
     get_competitor_win_rate,
     get_qc_citations,
@@ -25,12 +28,15 @@ from api.queries import (
     get_topics_over_time,
     get_prompt_detail,
     get_prompt_responses,
+    get_prompt_fanout_queries,
     get_health_summary,
     get_reddit_targets,
     set_reddit_thread_status,
     get_losing_questions,
     set_qc_url_override,
     run_site_audit,
+    get_prompt_qc_citations,
+    get_top_fanout_queries,
 )
 
 from api.recommendations import (
@@ -129,6 +135,17 @@ def site_audit(school: str = None, refresh: bool = False):
     api/queries/site_audit.py. `refresh=true` bypasses the page_facts cache
     and re-fetches every page's HTML."""
     return run_site_audit(school, force=refresh)
+@app.get("/api/competitor-citations")
+def competitor_citations(competitor: str, days: int = None, school: str = None):
+    return get_competitor_citations(competitor, days, school)
+
+@app.get("/api/competitor-stats")
+def competitor_stats(competitor: str, days: int = None, school: str = None):
+    return get_competitor_stats(competitor, days, school)
+
+@app.get("/api/citation-prompts")
+def citation_prompts(url: str, competitor: str, days: int = None, school: str = None):
+    return get_citation_prompts(url, competitor, days, school)
 
 
 @app.get("/api/qc-citations")
@@ -376,3 +393,35 @@ def topic_prompt_responses(prompt_id: str, engine: str, days: int = None):
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Prompt not found")
     return result
+
+@app.get("/api/topic-prompt/{prompt_id}/fanout-queries")
+def topic_prompt_fanout_queries(prompt_id: str, days: int = None, run_id: str = None):
+    return get_prompt_fanout_queries(prompt_id, days, run_id)
+
+@app.get("/api/topic-prompt/{prompt_id}/qc-citations")
+def topic_prompt_qc_citations(prompt_id: str, days: int = None):
+    return get_prompt_qc_citations(prompt_id, days)
+
+@app.get("/api/top-fanout-queries")
+def top_fanout_queries(days: int = None, min_count: int = 5):
+    return get_top_fanout_queries(days, min_count)
+
+@app.post("/api/fanout-query/run")
+def run_fanout_query(engine: str = Body(...), query: str = Body(...)):
+    if engine != "chatgpt":
+        return {"error": "Live queries only supported for ChatGPT"}
+    from src.querier import query_chatgpt
+    from src.parsing.deterministic import qc_deterministic_fields
+    result = query_chatgpt(query)
+    det = qc_deterministic_fields(result["text"], result["citations"])
+    hits = det["qc_brand_hits"]
+    qc_rank = None
+    if hits and result["text"]:
+        qc_rank = round(hits[0][1] / len(result["text"]) * 100)
+    return {
+        "text": result["text"],
+        "citations": result["citations"],
+        "qc_mentioned": det["qc_mentioned"],
+        "qc_cited": det["qc_cited"],
+        "qc_rank": qc_rank,
+    }

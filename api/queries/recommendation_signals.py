@@ -14,7 +14,7 @@ Nothing here replaces api/queries/recommendations.py - those four functions
 are reused as-is (Bucket C existing signals).
 """
 
-from api.db import get_connection, _date_filter, _school_clause_params
+from api.db import get_connection, _date_filter, _school_clause_params, _sentiment_score_expr
 from api.queries.summary import get_summary
 from api.queries.visibility import (
     get_mention_rate_by_category,
@@ -68,7 +68,8 @@ def _positive_rate_by(group_col, days=None, school=None):
     query = f"""
         SELECT {group_col} as grp,
             AVG(CASE WHEN s.qc_sentiment = 'positive' THEN 1 ELSE 0 END) as positive_rate,
-            COUNT(*) as sample_n
+            COUNT(*) as sample_n,
+            AVG({_sentiment_score_expr('s')}) as sentiment_score
         FROM sentiment_responses s
         LEFT JOIN questions q ON q.id = s.question_id
         WHERE {group_col} IS NOT NULL {filter_clause} {school_clause}
@@ -78,7 +79,11 @@ def _positive_rate_by(group_col, days=None, school=None):
         with conn.cursor() as cur:
             cur.execute(query, params)
             rows = cur.fetchall()
-    return {r[0]: {"positive_sentiment_rate": round(float(r[1]) * 100, 1), "sample_n": r[2]} for r in rows}
+    return {r[0]: {
+        "positive_sentiment_rate": round(float(r[1]) * 100, 1),
+        "sample_n": r[2],
+        "sentiment_score": round(float(r[3]), 1) if r[3] is not None else None,
+    } for r in rows}
 
 
 def _segment_score(row):

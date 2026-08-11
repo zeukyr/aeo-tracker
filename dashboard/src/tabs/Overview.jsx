@@ -220,13 +220,25 @@ function Overview() {
           label="Positive sentiment"
           value={`${summary.positive_sentiment_rate}%`}
           detail={summary.sentiment_total
-            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative`
+            ? `${summary.positive_sentiment_count}/${summary.sentiment_total} · ${summary.neutral_sentiment_count} neutral, ${summary.negative_sentiment_count} negative${summary.sentiment_score != null ? ` · score ${summary.sentiment_score > 0 ? "+" : ""}${summary.sentiment_score}` : ""}`
             : null}
           diff={summary.positive_sentiment_diff}
         />
         <MetricCard label="Citation rate"      value={summary.citation_rate ? `${summary.citation_rate}%` : "--"} diff={summary.citation_rate_diff} />
         <MetricCard label="Share of voice"     value={summary.sov ? `${summary.sov}%` : "--"} diff={summary.sov_diff} />
-        <MetricCard label="Average rank"     value={summary.avg_rank ? `${summary.avg_rank}` : "--"} diff={summary.avg_rank_diff} />
+        <MetricCard
+          label="Average rank"
+          value={summary.avg_rank ? (
+            <>
+              {summary.avg_rank}
+              {summary.avg_field_size != null && (
+                <span style={{ fontSize: 13, fontWeight: 400, color: "#9b9b9b" }}> /{summary.avg_field_size}</span>
+              )}
+            </>
+          ) : "--"}
+          diff={summary.avg_rank_diff}
+          detail={summary.avg_rank_score != null ? `normalized: ${summary.avg_rank_score}/100` : undefined}
+        />
       </div>
 
       <div className="chart-section">

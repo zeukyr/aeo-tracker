@@ -14,12 +14,15 @@ from api.queries.sentiment import (
 from api.queries.competitors import (
     get_top_competitors_by_school,
     get_competitor_win_rate,
+    get_competitor_citations,
+    get_competitor_stats,
 )
 from api.queries.citations import (
     get_citations,
     get_qc_citations,
     get_citations_by_school,
     get_sentiment_citations,
+    get_citation_prompts,
 )
 from api.queries.cited_urls import get_reddit_targets, set_reddit_thread_status
 from api.queries.summary import get_summary
@@ -39,3 +42,4 @@ from api.queries.recommendation_signals import (
     get_competitor_profile,
     get_health_summary,
 )
+from api.queries.topics import get_topics, get_topics_over_time, get_prompt_detail, get_prompt_responses, get_prompt_fanout_queries, get_prompt_qc_citations, get_top_fanout_queries

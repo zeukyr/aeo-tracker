@@ -76,5 +76,27 @@ Return JSON only, no preamble, no markdown:
     "concerns_raised": [concerns raised about QC, or []],
     "positives_raised": [positives raised about QC, or []]
 }}
+""",
+
+    "credibility": """
+You are analyzing an AI engine response to the question: "{question}"
+Response: "{response}"
+Citations: {citations}
+
+QC (QC Career School, QC Makeup Academy, QC Design School, QC Event Planning,
+QC Pet Studies, QC Wellness Studies) is being tracked.
+
+Return JSON only, no preamble, no markdown:
+{{
+    "qc_sentiment": "positive" | "negative" | "neutral",
+        - "positive": response affirms QC's legitimacy, accreditation, or credibility
+        - "negative": response raises doubts, denies accreditation, or discourages QC
+        - "neutral": purely factual with no lean, or QC not directly addressed
+    "qc_verdict": "one sentence summary of what the AI concluded about QC's credibility",
+    "competitor_won": null,
+    "win_reasons": [],
+    "concerns_raised": [specific concerns or doubts raised about QC's credibility, or []],
+    "positives_raised": [positive credibility signals mentioned about QC, or []]
+}}
 """
 }

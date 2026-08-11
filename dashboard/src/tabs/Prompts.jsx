@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import {
   LineChart, Line,
   XAxis, YAxis, Tooltip,
@@ -155,6 +156,901 @@ function TopicsOverTimeChart({ chartData }) {
         {renderHalf(sentTopics, "Sentiment")}
       </div>
     </div>
+  );
+}
+
+// ─── chart legend helper ───────────────────────────────────────────────────────
+function ChartLegend({ items }) {
+  return (
+    <div style={{ display: "flex", gap: 14, marginBottom: 10, flexWrap: "wrap" }}>
+      {items.map(({ label, color, dashed }) => (
+        <span key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12, color: "#6b6b6b" }}>
+          <span style={{
+            width: dashed ? 14 : 8,
+            height: dashed ? 0 : 8,
+            borderRadius: dashed ? 0 : "50%",
+            background: dashed ? "none" : color,
+            borderTop: dashed ? `2px dashed ${color}` : "none",
+            flexShrink: 0,
+            opacity: dashed ? 0.5 : 1,
+          }} />
+          {label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+// ─── visibility trend line chart (mention-type prompts) ───────────────────────
+function VisibilityChart({ data }) {
+  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
+        <YAxis
+          tickFormatter={v => `${v}%`}
+          tick={{ fontSize: 11, fill: "#888780" }}
+          axisLine={false} tickLine={false}
+          width={36} domain={[0, 100]}
+        />
+        <Tooltip content={<ChartTooltip />} />
+        <Line type="monotone" dataKey="mentionRate"  name="Mention rate"  stroke={QC_BLUE}   strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="citationRate" name="Citation rate" stroke="#1d9e75"  strokeWidth={1} strokeOpacity={0.35} dot={false} />
+        <Line type="monotone" dataKey="visibility"   name="Visibility"    stroke={QC_BLUE}   strokeWidth={2.5} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ─── sentiment area chart (sentiment-type prompts) ────────────────────────────
+function SentimentChart({ data }) {
+  if (!data?.length) return <p className="text-xs text-gray-400 italic">No time-series data yet.</p>;
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <AreaChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+        <defs>
+          <linearGradient id="tGradPos" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#3b6d11" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#3b6d11" stopOpacity={0.02} />
+          </linearGradient>
+          <linearGradient id="tGradNeu" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#854f0b" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#854f0b" stopOpacity={0.02} />
+          </linearGradient>
+          <linearGradient id="tGradNeg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%"  stopColor="#a32d2d" stopOpacity={0.15} />
+            <stop offset="95%" stopColor="#a32d2d" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} />
+        <YAxis tickFormatter={v => `${v}%`} tick={{ fontSize: 11, fill: "#888780" }} axisLine={false} tickLine={false} width={36} />
+        <Tooltip content={<ChartTooltip />} />
+        <Area type="monotone" dataKey="positive" name="Positive" stroke="#3b6d11" strokeWidth={2} fill="url(#tGradPos)" dot={false} />
+        <Area type="monotone" dataKey="neutral"  name="Neutral"  stroke="#854f0b" strokeWidth={2} fill="url(#tGradNeu)" dot={false} />
+        <Area type="monotone" dataKey="negative" name="Negative" stroke="#a32d2d" strokeWidth={2} fill="url(#tGradNeg)" dot={false} />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ─── competitor ranking panel (right ⅓) ──────────────────────────────────────
+// Branching behaviour:
+//   • visibility != null  → ranked bar rows by mention-rate %
+//   • visibility == null  → plain name pills (sentiment prompts, no mention data)
+function CompetitorRanking({ competitors }) {
+  if (!competitors?.length) {
+    return <p className="text-xs text-gray-400 italic">No competitor data.</p>;
+  }
+
+  const hasVisibility = competitors.some(c => c.visibility != null);
+
+  if (!hasVisibility) {
+    // Plain pill list for sentiment prompts
+    return (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {competitors.map(c => (
+          <span key={c.name} style={{
+            fontSize: 11, padding: "3px 10px", borderRadius: 99,
+            background: c.isQC ? "#dbeafe" : "#f0efec",
+            color:      c.isQC ? QC_BLUE   : "#4b5563",
+            fontWeight: c.isQC ? 600 : 400,
+          }}>
+            {c.name}{c.isQC ? " (YOU)" : ""}
+          </span>
+        ))}
+      </div>
+    );
+  }
+
+  // Ranked bars by visibility (mention rate %)
+  const maxVis = Math.max(...competitors.map(c => c.visibility || 0), 1);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {competitors.slice(0, 8).map((comp, i) => {
+        const barPct   = Math.round(((comp.visibility || 0) / maxVis) * 100);
+        const barColor = comp.isQC ? QC_BLUE : "#7c3aed";
+        const opacity  = comp.isQC ? 1 : (0.4 + 0.6 * ((comp.visibility || 0) / maxVis));
+        return (
+          <div key={comp.name} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ width: 18, textAlign: "right", fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>
+              {i + 1}
+            </span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, color: comp.isQC ? QC_BLUE : "#111", fontWeight: comp.isQC ? 600 : i === 0 ? 500 : 400 }}>
+                  {comp.name}
+                  {comp.isQC && (
+                    <span className="badge badge--you" style={{ marginLeft: 6, fontSize: 10 }}>YOU</span>
+                  )}
+                </span>
+                <span style={{ fontSize: 11, color: "#6b6b6b", flexShrink: 0, marginLeft: 8 }}>
+                  {comp.visibility}%
+                </span>
+              </div>
+              <div style={{ height: 4, background: "#f0efec", borderRadius: 99, overflow: "hidden" }}>
+                <div style={{
+                  height: "100%", width: `${barPct}%`,
+                  background: barColor, opacity,
+                  borderRadius: 99, transition: "width 0.4s ease",
+                }} />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── LLM stat node badge ──────────────────────────────────────────────────────
+function StatNode({ label, value, color }) {
+  if (value == null) return null;
+  return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      background: "#f4f4f2", borderRadius: 8,
+      padding: "4px 10px", minWidth: 52,
+    }}>
+      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em", lineHeight: 1.3 }}>
+        {label}
+      </span>
+      <span style={{ fontSize: 13, fontWeight: 600, color: color || "#374151", lineHeight: 1.3 }}>
+        {value}%
+      </span>
+    </div>
+  );
+}
+
+// ─── LLM response drawer (slide-in from right, with prev/next history nav) ───
+function ResponseDrawer({ drawer, onClose }) {
+  const { open, engine, promptText, promptId } = drawer;
+  const { days } = useFilter();
+  const [history, setHistory] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch the full response history for this (prompt, engine) pair whenever the drawer opens
+  useEffect(() => {
+    if (!open || !promptId || !engine) return;
+    setLoading(true);
+    setIndex(0);
+    const params = new URLSearchParams({ engine });
+    if (days) params.append("days", days);
+
+    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/responses?${params}`)
+      .then(r => r.json())
+      .then(rows => {
+        setHistory(Array.isArray(rows) ? rows : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setHistory([]);
+        setLoading(false);
+      });
+  }, [open, promptId, engine, days]);
+
+  const total = history.length;
+  const goPrevious = () => setIndex(i => Math.min(i + 1, total - 1));
+  const goNext = () => setIndex(i => Math.max(i - 1, 0));
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = e => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") setIndex(i => Math.min(i + 1, total - 1));
+      if (e.key === "ArrowRight") setIndex(i => Math.max(i - 1, 0));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose, total]);
+
+  if (!open) return null;
+  const color = LLM_COLORS[engine] || "#888";
+  const current = history[index];
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(520px, 90vw)",
+        background: "#fff",
+        borderLeft: "1px solid #e5e7eb",
+        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
+        zIndex: 50,
+        display: "flex", flexDirection: "column",
+        overflow: "hidden",
+      }}>
+        {/* header */}
+        <div style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid #e5e7eb",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
+        }}>
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
+              {LLM_LABELS[engine] || engine}
+            </p>
+            <p style={{ fontSize: 11, color: "#9b9b9b" }}>
+              {loading
+                ? "Loading…"
+                : total > 0
+                  ? `Response ${index + 1} of ${total} · ${current?.date ?? ""}`
+                  : "No responses"}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* prompt context */}
+        {promptText && (
+          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
+            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{promptText}"</p>
+          </div>
+        )}
+
+        {/* prev / next navigation */}
+        {total > 1 && (
+          <div style={{
+            padding: "8px 20px",
+            borderBottom: "1px solid #f0efec",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexShrink: 0,
+          }}>
+            <button
+              onClick={goPrevious}
+              disabled={index >= total - 1}
+              style={{
+                background: "none", border: "none", cursor: index >= total - 1 ? "default" : "pointer",
+                fontSize: 12, color: index >= total - 1 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Previous response"
+            >
+              ← Previous
+            </button>
+            <button
+              onClick={goNext}
+              disabled={index <= 0}
+              style={{
+                background: "none", border: "none", cursor: index <= 0 ? "default" : "pointer",
+                fontSize: 12, color: index <= 0 ? "#d1d5db" : "#374151",
+                display: "flex", alignItems: "center", gap: 4, padding: "4px 6px",
+              }}
+              aria-label="Next response"
+            >
+              Next →
+            </button>
+          </div>
+        )}
+
+        {/* response body */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
+          {loading
+            ? <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
+            : current?.response
+              ? <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.7, whiteSpace: "pre-wrap" }}>{current.response}</p>
+              : <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>No response available.</p>
+          }
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─── fanout query result drawer ───────────────────────────────────────────────
+function FanoutDrawer({ drawer, onClose }) {
+  const { open, queryText, engine } = drawer;
+  const color = LLM_COLORS[engine] || "#374151";
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = e => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return createPortal(
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.18)", zIndex: 40 }} />
+      <div style={{
+        position: "fixed", top: 0, right: 0, bottom: 0,
+        width: "min(520px, 90vw)",
+        background: "#fff",
+        borderLeft: "1px solid #e5e7eb",
+        boxShadow: "-4px 0 24px rgba(0,0,0,0.08)",
+        zIndex: 50,
+        display: "flex", flexDirection: "column",
+        overflow: "hidden",
+      }}>
+        {/* header */}
+        <div style={{
+          padding: "16px 20px",
+          borderBottom: "1px solid #e5e7eb",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
+        }}>
+          <div>
+            <p style={{ fontSize: 13, fontWeight: 600, color, marginBottom: 2 }}>
+              {engine ? LLM_LABELS[engine] || engine : "Fanout Query"}
+            </p>
+            <p style={{ fontSize: 11, color: "#9b9b9b" }}>Fanout search query</p>
+          </div>
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#9b9b9b", lineHeight: 1, padding: "4px 8px" }}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* query text */}
+        {queryText && (
+          <div style={{ padding: "12px 20px", borderBottom: "1px solid #f0efec", flexShrink: 0 }}>
+            <p style={{ fontSize: 11, color: "#9b9b9b", fontStyle: "italic" }}>"{queryText}"</p>
+          </div>
+        )}
+
+        {/* body placeholder */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px 20px" }}>
+          <p style={{ fontSize: 13, color: "#9b9b9b", fontStyle: "italic" }}>
+            Per-query result tracking coming soon.
+          </p>
+        </div>
+      </div>
+    </>,
+    document.body
+  );
+}
+
+// ─── fanout queries expandable section ───────────────────────────────────────
+function FanoutQueriesSection({ promptId, days, onOpenFanoutDrawer }) {
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState(null);  // null = not yet fetched
+
+  function fetchRun(runId) {
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    if (runId) params.append("run_id", runId);
+    fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/fanout-queries?${params}`)
+      .then(r => r.json())
+      .then(d => setData(d))
+      .catch(() => setData({ total_runs: 0, queries: [], run_id: null, run_date: null, run_index: null, prev_run_id: null, next_run_id: null }));
+  }
+
+  function handleToggle() {
+    setOpen(o => {
+      const next = !o;
+      if (next && data === null) fetchRun(null);
+      return next;
+    });
+  }
+
+  const loading = open && data === null;
+  const queries = data ? data.queries : [];
+
+  return (
+    <div style={{ borderTop: "1px solid #f0efec", marginTop: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 0" }}>
+        <button
+          onClick={handleToggle}
+          style={{
+            display: "flex", alignItems: "center", gap: 6,
+            flex: 1, background: "none", border: "none",
+            cursor: "pointer", textAlign: "left", padding: 0,
+          }}
+        >
+          <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
+            ▶
+          </span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            Fanout Queries
+          </span>
+          {data && (
+            <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({queries.length})</span>
+          )}
+        </button>
+
+        {open && data && data.total_runs > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: 4, flexShrink: 0 }}>
+            <button
+              onClick={e => { e.stopPropagation(); fetchRun(data.prev_run_id); }}
+              disabled={!data.prev_run_id}
+              style={{
+                background: "none", border: "none", cursor: data.prev_run_id ? "pointer" : "default",
+                fontSize: 12, color: data.prev_run_id ? "#6b6b6b" : "#d1d5db", padding: "2px 4px", lineHeight: 1,
+              }}
+              title="Older run"
+            >←</button>
+            <span style={{ fontSize: 10, color: "#9b9b9b", whiteSpace: "nowrap" }}>
+              {data.run_date} · {data.run_index + 1} of {data.total_runs}
+            </span>
+            <button
+              onClick={e => { e.stopPropagation(); fetchRun(data.next_run_id); }}
+              disabled={!data.next_run_id}
+              style={{
+                background: "none", border: "none", cursor: data.next_run_id ? "pointer" : "default",
+                fontSize: 12, color: data.next_run_id ? "#6b6b6b" : "#d1d5db", padding: "2px 4px", lineHeight: 1,
+              }}
+              title="Newer run"
+            >→</button>
+          </div>
+        )}
+      </div>
+
+      {open && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 8 }}>
+          {loading && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>Loading…</p>
+          )}
+          {!loading && data && queries.length === 0 && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic" }}>No fanout queries recorded yet.</p>
+          )}
+          {!loading && queries.map((fq, i) => {
+            const color = LLM_COLORS[fq.engine] || "#9b9b9b";
+            return (
+              <button
+                key={i}
+                onClick={() => onOpenFanoutDrawer(fq.query, fq.engine)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
+                  padding: "7px 12px", cursor: "pointer", textAlign: "left",
+                  transition: "border-color 0.15s",
+                }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = "#d1d5db"}
+                onMouseLeave={e => e.currentTarget.style.borderColor = "#f0efec"}
+              >
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[fq.engine] || fq.engine}
+                </span>
+                <span style={{ fontSize: 12, color: "#374151", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {fq.query}
+                </span>
+                <span style={{ fontSize: 12, color: "#9b9b9b", flexShrink: 0 }}>▶</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── qc citations collapsible ─────────────────────────────────────────────────
+function QCCitationsSection({ promptId, days }) {
+  const [open, setOpen] = useState(false);
+  const [citations, setCitations] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  function handleToggle() {
+    setOpen(o => {
+      const next = !o;
+      if (next && citations === null && !loading) {
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (days) params.append("days", days);
+        fetch(`${API_BASE_URL}/api/topic-prompt/${promptId}/qc-citations?${params}`)
+          .then(r => r.json())
+          .then(data => { setCitations(Array.isArray(data) ? data : []); setLoading(false); })
+          .catch(() => { setCitations([]); setLoading(false); });
+      }
+      return next;
+    });
+  }
+
+  const count = citations ? citations.length : null;
+
+  return (
+    <div style={{ borderBottom: "1px solid #f0efec", paddingBottom: 4, marginBottom: 8 }}>
+      <button
+        onClick={handleToggle}
+        style={{
+          display: "flex", alignItems: "center", gap: 6,
+          width: "100%", background: "none", border: "none",
+          cursor: "pointer", padding: "6px 0", textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 10, color: "#9b9b9b", display: "inline-block", transform: open ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 0.15s" }}>
+          ▶
+        </span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          QC Citations
+        </span>
+        {count !== null && (
+          <span style={{ fontSize: 11, color: "#9b9b9b", marginLeft: 2 }}>({count})</span>
+        )}
+      </button>
+
+      {open && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, paddingBottom: 4 }}>
+          {loading && <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>Loading…</p>}
+          {!loading && citations !== null && citations.length === 0 && (
+            <p style={{ fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>No QC citations in this period.</p>
+          )}
+          {!loading && citations && citations.map((c, i) => {
+            const color = LLM_COLORS[c.engine] || "#9b9b9b";
+            let domain = "";
+            try { domain = new URL(c.url).hostname.replace(/^www\./, ""); } catch {}
+            return (
+              <div key={i} style={{
+                display: "flex", alignItems: "center", gap: 10,
+                background: "#fff", border: "1px solid #f0efec", borderRadius: 8,
+                padding: "6px 12px",
+              }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[c.engine] || c.engine}
+                </span>
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 12, color: "#374151", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                  title={c.url}
+                >
+                  {domain}
+                </a>
+                {c.is_internal && (
+                  <span style={{ fontSize: 10, fontWeight: 600, color: "#1d9e75", background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 4, padding: "1px 5px", flexShrink: 0 }}>
+                    internal
+                  </span>
+                )}
+                <span style={{ fontSize: 11, color: "#9b9b9b", flexShrink: 0 }}>{c.run_date}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── top fanouts section ──────────────────────────────────────────────────────
+function BoolChip({ label, value }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em" }}>{label}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: value ? "#16a34a" : "#9b9b9b" }}>
+        {value ? "✓ Yes" : "✗ No"}
+      </span>
+    </div>
+  );
+}
+
+function TopFanoutsSection({ days }) {
+  const [fanouts, setFanouts] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(new Set());
+  const [runResults, setRunResults] = useState({});
+  const [runErrors, setRunErrors] = useState({});
+
+  useEffect(() => {
+    setFanouts(null);
+    setLoading(true);
+    setExpanded(new Set());
+    setRunResults({});
+    setRunErrors({});
+    const params = new URLSearchParams();
+    if (days) params.append("days", days);
+    params.append("min_count", "2");
+    fetch(`${API_BASE_URL}/api/top-fanout-queries?${params}`)
+      .then(r => r.json())
+      .then(data => { setFanouts(Array.isArray(data) ? data : []); setLoading(false); })
+      .catch(() => { setFanouts([]); setLoading(false); });
+  }, [days]);
+
+  function toggleExpand(key) {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  }
+
+  function runQuery(key, engine, query) {
+    setRunResults(prev => ({ ...prev, [key]: "loading" }));
+    setRunErrors(prev => { const n = { ...prev }; delete n[key]; return n; });
+    fetch(`${API_BASE_URL}/api/fanout-query/run`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ engine, query }),
+    })
+      .then(r => r.json())
+      .then(data => setRunResults(prev => ({ ...prev, [key]: data })))
+      .catch(() => setRunErrors(prev => ({ ...prev, [key]: "Request failed" })));
+  }
+
+  if (loading) return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb" }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Top Fanout Queries</span>
+      </div>
+      <p style={{ padding: "12px 16px", fontSize: 12, color: "#9b9b9b", fontStyle: "italic", margin: 0 }}>Loading…</p>
+    </div>
+  );
+
+  if (!fanouts || fanouts.length === 0) return null;
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div style={{ padding: "6px 16px", background: "#f8f7f5", borderBottom: "1px solid #e5e7eb", display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.06em" }}>Top Fanout Queries</span>
+        <span style={{ fontSize: 11, color: "#9b9b9b" }}>queries issued across 5+ prompts</span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {fanouts.map((fq, i) => {
+          const key = `${fq.engine}|${fq.query}`;
+          const color = LLM_COLORS[fq.engine] || "#9b9b9b";
+          const isExpanded = expanded.has(key);
+          const runResult = runResults[key];
+          const canRun = fq.engine === "chatgpt";
+
+          return (
+            <div key={key} style={{ borderBottom: i < fanouts.length - 1 ? "1px solid #f0efec" : "none" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px" }}>
+                <span style={{ fontSize: 10, fontWeight: 600, color, width: 58, flexShrink: 0, textTransform: "uppercase", letterSpacing: "0.03em" }}>
+                  {LLM_LABELS[fq.engine] || fq.engine}
+                </span>
+                <span style={{ fontSize: 13, color: "#374151", flex: 1, minWidth: 0 }}>
+                  {fq.query}
+                </span>
+                <span style={{ fontSize: 11, color: "#6b7280", flexShrink: 0, background: "#f3f4f6", borderRadius: 4, padding: "2px 7px" }}>
+                  {fq.count} prompts
+                </span>
+                <button
+                  onClick={() => toggleExpand(key)}
+                  style={{ background: "none", border: "1px solid #e5e7eb", borderRadius: 4, cursor: "pointer", padding: "3px 8px", fontSize: 11, color: "#6b7280", flexShrink: 0 }}
+                >
+                  {isExpanded ? "▲ Hide" : "▼ Prompts"}
+                </button>
+                <button
+                  onClick={() => canRun && runResult !== "loading" && runQuery(key, fq.engine, fq.query)}
+                  disabled={!canRun || runResult === "loading"}
+                  title={!canRun ? "Live queries only supported for ChatGPT" : "Query ChatGPT with this fanout query"}
+                  style={{
+                    background: canRun ? "#378add" : "#e5e7eb",
+                    color: canRun ? "#fff" : "#9b9b9b",
+                    border: "none", borderRadius: 4,
+                    cursor: canRun && runResult !== "loading" ? "pointer" : "not-allowed",
+                    padding: "4px 12px", fontSize: 11, fontWeight: 600, flexShrink: 0,
+                  }}
+                >
+                  {runResult === "loading" ? "Running…" : "▶ Run"}
+                </button>
+              </div>
+
+              {isExpanded && (
+                <div style={{ padding: "0 16px 10px 84px", display: "flex", flexDirection: "column", gap: 3 }}>
+                  {fq.prompts.map(p => (
+                    <div key={p.id} style={{ fontSize: 12, color: "#6b7280", display: "flex", alignItems: "flex-start", gap: 6 }}>
+                      <span style={{ color: "#d1d5db", flexShrink: 0, marginTop: 1 }}>•</span>
+                      <span>{p.question}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {runResult && runResult !== "loading" && (
+                <div style={{ margin: "0 16px 12px", background: "#f8f7f5", border: "1px solid #e5e7eb", borderRadius: 8, padding: "12px 14px" }}>
+                  {runResult.error ? (
+                    <p style={{ fontSize: 12, color: "#dc2626", margin: 0 }}>{runResult.error}</p>
+                  ) : (
+                    <>
+                      <div style={{ display: "flex", gap: 20, marginBottom: 10 }}>
+                        <BoolChip label="QC Mentioned" value={runResult.qc_mentioned} />
+                        <BoolChip label="QC Cited" value={runResult.qc_cited} />
+                        {runResult.qc_rank !== null && runResult.qc_rank !== undefined && (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <span style={{ fontSize: 10, color: "#9b9b9b", textTransform: "uppercase", letterSpacing: "0.04em" }}>First Mention</span>
+                            <span style={{ fontSize: 12, fontWeight: 600, color: "#374151" }}>{runResult.qc_rank}% into response</span>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{
+                        fontSize: 12, color: "#374151", lineHeight: 1.6,
+                        maxHeight: 220, overflowY: "auto",
+                        background: "#fff", border: "1px solid #e5e7eb", borderRadius: 6,
+                        padding: "8px 10px", whiteSpace: "pre-wrap",
+                      }}>
+                        {runResult.text}
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {runErrors[key] && (
+                <p style={{ margin: "0 16px 12px", fontSize: 12, color: "#dc2626" }}>{runErrors[key]}</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── expanded prompt detail panel ─────────────────────────────────────────────
+function PromptDetail({ prompt, detail, loading, error, onOpenDrawer }) {
+  const { days } = useFilter();
+  const [fanoutDrawer, setFanoutDrawer] = useState({ open: false, queryText: null, engine: null });
+
+  function openFanoutDrawer(queryText, engine) {
+    setFanoutDrawer({ open: true, queryText, engine });
+  }
+  function closeFanoutDrawer() {
+    setFanoutDrawer(d => ({ ...d, open: false }));
+  }
+
+  if (loading) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-4 pb-4 pt-1">
+          <div className="ml-8 bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-gray-400 italic">Loading…</p>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (error) {
+    return (
+      <tr>
+        <td colSpan={3} className="px-4 pb-4 pt-1">
+          <div className="ml-8 bg-gray-50 rounded-lg p-4">
+            <p className="text-xs text-red-500">Failed to load detail ({error}). Restart the backend server and reload.</p>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  if (!detail) return null;
+
+  const { kind, timeseries, competitors, llms } = detail;
+
+  return (
+    <>
+    <tr>
+      <td colSpan={3} className="px-4 pb-4 pt-1">
+        <div className="ml-8 bg-gray-50 rounded-lg p-4 space-y-4">
+
+          {/* prompt text */}
+          <p className="italic text-gray-600 text-sm">"{prompt.text}"</p>
+
+          {/* chart (⅔) + competitors (⅓) */}
+          <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+
+            {/* chart */}
+            <div style={{ flex: 2, minWidth: 0 }}>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">
+                {kind === "mention" ? "Visibility over time" : "Sentiment over time"}
+              </p>
+              {kind === "mention" ? (
+                <>
+                  <ChartLegend items={[
+                    { label: "Visibility",    color: QC_BLUE },
+                    { label: "Mention rate",  color: QC_BLUE,  dashed: true },
+                    { label: "Citation rate", color: "#1d9e75", dashed: true },
+                  ]} />
+                  <VisibilityChart data={timeseries} />
+                </>
+              ) : (
+                <>
+                  <ChartLegend items={[
+                    { label: "Positive", color: "#3b6d11" },
+                    { label: "Neutral",  color: "#854f0b" },
+                    { label: "Negative", color: "#a32d2d" },
+                  ]} />
+                  <SentimentChart data={timeseries} />
+                </>
+              )}
+            </div>
+
+            {/* competitor panel */}
+            <div style={{ flex: 1, minWidth: 140 }}>
+              <p className="text-xs font-medium text-gray-500 uppercase mb-2">Top competitors</p>
+              <CompetitorRanking competitors={competitors} />
+            </div>
+          </div>
+
+          <QCCitationsSection promptId={prompt.id} days={days} />
+
+          {/* per-LLM breakdown */}
+          <div>
+            <p className="text-xs font-medium text-gray-500 uppercase mb-2">LLM Breakdown</p>
+            <div className="space-y-2">
+              {LLM_ENGINES.map(engine => {
+                const llm   = llms?.find(l => l.engine === engine);
+                const color = LLM_COLORS[engine];
+                return (
+                  <div key={engine} style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    background: "#fff", borderRadius: 8, padding: "8px 12px",
+                    border: "1px solid #f0efec",
+                  }}>
+                    {/* engine label */}
+                    <span style={{ fontSize: 12, fontWeight: 600, color, width: 82, flexShrink: 0 }}>
+                      {LLM_LABELS[engine]}
+                    </span>
+
+                    {/* stat node badges */}
+                    {llm ? (
+                      <div style={{ flex: 1, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
+                        {llm.kind === "mention" ? (
+                          <>
+                            <StatNode label="Vis"      value={llm.visibility}   color={QC_BLUE}   />
+                            <StatNode label="Mention"  value={llm.mentionRate}  color="#374151"   />
+                            <StatNode label="Citation" value={llm.citationRate} color="#374151"   />
+                            <StatNode label="SOV"      value={llm.sov}          color="#7c3aed"   />
+                          </>
+                        ) : (
+                          <>
+                            <StatNode label="Pos" value={llm.positive} color="#3b6d11" />
+                            <StatNode label="Neu" value={llm.neutral}  color="#854f0b" />
+                            <StatNode label="Neg" value={llm.negative} color="#a32d2d" />
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-gray-400 flex-1">No data</span>
+                    )}
+
+                    {/* arrow → response drawer */}
+                    <button
+                      onClick={() => onOpenDrawer(engine, prompt.text, prompt.id)}
+                      style={{
+                        background: "none", border: "none", cursor: "pointer",
+                        color: llm ? color : "#d1d5db",
+                        fontSize: 13, padding: "2px 4px", flexShrink: 0,
+                      }}
+                      title={llm ? `View ${LLM_LABELS[engine]} response` : "No response yet"}
+                      aria-label={`Open ${LLM_LABELS[engine]} response`}
+                    >
+                      ▶
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <FanoutQueriesSection promptId={prompt.id} days={days} onOpenFanoutDrawer={openFanoutDrawer} />
+          </div>
+        </div>
+      </td>
+    </tr>
+    <FanoutDrawer drawer={fanoutDrawer} onClose={closeFanoutDrawer} />
+    </>
   );
 }
 
@@ -518,6 +1414,9 @@ export default function Prompts() {
               </table>
             </div>
           )}
+
+          {/* ── Top Fanout Queries ─────────────────────────────────────── */}
+          <TopFanoutsSection days={days} />
 
         </div>
       )}

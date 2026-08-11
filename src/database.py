@@ -133,6 +133,30 @@ def save_sentiment_response(run_id, question_id, engine, raw_response, citations
         
         conn.commit()
 
+def save_fanout_queries(run_id, question_id, engine, queries):
+    if not queries:
+        return
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            for i, query in enumerate(queries):
+                cur.execute(
+                    "INSERT INTO fanout_queries (question_id, run_id, engine, query, query_order) VALUES (%s, %s, %s, %s, %s)",
+                    (question_id, run_id, engine, query, i)
+                )
+        conn.commit()
+
+
+def get_processed_question_ids(run_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT DISTINCT question_id FROM mention_responses WHERE run_id = %s
+                UNION
+                SELECT DISTINCT question_id FROM sentiment_responses WHERE run_id = %s
+            """, (run_id, run_id))
+            return {row[0] for row in cur.fetchall()}
+
+
 def get_questions():
     with get_connection() as conn:
         with conn.cursor() as cur:

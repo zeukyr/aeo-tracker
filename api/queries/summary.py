@@ -1,4 +1,4 @@
-from api.db import get_connection, _date_filter, _prev_date_filter, _school_clause_params
+from api.db import get_connection, _date_filter, _prev_date_filter, _school_clause_params, _rank_score_cte, _rank_score_expr, _sentiment_score_expr
 
 def fetch_avg_rank(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
@@ -12,6 +12,34 @@ def fetch_avg_rank(cur, filter_clause, school=None):
     """, params)
     row = cur.fetchone()[0]
     return float(row) if row else None
+
+def fetch_avg_rank_score(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
+    cur.execute(f"""
+        WITH {_rank_score_cte()}
+        SELECT AVG({_rank_score_expr('m.qc_mention_order')}), AVG(rt.total_brands)
+        FROM mention_responses m
+        LEFT JOIN questions q ON q.id = m.question_id
+        LEFT JOIN rt ON rt.mention_response_id = m.id
+        WHERE m.qc_mentioned = TRUE
+        AND m.qc_mention_order IS NOT NULL
+        {filter_clause.replace("created_at", "m.created_at")} {school_clause};
+    """, params)
+    row = cur.fetchone()
+    rank_score = float(row[0]) if row[0] is not None else None
+    field_size = float(row[1]) if row[1] is not None else None
+    return rank_score, field_size
+
+def fetch_sentiment_score(cur, filter_clause, school=None):
+    school_clause, params = _school_clause_params(school)
+    cur.execute(f"""
+        SELECT AVG({_sentiment_score_expr('s')})
+        FROM sentiment_responses s
+        LEFT JOIN questions q ON q.id = s.question_id
+        WHERE 1=1 {filter_clause.replace("created_at", "s.created_at")} {school_clause};
+    """, params)
+    row = cur.fetchone()[0]
+    return float(row) if row is not None else None
 
 def fetch_sov(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
@@ -43,7 +71,8 @@ def fetch_sov(cur, filter_clause, school=None):
 def fetch_visibility_score(cur, filter_clause, school=None):
     school_clause, params = _school_clause_params(school)
     cur.execute(f"""
-        WITH link_scores AS (
+        WITH {_rank_score_cte()},
+        link_scores AS (
             SELECT
                 mention_response_id,
                 MAX(
@@ -60,19 +89,13 @@ def fetch_visibility_score(cur, filter_clause, school=None):
         )
         SELECT AVG(
             (CASE WHEN m.qc_mentioned THEN 100 ELSE 0 END) * 0.40
-            + (CASE
-                WHEN m.qc_mention_order = 1 THEN 100
-                WHEN m.qc_mention_order = 2 THEN 75
-                WHEN m.qc_mention_order = 3 THEN 50
-                WHEN m.qc_mention_order >= 4 THEN 25
-                WHEN m.qc_mentioned THEN 25
-                ELSE 0
-              END) * 0.45
+            + ({_rank_score_expr('m.qc_mention_order')} * 100) * 0.45
             + COALESCE(ls.link_score, 0) * 0.15
         )
         FROM mention_responses m
         LEFT JOIN questions q ON q.id = m.question_id
         LEFT JOIN link_scores ls ON ls.mention_response_id = m.id
+        LEFT JOIN rt ON rt.mention_response_id = m.id
         WHERE 1=1 {filter_clause.replace("created_at", "m.created_at")} {school_clause};
     """, params)
     row = cur.fetchone()[0]
@@ -196,9 +219,11 @@ def get_summary(days=None, school=None):
             sentiment_curr = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_curr)
             sentiment_prev = fetch_rate(cur, "qc_sentiment = 'positive'", "sentiment_responses", filter_prev)
             sentiment_dist = fetch_sentiment_distribution(cur, filter_curr)
+            sentiment_score_curr = fetch_sentiment_score(cur, filter_curr, school)
 
             rank_curr = fetch_avg_rank(cur, filter_curr, school)
             rank_prev = fetch_avg_rank(cur, filter_prev, school)
+            rank_score_curr, field_size_curr = fetch_avg_rank_score(cur, filter_curr, school)
 
             sov_curr = fetch_sov(cur, filter_curr, school)
             sov_prev = fetch_sov(cur, filter_prev, school)
@@ -247,8 +272,11 @@ def get_summary(days=None, school=None):
         "positive_sentiment_count": sentiment_dist["positive"],
         "neutral_sentiment_count": sentiment_dist["neutral"],
         "negative_sentiment_count": sentiment_dist["negative"],
+        "sentiment_score": round(sentiment_score_curr, 1) if sentiment_score_curr is not None else None,
         "avg_rank": round(rank_curr, 2) if rank_curr else None,
         "avg_rank_diff": rank_diff(rank_curr, rank_prev),
+        "avg_rank_score": round(rank_score_curr * 100, 1) if rank_score_curr is not None else None,
+        "avg_field_size": round(field_size_curr, 1) if field_size_curr is not None else None,
         "sov": sov_curr,
         "sov_diff": sov_diff(sov_curr, sov_prev),
         "visibility_score": visibility_curr,

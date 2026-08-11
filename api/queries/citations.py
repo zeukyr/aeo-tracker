@@ -1,4 +1,4 @@
-from api.db import get_connection, _date_filter, _school_clause_params
+from api.db import get_connection, _date_filter, _school_clause_params, _rank_score_cte, _rank_score_expr
 from src.parsing.urls import normalize_url
 
 QC_ILIKE = """
@@ -127,3 +127,38 @@ def get_sentiment_citations(days=None, school=None):
     rows = [{"url": r[0], "school": r[1], "question_type": r[2], "count": r[3], "source_type": r[4]}
             for r in rows]
     return _merge_normalized(rows, ["url", "school", "question_type"])
+
+
+def get_citation_prompts(url, competitor, days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND m.created_at')
+    school_clause, school_params = _school_clause_params(school)
+    query = f"""
+        WITH {_rank_score_cte()}
+        SELECT
+            q.id,
+            q.question,
+            q.school,
+            q.question_type,
+            COUNT(DISTINCT m.id) AS response_count,
+            ROUND(AVG(b.rank_position)::numeric, 1) AS avg_rank,
+            ROUND(AVG({_rank_score_expr('b.rank_position')})::numeric * 100, 1) AS avg_rank_score,
+            ROUND(AVG(rt.total_brands)::numeric, 1) AS avg_field_size
+        FROM competitor_citation_map ccm
+        JOIN mention_responses m ON m.id = ccm.mention_response_id
+        JOIN questions q ON q.id = m.question_id
+        JOIN mention_response_brands b
+          ON b.mention_response_id = m.id
+         AND b.brand_name = ccm.competitor_name
+         AND b.brand_type = 'competitor'
+        LEFT JOIN rt ON rt.mention_response_id = m.id
+        WHERE ccm.url = %s
+          AND ccm.competitor_name = %s
+          {filter_clause} {school_clause}
+        GROUP BY q.id, q.question, q.school, q.question_type
+        ORDER BY response_count DESC, q.question;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, [url, competitor] + school_params)
+            rows = cur.fetchall()
+    return [{"id": str(r[0]), "question": r[1], "school": r[2], "question_type": r[3], "response_count": r[4], "avg_rank": float(r[5]) if r[5] is not None else None, "avg_rank_score": float(r[6]) if r[6] is not None else None, "avg_field_size": float(r[7]) if r[7] is not None else None} for r in rows]

@@ -1,16 +1,30 @@
 import sys
 from src.logger import logger
-from src.database import get_questions, start_run, finish_run, save_mention_response, save_sentiment_response
+from src.database import get_questions, get_processed_question_ids, start_run, finish_run, save_mention_response, save_sentiment_response, save_fanout_queries
 from src.querier import query_all_engines
 from src.parsing.parser import parse_response
+from src.classify_run_citations import classify_and_store
 import time
 
 def main():
-    logger.info("Starting run...")
-    run_id = start_run()
+    resume_run_id = None
+    if "--resume" in sys.argv:
+        idx = sys.argv.index("--resume")
+        resume_run_id = sys.argv[idx + 1]
+
+    if resume_run_id:
+        run_id = resume_run_id
+        logger.info(f"Resuming run {run_id}...")
+    else:
+        logger.info("Starting run...")
+        run_id = start_run()
 
     try:
         questions = get_questions()
+        if resume_run_id:
+            done = get_processed_question_ids(run_id)
+            questions = [q for q in questions if q[0] not in done]
+            logger.info(f"Skipping {len(done)} already-processed questions, {len(questions)} remaining")
         logger.info(f"Loaded {len(questions)} questions")
 
         for question_id, question, question_type in questions:
@@ -22,6 +36,14 @@ def main():
                 if "error" in result:
                     logger.error(f"[{engine}] Failed for '{question}': {result['error']}")
                     continue
+
+                fanout = result.get("fanout_queries", [])
+                if fanout:
+                    save_fanout_queries(run_id, question_id, engine, fanout)
+                    logger.info(f"[{engine}] Saved {len(fanout)} fanout queries for '{question}'")
+
+                if "text" not in result:
+                    continue  # fanout-only engine (e.g. gemini), no response to parse/store
 
                 parsed = parse_response(
                     question=question,
@@ -57,6 +79,12 @@ def main():
             time.sleep(2)
         finish_run(run_id, status="success")
         logger.info("Run complete")
+        try:
+            logger.info("Classifying competitor citations...")
+            classify_and_store(run_id)
+            logger.info("Citation classification complete")
+        except Exception as e:
+            logger.error(f"Citation classification failed (non-fatal): {e}")
 
     except Exception as e:
         finish_run(run_id, status="failed", error=str(e))
