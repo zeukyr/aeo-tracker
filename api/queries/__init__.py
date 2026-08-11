@@ -8,6 +8,7 @@ from api.queries.visibility import (
 )
 from api.queries.sentiment import (
     get_sentiment_distribution,
+    get_sentiment_score_trend,
     get_top_concerns,
     get_top_positives,
 )

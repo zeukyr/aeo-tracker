@@ -1,4 +1,21 @@
-from api.db import get_connection, _date_filter, _school_clause_params
+from api.db import get_connection, _date_filter, _school_clause_params, _sentiment_score_expr
+
+def get_sentiment_score_trend(days=None, school=None):
+    filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')
+    school_clause, params = _school_clause_params(school)
+    query = f"""
+        SELECT DATE(s.created_at) as day, AVG({_sentiment_score_expr('s')}) as score
+        FROM sentiment_responses s
+        LEFT JOIN questions q ON q.id = s.question_id
+        WHERE 1=1 {filter_clause} {school_clause}
+        GROUP BY day
+        ORDER BY day;
+    """
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(query, params)
+            rows = cur.fetchall()
+    return [{"day": str(day), "score": round(float(score), 1) if score is not None else None} for day, score in rows]
 
 def get_sentiment_distribution(days=None, school=None):
     filter_clause = _date_filter(days).replace('AND created_at', 'AND s.created_at')

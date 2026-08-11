@@ -9,6 +9,7 @@ from api.queries import (
     get_mention_rate_by_category,
     get_mention_rate_by_school,
     get_sentiment_distribution,
+    get_sentiment_score_trend,
     get_top_positives,
     get_top_concerns,
     get_top_competitors_by_school,
@@ -95,6 +96,10 @@ def citation_rate_by_school(days: int = None, school: str = None):
 @app.get("/api/sentiment-distribution")
 def sentiment_distribution(days: int = None, school: str = None):
     return get_sentiment_distribution(days, school)
+
+@app.get("/api/sentiment-score-trend")
+def sentiment_score_trend(days: int = None, school: str = None):
+    return get_sentiment_score_trend(days, school)
 
 @app.get("/api/top-concerns")
 def top_concerns(days: int = None, school: str = None):
